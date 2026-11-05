@@ -584,7 +584,7 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
     <button type="button" class="actions-tile" id="dealerHomeTile" hidden data-go="dealer"><span class="tile-top"><span class="glyph">▣</span><span class="arrow">↗</span></span><span class="tile-copy"><strong>Dealership Position</strong><small id="dealerHomeHint">Record trading or insolvency position</small></span></button>
     <button type="button" class="actions-tile" data-go="post" id="postHomeTile"><span class="tile-top"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15m-6-6 6 6-6 6"/><path d="M4 5v14"/></svg></span><span class="arrow">↗</span></span><span class="tile-copy"><strong>Post-Resolution</strong><small id="postHomeHint">Follow-up actions after the complaint ends</small></span></button>
     <button type="button" class="actions-tile" data-go="closure"><span class="tile-top"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6"/></svg></span><span class="arrow">↗</span></span><span class="tile-copy"><strong>Complaint Closure</strong><small>Outcomes, redress and final costs</small></span></button>
-    <button type="button" class="actions-tile" data-go="review" id="fosHomeTile"><span class="tile-top"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l4 4v14H4V3h4z"/><path d="M15 3v5h5M8 12h8M8 16h5"/></svg></span><span class="arrow">↗</span></span><span class="tile-copy"><strong>FOS Decision Review</strong><small id="fosHomeHint">Review Investigator and Ombudsman decisions</small></span></button>
+    <button type="button" class="actions-tile" data-go="review" id="fosHomeTile"><span class="tile-top"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l4 4v14H4V3h4z"/><path d="M15 3v5h5M8 12h8M8 16h5"/></svg></span><span class="arrow">↗</span></span><span class="tile-copy"><strong>Financial Ombudsman</strong><small id="fosHomeHint">Review Investigator and Ombudsman decisions</small></span></button>
     <button type="button" class="actions-tile" data-go="solicitor" id="solicitorHomeTile" disabled><span class="tile-top"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l4 4v14H3V3h4z"/><path d="M14 3v5h7M7 13h10M7 17h7"/></svg></span><span class="arrow">↗</span></span><span class="tile-copy"><strong>Solicitor Escalation</strong><small id="solicitorHomeHint">Available when solicitor escalation is enabled in Complaints Hub</small></span></button>
   </div>
   <div class="home-footer-note">COMPLAINT ACTIONS <span>·</span> <span id="homeFooterRef">—</span></div>
@@ -724,13 +724,13 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
 
   <div class="view-switch" id="reviewViewSwitch" hidden style="display:none!important">
     <div class="context" id="reviewViewContext">FOS decision review is available for this complaint.</div>
-    <button type="button" class="switchbtn" id="reviewViewToggle">Open FOS Decision Review</button>
+    <button type="button" class="switchbtn" id="reviewViewToggle">Open Financial Ombudsman</button>
   </div>
 
   <section class="review-shell" id="reviewShell">
     <div class="review-hero">
       <div class="review-eyebrow">Financial Ombudsman Service</div>
-      <h2>Decision Review</h2>
+      <h2>Financial Ombudsman</h2>
       <p>Review Carmoola's response alongside the FOS decision before deciding the next step.</p>
       <div class="review-stagebar">
         <div class="review-stage" id="rvStageResponse"><div class="k">1 · Carmoola response</div><div class="v" id="rvStageResponseText">Available</div></div>
@@ -1058,22 +1058,8 @@ function sumClass(c){var t=0;var els=document.querySelectorAll('.'+c);for(var i=
 
 var REVIEW_MODE=false, REVIEW_DOCS={}, REVIEW_SELECTED='';
 var FOS_REQUIRED_STAGE='', FOS_REQUIRED_ACTIONS=[], FOS_COMPLETED_ACTIONS=[];
-function fosReviewIsAvailable(){
-  var r=PREFILL&&PREFILL.fosReview;
-  if(!r||!r.allowed||!PREFILL.fosApplicable)return false;
-
-  // Fail closed: the review workspace is only available when the complaint's
-  // actual Complaints Hub status is explicitly FOS Decision Review.
-  var rawStatus=PREFILL.statusName||PREFILL.status||PREFILL.issueStatus||PREFILL.jiraStatus||'';
-  if(rawStatus&&typeof rawStatus==='object')rawStatus=rawStatus.name||rawStatus.value||'';
-  if(String(rawStatus||'').trim().toLowerCase()!=='fos decision review')return false;
-
-  var stage=String(r.latestStage||'').toLowerCase();
-  if(stage!=='investigator'&&stage!=='ombudsman')return false;
-  var docs=r.documents||{},stageDoc=docs[stage]||{};
-  if(!stageDoc.available)return false;
-  return true;
-}
+function fosReviewIsAvailable(){return !!(PREFILL&&PREFILL.fosApplicable&&PREFILL.fosReview&&PREFILL.fosReview.allowed);}
+function fosReviewIsEditable(){return fosReviewIsAvailable()&&PREFILL.statusName==='FOS Decision Review'&&PREFILL.fosReview.editable===true;}
 function fmtReviewDate(v){if(!v)return '';var d=new Date(v);if(isNaN(d))return String(v);return d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});}
 function formatDisplayDate(value){
   if(value===null||value===undefined||String(value).trim()==='')return '';
@@ -1145,6 +1131,8 @@ function renderReview(){
   $('#rvStageInvestigator').classList.toggle('done',!!inv.available);$('#rvStageInvestigator').classList.toggle('current',r.latestStage==='investigator');$('#rvStageInvestigatorText').textContent=inv.available?(fmtReviewOutcome(inv.outcome)||'Received'):'Not available';
   $('#rvStageOmbudsman').classList.toggle('done',!!omb.available);$('#rvStageOmbudsman').classList.toggle('current',r.latestStage==='ombudsman');$('#rvStageOmbudsmanText').textContent=omb.available?(fmtReviewOutcome(omb.outcome)||'Received'):'Not reached';
   var buttons=$('#rvActionButtons');buttons.innerHTML='';
+  $('#rvActions').hidden=!fosReviewIsEditable();if(!fosReviewIsEditable()){var first=(omb.available?'ombudsman':(inv.available?'investigator':(resp.available?'response':'')));if(first)reviewSelectDoc(first);return;}
+
   if(r.latestStage==='investigator'){
     $('#rvActionTitle').innerHTML='Investigator view received <span class="review-badge">Decision required</span>';
     $('#rvActionCopy').textContent='Choose whether Carmoola accepts the Investigator’s view or asks for an Ombudsman to make a final decision.';
@@ -1195,7 +1183,7 @@ function submitReviewAction(action){
     .catch(function(e){er.textContent=e.message||'Could not complete the review action.';er.classList.add('show');go.disabled=false;go.textContent=action==='escalate_ombudsman'?'Yes, Escalate':(action==='accept_ombudsman'?'Yes, Continue':'Yes, Accept View');});
 }
 function initReview(){
-  if(!fosReviewIsAvailable()){ $('#reviewViewSwitch').hidden=true; $('#reviewShell').innerHTML='<div class="actions-subhero"><h2>FOS Decision Review</h2><p>This complaint has been referred to FOS, but it is not currently at the FOS Decision Review stage with a decision available.</p></div>'; return; }
+  if(!fosReviewIsAvailable()){ $('#reviewViewSwitch').hidden=true; $('#reviewShell').innerHTML='<div class="actions-subhero"><h2>Financial Ombudsman</h2><p>This section is available where the Financial Ombudsman field is Yes.</p></div>'; return; }
   renderReview();
   document.querySelectorAll('[data-review-doc]').forEach(function(btn){
     btn.addEventListener('click',function(){
@@ -1228,7 +1216,7 @@ function renderFosRequiredActions(){
   FOS_REQUIRED_ACTIONS.forEach(function(action,index){
     var done=FOS_COMPLETED_ACTIONS.indexOf(action)!==-1;
     var label=document.createElement('label');label.className='fos-task'+(done?' done':'');label.dataset.index=String(index);
-    var input=document.createElement('input');input.type='checkbox';input.checked=done;input.setAttribute('aria-label','Mark FOS action complete');
+    var input=document.createElement('input');input.type='checkbox';input.checked=done;input.disabled=!fosReviewIsEditable();input.setAttribute('aria-label','Mark FOS action complete');
     var check=document.createElement('span');check.className='fos-task-check';check.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>';
     var text=document.createElement('span');text.className='fos-task-text';text.textContent=action;
     label.appendChild(input);label.appendChild(check);label.appendChild(text);box.appendChild(label);
@@ -1241,6 +1229,7 @@ function updateFosRequiredProgress(){
   $('#fosRequiredProgress').textContent=done+' of '+FOS_REQUIRED_ACTIONS.length+' completed';
 }
 function saveFosRequiredAction(index,checked,row,input){
+  if(!fosReviewIsEditable())return;
   var action=FOS_REQUIRED_ACTIONS[index];if(!action||!FOS_REQUIRED_STAGE)return;
   var before=FOS_COMPLETED_ACTIONS.slice();
   if(checked){if(FOS_COMPLETED_ACTIONS.indexOf(action)===-1)FOS_COMPLETED_ACTIONS.push(action);}else{FOS_COMPLETED_ACTIONS=FOS_COMPLETED_ACTIONS.filter(function(x){return x!==action;});}
@@ -2533,6 +2522,7 @@ function prTaskRows(container,tasks,editable){
  var del=document.createElement('button');del.type='button';del.textContent='×';del.title='Remove task';del.addEventListener('click',function(){tasks.splice(index,1);prTaskRows(container,tasks,editable);});row.appendChild(del);
  if(task.status==='not_required'){var reason=document.createElement('input');reason.className='pr-reason';reason.placeholder='Reason no longer required (mandatory)';reason.value=task.reason||'';reason.addEventListener('input',function(){task.reason=this.value;});row.appendChild(reason);}container.appendChild(row);});
 }
+var PR_LINKED_TASK_IDS=new Set();
 var prTaskSaving=false;
 function prTaskNotice(message,isError){var el=$('#prTaskSaveState');el.textContent=message||'';el.className=isError?'pr-save-error':message==='Saved to Jira'?'pr-save-ok':'';}
 function prDisplayTasks(){
@@ -2549,8 +2539,8 @@ function prDisplayTasks(){
  $('#prSavedBreakdown').innerHTML='<h3 style="margin:0 0 10px">Saved financial breakdown</h3>'+rows;
 
  var ordered=tasks.map(function(t,i){return {task:t,index:i};}).sort(function(a,b){return (a.task.status==='outstanding'?0:1)-(b.task.status==='outstanding'?0:1);});
- $('#prTaskList').innerHTML=ordered.length?ordered.map(function(entry){var x=entry.task,i=entry.index,done=x.status==='done',inactive=x.status==='not_required';return '<div class="pr-checklist-item '+(done?'is-done':inactive?'is-no-longer':'')+'"><input class="pr-checklist-tick" type="checkbox" data-task-index="'+i+'" '+(done?'checked':'')+' '+(inactive?'disabled':'')+' aria-label="Mark '+prHtml(x.description)+' as '+(done?'outstanding':'done')+'"><div class="pr-checklist-text">'+prHtml(x.description)+(inactive?'<span class="pr-checklist-meta">No longer required'+(x.reason?' — '+prHtml(x.reason):'')+'</span>':done?'<span class="pr-checklist-meta">Completed</span>':'<span class="pr-checklist-meta">Outstanding</span>')+'</div><div class="pr-checklist-side">'+(inactive?'<button type="button" class="pr-task-subtle" data-reopen-task="'+i+'">Reopen</button>':done?'<button type="button" class="pr-task-subtle" data-reopen-task="'+i+'">Reopen</button>':'<button type="button" class="pr-task-subtle" data-not-required="'+i+'">No longer required</button>')+'</div></div>';}).join(''):'<p class="pr-checklist-empty">No tasks recorded. Add a task to keep track of outstanding actions.</p>';
- $('#prTaskList').querySelectorAll('input,button').forEach(function(el){if(!el.hasAttribute('data-reopen-task')&&!el.hasAttribute('data-not-required')&&!el.hasAttribute('data-task-index'))return;if(prTaskSaving)el.disabled=true;});
+ $('#prTaskList').innerHTML=ordered.length?ordered.map(function(entry){var x=entry.task,i=entry.index,done=x.status==='done',inactive=x.status==='not_required';return '<div class="pr-checklist-item '+(done?'is-done':inactive?'is-no-longer':'')+'"><input class="pr-checklist-tick" type="checkbox" data-task-index="'+i+'" '+(done?'checked':'')+' '+(inactive?'disabled':'')+' aria-label="Mark '+prHtml(x.description)+' as '+(done?'outstanding':'done')+'"><div class="pr-checklist-text">'+prHtml(x.description)+(inactive?'<span class="pr-checklist-meta">No longer required'+(x.reason?' — '+prHtml(x.reason):'')+'</span>':done?'<span class="pr-checklist-meta">Completed</span>':'<span class="pr-checklist-meta">Outstanding</span>')+'</div><div class="pr-checklist-side">'+(x.id&&!done&&!inactive?(PR_LINKED_TASK_IDS.has(x.id)?'<span class="pr-save-ok" style="font-size:11px;margin-right:8px">In My Tasks ✓</span>':'<button type="button" class="post-btn-secondary" style="font-size:11px;padding:6px 9px;margin-right:8px" data-add-my-task="'+prHtml(x.id)+'">Add to my task list</button>'):'')+(inactive?'<button type="button" class="pr-task-subtle" data-reopen-task="'+i+'">Reopen</button>':done?'<button type="button" class="pr-task-subtle" data-reopen-task="'+i+'">Reopen</button>':'<button type="button" class="pr-task-subtle" data-not-required="'+i+'">No longer required</button>')+'</div></div>';}).join(''):'<p class="pr-checklist-empty">No tasks recorded. Add a task to keep track of outstanding actions.</p>';
+ $('#prTaskList').querySelectorAll('input,button').forEach(function(el){if(!el.hasAttribute('data-reopen-task')&&!el.hasAttribute('data-not-required')&&!el.hasAttribute('data-task-index')&&!el.hasAttribute('data-add-my-task'))return;if(prTaskSaving)el.disabled=true;});
  $('#prInlineAddTask').disabled=prTaskSaving;
 }
 async function prInlineSave(tasks,success){
@@ -2559,11 +2549,21 @@ async function prInlineSave(tasks,success){
  try{
   var response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'post_tasks_save',tasks:tasks,expectedTasksRaw:(POST_DATA&&POST_DATA.tasksRaw)||''})});
   var data=await response.json();if(!response.ok||!data.ok)throw Error((data.errors&&data.errors.join(' '))||data.error||('Jira save failed (HTTP '+response.status+').'));
-  POST_DATA=data.postResolution;prTaskNotice('Saved to Jira',false);prRender();refreshClosureRecoverySummary(POST_DATA);if(success)success();
+  POST_DATA=data.postResolution;if(data.linkedTaskIds)PR_LINKED_TASK_IDS=new Set(data.linkedTaskIds);prTaskNotice(data.taskSyncWarning||'Saved to Jira',!!data.taskSyncWarning);prRender();refreshClosureRecoverySummary(POST_DATA);if(success)success();
  }catch(err){prTaskNotice('Could not save: '+(err.message||'Network error')+'. Your change was not applied.',true);prDisplayTasks();}
  finally{prTaskSaving=false;prDisplayTasks();}
 }
+async function prRefreshTaskLinks(){
+ if(!POST_DATA||!['Post-Resolution Tasks','Partner Funds Outstanding'].includes(PREFILL.statusName))return;
+ try{var r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'post_task_links'})});var d=await r.json();if(!d.ok)throw Error((d.errors||[])[0]||'Link lookup failed');PR_LINKED_TASK_IDS=new Set(d.linkedTaskIds||[]);prDisplayTasks();}catch(e){console.warn('Task link lookup',e);}
+}
+async function prAddToMyTasks(taskId,button){
+ button.disabled=true;var original=button.textContent;button.textContent='Adding…';
+ try{var r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'post_task_add_to_my_tasks',taskId:taskId})});var d=await r.json();if(!r.ok||!d.ok)throw Error((d.errors||[])[0]||'Unable to create task');PR_LINKED_TASK_IDS=new Set(d.linkedTaskIds||[]);prTaskNotice('Added to My Tasks',false);prDisplayTasks();}
+ catch(e){prTaskNotice(e.message,true);button.disabled=false;button.textContent=original;}
+}
 function prInitInlineTasks(){
+ $('#prTaskList').addEventListener('click',function(event){var btn=event.target.closest('[data-add-my-task]');if(btn&&!prTaskSaving){event.preventDefault();prAddToMyTasks(btn.dataset.addMyTask,btn);}});
  $('#prTaskList').addEventListener('change',function(event){var input=event.target.closest('[data-task-index]');if(!input||prTaskSaving)return;var i=Number(input.dataset.taskIndex),tasks=(POST_DATA.tasks||[]).map(function(x){return Object.assign({},x);});if(!tasks[i])return;tasks[i].status=input.checked?'done':'outstanding';tasks[i].reason='';prInlineSave(tasks);});
  $('#prTaskList').addEventListener('click',function(event){if(prTaskSaving)return;var n=event.target.closest('[data-not-required]'),r=event.target.closest('[data-reopen-task]');if(!n&&!r)return;var i=Number((n||r).getAttribute(n?'data-not-required':'data-reopen-task')),tasks=(POST_DATA.tasks||[]).map(function(x){return Object.assign({},x);});if(!tasks[i])return;if(n){var reason=window.prompt('Why is this task no longer required?');if(reason===null)return;if(!reason.trim()){prTaskNotice('A reason is required to mark a task as no longer required.',true);return;}tasks[i].status='not_required';tasks[i].reason=reason.trim();}else{tasks[i].status='outstanding';tasks[i].reason='';}prInlineSave(tasks);});
  $('#prInlineAddTask').addEventListener('click',function(){if(prTaskSaving)return;$('#prInlineNewTask').hidden=false;$('#prInlineTaskDescription').focus();});
@@ -2592,7 +2592,7 @@ function initPrDashboard(){
  $('#prSaveTasks').addEventListener('click',function(){prSaveTaskList(window.prTaskEdits,this,false);});
 }
 function initPostResolution(){POST_DATA=PREFILL.postResolution||null;if(!POST_DATA)return;
-  initPrDashboard();$('#postBeginOpening').addEventListener('click',prOpenSetup);
+  initPrDashboard();prRefreshTaskLinks();$('#postBeginOpening').addEventListener('click',prOpenSetup);
   $('#postSuspenseList').addEventListener('click',function(event){var unlink=event.target.closest('.post-unlink-auction');if(unlink){var unlinkId=unlink.getAttribute('data-item');if(!window.confirm('Unlink this auction receipt from the recovery? The amount will be added back to the outstanding balance, and this suspense item will be excluded from future automatic matching.'))return;prRequest({action:'post_unlink_auction',itemId:unlinkId,confirmed:true},unlink,function(data){POST_DATA=data.postResolution;prRender();refreshClosureRecoverySummary(POST_DATA);showActionsSaveToast('Auction receipt unlinked and excluded from automatic reconciliation.');});return;}var classify=event.target.closest('.post-classify');if(classify){var id=classify.getAttribute('data-item'),sel=classify.parentElement.querySelector('.post-classification'),cat=sel&&sel.value;if(!cat){prError('Choose a payment classification first.');return;}var row=(POST_DATA.suspense.rows||[]).find(function(x){return String(x.id)===String(id);});var names={A:'auction proceeds',P:'dealership / partner money',C:'customer money',O:'other money',X:'excluded from recovery'};if(!window.confirm('Classify suspense #'+id+' ('+gbp.format(row.amount)+') as '+names[cat]+'? '+(cat==='A'||cat==='P'?'This will deduct the amount applied from the recovery balance.':'This will not reduce the recovery balance.')))return;prRequest({action:'post_classify_suspense',itemId:id,category:cat,confirmed:true},classify,function(data){POST_DATA=data.postResolution;prRender();refreshClosureRecoverySummary(POST_DATA);showActionsSaveToast('Suspense classification saved.');});return;}var b=event.target.closest('.post-confirm-auction');if(!b)return;var itemId=b.getAttribute('data-item');var row=(POST_DATA.suspense.rows||[]).find(function(x){return x.id===itemId;});if(!row)return;var msg='Confirm that suspense item '+itemId+' ('+gbp.format(row.amount)+') is the NET auction proceeds for this vehicle?\nReference: '+(row.reference||'Not recorded')+'\nGross auction sale: '+(POST_DATA.auction.gross==null?'Not recorded':gbp.format(POST_DATA.auction.gross))+'\nThis will reduce the recovery balance and cannot be automatically undone.';if(!window.confirm(msg))return;prRequest({action:'post_confirm_auction',itemId:itemId,confirmed:true},b,function(data){POST_DATA=data.postResolution;prRender();refreshClosureRecoverySummary(POST_DATA);showActionsSaveToast('Auction proceeds allocated from suspense.');});});
   $('#postVehicle').addEventListener('change',function(){var noVehicle=this.value==='No Vehicle Rejection';if(noVehicle){var existing=Array.from(document.querySelectorAll('.post-line')).find(function(row){return row.querySelector('.pr-desc').value.trim().toLowerCase()==='vehicle repairs';});if(existing){$('#postRepair').value=existing.querySelector('.pr-amount').value;existing.remove();}}else if(prCash($('#postRepair').value)>0){prAddLine('Vehicle repairs',prCash($('#postRepair').value));$('#postRepair').value=0;}prRenderVehicle();prUpdateMath();prRenderRunningCosts();});$('#postRepair').addEventListener('input',function(){prUpdateMath();prRenderRunningCosts();});
   $('#postEditCustomer').addEventListener('click',function(){openRejCalc(prCustomerStage());});
@@ -2630,7 +2630,7 @@ function gotoActionsPage(page){
   $('#reviewShell').classList.toggle('active',page==='review');
   $('#reviewViewSwitch').hidden=true;
   $('#actionsNav').hidden=true;
-  $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','review':'/ FOS Decision Review','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','dealer':'/ Dealership Position'}[page]||'';
+  $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','dealer':'/ Dealership Position'}[page]||'';
   $('#footer').hidden=page!=='closure';
   $('#manageBtn').style.display=page==='closure'?'':'none';
   $('#closedBanner').style.display=(page==='closure'&&PREFILL.alreadyClosed&&$('#unlockBtn').dataset.unlocked!=='1')?'block':'none';
@@ -2684,7 +2684,7 @@ function initActionsHome(){
   field('solName',esc.solicitorName);field('solTarget',esc.target);field('solRef',esc.externalReference);field('solFile',esc.fileSent);field('solSheet',esc.sheetDocumentId);field('solUpdate',esc.externalUpdate||'No update recorded.');date('solDate',esc.escalationDate);date('solFileDate',esc.fileSentDate);
   var links=$('#solLinks');links.textContent='';
   if(/^https:\/\//i.test(esc.zendeskTicket||'')){var a=document.createElement('a');a.href=esc.zendeskTicket;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Open Zendesk ticket ↗';links.appendChild(a);}
-  $('#fosHomeHint').textContent=!p.fosApplicable?'Not available — this complaint has not been referred to FOS.':(fosReviewIsAvailable()?'Review the latest decision and choose the next action.':'FOS referral recorded. No active decision review is currently available.');
+  $('#fosHomeHint').textContent=!p.fosApplicable?'Not available — this complaint has not been referred to FOS.':(fosReviewIsEditable()?'Review the latest decision and choose the next action.':'View the complaint response and available FOS decisions (read only).');
   document.querySelectorAll('[data-go]').forEach(function(btn){btn.addEventListener('click',function(){gotoActionsPage(btn.dataset.go);});});
   initRejectionPageOutcome();
   $('#homeRejectionTile').addEventListener('click',function(){gotoActionsPage('rejection');homeRejectionDirect=true;syncRejectionPageOutcome();setRejectionPageMode(true);openRejCalc(prCustomerStage());updateRejectionPageVisibility();});
