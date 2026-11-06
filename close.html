@@ -502,6 +502,17 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
 .dealer-summary{background:#FCF7FA;border:1px solid #EEDDE8;border-radius:12px;padding:17px;margin:14px 0}.dealer-summary strong{font-size:19px}.dealer-hist{overflow-wrap:anywhere;font-size:12px;color:#6E5F70;background:#F8F5F9;border-radius:9px;padding:12px}
 .dealer-field{display:block;font-size:13px;font-weight:700;margin:14px 0}.dealer-field select,.dealer-field textarea{display:block;width:100%;margin-top:6px;font:inherit;font-size:14px;border:1.5px solid #DDD1DD;border-radius:9px;padding:11px;background:#fff;color:var(--ink)}
 .dealer-field textarea{min-height:75px;resize:vertical}.dealer-hidden{display:none!important}
+
+/* Post-Resolution inline new-task editor: description first, deadline second, actions last. */
+.pr-new-task{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:end}
+.pr-new-task #prInlineTaskDescription{grid-column:1 / -1;width:100%;min-width:0;min-height:44px;align-self:stretch}
+.pr-new-task .pr-inline-deadline{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:12px;width:100%;align-items:end}
+.pr-new-task .pr-inline-deadline label{min-width:0}
+.pr-new-task .pr-inline-deadline input[type=date]{width:175px;max-width:100%}
+.pr-new-task .pr-inline-deadline input[type=time]{width:135px;max-width:100%}
+.pr-new-task #prInlineCancelAdd{grid-column:2}
+.pr-new-task #prInlineSaveAdd{grid-column:3}
+@media(max-width:550px){.pr-new-task{grid-template-columns:minmax(0,1fr) auto;gap:10px}.pr-new-task #prInlineCancelAdd{grid-column:1;justify-self:end}.pr-new-task #prInlineSaveAdd{grid-column:2}.pr-new-task #prInlineTaskDescription{width:100%}}
 </style>
 </head>
 <body>
