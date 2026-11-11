@@ -513,6 +513,24 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
 .pr-new-task #prInlineCancelAdd{grid-column:2}
 .pr-new-task #prInlineSaveAdd{grid-column:3}
 @media(max-width:550px){.pr-new-task{grid-template-columns:minmax(0,1fr) auto;gap:10px}.pr-new-task #prInlineCancelAdd{grid-column:1;justify-self:end}.pr-new-task #prInlineSaveAdd{grid-column:2}.pr-new-task #prInlineTaskDescription{width:100%}}
+
+/* Assigned-stage introduction gate */
+#actionsInitial[hidden]{display:none!important}
+.initial-wrap{max-width:830px;margin:0 auto 35px}
+.initial-hero{background:linear-gradient(115deg,#2d172b,#612344);color:white;border-radius:18px;padding:28px 30px;margin:0 0 18px;position:relative;overflow:hidden}
+.initial-hero:after{content:'';position:absolute;right:-65px;top:-85px;width:220px;height:220px;background:#f9008138;border-radius:50%}
+.initial-eyebrow{color:#ffc4e0;letter-spacing:.12em;font-size:11px;font-weight:800}
+.initial-hero h2{font-size:29px;letter-spacing:-.03em;margin:9px 0 8px;position:relative;z-index:1}
+.initial-hero p{font-size:13.5px;line-height:1.65;color:#f9e4ef;max-width:600px;margin:0;position:relative;z-index:1}
+.initial-progress{display:flex;gap:8px;margin-bottom:16px;align-items:center;font-weight:700;font-size:12px;color:#776878}.initial-progress b{color:#b8005f;background:#ffeaf4;padding:6px 10px;border-radius:8px}.initial-progress span{color:#a99da9}
+.initial-card{background:white;border:1px solid #e9e1e9;border-radius:15px;padding:23px 26px;margin:13px 0;box-shadow:0 4px 20px #28162808}
+.initial-card h3{margin:0 0 6px;font-size:18px}.initial-card p{font-size:13px;color:#716875;margin:0 0 16px;line-height:1.55}
+.initial-callout{background:#fff5fa;border:1px solid #f6d1e5;border-radius:11px;padding:14px 16px;line-height:1.6;font-size:13px;color:#5b4052}
+.initial-callout strong{display:block;margin-bottom:5px;color:#9f1159}
+.initial-script{border:1px solid #ede1e9;border-radius:11px;margin-top:14px;overflow:hidden}.initial-script summary{cursor:pointer;padding:13px 16px;font-size:13px;font-weight:800;color:#a50c5c;background:#fffafd}.initial-script div{padding:15px 16px;font-size:13.5px;line-height:1.75;color:#3e3441;border-top:1px solid #ede1e9}.initial-script p{margin:0 0 10px;color:#3e3441;font-size:13.5px}
+.initial-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.initial-choice{display:block;border:1.5px solid #e9dfe8;border-radius:12px;padding:15px;cursor:pointer;transition:.15s}.initial-choice:has(input:checked){border-color:#f90081;background:#fff2f9;box-shadow:0 0 0 2px #f9008112}.initial-choice input{accent-color:#f90081;margin:0 7px 0 0}.initial-choice strong{font-size:13.5px}.initial-choice small{display:block;margin:7px 0 0 22px;font-size:11.5px;color:#776d79}
+.initial-notes-label{display:block;font-size:13.5px;font-weight:800;margin:17px 0 7px}.initial-notes{font:inherit;font-size:13px;padding:12px;border:1.5px solid #dcd5e2;border-radius:10px;width:100%;min-height:82px;resize:vertical}.initial-notes:focus{outline:0;border-color:#f90081;box-shadow:0 0 0 3px #ffeaf4}.initial-count{display:block;text-align:right;color:#827889;font-size:11px;margin-top:4px}.initial-confirm{display:flex;align-items:flex-start;gap:11px;padding:15px;background:#fdf8fb;border:1px solid #ece3eb;border-radius:11px;margin:16px 0;font-size:13px;font-weight:650;cursor:pointer}.initial-confirm input{accent-color:#f90081;width:17px;height:17px;flex:none;margin-top:1px}.initial-footer{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-top:9px}.initial-footer .btn{min-width:200px}.initial-footer .btn:disabled{background:#d8cbd5;box-shadow:none;color:#776979;cursor:not-allowed}.initial-footer small{color:#847686;font-size:11.5px}.initial-error{color:#a31c43;background:#fff0f2;border:1px solid #f4c9d5;padding:12px;border-radius:9px;margin-top:12px;font-size:12.5px}.initial-error[hidden]{display:none!important}
+@media(max-width:620px){.initial-hero{padding:23px 21px}.initial-hero h2{font-size:25px}.initial-card{padding:19px}.initial-grid{grid-template-columns:1fr}.initial-footer{flex-direction:column;align-items:stretch}.initial-footer .btn{width:100%}}
 </style>
 </head>
 <body>
@@ -587,6 +605,26 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
 <div class="closure-check-overlay" id="closureCheckModal" hidden role="dialog" aria-modal="true" aria-labelledby="closureCheckTitle">
   <div class="closure-check-dialog"><h3 id="closureCheckTitle">Post-Resolution check</h3><p id="closureCheckDescription"></p><label id="closureMoveClosedRow" class="closure-move-closed" hidden><input id="closureMoveClosed" type="checkbox"><span><strong>Move the complaint to Closed</strong><small>After saving, transition the Complaints Hub complaint to Complaint Closed.</small></span></label><div class="closure-check-actions"><button type="button" class="post-btn-secondary" id="closureCheckCancel">Cancel</button><button type="button" class="post-btn-secondary" id="closureCheckReview">Review Recovery</button><button type="button" class="btn" id="closureCheckContinue">Continue &amp; Save Closure</button></div></div>
 </div>
+<section id="actionsInitial" class="actions-page" aria-label="Initial Customer Call" hidden>
+ <div class="initial-wrap">
+  <div class="initial-progress"><b>01 · Initial Customer Call</b><span>→</span>02 · Investigation</div>
+  <div class="initial-hero"><div class="initial-eyebrow">COMPLAINT ACTIONS · GETTING STARTED</div><h2>Initial Customer Call</h2><p>Before you start investigating, make an initial attempt to speak with the customer and record what happened. This helps set expectations and makes the process feel more personal.</p></div>
+  <div class="initial-card"><h3>1. Make the introduction call</h3><p>Call <strong id="initialCustomer">the customer</strong> to introduce yourself as their complaint handler. You can adapt the suggestions below to sound natural.</p>
+   <div class="initial-callout"><strong>What to cover</strong>Introduce yourself and confirm that you will be investigating their complaint. Let them know they can contact you if anything comes up, and that you will reach out when you need further information. Reassure them that a period without updates does not mean their complaint has been forgotten.</div>
+   <details class="initial-script"><summary>▾ &nbsp; Suggested call script &amp; talking points</summary><div><p>“Hi, is that <span id="initialScriptCustomer">[customer]</span>? It’s <strong id="initialAgent">[your name]</strong> calling from Carmoola. I’m going to be looking after your complaint, so I just wanted to introduce myself properly.</p><p>I’ll be reviewing everything and looking into the concerns you’ve raised. If you have any questions or there’s anything you’d like to add, you can reach out to me. Otherwise, don’t worry — I’ll get in touch if I need anything from you.</p><p>I’m looking after a number of complaints, so there may be periods when you don’t hear from me while I’m gathering information. That doesn’t mean I’ve stopped working on yours. I’ll keep you updated as things progress, and we’ll make sure you receive a response within the applicable timeframe.”</p><p><strong>Before ending:</strong> Ask if there is anything else they would like you to consider, check their preferred method of contact and avoid promising a particular outcome.</p></div></details>
+  </div>
+  <div class="initial-card"><h3>2. Record the outcome</h3><p>Choose what happened when you tried to contact the customer.</p><div class="initial-grid" role="radiogroup" aria-label="Call outcome">
+   <label class="initial-choice"><input type="radio" name="initialOutcome" value="Spoke to customer"><strong>Spoke to customer</strong><small>Introduction call completed</small></label>
+   <label class="initial-choice"><input type="radio" name="initialOutcome" value="Voicemail left"><strong>Voicemail left</strong><small>Message left introducing yourself</small></label>
+   <label class="initial-choice"><input type="radio" name="initialOutcome" value="No voicemail option"><strong>No voicemail option</strong><small>Tried to call but couldn't leave a message</small></label>
+   <label class="initial-choice"><input type="radio" name="initialOutcome" value="No call made"><strong>No call made</strong><small>Explain why the call could not be made</small></label>
+  </div>
+  <label class="initial-notes-label" for="initialNotes">Call notes <span id="initialNotesRequired" style="color:#f90081" hidden>· Required</span></label><textarea id="initialNotes" class="initial-notes" maxlength="255" placeholder="Add any useful context about the call or contact attempt…"></textarea><span class="initial-count" id="initialNotesCount">0 / 255 characters · short-text Jira field</span>
+  <label class="initial-confirm"><input type="checkbox" id="initialConfirmed"><span id="initialConfirmationText">I confirm I have accurately recorded the initial contact attempt and am ready to start investigating this complaint.</span></label>
+  <div class="initial-error" id="initialError" role="alert" hidden></div>
+  <div class="initial-footer"><small>Saved to Jira before the complaint moves to Investigation.</small><button type="button" class="btn" id="initialStart" disabled>Start Investigation →</button></div>
+ </div></div>
+</section>
 <section id="actionsHome" class="actions-page active" aria-label="Complaint homepage">
   <div class="home-action-heading"><div><h3>What would you like to do?</h3><p>Select a workspace to continue managing this complaint.</p></div><span class="home-action-count">7 WORKSPACES</span></div>
   <div class="actions-tiles home-tiles home-tiles-five">
@@ -2630,6 +2668,7 @@ function gotoActionsPage(page){
   if(page!=='rejection'&&ACTION_PAGE==='rejection'&&homeRejectionDirect){closeRejSides();rejWork=null;homeRejectionDirect=false;setRejectionPageMode(false);}
   if(closureRecoveryModalOpen)closeClosureRecoveryModal();
   if(page==='home')prOpeningStarted=false;
+  if(PREFILL.statusName==='Assigned'&&page!=='initial')return;
   if(page==='post'&&!canOpenPostResolution(PREFILL.statusName))return;
   if(page==='review'&&!PREFILL.fosApplicable)return;
   if(page==='solicitor'&&!(PREFILL.solicitorEscalation&&PREFILL.solicitorEscalation.enabled))return;
@@ -2637,6 +2676,8 @@ function gotoActionsPage(page){
   document.body.classList.toggle('actions-on-home',page==='home');
   document.body.classList.toggle('actions-in-workspace',page!=='home');
   $('#globalHomeBtn').hidden=page==='home';
+  $('#actionsInitial').hidden=page!=='initial';
+  $('#actionsInitial').classList.toggle('active',page==='initial');
   $('#actionsHome').classList.toggle('active',page==='home');
   $('#actionsRunning').classList.toggle('active',page==='running');
   $('#actionsPost').classList.toggle('active',page==='post');
@@ -2708,9 +2749,40 @@ function initActionsHome(){
   $('#homeRejectionTile').addEventListener('click',function(){gotoActionsPage('rejection');homeRejectionDirect=true;syncRejectionPageOutcome();setRejectionPageMode(true);openRejCalc(prCustomerStage());updateRejectionPageVisibility();});
   $('#actionsHomeBtn').addEventListener('click',function(){gotoActionsPage('home');});
   $('#globalHomeBtn').addEventListener('click',function(){gotoActionsPage('home');});
-  gotoActionsPage('home');
+  initInitialContact();
+  gotoActionsPage(p.statusName==='Assigned'?'initial':'home');
 }
 
+
+
+function initInitialContact(){
+ var p=PREFILL||{};
+ var first=String(p.customerName||'').trim().split(/\s+/)[0]||'the customer';
+ var agent=String(p.assigneeName||'').trim().split(/\s+/)[0]||'your complaint handler';
+ $('#initialCustomer').textContent=p.customerName||'the customer';
+ $('#initialScriptCustomer').textContent=first;
+ $('#initialAgent').textContent=agent;
+ var notes=$('#initialNotes'),check=$('#initialConfirmed'),btn=$('#initialStart'),err=$('#initialError');
+ function selected(){return document.querySelector('input[name="initialOutcome"]:checked')?.value||'';}
+ function validate(){
+  var outcome=selected(),needNotes=outcome==='No call made';
+  $('#initialNotesRequired').hidden=!needNotes;
+  $('#initialNotesCount').textContent=notes.value.length+' / 255 characters · short-text Jira field';
+  $('#initialConfirmationText').textContent=outcome==='Spoke to customer'?'I confirm the introduction call was completed and these details are accurate.':'I confirm the initial contact outcome is accurately recorded and I am ready to start investigating.';
+  btn.disabled=!outcome||!check.checked||(needNotes&&notes.value.trim().length<10);
+ }
+ document.querySelectorAll('input[name="initialOutcome"]').forEach(function(el){el.addEventListener('change',validate);});
+ notes.addEventListener('input',validate);check.addEventListener('change',validate);
+ btn.addEventListener('click',function(){
+  validate();if(btn.disabled)return;
+  err.hidden=true;btn.disabled=true;btn.textContent='Saving & starting…';
+  fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'start_investigation',callOutcome:selected(),callNotes:notes.value.trim(),confirmed:check.checked})})
+   .then(function(r){return r.json();}).then(function(d){if(!d.ok)throw Error((d.errors||[])[0]||'Unable to start investigation.');PREFILL.statusName='Investigation';$('#homeStatus').textContent='Investigation';$('#postHomeTile').disabled=!canOpenPostResolution('Investigation');gotoActionsPage('home');showActionsSaveToast('Initial Customer Call recorded. Investigation started.');})
+   .catch(function(e){err.textContent=e.message;err.hidden=false;})
+   .finally(function(){btn.textContent='Start Investigation →';validate();});
+ });
+ validate();
+}
 
 function dealerEligible(){return /^vehicle\s+issues?$/i.test(String(PREFILL?.complaintType||'').trim());}
 function dealerNonOutsourced(){return dealerEligible()&&!PREFILL?.dealershipPosition?.outsourced;}
