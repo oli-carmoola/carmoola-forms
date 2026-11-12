@@ -531,6 +531,15 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
 .initial-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.initial-choice{display:block;border:1.5px solid #e9dfe8;border-radius:12px;padding:15px;cursor:pointer;transition:.15s}.initial-choice:has(input:checked){border-color:#f90081;background:#fff2f9;box-shadow:0 0 0 2px #f9008112}.initial-choice input{accent-color:#f90081;margin:0 7px 0 0}.initial-choice strong{font-size:13.5px}.initial-choice small{display:block;margin:7px 0 0 22px;font-size:11.5px;color:#776d79}
 .initial-notes-label{display:block;font-size:13.5px;font-weight:800;margin:17px 0 7px}.initial-notes{font:inherit;font-size:13px;padding:12px;border:1.5px solid #dcd5e2;border-radius:10px;width:100%;min-height:82px;resize:vertical}.initial-notes:focus{outline:0;border-color:#f90081;box-shadow:0 0 0 3px #ffeaf4}.initial-count{display:block;text-align:right;color:#827889;font-size:11px;margin-top:4px}.initial-confirm{display:flex;align-items:flex-start;gap:11px;padding:15px;background:#fdf8fb;border:1px solid #ece3eb;border-radius:11px;margin:16px 0;font-size:13px;font-weight:650;cursor:pointer}.initial-confirm input{accent-color:#f90081;width:17px;height:17px;flex:none;margin-top:1px}.initial-footer{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-top:9px}.initial-footer .btn{min-width:200px}.initial-footer .btn:disabled{background:#d8cbd5;box-shadow:none;color:#776979;cursor:not-allowed}.initial-footer small{color:#847686;font-size:11.5px}.initial-error{color:#a31c43;background:#fff0f2;border:1px solid #f4c9d5;padding:12px;border-radius:9px;margin-top:12px;font-size:12.5px}.initial-error[hidden]{display:none!important}
 @media(max-width:620px){.initial-hero{padding:23px 21px}.initial-hero h2{font-size:25px}.initial-card{padding:19px}.initial-grid{grid-template-columns:1fr}.initial-footer{flex-direction:column;align-items:stretch}.initial-footer .btn{width:100%}}
+
+/* Optional Talkdesk click-to-call action for Initial Customer Call */
+.initial-call-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 17px}
+.initial-call-actions[hidden]{display:none!important}
+.initial-dial-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 17px;border-radius:10px;background:#f90081;color:#fff;text-decoration:none;font-weight:800;font-size:13px;box-shadow:0 3px 12px #f9008126}
+.initial-dial-button:hover{background:#b8005f;color:#fff}
+.initial-dial-button:focus-visible,.initial-call-help:focus-visible{outline:3px solid #f90081;outline-offset:3px}
+.initial-call-help{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:1px solid #dfcddd;color:#9f1159;background:#fff;text-decoration:none;font-size:16px;font-weight:800}
+.initial-call-help:hover{background:#fff1f8;border-color:#f90081}
 </style>
 </head>
 <body>
@@ -610,6 +619,10 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
   <div class="initial-progress"><b>01 · Initial Customer Call</b><span>→</span>02 · Investigation</div>
   <div class="initial-hero"><div class="initial-eyebrow">COMPLAINT ACTIONS · GETTING STARTED</div><h2>Initial Customer Call</h2><p>Before you start investigating, make an initial attempt to speak with the customer and record what happened. This helps set expectations and makes the process feel more personal.</p></div>
   <div class="initial-card"><h3>1. Make the introduction call</h3><p>Call <strong id="initialCustomer">the customer</strong> to introduce yourself as their complaint handler. You can adapt the suggestions below to sound natural.</p>
+   <div class="initial-call-actions" id="initialCallActions" hidden>
+     <a class="initial-dial-button" id="initialDialCustomer" href="#" aria-label="Call customer"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72l.57 3a2 2 0 0 1-.57 1.91L8.8 10.9a16 16 0 0 0 4.3 4.3l1.27-1.28a2 2 0 0 1 1.91-.57l3 .57A2 2 0 0 1 22 16.92Z"/></svg>Call customer</a>
+     <a class="initial-call-help" href="https://chromewebstore.google.com/detail/talkdesk-click-to-call-ex/adjgicoimjhccdcjgepkmigomegpjplg?authuser=0&amp;pli=1" target="_blank" rel="noopener noreferrer" aria-label="How to enable Talkdesk click-to-call (opens Chrome Web Store)" title="Install the Talkdesk Click-to-Call Chrome extension to call through Talkdesk">i</a>
+   </div>
    <div class="initial-callout"><strong>What to cover</strong>Introduce yourself and confirm that you will be investigating their complaint. Let them know they can contact you if anything comes up, and that you will reach out when you need further information. Reassure them that a period without updates does not mean their complaint has been forgotten.</div>
    <details class="initial-script"><summary>▾ &nbsp; Suggested call script &amp; talking points</summary>
     <div>
@@ -2790,6 +2803,18 @@ function initInitialContact(){
   $('#initialScriptEmailCustomer').textContent=first;
   $('#initialScriptClosingCustomer').textContent=first;
  $('#initialAgent').textContent=agent;
+ // Only show the dial action for a valid international-format customer number.
+ var rawPhone=String(p.customerPhone||'').trim();
+ var phone=rawPhone.replace(/[\s().-]/g,'');
+ var callActions=$('#initialCallActions'),callLink=$('#initialDialCustomer');
+ if(/^\+?[1-9]\d{6,14}$/.test(phone)){
+   if(!phone.startsWith('+'))phone='+'+phone;
+   callLink.href='tel:'+phone;
+   callActions.hidden=false;
+ }else{
+   callActions.hidden=true;
+   callLink.removeAttribute('href');
+ }
  var notes=$('#initialNotes'),check=$('#initialConfirmed'),btn=$('#initialStart'),err=$('#initialError');
  function selected(){return document.querySelector('input[name="initialOutcome"]:checked')?.value||'';}
  function validate(){
