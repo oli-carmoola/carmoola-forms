@@ -550,6 +550,36 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
 .de-actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.de-action{border:1px solid #decbd9;border-radius:9px;background:#fff;color:#862553;font:700 12px 'DM Sans',sans-serif;padding:10px 12px;cursor:pointer}.de-action.primary{background:#f90081;color:white;border-color:#f90081}.de-action:disabled{opacity:.4;cursor:default}
 .de-note{font-size:12px;color:#74687a}.de-notice{font-size:12px;margin:9px 0;color:#a01949}.de-timeline{position:relative;margin:15px 0 0;padding-left:20px;border-left:2px solid #f6d0e4}.de-entry{position:relative;margin:0 0 13px;padding:14px;border-radius:11px;border:1px solid #eee3ed;background:#fff}.de-entry:before{content:'';position:absolute;left:-27px;top:20px;width:10px;height:10px;background:#f90081;border:3px solid white;border-radius:50%;box-shadow:0 0 0 1px #e9bad1}.de-entry-head{display:flex;justify-content:space-between;gap:10px;font-size:12px}.de-entry details{margin-top:10px}.de-entry summary{color:#a01960;font-weight:750;font-size:12px;cursor:pointer}.de-email{white-space:pre-wrap;overflow-wrap:anywhere;background:#fcf8fb;padding:13px;border-radius:9px;font-size:12.5px;line-height:1.55;margin-top:9px}
 @media(max-width:620px){.de-stats,.de-fields{grid-template-columns:1fr}.de-card{padding:15px}}
+
+/* 2026 Post-Resolution Hub UI refresh - presentation only; existing controls retain their IDs */
+.hub-dashboard[hidden],.hub-panel[hidden]{display:none!important}
+.workspace-rail[hidden],.rail-mobile-toggle[hidden],.hub-dialog-overlay[hidden]{display:none!important}
+.workspace-rail{position:fixed;z-index:50;inset:0 auto 0 0;width:238px;display:flex;flex-direction:column;background:linear-gradient(160deg,#2b102b 0%,#3a1535 62%,#54183d 100%);color:#fff;box-shadow:7px 0 34px #2a14231c}
+.rail-brand{padding:29px 22px 22px}.rail-logo{font-size:24px;font-weight:800;letter-spacing:-.065em}.rail-logo span{color:#ff66af;font-size:10px;vertical-align:top;margin-left:3px}.rail-caption{display:block;font-size:9px;font-weight:800;letter-spacing:.16em;color:#d0a8bf;margin-top:8px}
+.rail-case{margin:0 13px 26px;padding:14px 13px;border:1px solid #ffffff22;border-radius:13px;background:#ffffff0c}.rail-case span{font-size:9px;letter-spacing:.12em;color:#e4b5cc;font-weight:800}.rail-case strong{display:block;font-size:14px;margin:5px 0}.rail-case small{display:block;font-size:11px;color:#dbb9cc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-links{padding:0 11px;overflow:auto}.rail-group{color:#d7acc4;font-weight:800;font-size:9px;letter-spacing:.13em;padding:19px 11px 8px}
+.rail-link{width:100%;border:0;display:flex;align-items:center;text-align:left;gap:12px;padding:11px 12px;border-radius:10px;background:transparent;color:#e7d1e0;font-family:inherit;font-size:12.5px;font-weight:650;cursor:pointer;margin:3px 0}.rail-link:hover:not(:disabled){background:#ffffff16;color:#fff}.rail-link.is-active{background:#ffd6ea;color:#551438;font-weight:800}.rail-link:disabled{opacity:.38;cursor:not-allowed}.rail-icon{width:20px;text-align:center;font-size:19px;line-height:1}
+.rail-foot{margin-top:auto;padding:22px;font-size:11px;color:#e4bed0;display:flex;gap:9px;align-items:center}.rail-pulse{width:7px;height:7px;background:#f76aa9;border-radius:50%}
+body.actions-with-rail .shell{max-width:1250px;width:calc(100% - 238px);margin-left:238px;margin-right:auto;padding:24px 34px 48px}
+body.actions-with-rail .shell>.logo,body.actions-with-rail .shell>.head,body.actions-with-rail .shell>.refsection,body.actions-with-rail .shell>.infobox{display:none!important}
+body.actions-with-rail .actions-page{max-width:none}
+body.actions-with-rail .actions-save-row{max-width:none}
+body.actions-with-rail .footer-inner{margin-left:238px;max-width:none}
+body.actions-with-rail #globalHomeBtn{display:none!important}
+.hub-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:4px 0 20px;padding:0 0 12px}.hub-heading h2{font-size:29px;letter-spacing:-.045em;margin:6px 0 4px;color:#2b1c2c}.hub-heading p{font-size:13px;color:#756b79;margin:0}
+.hub-overline{display:block;font-size:10px;color:#a21b64;font-weight:800;letter-spacing:.11em}.hub-slash{color:#cbb7c5;padding:0 8px}.hub-heading .post-chip{background:#ffeaf4;color:#a80b60;border:1px solid #f6d2e4}
+.hub-dashboard{display:flex;flex-direction:column;gap:15px;margin-bottom:16px}.hub-overview{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:12px}.hub-metric{padding:18px 19px;border:1px solid #eadfe9;background:#fff;border-radius:16px;box-shadow:0 3px 16px #29122807}.hub-metric-main{background:linear-gradient(120deg,#fff,#fff0f8);border-color:#f0c9dc}.hub-metric>span{color:#746877;font-size:11px;font-weight:750}.hub-metric strong{display:block;color:#2d1830;font-size:22px;letter-spacing:-.03em;margin:7px 0 2px}.hub-metric-main strong{font-size:28px;color:#a0065c}.hub-metric small{color:#918692;font-size:10.5px}
+.hub-panel{border:1px solid #eae0e9;background:#fff;border-radius:17px;padding:20px 22px;box-shadow:0 5px 25px #2b122008;margin:0 0 15px}.hub-panel-title{display:flex;align-items:center;gap:12px}.hub-panel-title>div:nth-child(2){flex:1;min-width:0}.hub-panel-title h3{font-size:17px;letter-spacing:-.025em;margin:0 0 4px}.hub-panel-title p{margin:0;color:#817583;font-size:12px}.hub-symbol{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:11px;background:#ffebf4;color:#b10a64;font-size:20px;font-weight:800}.hub-symbol.mini{width:28px;height:28px;font-size:14px}
+.hub-recovery{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px}.hub-recovery-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.hub-btn{font-family:inherit;font-size:12.5px;font-weight:800;min-height:39px;padding:10px 14px;border-radius:10px;cursor:pointer;white-space:nowrap}.hub-btn-primary{background:#f90081;color:white;border:1px solid #f90081;box-shadow:0 3px 12px #f900811e}.hub-btn-primary:hover{background:#ca006a}.hub-btn-quiet{background:white;color:#8e225c;border:1px solid #e8d8e3}.hub-btn-quiet:hover{background:#fff4fa}.hub-btn:disabled{opacity:.45;cursor:default}
+.hub-breakdown{grid-column:1/-1;border-top:1px solid #f1e8ef;margin-top:10px;padding-top:11px}.hub-breakdown>summary{font-size:11.5px;color:#8c6981;cursor:pointer;font-weight:700;list-style:none}.hub-breakdown>summary::-webkit-details-marker{display:none}.hub-breakdown>summary span{margin-left:6px}.hub-breakdown-body{padding:8px 0 3px}.hub-breakdown-body h3{font-size:13px!important}.hub-advanced{display:flex;gap:12px;align-items:center;padding:12px 0 2px;border-top:1px solid #f2e9ee}.hub-text-link{border:0;background:transparent;text-decoration:underline;text-underline-offset:2px;color:#8f8190;font-size:11px;font-family:inherit;cursor:pointer;padding:0}.hub-text-link:hover{color:#9e0e60}.hub-advanced small{color:#aaa0ad;font-size:10px}
+.hub-task-panel{padding:0}.hub-accordion-head{display:flex;align-items:center;gap:13px;padding:18px 22px;list-style:none;cursor:pointer}.hub-accordion-head::-webkit-details-marker{display:none}.hub-accordion-copy{flex:1}.hub-accordion-copy strong{display:block;font-size:16px}.hub-accordion-copy small{color:#817583;font-size:11.5px;display:block;margin-top:3px}.hub-accordion-right{color:#978a98;font-size:11px}.hub-chevron{display:inline-block;font-size:17px;transition:transform .2s}.hub-task-panel[open] .hub-chevron,.hub-email-history[open] .hub-chevron{transform:rotate(180deg)}.hub-accordion-inner{border-top:1px solid #f1e8ee;padding:0 22px 20px}.hub-accordion-inner .pr-checklist-head{margin-top:15px}
+.hub-escalation{padding:20px 22px}.hub-escalation .de-chip{margin-left:auto}.hub-de-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:17px 0}.hub-de-summary>div{border:1px solid #f0e7ef;border-radius:11px;background:#fdfafd;padding:11px 13px}.hub-de-summary span{font-size:10px;color:#8d7f8d;font-weight:750;display:block}.hub-de-summary strong{display:block;font-size:17px;color:#2c1b2b;letter-spacing:-.015em;margin-top:5px}.hub-de-cta{display:flex;gap:15px;align-items:center;justify-content:space-between;padding:4px 0 17px}.hub-de-cta p{margin:0;font-size:12px;color:#857985}.hub-email-history{border-top:1px solid #f0e7ed}.hub-email-history>summary{display:flex;align-items:center;gap:11px;list-style:none;padding:16px 0 4px;cursor:pointer}.hub-email-history>summary::-webkit-details-marker{display:none}.hub-email-history>summary>span:nth-child(2){flex:1}.hub-email-history>summary strong{display:block;font-size:13px}.hub-email-history>summary small{display:block;color:#978b99;font-size:11px;margin-top:3px}.hub-email-content{padding:13px 0 3px}.hub-email-toolbar{display:flex;align-items:center;gap:16px;justify-content:space-between}.hub-email-toolbar p{font-size:11px;color:#8d8190}.hub-email-toolbar button{font-size:11px;padding:7px 9px}
+.hub-dialog-overlay{position:fixed;inset:0;z-index:170;background:#1c0c1ebf;display:flex;align-items:center;justify-content:center;padding:18px}.hub-dialog{width:min(640px,100%);max-height:min(88vh,900px);overflow:auto;background:white;border-radius:20px;box-shadow:0 22px 110px #150b1c50}.hub-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;padding:25px 28px 18px;border-bottom:1px solid #f0e7ed}.hub-dialog-head h3{font-size:22px;letter-spacing:-.04em;margin:6px 0}.hub-dialog-head p{font-size:12px;color:#857b87;margin:0}.hub-modal-x{height:32px;width:32px;border:1px solid #e8dbe6;background:#fff;border-radius:9px;font-size:21px;cursor:pointer;color:#8c7383}.hub-dialog-body{padding:22px 28px}.hub-dialog-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #f0e7ed;padding:15px 28px}.hub-dialog-foot span{font-size:11px;color:#928693}.hub-dialog .de-fields{gap:17px}.hub-dialog .de-fields label{font-size:12px;color:#433545;gap:8px}.hub-dialog .de-fields input,.hub-dialog .de-fields select,.hub-dialog .de-fields textarea{border-radius:10px;min-height:44px;border:1px solid #dbcedb;font-family:inherit;font-size:13px;background:#fff}.hub-dialog .de-fields textarea{min-height:105px}.hub-dialog .de-fields input:focus,.hub-dialog .de-fields select:focus,.hub-dialog .de-fields textarea:focus{border-color:#f90081;outline:0;box-shadow:0 0 0 3px #ffe9f3}.hub-currency{display:flex;align-items:center;border:1px solid #dbcedb;border-radius:10px;overflow:hidden;background:#fff}.hub-currency:focus-within{border-color:#f90081;box-shadow:0 0 0 3px #ffe9f3}.hub-currency>span{font-size:16px;font-weight:800;color:#922158;padding:0 13px;border-right:1px solid #eee4ed;background:#fcf7fb;align-self:stretch;display:flex;align-items:center}.hub-dialog .de-fields .hub-currency input{border:0!important;border-radius:0;box-shadow:none!important;width:100%;font-weight:750;font-variant-numeric:tabular-nums;padding:10px 12px}.hub-dialog .de-note{line-height:1.5}
+.de-entry{box-shadow:0 2px 8px #2b1b2807}.de-entry-head{gap:16px}
+@media(min-width:1450px){body.actions-with-rail .shell{margin-left:calc(238px + (100vw - 238px - 1250px)/2)}}
+@media(max-width:1000px){.workspace-rail{width:195px}.rail-link{font-size:11.5px}.rail-brand{padding-left:15px}body.actions-with-rail .shell{margin-left:195px;width:calc(100% - 195px);padding:20px}body.actions-with-rail .footer-inner{margin-left:195px}.hub-recovery{grid-template-columns:1fr}.hub-recovery-actions{justify-content:flex-start}.hub-overview{grid-template-columns:repeat(3,1fr)}.hub-metric-main strong{font-size:23px}}
+@media(max-width:710px){.workspace-rail{width:min(285px,85vw);box-shadow:0 0 0 100vmax #28122980}.workspace-rail:not(.rail-open){display:none}body.actions-with-rail .shell{width:100%;margin:0;padding:68px 15px 25px}body.actions-with-rail .footer-inner{margin:0}.rail-mobile-toggle{position:fixed;top:12px;left:13px;z-index:49;background:#401934;color:#fff;border:0;border-radius:10px;padding:11px 14px;font-family:inherit;font-weight:800;font-size:12px}.hub-heading{align-items:flex-start;flex-direction:column}.hub-heading h2{font-size:25px}.hub-overview{grid-template-columns:1fr 1fr}.hub-overview .hub-metric-main{grid-column:1/-1}.hub-de-summary{gap:6px}.hub-de-summary>div{padding:10px}.hub-de-summary strong{font-size:15px}.hub-recovery-actions{width:100%}.hub-accordion-right{font-size:0}.hub-accordion-right .hub-chevron{font-size:18px}.hub-dialog-head,.hub-dialog-body,.hub-dialog-foot{padding-left:18px;padding-right:18px}}
+
 </style>
 </head>
 <body>
@@ -616,6 +646,23 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
   </div>
 
 </div>
+<aside class="workspace-rail" id="workspaceRail" hidden aria-label="Complaint workspace navigation">
+  <div class="rail-brand"><div class="rail-logo">carmoola<span>●</span></div><span class="rail-caption">COMPLAINTS HUB</span></div>
+  <div class="rail-case"><span>WORKING ON</span><strong id="railCaseRef">Complaint</strong><small id="railCustomer">Customer</small></div>
+  <nav class="rail-links" aria-label="Complaint sections">
+    <button type="button" class="rail-link" data-rail="home"><span class="rail-icon">⌂</span><span>Complaint home</span></button>
+    <div class="rail-group">WORKSPACES</div>
+    <button type="button" class="rail-link" data-rail="running"><span class="rail-icon">▤</span><span>Running costs</span></button>
+    <button type="button" class="rail-link" data-rail="rejection"><span class="rail-icon">◇</span><span>Vehicle rejection</span></button>
+    <button type="button" class="rail-link" data-rail="post"><span class="rail-icon">▣</span><span>Post-Resolution Hub</span></button>
+    <button type="button" class="rail-link" data-rail="closure"><span class="rail-icon">✓</span><span>Complaint closure</span></button>
+    <button type="button" class="rail-link" data-rail="review"><span class="rail-icon">▤</span><span>FOS decision review</span></button>
+    <button type="button" class="rail-link" data-rail="dealer"><span class="rail-icon">♧</span><span>Dealership position</span></button>
+    <button type="button" class="rail-link" data-rail="solicitor"><span class="rail-icon">⚖</span><span>Solicitor escalation</span></button>
+  </nav>
+  <div class="rail-foot"><span class="rail-pulse"></span><span id="railStatus">Complaints Hub</span></div>
+</aside>
+<button type="button" id="railMobileToggle" class="rail-mobile-toggle" aria-label="Open workspace menu" hidden>☰ &nbsp; Workspaces</button>
 <div class="actions-nav" id="actionsNav" hidden><button type="button" class="actions-home-link" id="actionsHomeBtn">⌂ &nbsp;Complaint Home</button><span class="actions-current" id="actionsCurrent"></span></div>
 <div id="actionsSaveToast" class="actions-toast" role="status" aria-live="polite"><span class="actions-toast-icon">✓</span><span>Running costs updated successfully.</span></div>
 <div class="closure-recovery-overlay" id="closureRecoveryModal" hidden role="dialog" aria-modal="true" aria-label="Post-Resolution recovery">
@@ -722,33 +769,38 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
   </div>
 </section>
 <section id="actionsPost" class="actions-page">
-  <div class="post-hero"><div><span class="post-eyebrow">COMPLAINT ACTIONS · RECOVERY MANAGEMENT</span><h2>Post-Resolution</h2><p>Manage third-party recovery, payments and the audit trail in Complaints Hub.</p></div><span class="post-chip" id="postStageChip">Loading…</span></div>
-  <div id="prDashboard" class="post-card" hidden>
-    <div class="post-section-heading"><div><span class="post-eyebrow-light">CASE MANAGEMENT</span><h3>Post-Resolution dashboard</h3><p class="post-muted">Manage your outstanding work and recovery separately.</p></div></div>
-    <div class="post-statgrid"><div class="post-stat"><span>FUNDS OUTSTANDING</span><strong id="prDashboardBalance">£0.00</strong></div><div class="post-stat"><span>OPEN TASKS</span><strong id="prDashboardTaskCount">0</strong></div><div class="post-stat"><span>RECOVERY STATUS</span><strong id="prDashboardStatus">—</strong></div></div>
-    <div id="prSavedBreakdown" style="margin:16px 0;padding:16px;border:1px solid #ece0e9;border-radius:12px;background:#fff"></div>
-    <div class="post-actions"><button type="button" class="post-btn-secondary" id="prEditFunds">View financial recovery</button><button type="button" class="post-btn-secondary" id="prCorrectOriginal">Edit original breakdown</button><button type="button" class="post-btn-secondary" id="prAddCost">+ Add recovery costs</button></div>
-    <div class="pr-checklist-head"><div><h3>Outstanding tasks</h3><p class="post-muted">Tick tasks when complete. Every change saves automatically to Complaints Hub.</p></div><button type="button" class="post-btn-secondary" id="prInlineAddTask">+ Add task</button></div><div id="prTaskSaveState" role="status" aria-live="polite"></div><div id="prTaskList" class="pr-checklist"></div><div class="pr-new-task" id="prInlineNewTask" hidden><input id="prInlineTaskDescription" maxlength="500" type="text" placeholder="What needs to be done?" aria-label="New task description"><div class="pr-inline-deadline"><label>Deadline (optional)<input id="prInlineTaskDeadline" type="date"></label><label>Time (optional)<input id="prInlineTaskTime" type="time" disabled></label></div><button type="button" class="post-btn-secondary" id="prInlineCancelAdd">Cancel</button><button type="button" class="btn" id="prInlineSaveAdd">Add task</button></div>
+  <div class="hub-heading"><div><span class="hub-overline">COMPLAINT WORKSPACE <span class="hub-slash">/</span> RECOVERY</span><h2>Post-Resolution Hub</h2><p>Everything that needs to happen after a complaint decision, in one place.</p></div><span class="post-chip" id="postStageChip">Loading…</span></div>
+  <div id="prDashboard" class="hub-dashboard" hidden>
+    <div class="hub-overview"><div class="hub-metric hub-metric-main"><span>Outstanding recovery</span><strong id="prDashboardBalance">£0.00</strong><small>Remaining amount to recover</small></div><div class="hub-metric"><span>Recovery status</span><strong id="prDashboardStatus">—</strong></div><div class="hub-metric"><span>Open tasks</span><strong id="prDashboardTaskCount">0</strong><small>Actions still to complete</small></div></div>
+    <section class="hub-panel hub-recovery" id="hubRecoverySection"><div class="hub-panel-title"><div class="hub-symbol">£</div><div><h3>Financial recovery</h3><p>Track the balance, costs and payments.</p></div></div>
+      <div class="hub-recovery-actions"><button type="button" class="hub-btn hub-btn-primary" id="prAddCost">＋ &nbsp;Add recovery cost</button><button type="button" class="hub-btn hub-btn-quiet" id="prEditFunds">View recovery details</button></div>
+      <details class="hub-breakdown"><summary>View saved recovery breakdown <span>⌄</span></summary><div id="prSavedBreakdown" class="hub-breakdown-body"></div><div class="hub-advanced"><button type="button" class="hub-text-link" id="prCorrectOriginal">Edit original breakdown</button><small>Only use to correct an error in the original calculation.</small></div></details>
+    </section>
+    <details class="hub-panel hub-task-panel" id="hubTaskSection" open><summary class="hub-accordion-head"><span class="hub-symbol">✓</span><span class="hub-accordion-copy"><strong>Tasks &amp; next steps</strong><small>Manage outstanding actions and deadlines.</small></span><span class="hub-accordion-right">Show / hide <span class="hub-chevron">⌄</span></span></summary><div class="hub-accordion-inner">
+      <div class="pr-checklist-head"><div><h3>Outstanding tasks</h3><p class="post-muted">Tick tasks when complete. Changes save automatically to Complaints Hub.</p></div><button type="button" class="post-btn-secondary" id="prInlineAddTask">+ Add task</button></div><div id="prTaskSaveState" role="status" aria-live="polite"></div><div id="prTaskList" class="pr-checklist"></div><div class="pr-new-task" id="prInlineNewTask" hidden><input id="prInlineTaskDescription" maxlength="500" type="text" placeholder="What needs to be done?" aria-label="New task description"><div class="pr-inline-deadline"><label>Deadline (optional)<input id="prInlineTaskDeadline" type="date"></label><label>Time (optional)<input id="prInlineTaskTime" type="time" disabled></label></div><button type="button" class="post-btn-secondary" id="prInlineCancelAdd">Cancel</button><button type="button" class="btn" id="prInlineSaveAdd">Add task</button></div>
+    </div></details>
   </div>
 
-  <section class="de-card" id="deConsole" hidden aria-label="Automated dealership escalation">
-    <div class="de-top"><div><span class="post-eyebrow-light">AUTOMATED FOLLOW-UP</span><h3>Dealership escalation emails</h3><p>Activate, manage and review automated dealership correspondence.</p></div><span class="de-chip" id="deStatus">Loading…</span></div>
-    <div class="de-stats"><div class="de-stat"><span>Current level</span><strong id="deLevel">—</strong></div><div class="de-stat"><span>Emails sent</span><strong id="deCount">0</strong></div><div class="de-stat"><span>Requested refund</span><strong id="deAmountView">—</strong></div></div>
+  <section class="hub-panel de-card hub-escalation" id="deConsole" hidden aria-label="Dealership escalation emails">
+    <div class="hub-panel-title"><span class="hub-symbol">✉</span><div><h3>Dealership escalation</h3><p>Automatic follow-ups with the dealership, managed from here.</p></div><span class="de-chip" id="deStatus">Loading…</span></div>
+    <div class="hub-de-summary"><div><span>Current stage</span><strong id="deLevel">—</strong></div><div><span>Emails sent</span><strong id="deCount">0</strong></div><div><span>Requested amount</span><strong id="deAmountView">—</strong></div></div>
+    <div class="hub-de-cta"><p id="deIntroText">Start an escalation to send scheduled dealership follow-ups.</p><button type="button" class="hub-btn hub-btn-primary" id="deOpenModal">Start escalation →</button></div>
+    <div id="deNotice" class="de-notice" role="status" aria-live="polite"></div>
+    <details class="hub-email-history" id="deHistoryDetails"><summary><span class="hub-symbol mini">↺</span><span><strong>Sent-email history</strong><small id="deHistoryCount">View the complete timeline of sent emails</small></span><span class="hub-chevron">⌄</span></summary><div class="hub-email-content"><div class="hub-email-toolbar"><p>Messages confirmed as sent through Zendesk and recorded in Supabase.</p><button type="button" class="post-btn-secondary" id="deRefresh">↻ Refresh</button></div><div id="deTimeline" class="de-timeline"><p class="de-note">Loading email history…</p></div></div></details>
+    <div class="hub-dialog-overlay" id="deModal" hidden><div class="hub-dialog" role="dialog" aria-modal="true" aria-labelledby="deModalTitle"><div class="hub-dialog-head"><div><span class="hub-overline">DEALERSHIP FOLLOW-UP</span><h3 id="deModalTitle">Start escalation</h3><p id="deModalSubtitle">Complete the details before activating scheduled emails.</p></div><button type="button" class="hub-modal-x" id="deModalClose" aria-label="Close escalation form">×</button></div><div class="hub-dialog-body">
     <div id="deStart" hidden><h4 style="margin:14px 0 8px">Start a dealership escalation</h4>
       <div class="de-fields"><label class="wide">What do you need from the dealership?<select id="deType"><option value="">Select escalation type</option><option>Request Dealership To Accept Rejection And Refund</option><option>Request Refund Following Rejection</option></select></label>
       <label class="wide">Why is this action required?<textarea id="deExplanation" maxlength="3000" placeholder="Explain the action required and the latest position…"></textarea></label>
-      <label>Refund amount (£)<input type="number" id="deStartAmount" min="0.01" step="0.01"></label><label>Refund breakdown (optional, 255 characters maximum)<input id="deBreakdown" maxlength="255" type="text" placeholder="Brief breakdown"></label></div>
+      <label>Refund amount <span class="hub-currency"><span>£</span><input type="number" id="deStartAmount" min="0.01" step="0.01" placeholder="0.00" inputmode="decimal"></span></label><label>Refund breakdown (optional, 255 characters maximum)<input id="deBreakdown" maxlength="255" type="text" placeholder="Brief breakdown"></label></div>
       <p class="de-note">The amount is suggested from the current Post-Resolution recovery balance. You can amend it here without changing the recovery ledger.</p>
-      <div class="de-actions"><button type="button" class="de-action primary" id="deStartButton">Activate dealership escalation</button></div>
+      <div class="de-actions"><button type="button" class="hub-btn hub-btn-primary" id="deStartButton">Activate dealership escalation</button></div>
     </div>
     <div id="deManage" hidden><div class="de-actions"><button type="button" class="de-action" id="deDeactivate">Deactivate</button><button type="button" class="de-action" id="deReactivate">Reactivate</button><button type="button" class="de-action" id="deEscalate">↑ Escalate level</button><button type="button" class="de-action" id="deDeescalate">↓ De-escalate level</button></div>
-      <div class="de-fields"><label>Amend requested refund (£)<input type="number" id="deManageAmount" min="0.01" step="0.01"></label><label>Reason for change<input id="deChangeReason" type="text" maxlength="240" placeholder="Required when changing amount"></label></div>
+      <div class="de-fields"><label>Amend requested refund <span class="hub-currency"><span>£</span><input type="number" id="deManageAmount" min="0.01" step="0.01" placeholder="0.00" inputmode="decimal"></span></label><label>Reason for change<input id="deChangeReason" type="text" maxlength="240" placeholder="Required when changing amount"></label></div>
       <div class="de-actions"><button type="button" class="de-action" id="deSaveAmount">Save amended amount</button></div>
       <p class="de-note">Changes control future emails, not previous correspondence. The email count and sent-email history are preserved.</p>
     </div>
-    <div id="deNotice" class="de-notice" role="status" aria-live="polite"></div>
-    <div class="post-section-heading" style="margin-top:21px"><div><h3 style="font-size:16px">Sent-email timeline</h3><p class="post-muted">Messages confirmed as sent through Zendesk and recorded in Supabase.</p></div><button type="button" class="post-btn-secondary" id="deRefresh">Refresh</button></div>
-    <div id="deTimeline" class="de-timeline"><p class="de-note">Loading email history…</p></div>
+    </div><div class="hub-dialog-foot"><span>Changes are saved in Complaints Hub.</span><button type="button" class="hub-btn hub-btn-quiet" id="deModalCancel">Close</button></div></div></div>
   </section>
   <div class="pr-modal-backdrop" id="prCostModal" hidden><div class="pr-dialog" role="dialog" aria-modal="true" aria-label="Add recovery cost"><h3>Add recovery costs</h3><p class="post-muted">Record a new cost incurred after the original recovery was saved. This does not overwrite the original balance.</p><label class="field"><span class="lab">Cost description</span><input id="prCostDescription" type="text" maxlength="18" placeholder="e.g. Further repairs"></label><label class="field"><span class="lab">Amount (£)</span><input id="prCostAmount" type="number" min="0.01" step="0.01" placeholder="0.00"></label><label class="field"><span class="lab">Reason / supporting context</span><input id="prCostReason" type="text" maxlength="180" placeholder="Why was this cost added?"></label><p id="prCostError" class="post-error" role="alert"></p><div class="post-actions"><button type="button" class="post-btn-secondary" id="prCostCancel">Cancel</button><button type="button" class="btn" id="prCostSave">Add cost &amp; save to Complaints Hub</button></div></div></div>
   <div class="pr-modal-backdrop" id="prSetupModal" hidden><div class="pr-dialog" role="dialog" aria-modal="true" aria-label="Set up Post-Resolution">
@@ -2800,9 +2852,12 @@ function deRender(){
   deEnable($('#deDeescalate'),started&&Number(d.level)>1&&Number(d.level)<=3&&!DE_BUSY);
   deEnable($('#deSaveAmount'),started&&!DE_BUSY);
   deEnable($('#deStartButton'),!DE_BUSY);
+  $('#deOpenModal').textContent=started?'Manage escalation →':'Start escalation →';
+  $('#deIntroText').textContent=started?(active?'Scheduled follow-ups are active. Manage the level, status or requested amount.':'This escalation is not currently sending emails. Review or reactivate it.'): 'No automated dealership escalation has been started for this complaint.';
   if(!d.hasDealershipTicket||!d.hasCustomerTicket){$('#deNotice').textContent='A dealership and customer Zendesk ticket reference are required before activation.';}
 }
 function deTimeline(rows,warning){
+ $('#deHistoryCount').textContent=(rows&&rows.length?rows.length+' sent email'+(rows.length===1?'':'s'):'No sent emails yet')+' · View timeline';
  var el=$('#deTimeline');
  el.innerHTML=rows&&rows.length?rows.map(function(r){
   var when=r.sent_at?new Date(r.sent_at).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short',timeZone:'Europe/London'}):'Date not recorded';
@@ -2829,16 +2884,41 @@ async function deSubmit(operation,button){
  var descriptions={start:'activate automated escalation',deactivate:'deactivate automated escalation',reactivate:'reactivate automated escalation',escalate:'increase the escalation level',deescalate:'decrease the escalation level',amount:'change the requested refund amount'};
  if(!window.confirm('Confirm you want to '+descriptions[operation]+'? This affects future automated dealership emails.'))return;
  DE_BUSY=true;button.disabled=true;$('#deNotice').textContent='Saving to Complaints Hub…';
- try{var response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});var data=await response.json();if(!response.ok||!data.ok)throw Error((data.errors||[])[0]||'Update failed');DE_STATE=data.escalation;deRender();$('#deNotice').textContent=data.auditWarning||'Escalation updated successfully.';}
+ try{var response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});var data=await response.json();if(!response.ok||!data.ok)throw Error((data.errors||[])[0]||'Update failed');DE_STATE=data.escalation;deRender();if(!$('#deModal').hidden)hubCloseDealModal();$('#deNotice').textContent=data.auditWarning||'Escalation updated successfully.';}
  catch(error){$('#deNotice').textContent='Could not save escalation: '+error.message;}
  finally{DE_BUSY=false;deRender();}
 }
 function deInit(){
+ $('#deOpenModal').addEventListener('click',hubOpenDealModal);
+ $('#deModalClose').addEventListener('click',hubCloseDealModal);
+ $('#deModalCancel').addEventListener('click',hubCloseDealModal);
+ $('#deModal').addEventListener('click',function(e){if(e.target===this)hubCloseDealModal();});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#deModal').hidden)hubCloseDealModal();});
  $('#deStartButton').addEventListener('click',function(){deSubmit('start',this);});
  [['deDeactivate','deactivate'],['deReactivate','reactivate'],['deEscalate','escalate'],['deDeescalate','deescalate'],['deSaveAmount','amount']].forEach(function(row){$('#'+row[0]).addEventListener('click',function(){deSubmit(row[1],this);});});
  $('#deRefresh').addEventListener('click',deFetch);
 }
 
+function hubUpdateRail(page){
+ var rail=$('#workspaceRail'),shown=!['home','initial'].includes(page);
+ rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
+ if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=PREFILL.statusName||'Complaints Hub';}
+ document.querySelectorAll('[data-rail]').forEach(function(b){
+  var target=b.dataset.rail;
+  var allowed=target==='home'||target==='post'&&canOpenPostResolution(PREFILL.statusName)||target==='review'&&PREFILL.fosApplicable||target==='solicitor'&&PREFILL.solicitorEscalation&&PREFILL.solicitorEscalation.enabled||!['post','review','solicitor'].includes(target);
+  b.disabled=!allowed;b.classList.toggle('is-active',target===page);b.setAttribute('aria-current',target===page?'page':'false');
+ });
+ rail.classList.remove('rail-open');
+}
+function hubOpenDealModal(){
+ if(!DE_STATE)return;
+ var started=!!DE_STATE.level;
+ $('#deModalTitle').textContent=started?'Manage dealership escalation':'Start dealership escalation';
+ $('#deModalSubtitle').textContent=started?'Changes will affect future emails only.':'Review the starting details before activating scheduled follow-ups.';
+ $('#deModal').hidden=false;
+ var first=started?$('#deManageAmount'):$('#deType');if(first&&!first.closest('[hidden]'))first.focus();
+}
+function hubCloseDealModal(){ $('#deModal').hidden=true;$('#deOpenModal').focus(); }
 function gotoActionsPage(page){
   if(page!=='rejection'&&ACTION_PAGE==='rejection'&&homeRejectionDirect){closeRejSides();rejWork=null;homeRejectionDirect=false;setRejectionPageMode(false);}
   if(closureRecoveryModalOpen)closeClosureRecoveryModal();
@@ -2848,6 +2928,7 @@ function gotoActionsPage(page){
   if(page==='review'&&!PREFILL.fosApplicable)return;
   if(page==='solicitor'&&!(PREFILL.solicitorEscalation&&PREFILL.solicitorEscalation.enabled))return;
   ACTION_PAGE=page;
+  hubUpdateRail(page);
   document.body.classList.toggle('actions-on-home',page==='home');
   document.body.classList.toggle('actions-in-workspace',page!=='home');
   $('#globalHomeBtn').hidden=page==='home';
@@ -2922,6 +3003,8 @@ function initActionsHome(){
   document.querySelectorAll('[data-go]').forEach(function(btn){btn.addEventListener('click',function(){gotoActionsPage(btn.dataset.go);});});
   initRejectionPageOutcome();
   $('#homeRejectionTile').addEventListener('click',function(){gotoActionsPage('rejection');homeRejectionDirect=true;syncRejectionPageOutcome();setRejectionPageMode(true);openRejCalc(prCustomerStage());updateRejectionPageVisibility();});
+  document.querySelectorAll('[data-rail]').forEach(function(button){button.addEventListener('click',function(){if(button.disabled)return;var target=button.dataset.rail;if(target==='rejection'){ $('#homeRejectionTile').click();return;}gotoActionsPage(target);});});
+  $('#railMobileToggle').addEventListener('click',function(){$('#workspaceRail').classList.toggle('rail-open');});
   $('#actionsHomeBtn').addEventListener('click',function(){gotoActionsPage('home');});
   $('#globalHomeBtn').addEventListener('click',function(){gotoActionsPage('home');});
   initInitialContact();
