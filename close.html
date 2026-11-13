@@ -561,7 +561,10 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
 .rail-link{width:100%;border:0;display:flex;align-items:center;text-align:left;gap:12px;padding:11px 12px;border-radius:10px;background:transparent;color:#e7d1e0;font-family:inherit;font-size:12.5px;font-weight:650;cursor:pointer;margin:3px 0}.rail-link:hover:not(:disabled){background:#ffffff16;color:#fff}.rail-link.is-active{background:#ffd6ea;color:#551438;font-weight:800}.rail-link:disabled{opacity:.38;cursor:not-allowed}.rail-icon{width:20px;text-align:center;font-size:19px;line-height:1}
 .rail-foot{margin-top:auto;padding:22px;font-size:11px;color:#e4bed0;display:flex;gap:9px;align-items:center}.rail-pulse{width:7px;height:7px;background:#f76aa9;border-radius:50%}
 body.actions-with-rail .shell{max-width:1250px;width:calc(100% - 238px);margin-left:238px;margin-right:auto;padding:24px 34px 48px}
-body.actions-with-rail .shell>.logo,body.actions-with-rail .shell>.head,body.actions-with-rail .shell>.refsection,body.actions-with-rail .shell>.infobox{display:none!important}
+body.actions-with-rail .shell>.logo,body.actions-with-rail .shell>.head,body.actions-with-rail .shell>.refsection,body.actions-with-rail .shell>.infobox,body.actions-with-rail .actions-shared-header,body.actions-with-rail .actions-nav{display:none!important}
+body.actions-with-rail .shell{padding-top:18px}
+body.actions-with-rail .actions-page{padding-top:0}
+body.actions-with-rail .hub-heading{margin-top:0}
 body.actions-with-rail .actions-page{max-width:none}
 body.actions-with-rail .actions-save-row{max-width:none}
 body.actions-with-rail .footer-inner{margin-left:238px;max-width:none}
@@ -647,7 +650,7 @@ body.actions-with-rail #globalHomeBtn{display:none!important}
 
 </div>
 <aside class="workspace-rail" id="workspaceRail" hidden aria-label="Complaint workspace navigation">
-  <div class="rail-brand"><div class="rail-logo">carmoola<span>●</span></div><span class="rail-caption">COMPLAINTS HUB</span></div>
+  <div class="rail-brand"><div class="rail-logo">carmoola</div><span class="rail-caption">COMPLAINTS HUB</span></div>
   <div class="rail-case"><span>WORKING ON</span><strong id="railCaseRef">Complaint</strong><small id="railCustomer">Customer</small></div>
   <nav class="rail-links" aria-label="Complaint sections">
     <button type="button" class="rail-link" data-rail="home"><span class="rail-icon">⌂</span><span>Complaint home</span></button>
