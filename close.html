@@ -644,6 +644,35 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 @media(max-width:900px){.overview-identity{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:15px}.overview-identity>div:nth-child(2){border-right:0}.overview-attention{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:710px){.overview-heading{align-items:flex-start;flex-direction:column}.overview-heading h2{font-size:26px}.overview-columns{grid-template-columns:1fr}.overview-attention{grid-template-columns:1fr}.overview-shortcuts{margin-bottom:14px}}
 
+
+/* Letters & Responses: calm, focused workspace */
+.letters-wrap{max-width:1100px;margin:0 auto;padding:4px 0 40px}
+.letters-top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}
+.letters-top h2{font-size:30px;line-height:1.15;margin:0 0 7px;letter-spacing:-.045em}
+.letters-top p,.letters-muted{color:#817183;font-size:13px;line-height:1.6;margin:0}
+.letters-chip{border-radius:30px;padding:8px 13px;background:#fceaf3;color:#a5085f;font-size:12px;font-weight:750}
+.letters-card{border:1px solid #e9dfe7;border-radius:17px;background:#fff;padding:24px;margin-bottom:16px;box-shadow:0 5px 20px #45203307}
+.letters-card h3{font-size:17px;margin:0 0 7px}
+.letters-row{display:flex;gap:13px;align-items:center;flex-wrap:wrap}.letters-row>*{min-width:0}
+.letters-label{display:block;font-size:12px;font-weight:750;color:#675767;margin:0 0 7px}
+.letters-field{width:100%;padding:11px 13px;border:1px solid #e5d9e4;border-radius:10px;background:#fff;color:#2e1830;font:inherit;font-size:13px;box-sizing:border-box}
+textarea.letters-field{min-height:85px;resize:vertical}
+.letters-field:focus{outline:2px solid #f4b5d3;outline-offset:1px}
+.letters-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.letters-full{grid-column:1 / -1}
+.letters-actions{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;margin-top:17px}
+.letters-btn{border:1px solid #e8cedd;background:#fff;color:#872052;border-radius:10px;padding:11px 17px;cursor:pointer;font:inherit;font-size:13px;font-weight:750;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.letters-btn.primary{background:#f90081;border-color:#f90081;color:#fff}
+.letters-btn:disabled{opacity:.38;cursor:not-allowed}
+.letters-summary{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.letters-status{color:#8d7487;font-size:12px;font-weight:650}
+.letters-note{font-size:12px;color:#6d5c6d;line-height:1.5}
+.letters-message{color:#8c1453;font-size:13px;margin-top:12px;min-height:12px;white-space:pre-wrap}
+.letters-doc-preview{width:100%;height:440px;border:1px solid #e7dce6;border-radius:12px;background:#fcfafc;margin:14px 0 0}
+.letters-inline-check{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;color:#403044}
+.letters-inline-check input{accent-color:#ed0081;margin-top:4px}
+@media(max-width:750px){.letters-form-grid{grid-template-columns:1fr}.letters-card{padding:17px}.letters-top h2{font-size:25px}}
+
 </style>
 </head>
 <body>
@@ -719,6 +748,7 @@ body.actions-overview .overview-legacy-controls{display:none!important}
     <button type="button" class="rail-link" data-rail="running"><span class="rail-icon">▤</span><span>Running costs</span></button>
     <button type="button" class="rail-link" data-rail="rejection"><span class="rail-icon">◇</span><span>Vehicle rejection</span></button>
     <button type="button" class="rail-link" data-rail="post"><span class="rail-icon">▣</span><span>Post-Resolution Hub</span></button>
+    <button type="button" class="rail-link" data-rail="letters"><span class="rail-icon">✉</span><span>Letters &amp; Responses</span></button>
     <button type="button" class="rail-link" data-rail="closure"><span class="rail-icon">✓</span><span>Complaint closure</span></button>
     <button type="button" class="rail-link" data-rail="review"><span class="rail-icon">▤</span><span>FOS decision review</span></button>
     <button type="button" class="rail-link" data-rail="dealer"><span class="rail-icon">♧</span><span>Dealership position</span></button>
@@ -855,6 +885,39 @@ body.actions-overview .overview-legacy-controls{display:none!important}
     <div class="sol-card"><h3>Latest solicitor update</h3><div class="sol-update" id="solUpdate">No update recorded.</div><p class="sol-footnote">Solicitor information is generally refreshed once a week. This displays the latest text held in Complaints Hub; it does not confirm when the solicitor last provided an update.</p></div>
   </div>
 </section>
+
+<section id="actionsLetters" class="actions-page" aria-label="Letters and Responses">
+ <div class="letters-wrap">
+  <div class="letters-top"><div><h2>Letters &amp; Responses</h2><p>Prepare, review and send customer responses.</p></div><span class="letters-chip" id="lettersTopStatus">Loading…</span></div>
+  <div class="letters-card">
+    <div class="letters-summary"><div><h3>Prepare a letter</h3><p class="letters-muted" id="lettersContext">The appropriate final-response template is selected from the complaint type.</p></div></div>
+    <div class="letters-form-grid" style="margin-top:20px">
+      <label><span class="letters-label">Letter type</span><select id="lettersType" class="letters-field"><option value="general">General final response</option><option value="vehicle">Vehicle issue final response</option><option value="affordability">Unaffordable lending final response</option><option value="holding">Eight-week holding response</option></select></label>
+      <label id="lettersOutcomeWrap"><span class="letters-label">Complaint outcome</span><select id="lettersOutcome" class="letters-field"></select></label>
+      <label class="letters-full" id="lettersIssuesWrap"><span class="letters-label">Additional issues raised (optional)</span><textarea id="lettersIssues" class="letters-field" placeholder="Any additional issues raised during the investigation"></textarea></label>
+      <label class="letters-full" id="lettersSummaryWrap"><span class="letters-label" id="lettersSummaryLabel">Why have you reached this decision?</span><textarea id="lettersSummary" class="letters-field" placeholder="Explain the reasoning and the evidence"></textarea></label>
+      <label class="letters-full" id="lettersDetailsWrap"><span class="letters-label">Remediation, goodwill and other details</span><textarea id="lettersDetails" class="letters-field" placeholder="Any agreed actions, payments or next steps"></textarea></label>
+      <label class="letters-full" id="lettersFactsWrap" hidden><span class="letters-label">Affordability decisioning facts</span><textarea id="lettersFacts" class="letters-field" style="min-height:160px" placeholder="Paste the decisioning facts in the format used by the existing affordability generator"></textarea><span class="letters-note">The existing affordability Zap expects the complete decisioning facts. This field must not be populated from the complaint summary alone.</span></label>
+      <label class="letters-inline-check letters-full" id="lettersDekraWrap" hidden><input type="checkbox" id="lettersDekra">DEKRA inspection completed</label>
+      <label class="letters-inline-check letters-full" id="lettersGoodstandingWrap" hidden><input type="checkbox" id="lettersGoodstanding">Customer's agreement is in good standing</label>
+    </div>
+    <div class="letters-actions"><button type="button" id="lettersGenerate" class="letters-btn primary">Generate draft</button></div>
+    <div id="lettersGenerateMessage" class="letters-message" role="status" aria-live="polite"></div>
+  </div>
+  <div class="letters-card">
+    <div class="letters-summary"><div><h3>Review the draft</h3><p id="lettersDraftSummary" class="letters-muted">No document has been generated yet.</p></div><div class="letters-row"><a id="lettersGoogleLink" class="letters-btn" target="_blank" rel="noopener noreferrer" hidden>Open in Google Docs ↗</a><button id="lettersRefresh" type="button" class="letters-btn">↻ Refresh status</button></div></div>
+    <div id="lettersPreviewNote" class="letters-note" style="margin-top:12px" hidden>Preview below where Google permits it. To make changes, open the Google Doc. You do not need to copy the document back here.</div>
+    <iframe id="lettersPreview" title="Draft document preview" class="letters-doc-preview" referrerpolicy="no-referrer" hidden></iframe>
+  </div>
+  <div class="letters-card">
+    <div class="letters-summary"><div><h3>Send the letter</h3><p class="letters-muted">Sending uses the latest saved version of the Google Doc.</p></div><span class="letters-status" id="lettersSendStatus">No draft</span></div>
+    <div style="margin-top:18px" class="letters-form-grid"><label class="letters-inline-check letters-full"><input type="checkbox" id="lettersReviewed">I have checked the latest version of the letter and approve it for sending.</label><label class="letters-inline-check letters-full" id="lettersReviewWrap"><input type="checkbox" id="lettersRequestReview">Request a Trustpilot review (final response only)</label><label class="letters-full"><span class="letters-label">Additional email message (optional)</span><textarea id="lettersEmailNotes" class="letters-field" placeholder="Anything else you'd like to say in the email"></textarea></label></div>
+    <div class="letters-actions"><button type="button" id="lettersSend" class="letters-btn primary" disabled>Send letter to customer</button></div>
+    <div id="lettersSendMessage" class="letters-message" role="status" aria-live="polite"></div>
+  </div>
+ </div>
+</section>
+
 <section id="actionsRunning" class="actions-page">
   <div class="costs-page-intro"><div><span class="costs-eyebrow">COST TRACKING</span><h2>Running Costs</h2><p>Keep an accurate record of expenses incurred throughout the complaint.</p></div><div class="costs-overview"><span>TOTAL RECORDED</span><strong id="runningHeroTotal">£0.00</strong></div></div>
   <div class="costs-ledger" id="runningCostsCard">
@@ -3106,12 +3169,14 @@ function gotoActionsPage(page){
   $('#actionsDealer').classList.toggle('active',page==='dealer');
   $('#actionsRejection').classList.toggle('active',page==='rejection');
   $('#actionsSolicitor').classList.toggle('active',page==='solicitor');
+  $('#actionsLetters').classList.toggle('active',page==='letters');
+  if(page==='letters')lettersRefresh();
   if(page==='post' && POST_DATA){prRender();solarisRefresh();prAutoReconcile();$('#deConsole').hidden=!['Post-Resolution Tasks','Partner Funds Outstanding'].includes(PREFILL.statusName);if(!$('#deConsole').hidden)deFetch();}else{$('#deConsole').hidden=true;}
   $('#closureShell').style.display=page==='closure'?'':'none';
   $('#reviewShell').classList.toggle('active',page==='review');
   $('#reviewViewSwitch').hidden=true;
   $('#actionsNav').hidden=true;
-  $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','dealer':'/ Dealership Position'}[page]||'';
+  $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position'}[page]||'';
   $('#footer').hidden=page!=='closure';
   $('#manageBtn').style.display=page==='closure'?'':'none';
   $('#closedBanner').style.display=(page==='closure'&&PREFILL.alreadyClosed&&$('#unlockBtn').dataset.unlocked!=='1')?'block':'none';
@@ -3161,8 +3226,8 @@ function overviewRender(){
   ['Complaint received',p.receivedDate,'date'],
   ['Initial customer call',o.initialCallDate,(o.initialCallDate?'date':(intro.outcome?'text':'')),intro.outcome],
   ['Acknowledgement',o.acknowledgementSent,'flag'],
-  ['8-week holding letter',o.holdingLetterDate,o.holdingLetterDate?'date':'flag',o.holdingResponseSent],
-  ['Final response',o.finalResponseSent,'flag'],
+  ['8-week holding letter',o.eightWeekHoldingSentDate,o.eightWeekHoldingSentDate?'date':'flag',o.eightWeekHoldingSent],
+  ['Final response',o.finalResponseSentDate&&isYes(o.finalResponseSent)?o.finalResponseSentDate:o.finalResponseSent,o.finalResponseSentDate&&isYes(o.finalResponseSent)?'date':'flag'],
   ['Resolved for customer',o.resolvedDate,'date'],
   ['Complaint closed',o.firstClosedDate,'date']
  ];
@@ -3319,6 +3384,81 @@ function initDealer(){
  $('#dealerRejectionOpen').addEventListener('click',function(){gotoActionsPage('dealer');$('#dealerEditor').hidden=false;});
 }
 
+
+// Letters & Responses: all API calls are authenticated using the existing signed complaint link.
+var LETTERS_STATE=null,LETTERS_BUSY=false,LETTERS_SENDING=false;
+var LETTERS_VEHICLE_OPTIONS=[
+'Repaired Vehicle (Dealership Paid)','Repaired Vehicle (Carmoola Paid)','Repaired Vehicle (Carmoola & Dealership Paid)',
+'Rejected Vehicle (Dealership Rejection. Evidence Not Acquired.)','Rejected Vehicle (Dealership Rejection. Evidence Acquired.)',
+'Rejected Vehicle (Carmoola Rejection. Next Steps Unclear.)','Rejected Vehicle (Auction Rejection)',
+'Rejected Vehicle (Partner Rejection)','Not Upheld (Evidence Acquired)','Not Upheld (Repairs Completed Before Inspection)',
+'Not Upheld (Post 6 months. No Evidence Provided)'];
+function lettersSuggestedType(){var type=String(PREFILL?.complaintType||'');return /^vehicle issues?$/i.test(type)?'vehicle':/unafford|affordability|responsible lending/i.test(type)?'affordability':'general';}
+function lettersSelectedDoc(){if(!LETTERS_STATE)return '';return $('#lettersType').value==='holding'?LETTERS_STATE.holdingDocumentId:LETTERS_STATE.finalDocumentId;}
+function lettersSelectedSent(){if(!LETTERS_STATE)return false;return $('#lettersType').value==='holding'?LETTERS_STATE.holdingSent:LETTERS_STATE.finalSent;}
+function lettersPending(){if(!LETTERS_STATE)return false;return !!($('#lettersType').value==='holding'?LETTERS_STATE.holdingSubmission?.state:LETTERS_STATE.finalSubmission?.state);}
+function lettersRender(){
+ var type=$('#lettersType').value,holding=type==='holding',afford=type==='affordability',veh=type==='vehicle';
+ $('#lettersType').querySelectorAll('option').forEach(function(o){o.disabled=o.value!=='holding'&&o.value!==lettersSuggestedType();});
+ $('#lettersOutcomeWrap').hidden=holding||afford;$('#lettersIssuesWrap').hidden=afford;
+ $('#lettersSummaryWrap').hidden=afford;$('#lettersDetailsWrap').hidden=afford||holding;
+ $('#lettersFactsWrap').hidden=!afford;$('#lettersDekraWrap').hidden=!veh;$('#lettersGoodstandingWrap').hidden=!afford;
+ $('#lettersReviewWrap').hidden=holding;
+ $('#lettersSummaryLabel').textContent=holding?'Why is the investigation not yet complete?':'Why have you reached this decision?';
+ var outcome=$('#lettersOutcome'),wanted=veh?LETTERS_VEHICLE_OPTIONS:['Upheld','Not Upheld'];
+ if(outcome.options.length!==wanted.length||Array.from(outcome.options).some(function(o,i){return o.value!==wanted[i]})){
+  outcome.replaceChildren();wanted.forEach(function(x){var option=document.createElement('option');option.value=x;option.textContent=x;outcome.appendChild(option);});
+ }
+ var doc=lettersSelectedDoc(),sent=lettersSelectedSent(),pending=lettersPending();
+ var sentDate=holding?LETTERS_STATE?.holdingSentDate:LETTERS_STATE?.finalSentDate;
+ var sentLabel=sent?(sentDate?'Sent · '+formatDisplayDate(sentDate):'Sent'):'';
+ $('#lettersTopStatus').textContent=sent?sentLabel:pending?'Sending requested':doc?'Draft ready':'No draft';
+ $('#lettersSendStatus').textContent=sent?sentLabel:pending?'Sending requested':doc?'Ready for review':'No draft';
+ $('#lettersDraftSummary').textContent=doc?'Draft saved in the complaint folder. Open it in Google Docs to make changes.':'No document has been generated yet.';
+ var a=$('#lettersGoogleLink'),frame=$('#lettersPreview');a.hidden=!doc;frame.hidden=!doc;$('#lettersPreviewNote').hidden=!doc;
+ if(doc){a.href='https://docs.google.com/document/d/'+encodeURIComponent(doc)+'/edit';var src='https://docs.google.com/document/d/'+encodeURIComponent(doc)+'/preview';if(frame.src!==src)frame.src=src;}else{a.removeAttribute('href');frame.removeAttribute('src');}
+ $('#lettersContext').textContent=holding?'Prepare an eight-week holding response for an investigation that is still ongoing.':'Suggested from complaint type: '+(PREFILL?.complaintType||'General complaint');
+ $('#lettersGenerate').disabled=LETTERS_BUSY||sent||pending;
+ $('#lettersGenerate').textContent=doc?'Generate new draft':'Generate draft';
+ $('#lettersSend').disabled=LETTERS_BUSY||LETTERS_SENDING||pending||!doc||sent||!$('#lettersReviewed').checked;
+}
+async function lettersCall(action,data){
+ var response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({token:getToken(),action},data||{}))});
+ var result=await response.json();if(!response.ok||!result.ok)throw Error((result.errors||[])[0]||result.error||'Request failed');return result;
+}
+async function lettersRefresh(){
+ if(LETTERS_BUSY)return;
+ try{var result=await lettersCall('letters_status');LETTERS_STATE=result.letters;lettersRender();}
+ catch(e){$('#lettersGenerateMessage').textContent=e.message;}
+}
+async function lettersGenerate(){
+ if(LETTERS_BUSY)return;var type=$('#lettersType').value,doc=lettersSelectedDoc();
+ if(doc&&!window.confirm('A draft already exists. Generate a NEW document? The existing draft will remain in Google Drive.'))return;
+ var summary=$('#lettersSummary').value.trim(),details=$('#lettersDetails').value.trim(),facts=$('#lettersFacts').value.trim(),outcome=$('#lettersOutcome').value;
+ if((type==='holding'&&!summary)||(type==='affordability'&&!facts)||(['general','vehicle'].includes(type)&&(!summary||!details))){$('#lettersGenerateMessage').textContent='Complete the required fields before generating the draft.';return;}
+ LETTERS_BUSY=true;$('#lettersGenerateMessage').textContent='Requesting draft…';lettersRender();
+ try{var d=await lettersCall('letters_generate',{letterType:type,confirmed:true,replaceDraft:!!doc,otherissues:$('#lettersIssues').value,summaryofdecision:summary,otherdetails:details,outcome,decisioningfacts:facts,dekracompleted:$('#lettersDekra').checked,goodstanding:$('#lettersGoodstanding').checked});$('#lettersGenerateMessage').textContent=d.message;$('#lettersReviewed').checked=false;}
+ catch(e){$('#lettersGenerateMessage').textContent=e.message;}
+ finally{LETTERS_BUSY=false;lettersRender();}
+}
+async function lettersSend(){
+ if(LETTERS_BUSY||LETTERS_SENDING||!$('#lettersReviewed').checked)return;
+ var doc=lettersSelectedDoc(),type=$('#lettersType').value;if(!doc)return;
+ if(!window.confirm('Send the latest version of this letter to the customer? This action sends a real customer communication.'))return;
+ LETTERS_SENDING=true;$('#lettersSendMessage').textContent='Requesting delivery…';lettersRender();
+ try{var d=await lettersCall('letters_send',{letterType:type,confirmed:true,approvedDocumentId:doc,reviewed:true,requestreview:$('#lettersRequestReview').checked,additionalEmail:$('#lettersEmailNotes').value});$('#lettersSendMessage').textContent=d.message;}
+ catch(e){$('#lettersSendMessage').textContent=e.message+' Check Zapier and Zendesk before trying again.';}
+ finally{lettersRender();}
+}
+function lettersInit(){
+ $('#lettersType').value=lettersSuggestedType();
+ $('#lettersType').addEventListener('change',function(){$('#lettersReviewed').checked=false;$('#lettersGenerateMessage').textContent='';$('#lettersSendMessage').textContent='';LETTERS_SENDING=false;lettersRender();});
+ $('#lettersReviewed').addEventListener('change',lettersRender);
+ $('#lettersRefresh').addEventListener('click',function(){LETTERS_SENDING=false;lettersRefresh();});
+ $('#lettersGenerate').addEventListener('click',lettersGenerate);$('#lettersSend').addEventListener('click',lettersSend);
+ lettersRender();
+}
+
 function boot(){
   var token=getToken();
   if(!token){$('#loading').textContent='This link is missing its access token. Please regenerate it from the complaint.';return;}
@@ -3334,7 +3474,7 @@ function boot(){
       initRejCalc();initInspCalc();initCostEditors();
       applyPrefill();restoreRejectionBreakdowns();restoreCostBreakdowns();restoreInspectionBreakdowns();syncRej();syncFos();recompute();initRunningCosts();updateCostRequirements();renderFosRequiredActions();initRunningOnlySave();initSubmit();initManagementActions();initClosedLock();initReview();
       // Outside FOS Decision Review, keep the existing default-to-FOS behaviour.
-      initPostResolution();deInit();solarisInit();initClosureRecoveryUI();initActionsHome();initDealer();
+      initPostResolution();deInit();solarisInit();lettersInit();initClosureRecoveryUI();initActionsHome();initDealer();
     })
     .catch(function(){$('#loading').textContent='Network error loading the complaint.';});
 }
