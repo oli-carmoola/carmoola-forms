@@ -540,6 +540,16 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
 .initial-dial-button:focus-visible,.initial-call-help:focus-visible{outline:3px solid #f90081;outline-offset:3px}
 .initial-call-help{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:1px solid #dfcddd;color:#9f1159;background:#fff;text-decoration:none;font-size:16px;font-weight:800}
 .initial-call-help:hover{background:#fff1f8;border-color:#f90081}
+
+/* Dealership escalation console */
+.de-card{background:#fff;border:1px solid #eadfe8;border-radius:15px;padding:21px;margin:18px 0;box-shadow:0 3px 18px rgba(39,21,37,.035)}
+.de-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}.de-top h3{margin:0 0 5px;font-size:19px}.de-top p{margin:0;font-size:12.5px;color:#766b79}
+.de-chip{border-radius:999px;background:#f1edf4;color:#65536a;padding:7px 12px;font-size:11px;font-weight:800}.de-chip.active{background:#e7f5ef;color:#12855b}.de-chip.inactive{background:#fff2d8;color:#805c14}
+.de-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:18px 0}.de-stat{background:#fcf8fb;border:1px solid #eee3ed;padding:12px;border-radius:10px}.de-stat span{display:block;font-size:10px;font-weight:750;color:#766b79;text-transform:uppercase}.de-stat strong{display:block;margin-top:5px;font-size:18px}
+.de-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.de-fields label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:700}.de-fields .wide{grid-column:1/-1}.de-fields textarea{width:100%;font:inherit;min-height:88px;padding:10px;border-radius:9px;border:1.5px solid #dcd5e2;resize:vertical}.de-fields input,.de-fields select{min-width:0}
+.de-actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.de-action{border:1px solid #decbd9;border-radius:9px;background:#fff;color:#862553;font:700 12px 'DM Sans',sans-serif;padding:10px 12px;cursor:pointer}.de-action.primary{background:#f90081;color:white;border-color:#f90081}.de-action:disabled{opacity:.4;cursor:default}
+.de-note{font-size:12px;color:#74687a}.de-notice{font-size:12px;margin:9px 0;color:#a01949}.de-timeline{position:relative;margin:15px 0 0;padding-left:20px;border-left:2px solid #f6d0e4}.de-entry{position:relative;margin:0 0 13px;padding:14px;border-radius:11px;border:1px solid #eee3ed;background:#fff}.de-entry:before{content:'';position:absolute;left:-27px;top:20px;width:10px;height:10px;background:#f90081;border:3px solid white;border-radius:50%;box-shadow:0 0 0 1px #e9bad1}.de-entry-head{display:flex;justify-content:space-between;gap:10px;font-size:12px}.de-entry details{margin-top:10px}.de-entry summary{color:#a01960;font-weight:750;font-size:12px;cursor:pointer}.de-email{white-space:pre-wrap;overflow-wrap:anywhere;background:#fcf8fb;padding:13px;border-radius:9px;font-size:12.5px;line-height:1.55;margin-top:9px}
+@media(max-width:620px){.de-stats,.de-fields{grid-template-columns:1fr}.de-card{padding:15px}}
 </style>
 </head>
 <body>
@@ -720,6 +730,26 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
     <div class="post-actions"><button type="button" class="post-btn-secondary" id="prEditFunds">View financial recovery</button><button type="button" class="post-btn-secondary" id="prCorrectOriginal">Edit original breakdown</button><button type="button" class="post-btn-secondary" id="prAddCost">+ Add recovery costs</button></div>
     <div class="pr-checklist-head"><div><h3>Outstanding tasks</h3><p class="post-muted">Tick tasks when complete. Every change saves automatically to Complaints Hub.</p></div><button type="button" class="post-btn-secondary" id="prInlineAddTask">+ Add task</button></div><div id="prTaskSaveState" role="status" aria-live="polite"></div><div id="prTaskList" class="pr-checklist"></div><div class="pr-new-task" id="prInlineNewTask" hidden><input id="prInlineTaskDescription" maxlength="500" type="text" placeholder="What needs to be done?" aria-label="New task description"><div class="pr-inline-deadline"><label>Deadline (optional)<input id="prInlineTaskDeadline" type="date"></label><label>Time (optional)<input id="prInlineTaskTime" type="time" disabled></label></div><button type="button" class="post-btn-secondary" id="prInlineCancelAdd">Cancel</button><button type="button" class="btn" id="prInlineSaveAdd">Add task</button></div>
   </div>
+
+  <section class="de-card" id="deConsole" hidden aria-label="Automated dealership escalation">
+    <div class="de-top"><div><span class="post-eyebrow-light">AUTOMATED FOLLOW-UP</span><h3>Dealership escalation emails</h3><p>Activate, manage and review automated dealership correspondence.</p></div><span class="de-chip" id="deStatus">Loading…</span></div>
+    <div class="de-stats"><div class="de-stat"><span>Current level</span><strong id="deLevel">—</strong></div><div class="de-stat"><span>Emails sent</span><strong id="deCount">0</strong></div><div class="de-stat"><span>Requested refund</span><strong id="deAmountView">—</strong></div></div>
+    <div id="deStart" hidden><h4 style="margin:14px 0 8px">Start a dealership escalation</h4>
+      <div class="de-fields"><label class="wide">What do you need from the dealership?<select id="deType"><option value="">Select escalation type</option><option>Request Dealership To Accept Rejection And Refund</option><option>Request Refund Following Rejection</option></select></label>
+      <label class="wide">Why is this action required?<textarea id="deExplanation" maxlength="3000" placeholder="Explain the action required and the latest position…"></textarea></label>
+      <label>Refund amount (£)<input type="number" id="deStartAmount" min="0.01" step="0.01"></label><label>Refund breakdown (optional, 255 characters maximum)<input id="deBreakdown" maxlength="255" type="text" placeholder="Brief breakdown"></label></div>
+      <p class="de-note">The amount is suggested from the current Post-Resolution recovery balance. You can amend it here without changing the recovery ledger.</p>
+      <div class="de-actions"><button type="button" class="de-action primary" id="deStartButton">Activate dealership escalation</button></div>
+    </div>
+    <div id="deManage" hidden><div class="de-actions"><button type="button" class="de-action" id="deDeactivate">Deactivate</button><button type="button" class="de-action" id="deReactivate">Reactivate</button><button type="button" class="de-action" id="deEscalate">↑ Escalate level</button><button type="button" class="de-action" id="deDeescalate">↓ De-escalate level</button></div>
+      <div class="de-fields"><label>Amend requested refund (£)<input type="number" id="deManageAmount" min="0.01" step="0.01"></label><label>Reason for change<input id="deChangeReason" type="text" maxlength="240" placeholder="Required when changing amount"></label></div>
+      <div class="de-actions"><button type="button" class="de-action" id="deSaveAmount">Save amended amount</button></div>
+      <p class="de-note">Changes control future emails, not previous correspondence. The email count and sent-email history are preserved.</p>
+    </div>
+    <div id="deNotice" class="de-notice" role="status" aria-live="polite"></div>
+    <div class="post-section-heading" style="margin-top:21px"><div><h3 style="font-size:16px">Sent-email timeline</h3><p class="post-muted">Messages confirmed as sent through Zendesk and recorded in Supabase.</p></div><button type="button" class="post-btn-secondary" id="deRefresh">Refresh</button></div>
+    <div id="deTimeline" class="de-timeline"><p class="de-note">Loading email history…</p></div>
+  </section>
   <div class="pr-modal-backdrop" id="prCostModal" hidden><div class="pr-dialog" role="dialog" aria-modal="true" aria-label="Add recovery cost"><h3>Add recovery costs</h3><p class="post-muted">Record a new cost incurred after the original recovery was saved. This does not overwrite the original balance.</p><label class="field"><span class="lab">Cost description</span><input id="prCostDescription" type="text" maxlength="18" placeholder="e.g. Further repairs"></label><label class="field"><span class="lab">Amount (£)</span><input id="prCostAmount" type="number" min="0.01" step="0.01" placeholder="0.00"></label><label class="field"><span class="lab">Reason / supporting context</span><input id="prCostReason" type="text" maxlength="180" placeholder="Why was this cost added?"></label><p id="prCostError" class="post-error" role="alert"></p><div class="post-actions"><button type="button" class="post-btn-secondary" id="prCostCancel">Cancel</button><button type="button" class="btn" id="prCostSave">Add cost &amp; save to Complaints Hub</button></div></div></div>
   <div class="pr-modal-backdrop" id="prSetupModal" hidden><div class="pr-dialog" role="dialog" aria-modal="true" aria-label="Set up Post-Resolution">
     <h3>Set up Post-Resolution</h3><p class="post-muted">What is outstanding following the complaint decision?</p><div id="prDestinationPreview" class="post-alert" style="margin-top:12px" aria-live="polite"></div>
@@ -2746,6 +2776,69 @@ function initPostResolution(){POST_DATA=PREFILL.postResolution||null;if(!POST_DA
 
 var ACTION_PAGE='home';var PR_RECON_BUSY=false;function prAutoReconcile(){if(PR_RECON_BUSY||!POST_DATA||POST_DATA.originalBalance===null||!['Post-Resolution Tasks','Partner Funds Outstanding'].includes(PREFILL.statusName))return;PR_RECON_BUSY=true;fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'post_reconcile'})}).then(r=>r.json()).then(data=>{if(!data.ok)throw Error((data.errors||[])[0]||'Reconciliation failed');POST_DATA=data.postResolution;prRender();refreshClosureRecoverySummary(POST_DATA);if(data.updated)showActionsSaveToast('New suspense funds automatically reconciled.'+(data.reportingSync&&!data.reportingSync.ok?' '+data.reportingSync.warning:''));}).catch(err=>prError('Suspense reconciliation: '+err.message)).finally(()=>{PR_RECON_BUSY=false;});}
 var ACTION_PAGE='home';
+
+var DE_STATE=null,DE_BUSY=false,DE_LOADED=false;
+function deMoneyFormat(n){return n===null||n===undefined||!Number.isFinite(Number(n))?'—':gbp.format(Number(n));}
+function deEnable(el,enabled){el.disabled=!enabled;}
+function deRender(){
+  if(!DE_STATE)return;
+  var d=DE_STATE,active=d.status==='Active',started=!!d.level;
+  var chip=$('#deStatus');chip.textContent=d.status;chip.className='de-chip '+(active?'active':started?'inactive':'');
+  $('#deLevel').textContent=(d.level||'—')+(d.sublevel?' · '+d.sublevel:'');
+  $('#deCount').textContent=String(d.count||0);
+  $('#deAmountView').textContent=deMoneyFormat(d.amount);
+  $('#deStart').hidden=active||started&&d.level!=='End';
+  $('#deManage').hidden=!started;
+  $('#deStartAmount').value=String(d.recoveryBalance!=null&&d.recoveryBalance>0?d.recoveryBalance:d.amount||'');
+  $('#deManageAmount').value=d.amount==null?'':String(d.amount);
+  if(!$('#deExplanation').value)$('#deExplanation').value=d.reason||'';
+  if(!$('#deBreakdown').value)$('#deBreakdown').value=d.breakdown||'';
+  if(d.type)$('#deType').value=d.type;
+  deEnable($('#deDeactivate'),active&&!DE_BUSY);
+  deEnable($('#deReactivate'),!active&&started&&d.level!=='End'&&!DE_BUSY);
+  deEnable($('#deEscalate'),started&&Number(d.level)<3&&!DE_BUSY);
+  deEnable($('#deDeescalate'),started&&Number(d.level)>1&&Number(d.level)<=3&&!DE_BUSY);
+  deEnable($('#deSaveAmount'),started&&!DE_BUSY);
+  deEnable($('#deStartButton'),!DE_BUSY);
+  if(!d.hasDealershipTicket||!d.hasCustomerTicket){$('#deNotice').textContent='A dealership and customer Zendesk ticket reference are required before activation.';}
+}
+function deTimeline(rows,warning){
+ var el=$('#deTimeline');
+ el.innerHTML=rows&&rows.length?rows.map(function(r){
+  var when=r.sent_at?new Date(r.sent_at).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short',timeZone:'Europe/London'}):'Date not recorded';
+  return '<article class="de-entry"><div class="de-entry-head"><strong>Level '+prHtml(r.escalation_sublevel||r.escalation_level||'—')+' · Email '+prHtml(r.email_number||'—')+'</strong><span>'+prHtml(when)+'</span></div><p class="de-note" style="margin:6px 0">'+prHtml(r.dealership_name||'Dealership')+(r.handler_name?' · '+prHtml(r.handler_name):'')+'</p><details><summary>Read sent email</summary><div class="de-email">'+prHtml(r.email_body||'No email body stored')+'</div></details></article>';
+ }).join(''):'<p class="de-note">No sent emails have been recorded for this complaint yet.</p>';
+ if(warning)$('#deNotice').textContent=warning;
+}
+async function deFetch(){
+ if(!$('#deConsole'))return;
+ $('#deNotice').textContent='';
+ try{var response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'dealership_escalation_get'})});var data=await response.json();if(!response.ok||!data.ok)throw Error((data.errors||[])[0]||'Unable to retrieve escalation');DE_STATE=data.escalation;DE_LOADED=true;deRender();deTimeline(data.emails,data.historyWarning);}
+ catch(error){$('#deNotice').textContent='Could not load dealership escalation: '+error.message;$('#deTimeline').textContent='Email timeline unavailable.';}
+}
+async function deSubmit(operation,button){
+ if(DE_BUSY)return;
+ var payload={token:getToken(),action:'dealership_escalation_manage',operation:operation,confirmed:true};
+ if(operation==='start'){
+  payload.escalationType=$('#deType').value;payload.explanation=$('#deExplanation').value.trim();payload.amount=Number($('#deStartAmount').value);payload.breakdown=$('#deBreakdown').value.trim();
+  if(!payload.escalationType||payload.explanation.length<10||!Number.isFinite(payload.amount)||payload.amount<=0){$('#deNotice').textContent='Select a type, explain the action (at least 10 characters) and enter a positive refund amount.';return;}
+ }else if(operation==='amount'){
+  payload.amount=Number($('#deManageAmount').value);payload.changeReason=$('#deChangeReason').value.trim();
+  if(!Number.isFinite(payload.amount)||payload.amount<=0||payload.changeReason.length<8){$('#deNotice').textContent='Enter a positive amount and a reason of at least eight characters.';return;}
+ }else payload.changeReason=$('#deChangeReason').value.trim();
+ var descriptions={start:'activate automated escalation',deactivate:'deactivate automated escalation',reactivate:'reactivate automated escalation',escalate:'increase the escalation level',deescalate:'decrease the escalation level',amount:'change the requested refund amount'};
+ if(!window.confirm('Confirm you want to '+descriptions[operation]+'? This affects future automated dealership emails.'))return;
+ DE_BUSY=true;button.disabled=true;$('#deNotice').textContent='Saving to Complaints Hub…';
+ try{var response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});var data=await response.json();if(!response.ok||!data.ok)throw Error((data.errors||[])[0]||'Update failed');DE_STATE=data.escalation;deRender();$('#deNotice').textContent=data.auditWarning||'Escalation updated successfully.';}
+ catch(error){$('#deNotice').textContent='Could not save escalation: '+error.message;}
+ finally{DE_BUSY=false;deRender();}
+}
+function deInit(){
+ $('#deStartButton').addEventListener('click',function(){deSubmit('start',this);});
+ [['deDeactivate','deactivate'],['deReactivate','reactivate'],['deEscalate','escalate'],['deDeescalate','deescalate'],['deSaveAmount','amount']].forEach(function(row){$('#'+row[0]).addEventListener('click',function(){deSubmit(row[1],this);});});
+ $('#deRefresh').addEventListener('click',deFetch);
+}
+
 function gotoActionsPage(page){
   if(page!=='rejection'&&ACTION_PAGE==='rejection'&&homeRejectionDirect){closeRejSides();rejWork=null;homeRejectionDirect=false;setRejectionPageMode(false);}
   if(closureRecoveryModalOpen)closeClosureRecoveryModal();
@@ -2766,7 +2859,7 @@ function gotoActionsPage(page){
   $('#actionsDealer').classList.toggle('active',page==='dealer');
   $('#actionsRejection').classList.toggle('active',page==='rejection');
   $('#actionsSolicitor').classList.toggle('active',page==='solicitor');
-  if(page==='post' && POST_DATA){prRender();prAutoReconcile();}
+  if(page==='post' && POST_DATA){prRender();prAutoReconcile();$('#deConsole').hidden=!['Post-Resolution Tasks','Partner Funds Outstanding'].includes(PREFILL.statusName);if(!$('#deConsole').hidden)deFetch();}else{$('#deConsole').hidden=true;}
   $('#closureShell').style.display=page==='closure'?'':'none';
   $('#reviewShell').classList.toggle('active',page==='review');
   $('#reviewViewSwitch').hidden=true;
@@ -2927,7 +3020,7 @@ function boot(){
       initRejCalc();initInspCalc();initCostEditors();
       applyPrefill();restoreRejectionBreakdowns();restoreCostBreakdowns();restoreInspectionBreakdowns();syncRej();syncFos();recompute();initRunningCosts();updateCostRequirements();renderFosRequiredActions();initRunningOnlySave();initSubmit();initManagementActions();initClosedLock();initReview();
       // Outside FOS Decision Review, keep the existing default-to-FOS behaviour.
-      initPostResolution();initClosureRecoveryUI();initActionsHome();initDealer();
+      initPostResolution();deInit();initClosureRecoveryUI();initActionsHome();initDealer();
     })
     .catch(function(){$('#loading').textContent='Network error loading the complaint.';});
 }
