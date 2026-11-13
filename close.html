@@ -673,6 +673,9 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .letters-inline-check input{accent-color:#ed0081;margin-top:4px}
 @media(max-width:750px){.letters-form-grid{grid-template-columns:1fr}.letters-card{padding:17px}.letters-top h2{font-size:25px}}
 
+
+/* Letters & Responses: single-document, progressive-disclosure layout */
+.letters-wrap{max-width:940px}.letters-top{margin-bottom:18px}.letters-switch{display:flex;gap:8px;margin:0 0 18px}.letters-switch-btn{background:#fff;border:1px solid #e8dce5;color:#59475a;border-radius:11px;padding:12px 16px;font:inherit;font-size:13px;font-weight:750;cursor:pointer}.letters-switch-btn.active{color:#a30861;background:#fff4f9;border-color:#edb7d1}.letters-switch-tag{display:inline-block;margin-left:7px;color:#8c7a89;font-size:11px;font-weight:600}.letters-switch-btn.active .letters-switch-tag{color:#a30861}.letters-document-card{padding:26px}.letters-existing-top{display:flex;align-items:center;gap:15px}.letters-existing-meta{flex:1;min-width:0}.letters-existing-meta h3{font-size:19px;margin:3px 0 5px}.letters-document-icon{width:54px;height:62px;display:grid;place-items:center;border-radius:10px;background:#fff0f7;color:#b40a69;font-size:28px;flex:none}.letters-eyebrow{display:block;color:#a11966;font-size:10px;letter-spacing:.12em;font-weight:800;margin-bottom:6px}.letters-state-pill{background:#f6f1f5;color:#665268;font-size:11px;font-weight:750;padding:7px 10px;border-radius:30px;white-space:nowrap}.letters-document-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.letters-btn.quiet{color:#6e5b6b;background:#fff}.letters-complete-icon{width:42px;height:42px;flex:none;border-radius:50%;display:grid;place-items:center;background:#e8f7ef;color:#177b4e;font-size:23px}.letters-finished{background:#fafffc}.letters-working-spinner{border-radius:50%;width:30px;height:30px;border:3px solid #f8dce9;border-top-color:#cf1773;flex:none;animation:lettersSpin 1s linear infinite}@keyframes lettersSpin{to{transform:rotate(360deg)}}.letters-modal[hidden]{display:none!important}.letters-modal{position:fixed;inset:0;z-index:12000;background:rgba(20,9,25,.72);display:flex;align-items:center;justify-content:center;padding:22px}.letters-modal-panel{background:#fff;border-radius:18px;width:min(1250px,98vw);height:min(92vh,1040px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 85px #14081950}.letters-modal-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid #eee4eb}.letters-modal-head h3{font-size:19px;margin:0 0 4px}.letters-modal-frame{width:100%;flex:1;border:0;background:#f4f1f4;min-height:200px}.letters-modal-foot{padding:9px 18px;font-size:11px;color:#746475;border-top:1px solid #eee4eb}.letters-modal-close{border:0;border-radius:9px;background:#f3edf2;color:#583d51;padding:10px 13px;cursor:pointer;font-size:16px}.letters-card[hidden]{display:none!important}@media(max-width:700px){.letters-switch{flex-direction:column}.letters-modal{padding:8px}.letters-modal-panel{height:95vh}.letters-modal-head{padding:12px;align-items:flex-start}.letters-existing-top{align-items:flex-start}.letters-state-pill{font-size:10px}.letters-document-actions .letters-btn{justify-content:center}.letters-modal-head .letters-row{gap:5px}}
 </style>
 </head>
 <body>
@@ -888,34 +891,38 @@ textarea.letters-field{min-height:85px;resize:vertical}
 
 <section id="actionsLetters" class="actions-page" aria-label="Letters and Responses">
  <div class="letters-wrap">
-  <div class="letters-top"><div><h2>Letters &amp; Responses</h2><p>Prepare, review and send customer responses.</p></div><span class="letters-chip" id="lettersTopStatus">Loading…</span></div>
-  <div class="letters-card">
-    <div class="letters-summary"><div><h3>Prepare a letter</h3><p class="letters-muted" id="lettersContext">The appropriate final-response template is selected from the complaint type.</p></div></div>
+  <div class="letters-top"><div><h2>Letters &amp; Responses</h2><p>Create a letter once, review it in Google Docs, then send it.</p></div><span class="letters-chip" id="lettersTopStatus">Loading…</span></div>
+  <div class="letters-switch" role="group" aria-label="Response type"><button type="button" id="lettersTabFinal" class="letters-switch-btn active" aria-pressed="true">Final response <span id="lettersFinalTag" class="letters-switch-tag">—</span></button><button type="button" id="lettersTabHolding" class="letters-switch-btn" aria-pressed="false">Eight-week holding <span id="lettersHoldingTag" class="letters-switch-tag">—</span></button></div>
+  <div class="letters-card letters-document-card" id="lettersExistingCard" hidden>
+    <div class="letters-existing-top"><div class="letters-document-icon" aria-hidden="true">▤</div><div class="letters-existing-meta"><span class="letters-eyebrow" id="lettersDocumentKind">FINAL RESPONSE LETTER</span><h3 id="lettersDocumentHeading">Your letter is ready</h3><p class="letters-muted" id="lettersDraftSummary">The document is saved in the complaint folder.</p></div><span class="letters-state-pill" id="lettersDocumentState">Draft ready</span></div>
+    <div class="letters-document-actions"><button type="button" class="letters-btn primary" id="lettersOpenPreview">↗ Preview letter</button><a id="lettersGoogleLink" class="letters-btn" target="_blank" rel="noopener noreferrer">Edit in Google Docs ↗</a><button type="button" id="lettersRefresh" class="letters-btn quiet">↻ Refresh</button></div>
+    <p class="letters-note" style="margin-top:14px">Edits are saved in the original Google Doc. The latest saved version will be exported when you send.</p>
+  </div>
+  <div class="letters-card" id="lettersPrepareCard" hidden>
+    <div class="letters-summary"><div><span class="letters-eyebrow">NEW DOCUMENT</span><h3 id="lettersPrepareTitle">Generate final response</h3><p class="letters-muted" id="lettersContext">We'll use the template matching this complaint.</p></div></div>
     <div class="letters-form-grid" style="margin-top:20px">
-      <label><span class="letters-label">Letter type</span><select id="lettersType" class="letters-field"><option value="general">General final response</option><option value="vehicle">Vehicle issue final response</option><option value="affordability">Unaffordable lending final response</option><option value="holding">Eight-week holding response</option></select></label>
       <label id="lettersOutcomeWrap"><span class="letters-label">Complaint outcome</span><select id="lettersOutcome" class="letters-field"></select></label>
       <label class="letters-full" id="lettersIssuesWrap"><span class="letters-label">Additional issues raised (optional)</span><textarea id="lettersIssues" class="letters-field" placeholder="Any additional issues raised during the investigation"></textarea></label>
-      <label class="letters-full" id="lettersSummaryWrap"><span class="letters-label" id="lettersSummaryLabel">Why have you reached this decision?</span><textarea id="lettersSummary" class="letters-field" placeholder="Explain the reasoning and the evidence"></textarea></label>
-      <label class="letters-full" id="lettersDetailsWrap"><span class="letters-label">Remediation, goodwill and other details</span><textarea id="lettersDetails" class="letters-field" placeholder="Any agreed actions, payments or next steps"></textarea></label>
-      <label class="letters-full" id="lettersFactsWrap" hidden><span class="letters-label">Affordability decisioning facts</span><textarea id="lettersFacts" class="letters-field" style="min-height:160px" placeholder="Paste the decisioning facts in the format used by the existing affordability generator"></textarea><span class="letters-note">The existing affordability Zap expects the complete decisioning facts. This field must not be populated from the complaint summary alone.</span></label>
+      <label class="letters-full" id="lettersSummaryWrap"><span class="letters-label" id="lettersSummaryLabel">Why have you reached this decision?</span><textarea id="lettersSummary" class="letters-field" placeholder="Explain the decision and supporting evidence"></textarea></label>
+      <label class="letters-full" id="lettersDetailsWrap"><span class="letters-label">Remediation, goodwill and other details</span><textarea id="lettersDetails" class="letters-field" placeholder="Agreed actions, payments or next steps"></textarea></label>
+      <label class="letters-full" id="lettersFactsWrap" hidden><span class="letters-label">Affordability decisioning facts</span><textarea id="lettersFacts" class="letters-field" style="min-height:160px" placeholder="Paste the complete affordability decisioning facts"></textarea><span class="letters-note">The affordability generator requires the full decisioning facts.</span></label>
       <label class="letters-inline-check letters-full" id="lettersDekraWrap" hidden><input type="checkbox" id="lettersDekra">DEKRA inspection completed</label>
       <label class="letters-inline-check letters-full" id="lettersGoodstandingWrap" hidden><input type="checkbox" id="lettersGoodstanding">Customer's agreement is in good standing</label>
     </div>
-    <div class="letters-actions"><button type="button" id="lettersGenerate" class="letters-btn primary">Generate draft</button></div>
-    <div id="lettersGenerateMessage" class="letters-message" role="status" aria-live="polite"></div>
+    <div class="letters-actions"><button type="button" id="lettersGenerate" class="letters-btn primary">Generate letter</button></div>
   </div>
-  <div class="letters-card">
-    <div class="letters-summary"><div><h3>Review the draft</h3><p id="lettersDraftSummary" class="letters-muted">No document has been generated yet.</p></div><div class="letters-row"><a id="lettersGoogleLink" class="letters-btn" target="_blank" rel="noopener noreferrer" hidden>Open in Google Docs ↗</a><button id="lettersRefresh" type="button" class="letters-btn">↻ Refresh status</button></div></div>
-    <div id="lettersPreviewNote" class="letters-note" style="margin-top:12px" hidden>Preview below where Google permits it. To make changes, open the Google Doc. You do not need to copy the document back here.</div>
-    <iframe id="lettersPreview" title="Draft document preview" class="letters-doc-preview" referrerpolicy="no-referrer" hidden></iframe>
-  </div>
-  <div class="letters-card">
-    <div class="letters-summary"><div><h3>Send the letter</h3><p class="letters-muted">Sending uses the latest saved version of the Google Doc.</p></div><span class="letters-status" id="lettersSendStatus">No draft</span></div>
-    <div style="margin-top:18px" class="letters-form-grid"><label class="letters-inline-check letters-full"><input type="checkbox" id="lettersReviewed">I have checked the latest version of the letter and approve it for sending.</label><label class="letters-inline-check letters-full" id="lettersReviewWrap"><input type="checkbox" id="lettersRequestReview">Request a Trustpilot review (final response only)</label><label class="letters-full"><span class="letters-label">Additional email message (optional)</span><textarea id="lettersEmailNotes" class="letters-field" placeholder="Anything else you'd like to say in the email"></textarea></label></div>
+  <div class="letters-card letters-working" id="lettersWaitingCard" hidden><div class="letters-existing-top"><span class="letters-working-spinner" aria-hidden="true"></span><div><h3>Draft generation requested</h3><p class="letters-muted">The Zap is creating the document in Google Drive. Refresh once it has finished.</p></div></div><div class="letters-actions"><button type="button" id="lettersWaitingRefresh" class="letters-btn">↻ Check for document</button></div></div>
+  <div id="lettersGenerateMessage" class="letters-message" role="status" aria-live="polite"></div>
+  <div class="letters-card" id="lettersSendCard" hidden>
+    <div class="letters-summary"><div><span class="letters-eyebrow">FINAL STEP</span><h3>Send to customer</h3><p class="letters-muted">Review and approve the latest Google Doc before sending.</p></div><span class="letters-status" id="lettersSendStatus">Ready for review</span></div>
+    <div style="margin-top:18px" class="letters-form-grid"><label class="letters-inline-check letters-full"><input type="checkbox" id="lettersReviewed">I've checked the latest version of the letter and approve it for sending.</label><label class="letters-inline-check letters-full" id="lettersReviewWrap"><input type="checkbox" id="lettersRequestReview">Request a Trustpilot review</label><label class="letters-full"><span class="letters-label">Additional email message (optional)</span><textarea id="lettersEmailNotes" class="letters-field" placeholder="Anything else you'd like to say in the email"></textarea></label></div>
     <div class="letters-actions"><button type="button" id="lettersSend" class="letters-btn primary" disabled>Send letter to customer</button></div>
     <div id="lettersSendMessage" class="letters-message" role="status" aria-live="polite"></div>
   </div>
+  <div class="letters-card letters-finished" id="lettersSentCard" hidden><div class="letters-existing-top"><span class="letters-complete-icon">✓</span><div><h3>Letter sent</h3><p class="letters-muted" id="lettersSentDescription">This letter has been marked as sent in Complaints Hub.</p></div></div></div>
+  <div class="letters-card letters-working" id="lettersSendingCard" hidden><h3>Sending requested</h3><p class="letters-muted">The delivery request is recorded. Check Zendesk and refresh the status; do not send it again.</p><div class="letters-actions"><button type="button" id="lettersSendingRefresh" class="letters-btn">↻ Refresh status</button></div></div>
  </div>
+ <div class="letters-modal" id="lettersPreviewModal" hidden role="dialog" aria-modal="true" aria-labelledby="lettersModalTitle"><div class="letters-modal-panel"><div class="letters-modal-head"><div><h3 id="lettersModalTitle">Letter preview</h3><p class="letters-muted">Preview only — use Google Docs to make changes.</p></div><div class="letters-row"><a id="lettersModalEdit" target="_blank" rel="noopener noreferrer" class="letters-btn">Edit in Google Docs ↗</a><button type="button" id="lettersModalClose" class="letters-modal-close" aria-label="Close preview">✕</button></div></div><iframe title="Google Docs letter preview" id="lettersModalFrame" class="letters-modal-frame" referrerpolicy="no-referrer"></iframe><div class="letters-modal-foot">If Google blocks the embedded preview, select Edit in Google Docs above to view the document.</div></div></div>
 </section>
 
 <section id="actionsRunning" class="actions-page">
@@ -3386,20 +3393,25 @@ function initDealer(){
 
 
 // Letters & Responses: all API calls are authenticated using the existing signed complaint link.
-var LETTERS_STATE=null,LETTERS_BUSY=false,LETTERS_SENDING=false;
+var LETTERS_STATE=null,LETTERS_BUSY=false,LETTERS_SENDING=false,LETTERS_VIEW='final',LETTERS_GENERATING=false;
 var LETTERS_VEHICLE_OPTIONS=[
 'Repaired Vehicle (Dealership Paid)','Repaired Vehicle (Carmoola Paid)','Repaired Vehicle (Carmoola & Dealership Paid)',
 'Rejected Vehicle (Dealership Rejection. Evidence Not Acquired.)','Rejected Vehicle (Dealership Rejection. Evidence Acquired.)',
 'Rejected Vehicle (Carmoola Rejection. Next Steps Unclear.)','Rejected Vehicle (Auction Rejection)',
 'Rejected Vehicle (Partner Rejection)','Not Upheld (Evidence Acquired)','Not Upheld (Repairs Completed Before Inspection)',
 'Not Upheld (Post 6 months. No Evidence Provided)'];
-function lettersSuggestedType(){var type=String(PREFILL?.complaintType||'');return /^vehicle issues?$/i.test(type)?'vehicle':/unafford|affordability|responsible lending/i.test(type)?'affordability':'general';}
-function lettersSelectedDoc(){if(!LETTERS_STATE)return '';return $('#lettersType').value==='holding'?LETTERS_STATE.holdingDocumentId:LETTERS_STATE.finalDocumentId;}
-function lettersSelectedSent(){if(!LETTERS_STATE)return false;return $('#lettersType').value==='holding'?LETTERS_STATE.holdingSent:LETTERS_STATE.finalSent;}
-function lettersPending(){if(!LETTERS_STATE)return false;return !!($('#lettersType').value==='holding'?LETTERS_STATE.holdingSubmission?.state:LETTERS_STATE.finalSubmission?.state);}
+function lettersSuggestedType(){var type=String(LETTERS_STATE?.complaintType||PREFILL?.complaintType||'');return /^vehicle issues?$/i.test(type)?'vehicle':/unafford|affordability|responsible lending/i.test(type)?'affordability':'general';}
+function lettersSelectedType(){return LETTERS_VIEW==='holding'?'holding':lettersSuggestedType();}
+function lettersSelectedDoc(){if(!LETTERS_STATE)return '';return LETTERS_VIEW==='holding'?LETTERS_STATE.holdingDocumentId:LETTERS_STATE.finalDocumentId;}
+function lettersSelectedSent(){if(!LETTERS_STATE)return false;return LETTERS_VIEW==='holding'?LETTERS_STATE.holdingSent:LETTERS_STATE.finalSent;}
+function lettersPending(){if(!LETTERS_STATE)return false;return !!(LETTERS_VIEW==='holding'?LETTERS_STATE.holdingSubmission?.state:LETTERS_STATE.finalSubmission?.state);}
+function lettersLabel(doc,sent,pending){return sent?'Sent':doc?'Draft ready':pending?'Sending requested':'Not created';}
 function lettersRender(){
- var type=$('#lettersType').value,holding=type==='holding',afford=type==='affordability',veh=type==='vehicle';
- $('#lettersType').querySelectorAll('option').forEach(function(o){o.disabled=o.value!=='holding'&&o.value!==lettersSuggestedType();});
+ var type=lettersSelectedType(),holding=LETTERS_VIEW==='holding',afford=type==='affordability',veh=type==='vehicle';
+ var finalDoc=!!LETTERS_STATE?.finalDocumentId,holdingDoc=!!LETTERS_STATE?.holdingDocumentId;
+ $('#lettersFinalTag').textContent=lettersLabel(finalDoc,LETTERS_STATE?.finalSent,LETTERS_STATE?.finalSubmission?.state);
+ $('#lettersHoldingTag').textContent=lettersLabel(holdingDoc,LETTERS_STATE?.holdingSent,LETTERS_STATE?.holdingSubmission?.state);
+ [['lettersTabFinal',!holding],['lettersTabHolding',holding]].forEach(function(item){var b=$('#'+item[0]);b.classList.toggle('active',item[1]);b.setAttribute('aria-pressed',String(item[1]));});
  $('#lettersOutcomeWrap').hidden=holding||afford;$('#lettersIssuesWrap').hidden=afford;
  $('#lettersSummaryWrap').hidden=afford;$('#lettersDetailsWrap').hidden=afford||holding;
  $('#lettersFactsWrap').hidden=!afford;$('#lettersDekraWrap').hidden=!veh;$('#lettersGoodstandingWrap').hidden=!afford;
@@ -3412,14 +3424,23 @@ function lettersRender(){
  var doc=lettersSelectedDoc(),sent=lettersSelectedSent(),pending=lettersPending();
  var sentDate=holding?LETTERS_STATE?.holdingSentDate:LETTERS_STATE?.finalSentDate;
  var sentLabel=sent?(sentDate?'Sent · '+formatDisplayDate(sentDate):'Sent'):'';
- $('#lettersTopStatus').textContent=sent?sentLabel:pending?'Sending requested':doc?'Draft ready':'No draft';
- $('#lettersSendStatus').textContent=sent?sentLabel:pending?'Sending requested':doc?'Ready for review':'No draft';
- $('#lettersDraftSummary').textContent=doc?'Draft saved in the complaint folder. Open it in Google Docs to make changes.':'No document has been generated yet.';
- var a=$('#lettersGoogleLink'),frame=$('#lettersPreview');a.hidden=!doc;frame.hidden=!doc;$('#lettersPreviewNote').hidden=!doc;
- if(doc){a.href='https://docs.google.com/document/d/'+encodeURIComponent(doc)+'/edit';var src='https://docs.google.com/document/d/'+encodeURIComponent(doc)+'/preview';if(frame.src!==src)frame.src=src;}else{a.removeAttribute('href');frame.removeAttribute('src');}
- $('#lettersContext').textContent=holding?'Prepare an eight-week holding response for an investigation that is still ongoing.':'Suggested from complaint type: '+(PREFILL?.complaintType||'General complaint');
- $('#lettersGenerate').disabled=LETTERS_BUSY||sent||pending;
- $('#lettersGenerate').textContent=doc?'Generate new draft':'Generate draft';
+ $('#lettersTopStatus').textContent=sent?sentLabel:pending?'Sending requested':doc?'Draft ready':LETTERS_GENERATING?'Generating':'Not created';
+ $('#lettersExistingCard').hidden=!doc;
+ $('#lettersPrepareCard').hidden=!!doc||sent||pending||LETTERS_GENERATING;
+ $('#lettersWaitingCard').hidden=!!doc||sent||pending||!LETTERS_GENERATING;
+ $('#lettersSentCard').hidden=!sent;
+ $('#lettersSendingCard').hidden=!pending||sent;
+ $('#lettersSendCard').hidden=!doc||sent||pending;
+ $('#lettersPrepareTitle').textContent=holding?'Generate eight-week holding letter':veh?'Generate vehicle issue final response':afford?'Generate unaffordable lending final response':'Generate general final response';
+ $('#lettersContext').textContent=holding?'For an investigation that has not yet concluded.':`Selected automatically from complaint type: ${LETTERS_STATE?.complaintType||PREFILL?.complaintType||'General'}.`;
+ $('#lettersDocumentKind').textContent=holding?'EIGHT-WEEK HOLDING RESPONSE':'FINAL RESPONSE LETTER';
+ $('#lettersDocumentHeading').textContent=holding?'Eight-week holding letter':'Final response letter';
+ $('#lettersDraftSummary').textContent=sent?'Saved in the complaint folder. You can still open the document.':'Saved in the complaint folder and ready to review.';
+ $('#lettersDocumentState').textContent=sent?sentLabel:pending?'Sending requested':'Draft ready';
+ $('#lettersSentDescription').textContent=sentDate?'Sent on '+formatDisplayDate(sentDate)+'. The letter remains available in Google Docs.':'Marked as sent. The letter remains available in Google Docs.';
+ $('#lettersSendStatus').textContent=doc?'Ready to send':'No draft';
+ var a=$('#lettersGoogleLink');a.hidden=!doc;if(doc)a.href='https://docs.google.com/document/d/'+encodeURIComponent(doc)+'/edit';else a.removeAttribute('href');
+ $('#lettersGenerate').disabled=LETTERS_BUSY||!!doc||sent||pending||LETTERS_GENERATING;
  $('#lettersSend').disabled=LETTERS_BUSY||LETTERS_SENDING||pending||!doc||sent||!$('#lettersReviewed').checked;
 }
 async function lettersCall(action,data){
@@ -3428,34 +3449,51 @@ async function lettersCall(action,data){
 }
 async function lettersRefresh(){
  if(LETTERS_BUSY)return;
- try{var result=await lettersCall('letters_status');LETTERS_STATE=result.letters;lettersRender();}
+ try{var result=await lettersCall('letters_status');LETTERS_STATE=result.letters;if(lettersSelectedDoc())LETTERS_GENERATING=false;lettersRender();}
  catch(e){$('#lettersGenerateMessage').textContent=e.message;}
 }
 async function lettersGenerate(){
- if(LETTERS_BUSY)return;var type=$('#lettersType').value,doc=lettersSelectedDoc();
- if(doc&&!window.confirm('A draft already exists. Generate a NEW document? The existing draft will remain in Google Drive.'))return;
- var summary=$('#lettersSummary').value.trim(),details=$('#lettersDetails').value.trim(),facts=$('#lettersFacts').value.trim(),outcome=$('#lettersOutcome').value;
- if((type==='holding'&&!summary)||(type==='affordability'&&!facts)||(['general','vehicle'].includes(type)&&(!summary||!details))){$('#lettersGenerateMessage').textContent='Complete the required fields before generating the draft.';return;}
+ if(LETTERS_BUSY||LETTERS_GENERATING||lettersSelectedDoc()||lettersSelectedSent()||lettersPending())return;
+ var type=lettersSelectedType(),summary=$('#lettersSummary').value.trim(),details=$('#lettersDetails').value.trim(),facts=$('#lettersFacts').value.trim(),outcome=$('#lettersOutcome').value;
+ if((type==='holding'&&!summary)||(type==='affordability'&&!facts)||(['general','vehicle'].includes(type)&&(!summary||!details))){$('#lettersGenerateMessage').textContent='Complete the required fields before generating the letter.';return;}
  LETTERS_BUSY=true;$('#lettersGenerateMessage').textContent='Requesting draft…';lettersRender();
- try{var d=await lettersCall('letters_generate',{letterType:type,confirmed:true,replaceDraft:!!doc,otherissues:$('#lettersIssues').value,summaryofdecision:summary,otherdetails:details,outcome,decisioningfacts:facts,dekracompleted:$('#lettersDekra').checked,goodstanding:$('#lettersGoodstanding').checked});$('#lettersGenerateMessage').textContent=d.message;$('#lettersReviewed').checked=false;}
+ try{var d=await lettersCall('letters_generate',{letterType:type,confirmed:true,otherissues:$('#lettersIssues').value,summaryofdecision:summary,otherdetails:details,outcome,decisioningfacts:facts,dekracompleted:$('#lettersDekra').checked,goodstanding:$('#lettersGoodstanding').checked});LETTERS_GENERATING=true;$('#lettersGenerateMessage').textContent=d.message;}
  catch(e){$('#lettersGenerateMessage').textContent=e.message;}
  finally{LETTERS_BUSY=false;lettersRender();}
 }
 async function lettersSend(){
- if(LETTERS_BUSY||LETTERS_SENDING||!$('#lettersReviewed').checked)return;
- var doc=lettersSelectedDoc(),type=$('#lettersType').value;if(!doc)return;
+ if(LETTERS_BUSY||LETTERS_SENDING||!$('#lettersReviewed').checked||lettersSelectedSent()||lettersPending())return;
+ var doc=lettersSelectedDoc(),type=lettersSelectedType();if(!doc)return;
  if(!window.confirm('Send the latest version of this letter to the customer? This action sends a real customer communication.'))return;
  LETTERS_SENDING=true;$('#lettersSendMessage').textContent='Requesting delivery…';lettersRender();
- try{var d=await lettersCall('letters_send',{letterType:type,confirmed:true,approvedDocumentId:doc,reviewed:true,requestreview:$('#lettersRequestReview').checked,additionalEmail:$('#lettersEmailNotes').value});$('#lettersSendMessage').textContent=d.message;}
+ try{var d=await lettersCall('letters_send',{letterType:type,confirmed:true,approvedDocumentId:doc,reviewed:true,requestreview:$('#lettersRequestReview').checked,additionalEmail:$('#lettersEmailNotes').value});$('#lettersSendMessage').textContent=d.message;await lettersRefresh();}
  catch(e){$('#lettersSendMessage').textContent=e.message+' Check Zapier and Zendesk before trying again.';}
  finally{lettersRender();}
 }
+function lettersOpenModal(){
+ var doc=lettersSelectedDoc();if(!doc)return;
+ var url='https://docs.google.com/document/d/'+encodeURIComponent(doc);
+ $('#lettersModalTitle').textContent=LETTERS_VIEW==='holding'?'Eight-week holding letter':'Final response letter';
+ $('#lettersModalEdit').href=url+'/edit';$('#lettersModalFrame').src=url+'/preview';
+ $('#lettersPreviewModal').hidden=false;document.body.style.overflow='hidden';$('#lettersModalClose').focus();
+}
+function lettersCloseModal(){$('#lettersPreviewModal').hidden=true;$('#lettersModalFrame').removeAttribute('src');document.body.style.overflow='';}
+function lettersChoose(view){
+ if(LETTERS_VIEW===view)return;LETTERS_VIEW=view;LETTERS_GENERATING=false;
+ $('#lettersReviewed').checked=false;$('#lettersGenerateMessage').textContent='';$('#lettersSendMessage').textContent='';LETTERS_SENDING=false;lettersRender();
+}
 function lettersInit(){
- $('#lettersType').value=lettersSuggestedType();
- $('#lettersType').addEventListener('change',function(){$('#lettersReviewed').checked=false;$('#lettersGenerateMessage').textContent='';$('#lettersSendMessage').textContent='';LETTERS_SENDING=false;lettersRender();});
+ $('#lettersTabFinal').addEventListener('click',function(){lettersChoose('final');});
+ $('#lettersTabHolding').addEventListener('click',function(){lettersChoose('holding');});
  $('#lettersReviewed').addEventListener('change',lettersRender);
  $('#lettersRefresh').addEventListener('click',function(){LETTERS_SENDING=false;lettersRefresh();});
+ $('#lettersWaitingRefresh').addEventListener('click',lettersRefresh);
+ $('#lettersSendingRefresh').addEventListener('click',function(){LETTERS_SENDING=false;lettersRefresh();});
  $('#lettersGenerate').addEventListener('click',lettersGenerate);$('#lettersSend').addEventListener('click',lettersSend);
+ $('#lettersOpenPreview').addEventListener('click',lettersOpenModal);
+ $('#lettersModalClose').addEventListener('click',lettersCloseModal);
+ $('#lettersPreviewModal').addEventListener('click',function(e){if(e.target===this)lettersCloseModal();});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#lettersPreviewModal').hidden)lettersCloseModal();});
  lettersRender();
 }
 
