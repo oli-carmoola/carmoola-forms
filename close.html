@@ -607,6 +607,43 @@ body.actions-with-rail #globalHomeBtn{display:none!important}
 .solaris-btn:disabled{background:#b5b0b8!important;color:#fff!important;opacity:1!important;cursor:not-allowed!important}
 #solarisDebtor[readonly]{background:#f9f7f9;color:#342936}
 @media(max-width:710px){#postWorkspace.pr-details-modal{inset:10px;padding:14px;border-radius:13px}}
+
+/* Complaint Overview: shared navigation, quiet dashboard, no large tiles. */
+body.actions-overview .shell{max-width:1250px}
+body.actions-overview #actionsHome{padding:0}
+body.actions-overview .overview-legacy-controls{display:none!important}
+.overview-page{max-width:1180px;margin:0 auto 24px;color:#2b1c2c}
+.overview-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:2px 0 19px}
+.overview-heading h2{font-size:30px;letter-spacing:-.045em;line-height:1.1;margin:5px 0 4px}
+.overview-heading p{font-size:13px;color:#887c89;margin:0}
+.overview-eyebrow{font-size:10px;font-weight:800;letter-spacing:.11em;color:#a11764}
+.overview-status{border:1px solid #f5cde1;color:#a00860;background:#ffecf5;padding:9px 14px;border-radius:999px;font-size:11.5px;font-weight:800;flex:none}
+.overview-identity{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:#fff;border:1px solid #eae0e9;border-radius:15px;box-shadow:0 4px 20px #28102206;padding:17px 8px}
+.overview-identity>div{border-right:1px solid #f0e7ef;padding:2px 17px;min-width:0}.overview-identity>div:last-child{border-right:0}
+.overview-identity span{font-size:10px;color:#887b8a;font-weight:700;display:block;margin-bottom:7px}.overview-identity strong{font-size:14px;color:#2b2030;overflow-wrap:anywhere}
+.overview-shortcuts{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:15px 0 28px}
+.overview-shortcuts>span{color:#938696;letter-spacing:.1em;font-size:9.5px;font-weight:800}
+.overview-shortcuts>div{display:flex;gap:7px;flex-wrap:wrap}
+.overview-shortcuts a{color:#79254e;text-decoration:none;background:white;border:1px solid #e9dfe8;border-radius:9px;padding:8px 11px;font-size:11.5px;font-weight:750}
+.overview-shortcuts a:hover{border-color:#f90081;background:#fff5fa}
+.overview-section-head,.overview-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.overview-section-head{margin:23px 0 10px}.overview-section-head h3,.overview-panel-head h3{font-size:17px;letter-spacing:-.025em;margin:0}
+.overview-section-head>span,.overview-panel-head>span{color:#9b8d9a;font-size:10px;font-weight:750;letter-spacing:.04em}
+.overview-attention{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.overview-attention-item{min-height:94px;background:white;border:1px solid #ebdfe9;border-radius:14px;padding:16px 36px 15px 17px;text-align:left;position:relative;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;gap:7px;box-shadow:0 3px 13px #2b102207}
+.overview-attention-item:hover{border-color:#ea9bc6;background:#fffbfd}.overview-attention-item strong{font-size:13px;color:#312032}.overview-attention-item span{color:#857686;font-size:12px;line-height:1.35}.overview-attention-item i{position:absolute;right:16px;top:16px;color:#bd4e87;font-size:15px;font-style:normal}
+.overview-no-attention{grid-column:1/-1;border:1px solid #eee3eb;border-radius:13px;padding:17px;color:#807581;background:#fff;font-size:12px}
+.overview-columns{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:24px}
+.overview-panel{border:1px solid #eae0e9;background:#fff;border-radius:16px;padding:20px 21px;box-shadow:0 4px 20px #28102207;min-width:0}
+.overview-panel-head{margin-bottom:12px}
+.overview-data-row{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;border-top:1px solid #f1ebf0;padding:12px 1px;font-size:12px}
+.overview-data-row span{color:#817584;min-width:0}.overview-data-row strong{text-align:right;max-width:60%;font-size:12px;font-weight:750;color:#332637;overflow-wrap:anywhere}
+.overview-bottom{margin-top:15px;border-radius:14px;border:1px solid #eae0e9;overflow:hidden;background:#fff}
+.overview-bottom-link{width:100%;border:0;border-bottom:1px solid #f2e9f0;display:grid;grid-template-columns:1fr 1fr auto;align-items:center;gap:12px;background:white;padding:15px 19px;font-family:inherit;cursor:pointer;text-align:left;color:#2c2130;font-size:12px}
+.overview-bottom-link:last-child{border-bottom:0}.overview-bottom-link:hover{background:#fff8fb}.overview-bottom-link>span:first-child{font-weight:800}.overview-bottom-link strong{font-size:12px;color:#867487;font-weight:650}.overview-bottom-link>span:last-child{color:#bc4b81}
+@media(max-width:900px){.overview-identity{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:15px}.overview-identity>div:nth-child(2){border-right:0}.overview-attention{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:710px){.overview-heading{align-items:flex-start;flex-direction:column}.overview-heading h2{font-size:26px}.overview-columns{grid-template-columns:1fr}.overview-attention{grid-template-columns:1fr}.overview-shortcuts{margin-bottom:14px}}
+
 </style>
 </head>
 <body>
@@ -677,7 +714,7 @@ body.actions-with-rail #globalHomeBtn{display:none!important}
   <div class="rail-brand"><div class="rail-logo">carmoola</div><span class="rail-caption">COMPLAINTS HUB</span></div>
   <div class="rail-case"><span>WORKING ON</span><strong id="railCaseRef">Complaint</strong><small id="railCustomer">Customer</small></div>
   <nav class="rail-links" aria-label="Complaint sections">
-    <button type="button" class="rail-link" data-rail="home"><span class="rail-icon">⌂</span><span>Complaint home</span></button>
+    <button type="button" class="rail-link" data-rail="home"><span class="rail-icon">⌂</span><span>Overview</span></button>
     <div class="rail-group">WORKSPACES</div>
     <button type="button" class="rail-link" data-rail="running"><span class="rail-icon">▤</span><span>Running costs</span></button>
     <button type="button" class="rail-link" data-rail="rejection"><span class="rail-icon">◇</span><span>Vehicle rejection</span></button>
@@ -735,7 +772,35 @@ body.actions-with-rail #globalHomeBtn{display:none!important}
   <div class="initial-footer"><small>Saved to Complaints Hub before the complaint moves to Investigation.</small><button type="button" class="btn" id="initialStart" disabled>Start Investigation →</button></div>
  </div></div>
 </section>
-<section id="actionsHome" class="actions-page active" aria-label="Complaint homepage">
+<section id="actionsHome" class="actions-page active" aria-label="Complaint overview">
+  <div class="overview-page">
+    <header class="overview-heading">
+      <div><span class="overview-eyebrow">COMPLAINT <span id="overviewReference">—</span></span><h2>Complaint Overview</h2><p id="overviewSubtitle">Complaint details</p></div>
+      <span class="overview-status" id="overviewStatus">—</span>
+    </header>
+    <div class="overview-identity" aria-label="Complaint details">
+      <div><span>Customer</span><strong id="overviewCustomer">—</strong></div>
+      <div><span>Assigned to</span><strong id="overviewAssignee">—</strong></div>
+      <div><span>Outsourcing</span><strong id="overviewOutsourced">—</strong></div>
+      <div id="overviewPartnerWrap"><span id="overviewPartnerLabel">Introducer</span><strong id="overviewPartner">—</strong></div>
+    </div>
+    <div class="overview-shortcuts" id="overviewShortcuts" aria-label="Quick links">
+      <span>QUICK LINKS</span><div id="overviewLinks"></div>
+    </div>
+    <section class="overview-attention-section" id="overviewAttentionSection" aria-labelledby="overviewAttentionTitle">
+      <div class="overview-section-head"><h3 id="overviewAttentionTitle">Needs attention</h3><span id="overviewAttentionCount"></span></div>
+      <div class="overview-attention" id="overviewAttention"></div>
+    </section>
+    <div class="overview-columns">
+      <section class="overview-panel" aria-labelledby="overviewDatesTitle"><div class="overview-panel-head"><h3 id="overviewDatesTitle">Important dates</h3><span>COMPLAINT HISTORY</span></div><div class="overview-date-list" id="overviewDates"></div></section>
+      <section class="overview-panel" aria-labelledby="overviewDetailsTitle"><div class="overview-panel-head"><h3 id="overviewDetailsTitle">Key details</h3></div><div class="overview-detail-list" id="overviewDetails"></div></section>
+    </div>
+    <div class="overview-bottom" id="overviewBottom" hidden>
+      <button type="button" class="overview-bottom-link" id="overviewRecoveryLink" hidden><span>Financial recovery</span><strong id="overviewRecoveryText">—</strong><span aria-hidden="true">↗</span></button>
+      <button type="button" class="overview-bottom-link" id="overviewSolicitorLink" hidden><span>Solicitor escalation</span><strong id="overviewSolicitorText">—</strong><span aria-hidden="true">↗</span></button>
+    </div>
+  </div>
+  <div class="overview-legacy-controls" aria-hidden="true">
   <div class="home-action-heading"><div><h3>What would you like to do?</h3><p>Select a workspace to continue managing this complaint.</p></div><span class="home-action-count">7 WORKSPACES</span></div>
   <div class="actions-tiles home-tiles home-tiles-five">
     <button type="button" class="actions-tile" data-go="running"><span class="tile-top"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M8 15h3"/></svg></span><span class="arrow">↗</span></span><span class="tile-copy"><strong>Running Costs</strong><small>Record and manage complaint expenses</small></span></button>
@@ -747,6 +812,7 @@ body.actions-with-rail #globalHomeBtn{display:none!important}
     <button type="button" class="actions-tile" data-go="solicitor" id="solicitorHomeTile" disabled><span class="tile-top"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l4 4v14H3V3h4z"/><path d="M14 3v5h7M7 13h10M7 17h7"/></svg></span><span class="arrow">↗</span></span><span class="tile-copy"><strong>Solicitor Escalation</strong><small id="solicitorHomeHint">Available when solicitor escalation is enabled in Complaints Hub</small></span></button>
   </div>
   <div class="home-footer-note">COMPLAINT ACTIONS <span>·</span> <span id="homeFooterRef">—</span></div>
+</div>
 </section>
 <section id="actionsDealer" class="actions-page" aria-label="Dealership Position">
 <div class="actions-subhero"><h2>Dealership Position</h2><p>Record the dealership’s current trading or insolvency position for this Vehicle Issues complaint.</p></div>
@@ -2997,7 +3063,7 @@ async function solarisSubmit(){
 function solarisInit(){['solarisHpa','solarisInvoice','solarisOther','solarisConfirm'].forEach(function(id){$('#'+id).addEventListener('change',solarisUpdateSubmit);});$('#solarisAmount').addEventListener('input',solarisPopulateBreakdown);$('#solarisBreakdown').addEventListener('input',function(){this.dataset.autogenerated='false';});['solarisPostOpen','solarisStandaloneOpen'].forEach(function(id){$('#'+id).addEventListener('click',solarisOpen);});['solarisClose','solarisCancel'].forEach(function(id){$('#'+id).addEventListener('click',solarisClose);});$('#solarisSubmit').addEventListener('click',solarisSubmit);$('#solarisModal').addEventListener('click',function(ev){if(ev.target===this)solarisClose();});document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&!$('#solarisModal').hidden)solarisClose();});solarisRefresh();}
 
 function hubUpdateRail(page){
- var rail=$('#workspaceRail'),shown=!['home','initial'].includes(page);
+ var rail=$('#workspaceRail'),shown=page!=='initial';
  rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
  if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=PREFILL.statusName||'Complaints Hub';}
  document.querySelectorAll('[data-rail]').forEach(function(b){
@@ -3026,8 +3092,10 @@ function gotoActionsPage(page){
   if(page==='solicitor'&&!solarisCanAccess())return;
   ACTION_PAGE=page;
   hubUpdateRail(page);
+  if(page==='home')overviewRender();
   if(page==='solicitor')solarisRefresh();
-  document.body.classList.toggle('actions-on-home',page==='home');
+  document.body.classList.toggle('actions-on-home',false);
+  document.body.classList.toggle('actions-overview',page==='home');
   document.body.classList.toggle('actions-in-workspace',page!=='home');
   $('#globalHomeBtn').hidden=page==='home';
   $('#actionsInitial').hidden=page!=='initial';
@@ -3059,6 +3127,68 @@ function showActionsSaveToast(message){
   toast.classList.add('show');
   actionsToastTimer=setTimeout(function(){toast.classList.remove('show');},5000);
 }
+function overviewRender(){
+ var p=PREFILL||{},o=p.overview||{},post=POST_DATA||p.postResolution||{},vd=p.vehicleDetails||{};
+ var put=function(id,v,fallback){var el=document.getElementById(id);if(el)el.textContent=(v===undefined||v===null||String(v).trim()==='')?(fallback||'Not recorded'):String(v);};
+ var plain=function(v){return String(v||'').trim();};
+ var isYes=function(v){return /^(yes|y|true|sent|complete|completed)$/i.test(plain(v));};
+ var money=function(v){var n=Number(v);return v===undefined||v===null||v===''||!Number.isFinite(n)?'Not recorded':gbp.format(n);};
+ put('overviewReference',p.issueKey);put('overviewSubtitle',p.complaintType||'Complaint');put('overviewStatus',p.statusName);
+ put('overviewCustomer',p.customerName);put('overviewAssignee',p.assigneeName);
+ var out=isYes(o.outsourced)||p.statusName==='Outsourced'||p.statusName==='Partner Funds Outstanding';
+ put('overviewOutsourced',out?'Outsourced':'Not outsourced');
+ var partner=out?(plain(p.introducerName)||plain(o.partner)) : plain(p.introducerName);
+ $('#overviewPartnerLabel').textContent=out?'Introducer':'Dealership';
+ put('overviewPartner',out?partner:p.dealershipName);
+ var linkHolder=$('#overviewLinks');linkHolder.replaceChildren();
+ [['Customer Zendesk',o.customerZendesk],['Dealership Zendesk',o.dealershipZendesk],['Complaint folder',o.complaintFolder],['Admin Portal',o.adminPortal],['Complaints Hub',p.jiraUrl]].forEach(function(pair){
+  try{var u=new URL(plain(pair[1]));if(u.protocol!=='https:')return;var a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener noreferrer';a.textContent=pair[0]+' ↗';linkHolder.appendChild(a);}catch(e){}
+ });
+ $('#overviewShortcuts').hidden=!linkHolder.children.length;
+ var attention=[];
+ var intro=p.initialCall||{};
+ if(!intro.outcome&&!o.initialCallDate)attention.push({name:'Initial customer call',description:'Not yet recorded',target:'initial'});
+ var tasks=(post.tasks||[]).filter(function(t){return t.status==='outstanding';});
+ if(tasks.length)attention.push({name:'Outstanding tasks',description:tasks.length+' action'+(tasks.length===1?'':'s')+' to complete',target:'post'});
+ if(post.currentBalance!==undefined&&post.currentBalance!==null&&Number(post.currentBalance)>0)attention.push({name:'Recovery outstanding',description:money(post.currentBalance)+' to recover',target:'post'});
+ var es=plain(o.dealershipEscalationStatus);
+ if(['Post-Resolution Tasks','Partner Funds Outstanding'].includes(p.statusName)&&!isYes(es)&&!/^active$/i.test(es)&&/vehicle/i.test(p.complaintType||''))attention.push({name:'Dealership follow-up',description:'Automated escalation not active',target:'post'});
+ var att=$('#overviewAttention');att.replaceChildren();
+ if(!attention.length){var empty=document.createElement('div');empty.className='overview-no-attention';empty.textContent='No outstanding actions flagged in the available complaint data.';att.appendChild(empty);}
+ else attention.slice(0,4).forEach(function(item){var btn=document.createElement('button');btn.type='button';btn.className='overview-attention-item';var name=document.createElement('strong');name.textContent=item.name;var desc=document.createElement('span');desc.textContent=item.description;var arrow=document.createElement('i');arrow.textContent='↗';btn.append(name,desc,arrow);btn.addEventListener('click',function(){if(item.target==='initial'&&p.statusName!=='Assigned')return;gotoActionsPage(item.target);});att.appendChild(btn);});
+ $('#overviewAttentionCount').textContent=attention.length?attention.length+' item'+(attention.length===1?'':'s'):'';
+ var dates=[
+  ['Complaint received',p.receivedDate,'date'],
+  ['Initial customer call',o.initialCallDate,(o.initialCallDate?'date':(intro.outcome?'text':'')),intro.outcome],
+  ['Acknowledgement',o.acknowledgementSent,'flag'],
+  ['8-week holding letter',o.holdingLetterDate,o.holdingLetterDate?'date':'flag',o.holdingResponseSent],
+  ['Final response',o.finalResponseSent,'flag'],
+  ['Resolved for customer',o.resolvedDate,'date'],
+  ['Complaint closed',o.firstClosedDate,'date']
+ ];
+ var list=$('#overviewDates');list.replaceChildren();
+ dates.forEach(function(it){var label=it[0],v=it[1],kind=it[2],alt=it[3]||'';var result='';
+  if(kind==='date'&&v)result=formatDisplayDate(v);
+  else if(kind==='text'&&alt)result=alt;
+  else if(kind==='flag'&&isYes(v||alt))result='Sent · date not recorded';
+  else if(kind==='flag'&&plain(v||alt)&&!isYes(v||alt))result='Not sent';
+  if(!result&&label==='Complaint closed'&&p.statusName==='Complaint Closed')result='Date not recorded';
+  if(!result)return;
+  var row=document.createElement('div');row.className='overview-data-row';var k=document.createElement('span');k.textContent=label;var value=document.createElement('strong');value.textContent=result;row.append(k,value);list.appendChild(row);
+ });
+ if(!list.children.length){list.textContent='No dates recorded.';}
+ var details=$('#overviewDetails');details.replaceChildren();
+ var pairs=[['Dealership',p.dealershipName],['Vehicle',[vd.make,vd.model].filter(Boolean).join(' ')],['Registration',vd.registration],['Complaint type',p.complaintType]];
+ pairs.forEach(function(pair){if(!plain(pair[1]))return;var row=document.createElement('div');row.className='overview-data-row';var a=document.createElement('span');a.textContent=pair[0];var b=document.createElement('strong');b.textContent=pair[1];row.append(a,b);details.appendChild(row);});
+ if(!details.children.length)details.textContent='No further details recorded.';
+ var hasRecovery=post.currentBalance!==null&&post.currentBalance!==undefined&&Number.isFinite(Number(post.currentBalance));
+ var solicitor=p.solicitorEscalation||{};var hasSolicitor=!!(solicitor.enabled||solicitor.sheetDocumentId||solicitor.zendeskTicket);
+ $('#overviewRecoveryLink').hidden=!hasRecovery;$('#overviewSolicitorLink').hidden=!hasSolicitor;
+ if(hasRecovery)put('overviewRecoveryText',money(post.currentBalance)+' outstanding');
+ if(hasSolicitor)put('overviewSolicitorText',solicitor.fileSent||'In progress');
+ $('#overviewBottom').hidden=!hasRecovery&&!hasSolicitor;
+}
+
 function initActionsHome(){
   var p=PREFILL;
   var values={homeReference:p.issueKey,homeDealership:p.dealershipName,homeIntroducer:p.introducerName,homeAssignee:p.assigneeName,homeReceived:formatDisplayDate(p.receivedDate),homeStatus:p.statusName,homeFooterRef:p.issueKey,homeComplaintType:p.complaintType};
@@ -3106,6 +3236,9 @@ function initActionsHome(){
   $('#actionsHomeBtn').addEventListener('click',function(){gotoActionsPage('home');});
   $('#globalHomeBtn').addEventListener('click',function(){gotoActionsPage('home');});
   initInitialContact();
+  $('#overviewRecoveryLink').addEventListener('click',function(){gotoActionsPage('post');});
+  $('#overviewSolicitorLink').addEventListener('click',function(){gotoActionsPage('solicitor');});
+  overviewRender();
   gotoActionsPage(p.statusName==='Assigned'?'initial':'home');
 }
 
