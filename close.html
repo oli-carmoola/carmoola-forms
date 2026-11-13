@@ -732,6 +732,17 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
     <div class="post-actions"><button type="button" class="post-btn-secondary" id="prSetupCancel">Cancel</button><button type="button" class="btn" id="prSetupContinue">Continue</button></div>
   </div></div>
   <div class="pr-modal-backdrop" id="prTasksModal" hidden><div class="pr-dialog" role="dialog" aria-modal="true" aria-label="Edit Post-Resolution tasks"><h3>Edit outstanding tasks</h3><div id="prTasksEditor"></div><button type="button" class="post-btn-secondary" id="prAddTask">+ Add task</button><p class="post-error" id="prTaskError"></p><div class="post-actions"><button type="button" class="post-btn-secondary" id="prCancelTasks">Cancel</button><button type="button" class="btn" id="prSaveTasks">Save tasks</button></div></div></div>
+  <div class="pr-modal-backdrop" id="prReopenModal" hidden><div class="pr-dialog" role="dialog" aria-modal="true" aria-labelledby="prReopenTitle">
+    <h3 id="prReopenTitle">Reopen complaint</h3><p class="post-muted">Reopen this closed complaint for outstanding recovery or follow-up tasks. Existing recovery figures and task history will be kept.</p>
+    <div id="prReopenChoices"><label class="pr-choice"><input type="radio" name="prReopenMode" value="funds"> Funds still to recover (tasks may also be outstanding)</label><label class="pr-choice"><input type="radio" name="prReopenMode" value="tasks"> Tasks only — no funds to recover</label></div>
+    <div id="prReopenDestination" class="post-alert" aria-live="polite" style="margin-top:12px"></div>
+    <label class="post-field" style="display:block;margin-top:14px"><span class="lab">Reason for reopening <span class="req">*</span></span><input type="text" id="prReopenReason" maxlength="180" placeholder="What needs further action?" style="width:100%"></label>
+    <label class="pr-choice" style="margin-top:12px"><input type="checkbox" id="prReopenClosedByMistake"> This complaint was closed by mistake</label>
+    <p class="post-muted" style="margin:5px 0 0 27px;font-size:12px">Select this only for an incorrect closure. The Complaint First Closed Date will be cleared; otherwise it will be retained.</p>
+    <label class="pr-choice" style="margin-top:12px"><input type="checkbox" id="prReopenConfirm"> I confirm this complaint needs to be reopened</label>
+    <p id="prReopenError" class="post-error" role="alert"></p>
+    <div class="post-actions"><button type="button" class="post-btn-secondary" id="prReopenCancel">Cancel</button><button type="button" class="btn" id="prReopenSave">Reopen complaint</button></div>
+  </div></div>
   <div id="postTransition" class="post-card" hidden>
     <span class="post-eyebrow-light">NEXT STEP</span>
     <h3 id="postTransitionTitle">Move to Post-Resolution Tasks</h3>
@@ -1145,7 +1156,7 @@ function formatDisplayDate(value){
   if(d.getUTCFullYear()!==parts[0]||d.getUTCMonth()!==parts[1]-1||d.getUTCDate()!==parts[2])return raw;
   return d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
 }
-function canOpenPostResolution(status){return ['Investigation','Holding Letter Due','Final Response Due','Outsourced','FOS Investigation','Ombudsman Investigation','Post-Resolution Tasks','Partner Funds Outstanding'].includes(String(status||''));}
+function canOpenPostResolution(status){return ['Investigation','Holding Letter Due','Final Response Due','Outsourced','FOS Investigation','Ombudsman Investigation','Post-Resolution Tasks','Partner Funds Outstanding','Complaint Closed'].includes(String(status||''));}
 
 function fmtReviewOutcome(v){var s=String(v||'').trim();if(!s)return '';var map={upheld:'Upheld',not_upheld:'Not Upheld',partially_upheld:'Partially Upheld',withdrawn:'Withdrawn',unclear:'Unclear'};var k=s.toLowerCase().replace(/[\s-]+/g,'_');if(map[k])return map[k];return s.replace(/_/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});}
 function reviewDocObject(kind){return (PREFILL&&PREFILL.fosReview&&PREFILL.fosReview.documents&&PREFILL.fosReview.documents[kind])||null;}
@@ -2543,8 +2554,8 @@ function prUpdateDestinationPreview(){
   $('#prDestinationPreview').innerHTML='<strong>Destination: '+target+'</strong><div style="margin-top:4px">'+detail+'</div>';
 }
 
-function prRender(){var p=POST_DATA,s=PREFILL.statusName,nonOut=['Investigation','Holding Letter Due','Final Response Due','Ombudsman Investigation'];var target=(s==='Outsourced'||s==='FOS Investigation'||nonOut.includes(s))?prEntryTarget(false):'';var active=['Post-Resolution Tasks','Partner Funds Outstanding'].includes(s);$('#postStageChip').textContent=s||'Unknown status';$('#postTransition').hidden=!target;$('#postWorkspace').hidden=!(active||(target&&prOpeningStarted));$('#postNotAvailable').hidden=!!target||active;$('#prDashboard').hidden=!active||!$('#postWorkspace').classList.contains('pr-editor-hidden')&&prOpeningStarted;$('#postWorkspace').classList.toggle('pr-editor-hidden',active&&!prOpeningStarted);if(active){$('#prDashboard').hidden=false;prDisplayTasks();}
-  if(target){var blocker=prDecisionBlocker();$('#postBeginOpening').disabled=!!blocker;$('#postTransitionTitle').textContent=blocker?'Decision required before Post-Resolution':'Move to Post-Resolution';$('#postTransitionDesc').textContent=blocker||('This complaint is currently in '+s+'. Choose whether there are funds to recover or tasks only. Your choice determines the destination.');$('#postBeginOpening').textContent='Choose Post-Resolution Route';$('#postTargetStatus').textContent=target;$('#postOpeningSaveLabel').textContent='Save & Move to '+target;$('#postTransitionStart').hidden=prOpeningStarted;$('#postTransitionInstructions').hidden=!prOpeningStarted;$('#postSave').textContent='Save & Move to '+target;}else{$('#postSave').textContent=prFinancialMode==='correct'?'Save corrected original breakdown':'Save non-financial details';}
+function prRender(){var p=POST_DATA,s=PREFILL.statusName,nonOut=['Investigation','Holding Letter Due','Final Response Due','Ombudsman Investigation'];var target=s==='Complaint Closed'?'REOPEN':(s==='Outsourced'||s==='FOS Investigation'||nonOut.includes(s))?prEntryTarget(false):'';var active=['Post-Resolution Tasks','Partner Funds Outstanding'].includes(s);$('#postStageChip').textContent=s||'Unknown status';$('#postTransition').hidden=!target;$('#postWorkspace').hidden=!(active||(target&&prOpeningStarted));$('#postNotAvailable').hidden=!!target||active;$('#prDashboard').hidden=!active||!$('#postWorkspace').classList.contains('pr-editor-hidden')&&prOpeningStarted;$('#postWorkspace').classList.toggle('pr-editor-hidden',active&&!prOpeningStarted);if(active){$('#prDashboard').hidden=false;prDisplayTasks();}
+  if(target==='REOPEN'){$('#postBeginOpening').disabled=false;$('#postTransitionTitle').textContent='Reopen this complaint';$('#postTransitionDesc').textContent='This complaint is closed. Reopen it for further recovery or outstanding tasks without changing the existing recovery history.';$('#postBeginOpening').textContent='Reopen complaint';$('#postTransitionStart').hidden=false;$('#postTransitionInstructions').hidden=true;}else if(target){var blocker=prDecisionBlocker();$('#postBeginOpening').disabled=!!blocker;$('#postTransitionTitle').textContent=blocker?'Decision required before Post-Resolution':'Move to Post-Resolution';$('#postTransitionDesc').textContent=blocker||('This complaint is currently in '+s+'. Choose whether there are funds to recover or tasks only. Your choice determines the destination.');$('#postBeginOpening').textContent='Choose Post-Resolution Route';$('#postTargetStatus').textContent=target;$('#postOpeningSaveLabel').textContent='Save & Move to '+target;$('#postTransitionStart').hidden=prOpeningStarted;$('#postTransitionInstructions').hidden=!prOpeningStarted;$('#postSave').textContent='Save & Move to '+target;}else{$('#postSave').textContent=prFinancialMode==='correct'?'Save corrected original breakdown':'Save non-financial details';}
   if(!active&&!target)return;
   $('#postVehicle').value=(p.auction&&p.auction.sold)?'Carmoola Auction — Completed':(p.vehicleResolution||'Not Yet Decided');prRenderVehicle();prRenderSuspense();
   $('#postParty').value=p.party||(s==='Partner Funds Outstanding'?PREFILL.introducerName:PREFILL.dealershipName)||'';
@@ -2668,6 +2679,35 @@ function prInitInlineTasks(){
 }
 
 function prOpenSetup(){if(prDecisionBlocker()){prError(prDecisionBlocker());return;}prSetupTasksDraft=(POST_DATA.tasks||[]).map(function(x){return Object.assign({},x);});if(!prSetupTasksDraft.length)prSetupTasksDraft.push({description:'',status:'outstanding'});prTaskRows($('#prSetupTasks'),prSetupTasksDraft);$('#prSetupModal').hidden=false;$('#prSetupError').textContent='';$('#prSetupError').classList.remove('show');$('#prNoFundsConfirmed').checked=false;document.querySelector('input[name="prSetupMode"][value="funds"]').checked=true;$('#prTasksOnlyConfirm').hidden=true;$('#prFundsInfo').hidden=false;prUpdateDestinationPreview();}
+function prReopenDestination(){
+  var outsourced=prIsOutsourced(),mode=document.querySelector('input[name="prReopenMode"]:checked')?.value||'tasks';
+  return outsourced&&mode==='funds'?'Partner Funds Outstanding':'Post-Resolution Tasks';
+}
+function prUpdateReopenPreview(){
+  var outsourced=prIsOutsourced(),mode=document.querySelector('input[name="prReopenMode"]:checked')?.value||'tasks';
+  $('#prReopenDestination').textContent='Destination: '+prReopenDestination()+(outsourced?' · '+(mode==='funds'?'Funds to recover':'Tasks only'):' · Non-outsourced complaint');
+}
+function prOpenReopen(){
+  if(PREFILL.statusName!=='Complaint Closed')return;
+  var outsourced=prIsOutsourced();
+  $('#prReopenChoices').hidden=!outsourced;
+  var hasFunds=Number(POST_DATA&&POST_DATA.currentBalance||0)>0.005;
+  document.querySelector('input[name="prReopenMode"][value="'+(outsourced&&hasFunds?'funds':'tasks')+'"]').checked=true;
+  $('#prReopenReason').value='';$('#prReopenConfirm').checked=false;$('#prReopenClosedByMistake').checked=false;$('#prReopenError').textContent='';
+  prUpdateReopenPreview();$('#prReopenModal').hidden=false;
+}
+function prSubmitReopen(btn){
+  var reason=$('#prReopenReason').value.trim(),mode=prIsOutsourced()?document.querySelector('input[name="prReopenMode"]:checked')?.value:'tasks';
+  if(reason.length<8){$('#prReopenError').textContent='Enter a reason of at least 8 characters.';return;}
+  if(!$('#prReopenConfirm').checked){$('#prReopenError').textContent='Confirm that the complaint needs to be reopened.';return;}
+  $('#prReopenError').textContent='';
+  prRequest({action:'post_reopen',reopenMode:mode,reason:reason,closedByMistake:$('#prReopenClosedByMistake').checked,confirmed:true},btn,function(data){
+    PREFILL.statusName=data.statusName;PREFILL.alreadyClosed=false;$('#homeStatus').textContent=data.statusName;
+    if(data.postResolution)POST_DATA=data.postResolution;
+    $('#prReopenModal').hidden=true;prOpeningStarted=false;prRender();
+    if(data.dateClearWarning){window.alert('Complaint reopened, but Complaint First Closed Date could not be cleared. Please correct that field in Complaints Hub.');}else{showActionsSaveToast('Complaint reopened in '+data.statusName+(data.firstClosedDateCleared?' and incorrect first closure date cleared.':'.'));}
+  });
+}
 function prTaskMode(){return document.querySelector('input[name="prSetupMode"]:checked').value;}
 function prSaveTaskList(tasks,btn,opening){var descriptions=tasks.filter(function(x){return String(x.description||'').trim();});if(descriptions.length!==tasks.length||!descriptions.length){(opening?$('#prSetupError'):$('#prTaskError')).textContent='Enter at least one task with a description.';return;}if(tasks.some(function(x){return x.status==='not_required'&&!String(x.reason||'').trim();})){(opening?$('#prSetupError'):$('#prTaskError')).textContent='Provide a reason for every task marked No Longer Required.';return;}var payload={action:opening?'post_tasks_only_open':'post_tasks_save',tasks:tasks,confirmedNoFunds:opening&&$('#prNoFundsConfirmed').checked,expectedTasksRaw:(POST_DATA&&POST_DATA.tasksRaw)||''};prRequest(payload,btn,function(data){POST_DATA=data.postResolution;if(data.statusName){PREFILL.statusName=data.statusName;$('#homeStatus').textContent=data.statusName;}$('#prTasksModal').hidden=true;$('#prSetupModal').hidden=true;prOpeningStarted=false;prRender();refreshClosureRecoverySummary(POST_DATA);showActionsSaveToast('Post-Resolution tasks saved.');});}
 function initPrDashboard(){
@@ -2687,7 +2727,10 @@ function initPrDashboard(){
  $('#prSaveTasks').addEventListener('click',function(){prSaveTaskList(window.prTaskEdits,this,false);});
 }
 function initPostResolution(){POST_DATA=PREFILL.postResolution||null;if(!POST_DATA)return;
-  initPrDashboard();prRefreshTaskLinks();$('#postBeginOpening').addEventListener('click',prOpenSetup);
+  initPrDashboard();prRefreshTaskLinks();$('#postBeginOpening').addEventListener('click',function(){if(PREFILL.statusName==='Complaint Closed')prOpenReopen();else prOpenSetup();});
+  document.querySelectorAll('input[name="prReopenMode"]').forEach(function(r){r.addEventListener('change',prUpdateReopenPreview);});
+  $('#prReopenCancel').addEventListener('click',function(){$('#prReopenModal').hidden=true;});
+  $('#prReopenSave').addEventListener('click',function(){prSubmitReopen(this);});
   $('#postSuspenseList').addEventListener('click',function(event){var unlink=event.target.closest('.post-unlink-auction');if(unlink){var unlinkId=unlink.getAttribute('data-item');if(!window.confirm('Unlink this auction receipt from the recovery? The amount will be added back to the outstanding balance, and this suspense item will be excluded from future automatic matching.'))return;prRequest({action:'post_unlink_auction',itemId:unlinkId,confirmed:true},unlink,function(data){POST_DATA=data.postResolution;prRender();refreshClosureRecoverySummary(POST_DATA);showActionsSaveToast('Auction receipt unlinked and excluded from automatic reconciliation.');});return;}var classify=event.target.closest('.post-classify');if(classify){var id=classify.getAttribute('data-item'),sel=classify.parentElement.querySelector('.post-classification'),cat=sel&&sel.value;if(!cat){prError('Choose a payment classification first.');return;}var row=(POST_DATA.suspense.rows||[]).find(function(x){return String(x.id)===String(id);});var names={A:'auction proceeds',P:'dealership / partner money',C:'customer money',O:'other money',X:'excluded from recovery'};if(!window.confirm('Classify suspense #'+id+' ('+gbp.format(row.amount)+') as '+names[cat]+'? '+(cat==='A'||cat==='P'?'This will deduct the amount applied from the recovery balance.':'This will not reduce the recovery balance.')))return;prRequest({action:'post_classify_suspense',itemId:id,category:cat,confirmed:true},classify,function(data){POST_DATA=data.postResolution;prRender();refreshClosureRecoverySummary(POST_DATA);showActionsSaveToast('Suspense classification saved.');});return;}var b=event.target.closest('.post-confirm-auction');if(!b)return;var itemId=b.getAttribute('data-item');var row=(POST_DATA.suspense.rows||[]).find(function(x){return x.id===itemId;});if(!row)return;var msg='Confirm that suspense item '+itemId+' ('+gbp.format(row.amount)+') is the NET auction proceeds for this vehicle?\nReference: '+(row.reference||'Not recorded')+'\nGross auction sale: '+(POST_DATA.auction.gross==null?'Not recorded':gbp.format(POST_DATA.auction.gross))+'\nThis will reduce the recovery balance and cannot be automatically undone.';if(!window.confirm(msg))return;prRequest({action:'post_confirm_auction',itemId:itemId,confirmed:true},b,function(data){POST_DATA=data.postResolution;prRender();refreshClosureRecoverySummary(POST_DATA);showActionsSaveToast('Auction proceeds allocated from suspense.');});});
   $('#postVehicle').addEventListener('change',function(){var noVehicle=this.value==='No Vehicle Rejection';if(noVehicle){var existing=Array.from(document.querySelectorAll('.post-line')).find(function(row){return row.querySelector('.pr-desc').value.trim().toLowerCase()==='vehicle repairs';});if(existing){$('#postRepair').value=existing.querySelector('.pr-amount').value;existing.remove();}}else if(prCash($('#postRepair').value)>0){prAddLine('Vehicle repairs',prCash($('#postRepair').value));$('#postRepair').value=0;}prRenderVehicle();prUpdateMath();prRenderRunningCosts();});$('#postRepair').addEventListener('input',function(){prUpdateMath();prRenderRunningCosts();});
   $('#postEditCustomer').addEventListener('click',function(){openRejCalc(prCustomerStage());});
