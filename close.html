@@ -3147,7 +3147,7 @@ function overviewRender(){
  $('#overviewShortcuts').hidden=!linkHolder.children.length;
  var attention=[];
  var intro=p.initialCall||{};
- if(!intro.outcome&&!o.initialCallDate)attention.push({name:'Initial customer call',description:'Not yet recorded',target:'initial'});
+ // The initial customer call is a one-time entry gate, not a retrospective action.
  var tasks=(post.tasks||[]).filter(function(t){return t.status==='outstanding';});
  if(tasks.length)attention.push({name:'Outstanding tasks',description:tasks.length+' action'+(tasks.length===1?'':'s')+' to complete',target:'post'});
  if(post.currentBalance!==undefined&&post.currentBalance!==null&&Number(post.currentBalance)>0)attention.push({name:'Recovery outstanding',description:money(post.currentBalance)+' to recover',target:'post'});
@@ -3155,7 +3155,7 @@ function overviewRender(){
  if(['Post-Resolution Tasks','Partner Funds Outstanding'].includes(p.statusName)&&!isYes(es)&&!/^active$/i.test(es)&&/vehicle/i.test(p.complaintType||''))attention.push({name:'Dealership follow-up',description:'Automated escalation not active',target:'post'});
  var att=$('#overviewAttention');att.replaceChildren();
  if(!attention.length){var empty=document.createElement('div');empty.className='overview-no-attention';empty.textContent='No outstanding actions flagged in the available complaint data.';att.appendChild(empty);}
- else attention.slice(0,4).forEach(function(item){var btn=document.createElement('button');btn.type='button';btn.className='overview-attention-item';var name=document.createElement('strong');name.textContent=item.name;var desc=document.createElement('span');desc.textContent=item.description;var arrow=document.createElement('i');arrow.textContent='↗';btn.append(name,desc,arrow);btn.addEventListener('click',function(){if(item.target==='initial'&&p.statusName!=='Assigned')return;gotoActionsPage(item.target);});att.appendChild(btn);});
+ else attention.slice(0,4).forEach(function(item){var btn=document.createElement('button');btn.type='button';btn.className='overview-attention-item';var name=document.createElement('strong');name.textContent=item.name;var desc=document.createElement('span');desc.textContent=item.description;var arrow=document.createElement('i');arrow.textContent='↗';btn.append(name,desc,arrow);btn.addEventListener('click',function(){gotoActionsPage(item.target);});att.appendChild(btn);});
  $('#overviewAttentionCount').textContent=attention.length?attention.length+' item'+(attention.length===1?'':'s'):'';
  var dates=[
   ['Complaint received',p.receivedDate,'date'],
@@ -3170,7 +3170,7 @@ function overviewRender(){
  dates.forEach(function(it){var label=it[0],v=it[1],kind=it[2],alt=it[3]||'';var result='';
   if(kind==='date'&&v)result=formatDisplayDate(v);
   else if(kind==='text'&&alt)result=alt;
-  else if(kind==='flag'&&isYes(v||alt))result='Sent · date not recorded';
+  else if(kind==='flag'&&isYes(v||alt))result='Sent';
   else if(kind==='flag'&&plain(v||alt)&&!isYes(v||alt))result='Not sent';
   if(!result&&label==='Complaint closed'&&p.statusName==='Complaint Closed')result='Date not recorded';
   if(!result)return;
