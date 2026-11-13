@@ -585,6 +585,18 @@ body.actions-with-rail #globalHomeBtn{display:none!important}
 @media(max-width:1000px){.workspace-rail{width:195px}.rail-link{font-size:11.5px}.rail-brand{padding-left:15px}body.actions-with-rail .shell{margin-left:195px;width:calc(100% - 195px);padding:20px}body.actions-with-rail .footer-inner{margin-left:195px}.hub-recovery{grid-template-columns:1fr}.hub-recovery-actions{justify-content:flex-start}.hub-overview{grid-template-columns:repeat(3,1fr)}.hub-metric-main strong{font-size:23px}}
 @media(max-width:710px){.rail-mobile-toggle:not([hidden]){display:block!important}.workspace-rail{width:min(285px,85vw);box-shadow:0 0 0 100vmax #28122980}.workspace-rail:not(.rail-open){display:none}body.actions-with-rail .shell{width:100%;margin:0;padding:68px 15px 25px}body.actions-with-rail .footer-inner{margin:0}.rail-mobile-toggle{position:fixed;top:12px;left:13px;z-index:49;background:#401934;color:#fff;border:0;border-radius:10px;padding:11px 14px;font-family:inherit;font-weight:800;font-size:12px}.hub-heading{align-items:flex-start;flex-direction:column}.hub-heading h2{font-size:25px}.hub-overview{grid-template-columns:1fr 1fr}.hub-overview .hub-metric-main{grid-column:1/-1}.hub-de-summary{gap:6px}.hub-de-summary>div{padding:10px}.hub-de-summary strong{font-size:15px}.hub-recovery-actions{width:100%}.hub-accordion-right{font-size:0}.hub-accordion-right .hub-chevron{font-size:18px}.hub-dialog-head,.hub-dialog-body,.hub-dialog-foot{padding-left:18px;padding-right:18px}}
 
+
+/* Solaris Law: shared Post-Resolution and solicitor workspace actions */
+.solaris-card{border:1px solid #ebdfea;border-radius:17px;background:#fff;padding:22px 24px;margin:18px 0;box-shadow:0 7px 22px rgba(54,24,50,.04)}
+.solaris-top{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.solaris-top>div:nth-child(2){flex:1;min-width:160px}.solaris-symbol{display:grid;place-items:center;width:43px;height:43px;border-radius:13px;background:#fff0f7;color:#bd0c73;font-size:22px}
+.solaris-top h3{font-size:16px;margin:0 0 4px;color:#301c30}.solaris-top p{font-size:12px;color:#766778;margin:0}.solaris-state{font-size:11px;font-weight:750;background:#f4eef5;color:#6a4b6e;padding:7px 11px;border-radius:20px}
+.solaris-card-body{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:16px;flex-wrap:wrap}.solaris-card-body p{font-size:13px;color:#695a69;margin:0;max-width:630px;line-height:1.5}
+.solaris-btn{border:0;border-radius:10px;background:#f90081;color:#fff;font-family:inherit;font-weight:700;font-size:13px;padding:11px 17px;cursor:pointer}.solaris-btn:disabled{opacity:.45;cursor:not-allowed}
+.solaris-overlay[hidden]{display:none!important}.solaris-overlay{position:fixed;inset:0;z-index:110;background:#1d1029aa;display:grid;place-items:center;padding:16px;overflow:auto}.solaris-dialog{background:#fff;border-radius:20px;width:min(640px,100%);max-height:94vh;overflow:auto;box-shadow:0 18px 80px #10051055}
+.solaris-dialog-header{padding:23px 28px 17px;border-bottom:1px solid #f1eaf0;display:flex;align-items:flex-start;gap:15px}.solaris-dialog-header>div{flex:1}.solaris-dialog-header h3{font-size:21px;margin:0 0 5px;color:#30132c}.solaris-dialog-header p{font-size:12px;color:#74667b;margin:0}.solaris-x{border:0;background:#f8f3f7;border-radius:8px;width:32px;height:32px;font-size:21px;cursor:pointer}
+.solaris-dialog-body{padding:22px 28px;display:grid;gap:14px}.solaris-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.solaris-field{display:flex;flex-direction:column;gap:7px;font-size:12px;font-weight:750;color:#493748}.solaris-field input,.solaris-field textarea{width:100%;box-sizing:border-box;border:1px solid #dfd3df;border-radius:10px;padding:12px 13px;background:#fff;font:inherit;font-size:14px;color:#281d29}.solaris-field textarea{min-height:82px;resize:vertical;line-height:1.45}.solaris-field input:focus,.solaris-field textarea:focus{outline:2px solid #f9008130;border-color:#db1988}.solaris-money{display:flex;align-items:stretch;border:1px solid #dfd3df;border-radius:10px;overflow:hidden}.solaris-money>span{display:grid;place-items:center;padding:0 14px;background:#f9f4f8;color:#563a54;font-size:16px}.solaris-money input{border:0!important;border-radius:0;outline:0!important;min-width:0}
+.solaris-helper{color:#84778a;font-size:11px;font-weight:500;line-height:1.4}.solaris-checks{border:1px solid #f0e8ed;background:#fdf9fc;border-radius:12px;padding:14px;display:grid;gap:12px}.solaris-checks label{display:flex;align-items:flex-start;gap:10px;color:#4c414c;font-size:12px;line-height:1.4}.solaris-checks input{accent-color:#eb1688;flex:none;margin-top:2px}.solaris-dialog-footer{padding:17px 28px 23px;display:flex;justify-content:flex-end;align-items:center;gap:12px}.solaris-error{color:#ae1557;font-size:12px;line-height:1.4;min-height:0}.solaris-tag{font-size:11px;color:#87637a}
+@media(max-width:650px){.solaris-grid{grid-template-columns:1fr}.solaris-dialog-body,.solaris-dialog-header,.solaris-dialog-footer{padding-left:17px;padding-right:17px}}
 </style>
 </head>
 <body>
@@ -668,6 +680,7 @@ body.actions-with-rail #globalHomeBtn{display:none!important}
   <div class="rail-foot"><span class="rail-pulse"></span><span id="railStatus">Complaints Hub</span></div>
 </aside>
 <button type="button" id="railMobileToggle" class="rail-mobile-toggle" aria-label="Open workspace menu" hidden>☰ &nbsp; Workspaces</button>
+<div class="solaris-overlay" id="solarisModal" hidden><div class="solaris-dialog" role="dialog" aria-modal="true" aria-labelledby="solarisTitle"><div class="solaris-dialog-header"><div><span class="solaris-tag">SOLICITOR ESCALATION · SOLARIS LAW</span><h3 id="solarisTitle">Prepare solicitor escalation</h3><p>Review the debt and confirm the evidence is ready before submitting.</p></div><button type="button" class="solaris-x" id="solarisClose" aria-label="Close">×</button></div><div class="solaris-dialog-body"><div class="solaris-grid"><label class="solaris-field">Debtor<input type="text" value="Dealership" disabled></label><label class="solaris-field">Amount to recover<div class="solaris-money"><span>£</span><input type="number" min="0.01" max="100000000" step="0.01" id="solarisAmount" required></div><small class="solaris-helper">Suggested from the outstanding Post-Resolution balance; changing this will not change the recovery ledger.</small></label></div><label class="solaris-field">Debt amount breakdown <span class="solaris-helper">Required</span><textarea id="solarisBreakdown" maxlength="3500" placeholder="Explain how the amount was calculated and any deductions or payments" required></textarea></label><label class="solaris-field">Notes for Solaris Law <span class="solaris-helper">Required</span><textarea id="solarisNotes" maxlength="5000" placeholder="What happened, contact so far and why legal recovery is needed" required></textarea></label><div class="solaris-checks"><strong style="font-size:12px;color:#4b3048">Confirm documents have been added to the complaint folder</strong><label><input type="checkbox" id="solarisHpa"> Hire Purchase Agreement added</label><label><input type="checkbox" id="solarisInvoice"> Vehicle invoice added</label><label><input type="checkbox" id="solarisOther"> Other relevant evidence and documents reviewed and added</label></div><label class="solaris-checks"><span style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" id="solarisConfirm"> <span style="font-size:12px;line-height:1.5">I confirm this is a dealership recovery, the details are accurate and I authorise submission to Solaris Law. This action can only be submitted once.</span></span></label><p class="solaris-error" id="solarisError" role="alert"></p></div><div class="solaris-dialog-footer"><button class="hub-btn hub-btn-quiet" type="button" id="solarisCancel">Cancel</button><button type="button" class="solaris-btn" id="solarisSubmit">Submit to Solaris Law</button></div></div></div>
 <div class="actions-nav" id="actionsNav" hidden><button type="button" class="actions-home-link" id="actionsHomeBtn">⌂ &nbsp;Complaint Home</button><span class="actions-current" id="actionsCurrent"></span></div>
 <div id="actionsSaveToast" class="actions-toast" role="status" aria-live="polite"><span class="actions-toast-icon">✓</span><span>Running costs updated successfully.</span></div>
 <div class="closure-recovery-overlay" id="closureRecoveryModal" hidden role="dialog" aria-modal="true" aria-label="Post-Resolution recovery">
@@ -744,6 +757,7 @@ body.actions-with-rail #globalHomeBtn{display:none!important}
 </section>
 <section id="actionsSolicitor" class="actions-page" aria-label="Solicitor escalation summary">
   <div class="post-hero"><div><span class="post-eyebrow">COMPLAINT ACTIONS · LEGAL RECOVERY</span><h2>Solicitor Escalation</h2><p>Case progress, outstanding debt and the most recent solicitor update.</p></div><span class="post-chip">Complaints Hub case summary</span></div>
+<section class="solaris-card" id="solarisStandaloneCard"><div class="solaris-top"><div class="solaris-symbol">⚖</div><div><h3>Send case to Solaris Law</h3><p>Prepare the inception sheet, evidence and solicitor correspondence.</p></div><span class="solaris-state" id="solarisStandaloneState">Not started</span></div><div class="solaris-card-body"><p id="solarisStandaloneHelp">The recovery balance will be suggested automatically. You can amend the amount before submitting.</p><button type="button" class="solaris-btn" id="solarisStandaloneOpen">Prepare solicitor escalation ↗</button></div></section>
   <div class="sol-layout">
     <div class="sol-stat"><div class="k">Original debt</div><div class="v" id="solOriginal">—</div></div>
     <div class="sol-stat"><div class="k">Current balance</div><div class="v" id="solBalance">—</div></div>
@@ -786,6 +800,7 @@ body.actions-with-rail #globalHomeBtn{display:none!important}
     </div></details>
   </div>
 
+<section class="solaris-card" id="solarisPostCard" hidden><div class="solaris-top"><div class="solaris-symbol">⚖</div><div><h3>Solicitor escalation</h3><p>Send recovery instructions and evidence to Solaris Law.</p></div><span class="solaris-state" id="solarisPostState">Not started</span></div><div class="solaris-card-body"><p id="solarisPostHelp">Prepare the solicitor file using your existing recovery balance and supporting documents.</p><button type="button" class="solaris-btn" id="solarisPostOpen">Prepare solicitor escalation ↗</button></div></section>
   <section class="hub-panel de-card hub-escalation" id="deConsole" hidden aria-label="Dealership escalation emails">
     <div class="hub-panel-title"><span class="hub-symbol">✉</span><div><h3>Dealership escalation</h3><p>Automatic follow-ups with the dealership, managed from here.</p></div><span class="de-chip" id="deStatus">Loading…</span></div>
     <div class="hub-de-summary"><div><span>Current stage</span><strong id="deLevel">—</strong></div><div><span>Emails sent</span><strong id="deCount">0</strong></div><div><span>Requested amount</span><strong id="deAmountView">—</strong></div></div>
@@ -2904,13 +2919,39 @@ function deInit(){
  $('#deRefresh').addEventListener('click',deFetch);
 }
 
+
+// Solaris Law submission is common to Post-Resolution and Solicitor Escalation.
+var SOLARIS_BUSY=false;
+function solarisCanAccess(){return ['Post-Resolution Tasks','Partner Funds Outstanding','Solicitor Escalation'].includes(PREFILL.statusName)||!!PREFILL.solicitorEscalation?.enabled;}
+function solarisAlreadySent(){var s=PREFILL.solicitorEscalation||{};return !!(s.sheetDocumentId||s.zendeskTicket||s.fileSentDate||(/^(?:case file sent|sent|yes|y)$/i).test((s.fileSent||'').trim())||(/Preparing case file|submitted to Zapier|delivery unconfirmed/i).test(s.externalUpdate||''));}
+function solarisRefresh(){
+ var s=PREFILL.solicitorEscalation||{},sent=solarisAlreadySent(),eligible=solarisCanAccess();
+ $('#solarisPostCard').hidden=!eligible;
+ ['Post','Standalone'].forEach(function(part){var state=$('#solaris'+part+'State'),btn=$('#solaris'+part+'Open'),help=$('#solaris'+part+'Help');state.textContent=sent?(s.fileSentDate||/^(?:case file sent|sent|yes|y)$/i.test((s.fileSent||'').trim())?'File sent':'Submission started'):'Not started';btn.hidden=sent||!eligible;help.textContent=sent?'This complaint already has a solicitor escalation recorded. The case details appear in the Solicitor Escalation workspace.':'Prepare the file for Solaris Law. The recovery balance will be suggested automatically.';});
+}
+function solarisOpen(){if(solarisAlreadySent())return;var n=Number((POST_DATA&&POST_DATA.currentBalance)??(PREFILL.postResolution&&PREFILL.postResolution.currentBalance)??0);$('#solarisAmount').value=Number.isFinite(n)&&n>0?n.toFixed(2):'';$('#solarisError').textContent='';$('#solarisModal').hidden=false;$('#solarisAmount').focus();}
+function solarisClose(){if(SOLARIS_BUSY)return;$('#solarisModal').hidden=true;}
+async function solarisSubmit(){
+ if(SOLARIS_BUSY)return;
+ var amount=Number($('#solarisAmount').value),breakdown=$('#solarisBreakdown').value.trim(),notes=$('#solarisNotes').value.trim();
+ if(!Number.isFinite(amount)||amount<=0||amount>100000000){$('#solarisError').textContent='Enter a valid positive amount.';return;}
+ if(breakdown.length<10||notes.length<20){$('#solarisError').textContent='Add a meaningful debt breakdown and case notes.';return;}
+ if(!['solarisHpa','solarisInvoice','solarisOther','solarisConfirm'].every(function(id){return $('#'+id).checked;})){$('#solarisError').textContent='Confirm that all evidence is in the complaint folder and authorise the submission.';return;}
+ if(!window.confirm('Submit this case to Solaris Law? The automation will prepare an inception sheet and send a Zendesk message. Do not submit it again if processing is delayed.'))return;
+ SOLARIS_BUSY=true;$('#solarisSubmit').disabled=true;$('#solarisSubmit').textContent='Submitting…';$('#solarisError').textContent='Sending instruction to Complaints Hub…';
+ try{var response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'solicitor_escalation_start',amount:amount,breakdown:breakdown,notes:notes,confirmHpa:true,confirmInvoice:true,confirmOther:true,confirmed:true})});var data=await response.json();if(!response.ok||!data.ok)throw Error((data.errors||[data.error||'Could not submit solicitor escalation'])[0]);PREFILL.solicitorEscalation=data.solicitorEscalation||PREFILL.solicitorEscalation;solarisClose();$('#solarisModal').hidden=true;solarisRefresh();showActionsSaveToast('Solaris instruction accepted. The case is being prepared. File-sent confirmation will follow after the Zap completes.');}
+ catch(err){$('#solarisError').textContent=err.message+' Do not retry if the first submission may already have been accepted; check the case status first.';}
+ finally{SOLARIS_BUSY=false;$('#solarisSubmit').disabled=false;$('#solarisSubmit').textContent='Submit to Solaris Law';}
+}
+function solarisInit(){['solarisPostOpen','solarisStandaloneOpen'].forEach(function(id){$('#'+id).addEventListener('click',solarisOpen);});['solarisClose','solarisCancel'].forEach(function(id){$('#'+id).addEventListener('click',solarisClose);});$('#solarisSubmit').addEventListener('click',solarisSubmit);$('#solarisModal').addEventListener('click',function(ev){if(ev.target===this)solarisClose();});document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&!$('#solarisModal').hidden)solarisClose();});solarisRefresh();}
+
 function hubUpdateRail(page){
  var rail=$('#workspaceRail'),shown=!['home','initial'].includes(page);
  rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
  if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=PREFILL.statusName||'Complaints Hub';}
  document.querySelectorAll('[data-rail]').forEach(function(b){
   var target=b.dataset.rail;
-  var allowed=target==='home'||target==='post'&&canOpenPostResolution(PREFILL.statusName)||target==='review'&&PREFILL.fosApplicable||target==='solicitor'&&PREFILL.solicitorEscalation&&PREFILL.solicitorEscalation.enabled||!['post','review','solicitor'].includes(target);
+  var allowed=target==='home'||target==='post'&&canOpenPostResolution(PREFILL.statusName)||target==='review'&&PREFILL.fosApplicable||target==='solicitor'&&solarisCanAccess()||!['post','review','solicitor'].includes(target);
   b.disabled=!allowed;b.classList.toggle('is-active',target===page);b.setAttribute('aria-current',target===page?'page':'false');
  });
  rail.classList.remove('rail-open');
@@ -2931,9 +2972,10 @@ function gotoActionsPage(page){
   if(PREFILL.statusName==='Assigned'&&page!=='initial')return;
   if(page==='post'&&!canOpenPostResolution(PREFILL.statusName))return;
   if(page==='review'&&!PREFILL.fosApplicable)return;
-  if(page==='solicitor'&&!(PREFILL.solicitorEscalation&&PREFILL.solicitorEscalation.enabled))return;
+  if(page==='solicitor'&&!solarisCanAccess())return;
   ACTION_PAGE=page;
   hubUpdateRail(page);
+  if(page==='solicitor')solarisRefresh();
   document.body.classList.toggle('actions-on-home',page==='home');
   document.body.classList.toggle('actions-in-workspace',page!=='home');
   $('#globalHomeBtn').hidden=page==='home';
@@ -2945,7 +2987,7 @@ function gotoActionsPage(page){
   $('#actionsDealer').classList.toggle('active',page==='dealer');
   $('#actionsRejection').classList.toggle('active',page==='rejection');
   $('#actionsSolicitor').classList.toggle('active',page==='solicitor');
-  if(page==='post' && POST_DATA){prRender();prAutoReconcile();$('#deConsole').hidden=!['Post-Resolution Tasks','Partner Funds Outstanding'].includes(PREFILL.statusName);if(!$('#deConsole').hidden)deFetch();}else{$('#deConsole').hidden=true;}
+  if(page==='post' && POST_DATA){prRender();solarisRefresh();prAutoReconcile();$('#deConsole').hidden=!['Post-Resolution Tasks','Partner Funds Outstanding'].includes(PREFILL.statusName);if(!$('#deConsole').hidden)deFetch();}else{$('#deConsole').hidden=true;}
   $('#closureShell').style.display=page==='closure'?'':'none';
   $('#reviewShell').classList.toggle('active',page==='review');
   $('#reviewViewSwitch').hidden=true;
@@ -2995,8 +3037,8 @@ function initActionsHome(){
   $('#postHomeHint').textContent=postTile.disabled?'Not available from the current complaint status.':'Follow-up actions after the complaint ends';
   var tile=$('#fosHomeTile');tile.disabled=!p.fosApplicable;
   var esc=p.solicitorEscalation||{};
-  $('#solicitorHomeTile').disabled=!esc.enabled;
-  $('#solicitorHomeHint').textContent=esc.enabled?'View solicitor case details and latest weekly update.':'Only available where Solicitor Escalation is Y.';
+  $('#solicitorHomeTile').disabled=!solarisCanAccess();
+  $('#solicitorHomeHint').textContent=solarisCanAccess()?'Prepare or manage the solicitor case with Solaris Law.':'Available for post-resolution and solicitor escalation complaints.';
   function field(id,value){document.getElementById(id).textContent=(value===null||value===undefined||String(value).trim()==='')?'Not recorded':String(value);}
   function money(id,value){field(id,value===null||value===undefined?'Not recorded':gbp.format(Number(value)));}
   function date(id,value){field(id,formatDisplayDate(value)||'Not recorded');}
@@ -3108,7 +3150,7 @@ function boot(){
       initRejCalc();initInspCalc();initCostEditors();
       applyPrefill();restoreRejectionBreakdowns();restoreCostBreakdowns();restoreInspectionBreakdowns();syncRej();syncFos();recompute();initRunningCosts();updateCostRequirements();renderFosRequiredActions();initRunningOnlySave();initSubmit();initManagementActions();initClosedLock();initReview();
       // Outside FOS Decision Review, keep the existing default-to-FOS behaviour.
-      initPostResolution();deInit();initClosureRecoveryUI();initActionsHome();initDealer();
+      initPostResolution();deInit();solarisInit();initClosureRecoveryUI();initActionsHome();initDealer();
     })
     .catch(function(){$('#loading').textContent='Network error loading the complaint.';});
 }
