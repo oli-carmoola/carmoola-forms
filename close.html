@@ -720,6 +720,40 @@ textarea.letters-field{min-height:85px;resize:vertical}
 #actionsInitial .initial-footer .btn{border-radius:10px}
 @media(max-width:710px){#actionsInitial .initial-page-head{flex-direction:column;gap:10px}#actionsInitial .initial-page-head h2{font-size:27px}#actionsInitial .initial-case-strip{grid-template-columns:1fr 1fr}#actionsInitial .initial-case-strip>div:nth-child(2){border:0}#actionsInitial .initial-case-strip>div:last-child{grid-column:1/-1;border-top:1px solid #f0e7ee;padding-top:13px;margin-top:12px}#actionsInitial .initial-card{padding:20px}#actionsInitial .initial-card>p{padding-left:0}#actionsInitial .initial-call-actions,#actionsInitial .initial-callout,#actionsInitial .initial-script{margin-left:0}}
 
+
+/* Sidebar refinement: wider workspace navigation and unobtrusive scrolling. */
+@media (min-width:1001px) {
+  .workspace-rail { width: 284px; }
+  body.actions-with-rail .shell { width: calc(100% - 284px); margin-left: 284px; }
+  body.actions-with-rail .footer-inner { margin-left: 284px; }
+}
+@media (min-width:1450px) {
+  body.actions-with-rail .shell { margin-left: calc(284px + (100vw - 284px - 1250px)/2); }
+}
+@media (min-width:711px) and (max-width:1000px) {
+  .workspace-rail { width: 244px; }
+  body.actions-with-rail .shell { margin-left: 244px; width: calc(100% - 244px); }
+  body.actions-with-rail .footer-inner { margin-left: 244px; }
+}
+.workspace-rail .rail-links {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none; /* Firefox: scrolling preserved, track hidden */
+  -ms-overflow-style: none;
+  overscroll-behavior: contain;
+}
+.workspace-rail .rail-links::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.workspace-rail .rail-link { gap: 13px; padding: 12px 14px; line-height: 1.45; }
+.workspace-rail .rail-icon { flex: 0 0 22px; }
+.workspace-rail .rail-link > span:last-child { min-width: 0; }
+@media (max-width:710px) {
+  .workspace-rail { width: min(310px, 88vw); }
+  body.actions-with-rail .shell { width: 100%; margin-left: 0; }
+  body.actions-with-rail .footer-inner { margin-left: 0; }
+}
+
 </style>
 </head>
 <body>
