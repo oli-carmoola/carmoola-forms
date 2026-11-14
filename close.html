@@ -370,8 +370,8 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
 .costs-ledger .running-summary-action{display:inline-flex;gap:8px;align-items:center;background:#F90081;border:1px solid #F90081;color:#fff;border-radius:10px;padding:11px 16px;font:750 13px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}
 .costs-ledger .running-summary-action:hover{background:#BD0064}
 .costs-ledger-list{min-height:165px;padding:8px 24px}
-.costs-ledger-list.rc-empty{display:flex;align-items:center;justify-content:center;color:#8E8190;font-size:13px;background:radial-gradient(ellipse at 50% 50%,#FFF7FB,#fff 70%)}
-.costs-ledger-list.rc-empty:before{content:'◇';font-size:23px;color:#DCA6C5;margin-right:10px}
+.costs-ledger-list.rc-empty{display:block;min-height:0;padding:24px 28px;color:#7d7380;font-size:15px;line-height:1.5;border-top:1px solid #eee6ee;background:#fff}
+.costs-ledger-list.rc-empty:before{content:none}
 .costs-ledger-list.rc-list{border:0;border-radius:0;overflow:visible;margin-top:0}
 .costs-ledger-list.rc-list table{font-family:'DM Sans',sans-serif;font-size:13px;width:100%}
 .costs-ledger-list.rc-list th{padding:12px 11px;color:#817584;background:#fff;font-size:10px;letter-spacing:.075em;border-bottom:1px solid #F0EAF1}
@@ -529,7 +529,7 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
 .initial-callout strong{display:block;margin-bottom:5px;color:#9f1159}
 .initial-script{border:1px solid #ede1e9;border-radius:11px;margin-top:14px;overflow:hidden}.initial-script summary{cursor:pointer;padding:13px 16px;font-size:13px;font-weight:800;color:#a50c5c;background:#fffafd}.initial-script div{padding:15px 16px;font-size:13.5px;line-height:1.75;color:#3e3441;border-top:1px solid #ede1e9}.initial-script p{margin:0 0 12px;color:#3e3441;font-size:13.5px}.initial-script-points{margin:15px 0 17px;padding-left:22px}.initial-script-points li{margin-bottom:15px;padding-left:3px}.initial-script-points li::marker{color:#b8005f}.initial-agent-tip{display:block;margin-top:6px;padding:8px 10px;border-radius:8px;background:#fff1f8;color:#8b285e;font-size:12px;font-style:italic}
 .initial-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.initial-choice{display:block;border:1.5px solid #e9dfe8;border-radius:12px;padding:15px;cursor:pointer;transition:.15s}.initial-choice:has(input:checked){border-color:#f90081;background:#fff2f9;box-shadow:0 0 0 2px #f9008112}.initial-choice input{accent-color:#f90081;margin:0 7px 0 0}.initial-choice strong{font-size:13.5px}.initial-choice small{display:block;margin:7px 0 0 22px;font-size:11.5px;color:#776d79}
-.initial-notes-label{display:block;font-size:13.5px;font-weight:800;margin:17px 0 7px}.initial-notes{font:inherit;font-size:13px;padding:12px;border:1.5px solid #dcd5e2;border-radius:10px;width:100%;min-height:82px;resize:vertical}.initial-notes:focus{outline:0;border-color:#f90081;box-shadow:0 0 0 3px #ffeaf4}.initial-count{display:block;text-align:right;color:#827889;font-size:11px;margin-top:4px}.initial-confirm{display:flex;align-items:flex-start;gap:11px;padding:15px;background:#fdf8fb;border:1px solid #ece3eb;border-radius:11px;margin:16px 0;font-size:13px;font-weight:650;cursor:pointer}.initial-confirm input{accent-color:#f90081;width:17px;height:17px;flex:none;margin-top:1px}.initial-footer{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-top:9px}.initial-footer .btn{min-width:200px}.initial-footer .btn:disabled{background:#d8cbd5;box-shadow:none;color:#776979;cursor:not-allowed}.initial-footer small{color:#847686;font-size:11.5px}.initial-error{color:#a31c43;background:#fff0f2;border:1px solid #f4c9d5;padding:12px;border-radius:9px;margin-top:12px;font-size:12.5px}.initial-error[hidden]{display:none!important}
+.initial-notes-label{display:block;font-size:13.5px;font-weight:800;margin:17px 0 7px}.initial-notes{font-family:inherit;font-size:13px;padding:12px;border:1.5px solid #dcd5e2;border-radius:10px;width:100%;min-height:82px;resize:vertical}.initial-notes:focus{outline:0;border-color:#f90081;box-shadow:0 0 0 3px #ffeaf4}.initial-count{display:block;text-align:right;color:#827889;font-size:11px;margin-top:4px}.initial-confirm{display:flex;align-items:flex-start;gap:11px;padding:15px;background:#fdf8fb;border:1px solid #ece3eb;border-radius:11px;margin:16px 0;font-size:13px;font-weight:650;cursor:pointer}.initial-confirm input{accent-color:#f90081;width:17px;height:17px;flex:none;margin-top:1px}.initial-footer{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-top:9px}.initial-footer .btn{min-width:200px}.initial-footer .btn:disabled{background:#d8cbd5;box-shadow:none;color:#776979;cursor:not-allowed}.initial-footer small{color:#847686;font-size:11.5px}.initial-error{color:#a31c43;background:#fff0f2;border:1px solid #f4c9d5;padding:12px;border-radius:9px;margin-top:12px;font-size:12.5px}.initial-error[hidden]{display:none!important}
 @media(max-width:620px){.initial-hero{padding:23px 21px}.initial-hero h2{font-size:25px}.initial-card{padding:19px}.initial-grid{grid-template-columns:1fr}.initial-footer{flex-direction:column;align-items:stretch}.initial-footer .btn{width:100%}}
 
 /* Optional Talkdesk click-to-call action for Initial Customer Call */
@@ -559,6 +559,11 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
 .workspace-rail{position:fixed;z-index:50;inset:0 auto 0 0;width:238px;display:flex;flex-direction:column;background:linear-gradient(160deg,#2b102b 0%,#3a1535 62%,#54183d 100%);color:#fff;box-shadow:7px 0 34px #2a14231c}
 .rail-brand{padding:29px 22px 22px}.rail-logo{font-size:24px;font-weight:800;letter-spacing:-.065em}.rail-logo span{color:#ff66af;font-size:10px;vertical-align:top;margin-left:3px}.rail-caption{display:block;font-size:9px;font-weight:800;letter-spacing:.16em;color:#d0a8bf;margin-top:8px}
 .rail-case{margin:0 13px 26px;padding:14px 13px;border:1px solid #ffffff22;border-radius:13px;background:#ffffff0c}.rail-case span{font-size:9px;letter-spacing:.12em;color:#e4b5cc;font-weight:800}.rail-case strong{display:block;font-size:14px;margin:5px 0}.rail-case small{display:block;font-size:11px;color:#dbb9cc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rail-switch{display:flex;justify-content:center;align-items:center;gap:7px;width:100%;margin-top:13px;border:1px solid #ffffff3d;background:#ffffff0d;color:#fff;border-radius:9px;padding:9px 10px;font-family:inherit;font-size:11.5px;font-weight:700;cursor:pointer;transition:background .15s}
+.rail-switch:hover,.rail-switch:focus-visible{background:#ffffff26;outline:none;border-color:#ffffff83}
+.switch-overlay[hidden]{display:none!important}.switch-overlay{position:fixed;inset:0;z-index:1000;background:#180f1ac2;display:flex;align-items:center;justify-content:center;padding:18px}.switch-dialog{width:min(440px,100%);background:#fff;border-radius:17px;padding:26px;box-shadow:0 18px 70px #150b1640;color:#281a2c}.switch-dialog h3{margin:0 0 7px;font-size:22px}.switch-dialog p{font-size:13px;line-height:1.6;color:#776977;margin:0 0 18px}.switch-dialog label{font-size:12px;font-weight:750;display:block;margin-bottom:7px}.switch-dialog input{width:100%;box-sizing:border-box;border:1px solid #d9cbd8;border-radius:9px;padding:12px;font-family:inherit;font-size:13px}.switch-dialog input:focus{outline:2px solid #f4abcc;outline-offset:1px}.switch-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:19px}.switch-actions button{border:1px solid #e0d4df;border-radius:9px;padding:10px 15px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;background:white}.switch-actions .switch-go{background:#e90076;color:#fff;border-color:#e90076}.switch-error{font-size:12px;color:#785e76;margin-top:11px;min-height:16px}
+.switch-search-row{display:flex;gap:8px}.switch-search-row input{flex:1;min-width:0}.switch-search-row button{flex:none;border:0;border-radius:9px;background:#e90076;color:white;padding:0 17px;font-weight:700;cursor:pointer}.switch-search-row button:disabled{opacity:.55;cursor:wait}
+.switch-results{margin-top:8px;max-height:320px;overflow:auto}.switch-result{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;border:1px solid #eee2eb;background:#fff;border-radius:10px;padding:12px 13px;margin:7px 0;cursor:pointer;font-family:inherit;color:#2f1d30}.switch-result:hover,.switch-result:focus-visible{background:#fff4f9;border-color:#efb4d0}.switch-result strong{display:block;font-size:13px}.switch-result small{display:block;font-size:12px;color:#807080;margin-top:3px}.switch-result .switch-arrow{color:#b00b68;font-size:20px}.switch-empty{font-size:13px;color:#796c78;padding:18px 5px}
 .rail-links{padding:0 11px;overflow:auto}.rail-group{color:#d7acc4;font-weight:800;font-size:9px;letter-spacing:.13em;padding:19px 11px 8px}
 .rail-link{width:100%;border:0;display:flex;align-items:center;text-align:left;gap:12px;padding:11px 12px;border-radius:10px;background:transparent;color:#e7d1e0;font-family:inherit;font-size:12.5px;font-weight:650;cursor:pointer;margin:3px 0}.rail-link:hover:not(:disabled){background:#ffffff16;color:#fff}.rail-link.is-active{background:#ffd6ea;color:#551438;font-weight:800}.rail-link:disabled{opacity:.38;cursor:not-allowed}.rail-icon{width:20px;text-align:center;font-size:19px;line-height:1}
 .rail-foot{margin-top:auto;padding:22px;font-size:11px;color:#e4bed0;display:flex;gap:9px;align-items:center}.rail-pulse{width:7px;height:7px;background:#f76aa9;border-radius:50%}
@@ -655,13 +660,13 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 .letters-card h3{font-size:17px;margin:0 0 7px}
 .letters-row{display:flex;gap:13px;align-items:center;flex-wrap:wrap}.letters-row>*{min-width:0}
 .letters-label{display:block;font-size:12px;font-weight:750;color:#675767;margin:0 0 7px}
-.letters-field{width:100%;padding:11px 13px;border:1px solid #e5d9e4;border-radius:10px;background:#fff;color:#2e1830;font:inherit;font-size:13px;box-sizing:border-box}
+.letters-field{width:100%;padding:11px 13px;border:1px solid #e5d9e4;border-radius:10px;background:#fff;color:#2e1830;font-family:inherit;font-size:13px;box-sizing:border-box}
 textarea.letters-field{min-height:85px;resize:vertical}
 .letters-field:focus{outline:2px solid #f4b5d3;outline-offset:1px}
 .letters-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
 .letters-full{grid-column:1 / -1}
 .letters-actions{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;margin-top:17px}
-.letters-btn{border:1px solid #e8cedd;background:#fff;color:#872052;border-radius:10px;padding:11px 17px;cursor:pointer;font:inherit;font-size:13px;font-weight:750;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.letters-btn{border:1px solid #e8cedd;background:#fff;color:#872052;border-radius:10px;padding:11px 17px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:750;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
 .letters-btn.primary{background:#f90081;border-color:#f90081;color:#fff}
 .letters-btn:disabled{opacity:.38;cursor:not-allowed}
 .letters-summary{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
@@ -675,7 +680,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
 
 
 /* Letters & Responses: single-document, progressive-disclosure layout */
-.letters-wrap{max-width:940px}.letters-top{margin-bottom:18px}.letters-switch{display:flex;gap:8px;margin:0 0 18px}.letters-switch-btn{background:#fff;border:1px solid #e8dce5;color:#59475a;border-radius:11px;padding:12px 16px;font:inherit;font-size:13px;font-weight:750;cursor:pointer}.letters-switch-btn.active{color:#a30861;background:#fff4f9;border-color:#edb7d1}.letters-switch-tag{display:inline-block;margin-left:7px;color:#8c7a89;font-size:11px;font-weight:600}.letters-switch-btn.active .letters-switch-tag{color:#a30861}.letters-document-card{padding:26px}.letters-existing-top{display:flex;align-items:center;gap:15px}.letters-existing-meta{flex:1;min-width:0}.letters-existing-meta h3{font-size:19px;margin:3px 0 5px}.letters-document-icon{width:54px;height:62px;display:grid;place-items:center;border-radius:10px;background:#fff0f7;color:#b40a69;font-size:28px;flex:none}.letters-eyebrow{display:block;color:#a11966;font-size:10px;letter-spacing:.12em;font-weight:800;margin-bottom:6px}.letters-state-pill{background:#f6f1f5;color:#665268;font-size:11px;font-weight:750;padding:7px 10px;border-radius:30px;white-space:nowrap}.letters-document-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.letters-btn.quiet{color:#6e5b6b;background:#fff}.letters-complete-icon{width:42px;height:42px;flex:none;border-radius:50%;display:grid;place-items:center;background:#e8f7ef;color:#177b4e;font-size:23px}.letters-finished{background:#fafffc}.letters-working-spinner{border-radius:50%;width:30px;height:30px;border:3px solid #f8dce9;border-top-color:#cf1773;flex:none;animation:lettersSpin 1s linear infinite}@keyframes lettersSpin{to{transform:rotate(360deg)}}.letters-modal[hidden]{display:none!important}.letters-modal{position:fixed;inset:0;z-index:12000;background:rgba(20,9,25,.72);display:flex;align-items:center;justify-content:center;padding:22px}.letters-modal-panel{background:#fff;border-radius:18px;width:min(1250px,98vw);height:min(92vh,1040px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 85px #14081950}.letters-modal-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid #eee4eb}.letters-modal-head h3{font-size:19px;margin:0 0 4px}.letters-modal-frame{width:100%;flex:1;border:0;background:#f4f1f4;min-height:200px}.letters-modal-foot{padding:9px 18px;font-size:11px;color:#746475;border-top:1px solid #eee4eb}.letters-modal-close{border:0;border-radius:9px;background:#f3edf2;color:#583d51;padding:10px 13px;cursor:pointer;font-size:16px}.letters-card[hidden]{display:none!important}@media(max-width:700px){.letters-switch{flex-direction:column}.letters-modal{padding:8px}.letters-modal-panel{height:95vh}.letters-modal-head{padding:12px;align-items:flex-start}.letters-existing-top{align-items:flex-start}.letters-state-pill{font-size:10px}.letters-document-actions .letters-btn{justify-content:center}.letters-modal-head .letters-row{gap:5px}}
+.letters-wrap{max-width:940px}.letters-top{margin-bottom:18px}.letters-switch{display:flex;gap:8px;margin:0 0 18px}.letters-switch-btn{background:#fff;border:1px solid #e8dce5;color:#59475a;border-radius:11px;padding:12px 16px;font-family:inherit;font-size:13px;font-weight:750;cursor:pointer}.letters-switch-btn.active{color:#a30861;background:#fff4f9;border-color:#edb7d1}.letters-switch-tag{display:inline-block;margin-left:7px;color:#8c7a89;font-size:11px;font-weight:600}.letters-switch-btn.active .letters-switch-tag{color:#a30861}.letters-document-card{padding:26px}.letters-existing-top{display:flex;align-items:center;gap:15px}.letters-existing-meta{flex:1;min-width:0}.letters-existing-meta h3{font-size:19px;margin:3px 0 5px}.letters-document-icon{width:54px;height:62px;display:grid;place-items:center;border-radius:10px;background:#fff0f7;color:#b40a69;font-size:28px;flex:none}.letters-eyebrow{display:block;color:#a11966;font-size:10px;letter-spacing:.12em;font-weight:800;margin-bottom:6px}.letters-state-pill{background:#f6f1f5;color:#665268;font-size:11px;font-weight:750;padding:7px 10px;border-radius:30px;white-space:nowrap}.letters-document-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.letters-btn.quiet{color:#6e5b6b;background:#fff}.letters-complete-icon{width:42px;height:42px;flex:none;border-radius:50%;display:grid;place-items:center;background:#e8f7ef;color:#177b4e;font-size:23px}.letters-finished{background:#fafffc}.letters-working-spinner{border-radius:50%;width:30px;height:30px;border:3px solid #f8dce9;border-top-color:#cf1773;flex:none;animation:lettersSpin 1s linear infinite}@keyframes lettersSpin{to{transform:rotate(360deg)}}.letters-modal[hidden]{display:none!important}.letters-modal{position:fixed;inset:0;z-index:12000;background:rgba(20,9,25,.72);display:flex;align-items:center;justify-content:center;padding:22px}.letters-modal-panel{background:#fff;border-radius:18px;width:min(1250px,98vw);height:min(92vh,1040px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 85px #14081950}.letters-modal-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid #eee4eb}.letters-modal-head h3{font-size:19px;margin:0 0 4px}.letters-modal-frame{width:100%;flex:1;border:0;background:#f4f1f4;min-height:200px}.letters-modal-foot{padding:9px 18px;font-size:11px;color:#746475;border-top:1px solid #eee4eb}.letters-modal-close{border:0;border-radius:9px;background:#f3edf2;color:#583d51;padding:10px 13px;cursor:pointer;font-size:16px}.letters-card[hidden]{display:none!important}@media(max-width:700px){.letters-switch{flex-direction:column}.letters-modal{padding:8px}.letters-modal-panel{height:95vh}.letters-modal-head{padding:12px;align-items:flex-start}.letters-existing-top{align-items:flex-start}.letters-state-pill{font-size:10px}.letters-document-actions .letters-btn{justify-content:center}.letters-modal-head .letters-row{gap:5px}}
 </style>
 </head>
 <body>
@@ -744,7 +749,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
 </div>
 <aside class="workspace-rail" id="workspaceRail" hidden aria-label="Complaint workspace navigation">
   <div class="rail-brand"><div class="rail-logo">carmoola</div><span class="rail-caption">COMPLAINTS HUB</span></div>
-  <div class="rail-case"><span>WORKING ON</span><strong id="railCaseRef">Complaint</strong><small id="railCustomer">Customer</small></div>
+  <div class="rail-case"><span>WORKING ON</span><strong id="railCaseRef">Complaint</strong><small id="railCustomer">Customer</small><button type="button" class="rail-switch" id="railSwitchComplaint"><span aria-hidden="true">⇄</span> Switch complaint</button></div>
   <nav class="rail-links" aria-label="Complaint sections">
     <button type="button" class="rail-link" data-rail="home"><span class="rail-icon">⌂</span><span>Overview</span></button>
     <div class="rail-group">WORKSPACES</div>
@@ -759,6 +764,19 @@ textarea.letters-field{min-height:85px;resize:vertical}
   </nav>
   <div class="rail-foot"><span class="rail-pulse"></span><span id="railStatus">Complaints Hub</span></div>
 </aside>
+<div class="switch-overlay" id="switchComplaintOverlay" hidden>
+ <div class="switch-dialog" role="dialog" aria-modal="true" aria-labelledby="switchComplaintTitle">
+  <h3 id="switchComplaintTitle">Switch complaint</h3>
+  <p>Search complaints assigned to this handler. Select a result to open its existing Complaint Actions link.</p>
+  <form id="switchComplaintForm" autocomplete="off">
+   <label for="switchComplaintQuery">Complaint reference or customer name</label>
+   <div class="switch-search-row"><input type="search" id="switchComplaintQuery" spellcheck="false" placeholder="CA-5914 or customer name" required minlength="2" maxlength="80"><button type="submit" class="switch-go" id="switchComplaintSearch">Search</button></div>
+  </form>
+  <div class="switch-error" id="switchComplaintError" role="status" aria-live="polite"></div>
+  <div class="switch-results" id="switchComplaintResults" aria-live="polite"></div>
+  <div class="switch-actions"><button type="button" id="switchComplaintCancel">Close</button></div>
+ </div>
+</div>
 <button type="button" id="railMobileToggle" class="rail-mobile-toggle" aria-label="Open workspace menu" hidden>☰ &nbsp; Workspaces</button>
 <div class="solaris-overlay" id="solarisModal" hidden><div class="solaris-dialog" role="dialog" aria-modal="true" aria-labelledby="solarisTitle"><div class="solaris-dialog-header"><div><span class="solaris-tag">SOLICITOR ESCALATION · SOLARIS LAW</span><h3 id="solarisTitle">Prepare solicitor escalation</h3><p>Review the debt and confirm the evidence is ready before submitting.</p></div><button type="button" class="solaris-x" id="solarisClose" aria-label="Close">×</button></div><div class="solaris-dialog-body"><div class="solaris-grid"><label class="solaris-field">Debtor · dealership<input type="text" id="solarisDebtor" readonly></label><label class="solaris-field">Amount to recover<div class="solaris-money"><span>£</span><input type="number" min="0.01" max="100000000" step="0.01" id="solarisAmount" required></div><small class="solaris-helper">Changing this amount will not alter the recovery ledger.</small></label></div><label class="solaris-field">Debt amount breakdown <span class="solaris-helper">Required</span><textarea id="solarisBreakdown" maxlength="3500" placeholder="Calculation from the saved Post-Resolution recovery details" required></textarea></label><label class="solaris-field">Notes for Solaris Law <span class="solaris-helper">Required</span><textarea id="solarisNotes" maxlength="5000" placeholder="What happened, contact so far and why legal recovery is needed" required></textarea></label><div class="solaris-checks"><strong style="font-size:12px;color:#4b3048">Confirm documents have been added to the complaint folder</strong><label><input type="checkbox" id="solarisHpa"> Hire Purchase Agreement added</label><label><input type="checkbox" id="solarisInvoice"> Vehicle invoice added</label><label><input type="checkbox" id="solarisOther"> Other relevant evidence and documents reviewed and added</label></div><label class="solaris-checks"><span style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" id="solarisConfirm"> <span style="font-size:12px;line-height:1.5">I confirm this is a dealership recovery, the details are accurate and I authorise submission to Solaris Law. This action can only be submitted once.</span></span></label><p class="solaris-error" id="solarisError" role="alert"></p></div><div class="solaris-dialog-footer"><button class="hub-btn hub-btn-quiet" type="button" id="solarisCancel">Cancel</button><button type="button" class="solaris-btn" id="solarisSubmit" disabled>Submit to Solaris Law</button></div></div></div>
 <div class="actions-nav" id="actionsNav" hidden><button type="button" class="actions-home-link" id="actionsHomeBtn">⌂ &nbsp;Complaint Home</button><span class="actions-current" id="actionsCurrent"></span></div>
@@ -911,6 +929,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
     </div>
     <div class="letters-actions"><button type="button" id="lettersGenerate" class="letters-btn primary">Generate letter</button></div>
   </div>
+  <div class="letters-card" id="lettersHoldingBlockedCard" hidden><div class="letters-existing-top"><div class="letters-document-icon" aria-hidden="true">✓</div><div><h3>No holding letter needed</h3><p class="letters-muted">The final response has already been sent, so a new eight-week holding letter cannot be generated.</p></div></div></div>
   <div class="letters-card letters-working" id="lettersWaitingCard" hidden><div class="letters-existing-top"><span class="letters-working-spinner" aria-hidden="true"></span><div><h3>Draft generation requested</h3><p class="letters-muted">The Zap is creating the document in Google Drive. Refresh once it has finished.</p></div></div><div class="letters-actions"><button type="button" id="lettersWaitingRefresh" class="letters-btn">↻ Check for document</button></div></div>
   <div id="lettersGenerateMessage" class="letters-message" role="status" aria-live="polite"></div>
   <div class="letters-card" id="lettersSendCard" hidden>
@@ -2301,7 +2320,7 @@ function renderRunningMain(){
   $('#runningHeroTotal').textContent=gbp.format(total);
   $('#runningEditLabel').textContent=rows.length?'Edit Running Costs':'Add Running Cost';
   var box=$('#runningList');
-  if(!rows.length){box.className='rc-empty';box.innerHTML='No running costs recorded.';return;}
+  if(!rows.length){box.className='costs-ledger-list rc-empty';box.textContent='No running costs recorded.';return;}
   box.className='rc-list';
   var h='<table><thead><tr><th>Description</th><th class="typecol">Cost type</th><th>Amount</th></tr></thead><tbody>';
   rows.forEach(function(r){h+='<tr><td>'+esc(r.desc)+'</td><td class="typecol">'+rcTypeBadge(r.type)+'</td><td>'+gbp.format(r.amount)+'</td></tr>';});
@@ -3423,11 +3442,13 @@ function lettersRender(){
   outcome.replaceChildren();wanted.forEach(function(x){var option=document.createElement('option');option.value=x;option.textContent=x;outcome.appendChild(option);});
  }
  var doc=lettersSelectedDoc(),sent=lettersSelectedSent(),pending=lettersPending(),generating=lettersGenerationPending()||LETTERS_GENERATING;
+ var holdingBlocked=holding&&!!LETTERS_STATE?.finalSent&&!doc&&!sent;
  var sentDate=holding?LETTERS_STATE?.holdingSentDate:LETTERS_STATE?.finalSentDate;
  var sentLabel=sent?(sentDate?'Sent · '+formatDisplayDate(sentDate):'Sent'):'';
  $('#lettersTopStatus').textContent=sent?sentLabel:pending?'Sending requested':doc?'Draft ready':generating?'Generating':'Not created';
  $('#lettersExistingCard').hidden=!doc;
- $('#lettersPrepareCard').hidden=!!doc||sent||pending||generating;
+ $('#lettersPrepareCard').hidden=!!doc||sent||pending||generating||holdingBlocked;
+ $('#lettersHoldingBlockedCard').hidden=!holdingBlocked;
  $('#lettersWaitingCard').hidden=!!doc||sent||pending||!generating;
  $('#lettersSentCard').hidden=!sent;
  $('#lettersSendingCard').hidden=!pending||sent;
@@ -3441,7 +3462,7 @@ function lettersRender(){
  $('#lettersSentDescription').textContent=sentDate?'Sent on '+formatDisplayDate(sentDate)+'. The letter remains available in Google Docs.':'Marked as sent. The letter remains available in Google Docs.';
  $('#lettersSendStatus').textContent=doc?'Ready to send':'No draft';
  var a=$('#lettersGoogleLink');a.hidden=!doc;if(doc)a.href='https://docs.google.com/document/d/'+encodeURIComponent(doc)+'/edit';else a.removeAttribute('href');
- $('#lettersGenerate').disabled=LETTERS_BUSY||!!doc||sent||pending||generating;
+ $('#lettersGenerate').disabled=LETTERS_BUSY||!!doc||sent||pending||generating||holdingBlocked;
  $('#lettersSend').disabled=LETTERS_BUSY||LETTERS_SENDING||pending||!doc||sent||!$('#lettersReviewed').checked;
 }
 async function lettersCall(action,data){
@@ -3455,6 +3476,7 @@ async function lettersRefresh(){
 }
 async function lettersGenerate(){
  if(LETTERS_BUSY||LETTERS_GENERATING||lettersGenerationPending()||lettersSelectedDoc()||lettersSelectedSent()||lettersPending())return;
+ if(LETTERS_VIEW==='holding'&&LETTERS_STATE?.finalSent){$('#lettersGenerateMessage').textContent='An eight-week holding letter cannot be generated after the final response has been sent.';return;}
  var type=lettersSelectedType(),summary=$('#lettersSummary').value.trim(),details=$('#lettersDetails').value.trim(),facts=$('#lettersFacts').value.trim(),outcome=$('#lettersOutcome').value;
  if((type==='holding'&&!summary)||(type==='affordability'&&!facts)||(['general','vehicle'].includes(type)&&(!summary||!details))){$('#lettersGenerateMessage').textContent='Complete the required fields before generating the letter.';return;}
  LETTERS_BUSY=true;$('#lettersGenerateMessage').textContent='Requesting draft…';lettersRender();
@@ -3498,6 +3520,36 @@ function lettersInit(){
  lettersRender();
 }
 
+function initComplaintSwitcher(){
+ var overlay=$('#switchComplaintOverlay'),input=$('#switchComplaintQuery'),err=$('#switchComplaintError'),results=$('#switchComplaintResults'),btn=$('#switchComplaintSearch');
+ var requestNo=0;
+ function close(){requestNo++;overlay.hidden=true;input.value='';err.textContent='';results.textContent='';btn.disabled=false;}
+ $('#railSwitchComplaint').addEventListener('click',function(){overlay.hidden=false;err.textContent='';results.textContent='';input.value='';input.focus();});
+ $('#switchComplaintCancel').addEventListener('click',close);
+ overlay.addEventListener('click',function(e){if(e.target===overlay)close();});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!overlay.hidden)close();});
+ $('#switchComplaintForm').addEventListener('submit',async function(e){
+  e.preventDefault();var query=input.value.trim();if(query.length<2){err.textContent='Enter at least two characters.';return;}
+  var serial=++requestNo;btn.disabled=true;err.textContent='Searching…';results.textContent='';
+  try{
+   var res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'complaint_switch_search',query:query})});
+   var data=await res.json();if(!res.ok||!data.ok)throw Error((data.errors||[])[0]||'Search failed');
+   if(serial!==requestNo||overlay.hidden)return;
+   err.textContent='';var matches=data.complaints||[];
+   if(!matches.length){results.textContent='No matching complaints with accessible links were found.';results.classList.add('switch-empty');return;}
+   results.classList.remove('switch-empty');
+   matches.forEach(function(item){
+    var button=document.createElement('button');button.type='button';button.className='switch-result';
+    var label=document.createElement('span'),ref=document.createElement('strong'),customer=document.createElement('small'),arrow=document.createElement('span');
+    ref.textContent=item.key;customer.textContent=item.customer||'Customer not recorded';arrow.className='switch-arrow';arrow.textContent='→';
+    label.appendChild(ref);label.appendChild(customer);button.appendChild(label);button.appendChild(arrow);
+    button.addEventListener('click',function(){window.location.assign(item.url);});results.appendChild(button);
+   });
+  }catch(error){if(serial===requestNo&&!overlay.hidden)err.textContent=error.message||'Unable to search complaints.';}
+  finally{if(serial===requestNo)btn.disabled=false;}
+ });
+}
+
 function boot(){
   var token=getToken();
   if(!token){$('#loading').textContent='This link is missing its access token. Please regenerate it from the complaint.';return;}
@@ -3513,7 +3565,7 @@ function boot(){
       initRejCalc();initInspCalc();initCostEditors();
       applyPrefill();restoreRejectionBreakdowns();restoreCostBreakdowns();restoreInspectionBreakdowns();syncRej();syncFos();recompute();initRunningCosts();updateCostRequirements();renderFosRequiredActions();initRunningOnlySave();initSubmit();initManagementActions();initClosedLock();initReview();
       // Outside FOS Decision Review, keep the existing default-to-FOS behaviour.
-      initPostResolution();deInit();solarisInit();lettersInit();initClosureRecoveryUI();initActionsHome();initDealer();
+      initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();
     })
     .catch(function(){$('#loading').textContent='Network error loading the complaint.';});
 }
