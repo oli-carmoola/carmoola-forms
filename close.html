@@ -877,6 +877,25 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .rca-summary-item small{display:block;color:#8b7786;font-weight:650;margin-bottom:6px}
 .rca-summary-item strong{font-weight:600;color:#38293b;line-height:1.5;overflow-wrap:anywhere}
 @media(max-width:710px){.rca-fields,.rca-summary-grid{grid-template-columns:1fr}.rca-card{padding:17px}.rca-heading{flex-direction:column}}
+
+/* Recovery cost modal: isolated from the main complaint editor's global .field styles. */
+#prCostModal .pr-cost-dialog{box-sizing:border-box;width:min(580px,100%);padding:0;border:1px solid #eee2ec;border-radius:20px;overflow:auto}
+#prCostModal .pr-cost-heading{padding:28px 32px 22px;border-bottom:1px solid #f0e6ed}
+#prCostModal .pr-cost-eyebrow{display:block;margin-bottom:10px;color:#a31966;font-size:10px;font-weight:800;letter-spacing:.13em}
+#prCostModal .pr-cost-heading h3{font-size:24px;line-height:1.25;letter-spacing:-.025em;margin:0 0 8px;color:#291b2b}
+#prCostModal .pr-cost-heading p{font-size:14px;line-height:1.55;color:#786d7b;margin:0}
+#prCostModal .pr-cost-form{padding:24px 32px 10px;display:grid;gap:21px}
+#prCostModal .pr-cost-field{display:flex;flex-direction:column;align-items:stretch;gap:8px;width:100%;min-width:0;margin:0;padding:0;border:0;font-size:14px;font-weight:700;color:#302335}
+#prCostModal .pr-cost-field>span{display:block;line-height:1.3}
+#prCostModal .pr-cost-field input,#prCostModal .pr-cost-field textarea{box-sizing:border-box;display:block;width:100%;min-width:0;max-width:100%;height:auto;margin:0;padding:12px 14px;border:1.5px solid #e5d8e4;border-radius:10px;background:#fff;color:#2a1e2b;font:500 14px/1.45 inherit;line-height:1.45;box-shadow:none}
+#prCostModal .pr-cost-field input{min-height:48px;font-family:inherit;font-size:15px}
+#prCostModal .pr-cost-field textarea{min-height:92px;font-family:inherit;font-size:14px;resize:vertical}
+#prCostModal .pr-cost-field input:focus,#prCostModal .pr-cost-field textarea:focus{outline:0;border-color:#ed0081;box-shadow:0 0 0 3px #fce0ee}
+#prCostModal .pr-cost-field small{font-size:11.5px;font-weight:400;line-height:1.4;color:#837788}
+#prCostModal .pr-cost-form .post-error{margin:0}
+#prCostModal .pr-cost-footer{display:flex;justify-content:flex-end;gap:10px;align-items:center;padding:18px 32px 26px}
+#prCostModal .pr-cost-footer button{min-height:44px;padding:10px 18px;border-radius:10px;white-space:normal}
+@media(max-width:620px){#prCostModal .pr-cost-heading{padding:24px 20px 18px}#prCostModal .pr-cost-form{padding:22px 20px 8px}#prCostModal .pr-cost-footer{padding:16px 20px 22px;flex-wrap:wrap}#prCostModal .pr-cost-footer button{flex:1}}
 </style>
 </head>
 <body>
@@ -1226,7 +1245,22 @@ textarea.letters-field{min-height:85px;resize:vertical}
     </div><div class="hub-dialog-foot"><span>Changes are saved in Complaints Hub.</span><button type="button" class="hub-btn hub-btn-quiet" id="deModalCancel">Close</button></div></div></div>
   </section>
   <section class="solaris-card" id="solarisPostCard" hidden><div class="solaris-top"><div class="solaris-symbol">⚖</div><div><h3>Solicitor escalation</h3><p>Send recovery instructions and evidence to Solaris Law.</p></div><span class="solaris-state" id="solarisPostState">Not started</span></div><div class="solaris-card-body"><p id="solarisPostHelp">Prepare the solicitor file using your existing recovery balance and supporting documents.</p><button type="button" class="solaris-btn" id="solarisPostOpen">Prepare solicitor escalation ↗</button></div></section>
-  <div class="pr-modal-backdrop" id="prCostModal" hidden><div class="pr-dialog" role="dialog" aria-modal="true" aria-label="Add recovery cost"><h3>Add recovery costs</h3><p class="post-muted">Record a new cost incurred after the original recovery was saved. This does not overwrite the original balance.</p><label class="field"><span class="lab">Cost description</span><input id="prCostDescription" type="text" maxlength="18" placeholder="e.g. Further repairs"></label><label class="field"><span class="lab">Amount (£)</span><input id="prCostAmount" type="number" min="0.01" step="0.01" placeholder="0.00"></label><label class="field"><span class="lab">Reason / supporting context</span><input id="prCostReason" type="text" maxlength="180" placeholder="Why was this cost added?"></label><p id="prCostError" class="post-error" role="alert"></p><div class="post-actions"><button type="button" class="post-btn-secondary" id="prCostCancel">Cancel</button><button type="button" class="btn" id="prCostSave">Add cost &amp; save to Complaints Hub</button></div></div></div>
+  <div class="pr-modal-backdrop" id="prCostModal" hidden>
+  <div class="pr-dialog pr-cost-dialog" role="dialog" aria-modal="true" aria-labelledby="prCostTitle" aria-describedby="prCostHelp">
+    <div class="pr-cost-heading">
+      <span class="pr-cost-eyebrow">POST-RESOLUTION · RECOVERY</span>
+      <h3 id="prCostTitle">Add Recovery Cost</h3>
+      <p id="prCostHelp">Record an additional cost against this recovery. The original balance will not be changed.</p>
+    </div>
+    <div class="pr-cost-form">
+      <label class="pr-cost-field" for="prCostDescription"><span>Cost Description</span><input id="prCostDescription" type="text" maxlength="18" placeholder="e.g. Further repairs" autocomplete="off"><small>Up to 18 characters</small></label>
+      <label class="pr-cost-field" for="prCostAmount"><span>Amount (£)</span><input id="prCostAmount" type="number" min="0.01" step="0.01" placeholder="0.00" inputmode="decimal"></label>
+      <label class="pr-cost-field" for="prCostReason"><span>Reason / Supporting Context</span><textarea id="prCostReason" maxlength="180" rows="3" placeholder="Explain why this additional cost has been incurred"></textarea><small>At least 8 characters. This will be saved with the recovery adjustment.</small></label>
+      <p id="prCostError" class="post-error" role="alert" aria-live="polite"></p>
+    </div>
+    <div class="pr-cost-footer"><button type="button" class="post-btn-secondary" id="prCostCancel">Cancel</button><button type="button" class="btn" id="prCostSave">Add Cost</button></div>
+  </div>
+</div>
   <div class="pr-modal-backdrop" id="prSetupModal" hidden><div class="pr-dialog" role="dialog" aria-modal="true" aria-label="Set up Post-Resolution">
     <h3>Set up Post-Resolution</h3><p class="post-muted">What is outstanding following the complaint decision?</p><div id="prDestinationPreview" class="post-alert" style="margin-top:12px" aria-live="polite"></div>
     <label class="pr-choice"><input type="radio" name="prSetupMode" value="funds" checked> Funds outstanding (tasks can be added too)</label>
