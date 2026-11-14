@@ -945,6 +945,12 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .acu-timeline-pill{flex:none;color:#a11b62;background:#fff0f8;border:1px solid #f7d8e8;border-radius:99px;padding:5px 10px;font-size:11px;font-weight:750}
 .acu-timeline-body{padding:19px 22px 21px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.75;font-size:13.5px;color:#403145;max-width:900px}
 .acu-timeline-empty{padding:28px 25px;border:1px dashed #e4d7e4;border-radius:14px;color:#867989;background:#fffcfe}
+.acu-history-gap{position:relative;padding:9px 0 3px;min-height:76px;display:flex;align-items:flex-start;gap:14px}
+.acu-history-gap-dots{position:absolute;left:-39px;top:0;width:19px;height:69px;display:flex;align-items:center;flex-direction:column;justify-content:space-evenly;z-index:2}
+.acu-history-gap-dots i{display:block;width:5px;height:5px;border-radius:50%;background:#c89db9}
+.acu-history-gap-label{border:1px dashed #e9d7e4;background:#fffbfe;border-radius:12px;padding:14px 17px;color:#746779;font-size:13px;line-height:1.5;flex:1}
+.acu-history-gap-label strong{display:block;color:#49334c;margin-bottom:3px;font-size:13px}
+@media(max-width:650px){.acu-history-gap-dots{left:-29px}}
 @media(max-width:650px){.acu-timeline{padding-left:31px}.acu-timeline:before{left:10px!important}.acu-timeline-dot{left:-31px;width:20px;height:20px}.acu-timeline-card-head{padding:15px}.acu-timeline-body{padding:16px}.acu-timeline-pill{font-size:10px}}
 @media(max-width:800px){.acu-stats,.acu-choice{grid-template-columns:1fr}.acu-header{flex-wrap:wrap}.acu-panel{padding:18px}.acu-header h2{font-size:26px}}
 </style>
@@ -4114,6 +4120,16 @@ function initComplaintSwitcher(){
 // Automated Customer Updates: all reads/writes stay behind the signed complaint token.
 let ACU_DATA=null,ACU_BUSY=false;
 function acuFormatDate(value){return value?formatDisplayDate(value):'Not recorded';}
+function acuAppendArchiveGap(history,missing){
+ if(!Number.isFinite(missing)||missing<=0)return;
+ const gap=document.createElement('div');gap.className='acu-history-gap';
+ const dots=document.createElement('span');dots.className='acu-history-gap-dots';dots.setAttribute('aria-hidden','true');
+ for(let i=0;i<3;i++)dots.appendChild(document.createElement('i'));
+ const message=document.createElement('div');message.className='acu-history-gap-label';
+ const heading=document.createElement('strong');heading.textContent=missing+' earlier '+(missing===1?'update is':'updates are')+' not saved in this timeline';
+ const detail=document.createElement('span');detail.textContent='These updates were sent previously, but their contents are not available here. You can find earlier messages in the Zendesk conversation.';
+ message.append(heading,detail);gap.append(dots,message);history.appendChild(gap);
+}
 function acuRender(){
  const d=ACU_DATA;if(!d)return;
  $('#acuStatus').textContent=d.label||'Not configured';$('#acuState').textContent=d.label||'Not configured';
@@ -4122,7 +4138,7 @@ function acuRender(){
  $('#acuPauseDate').value=d.pausedUntil||'';$('#acuPauseRow').hidden=mode!=='pause';
  const history=$('#acuHistory');history.replaceChildren();const records=[...(d.history||[])].sort((a,b)=>new Date(b.sent_at||0)-new Date(a.sent_at||0));
  const status=$('#acuHistoryMessage');status.replaceChildren();
- if(!records.length){const empty=document.createElement('div');empty.className='acu-timeline-empty';empty.textContent=d.historyError||'No automated emails are recorded in the archive for this complaint.';history.appendChild(empty);return;}
+ if(!records.length){const empty=document.createElement('div');empty.className='acu-timeline-empty';empty.textContent=d.historyError||'No automated emails are recorded in the archive for this complaint.';history.appendChild(empty);if(!d.historyError&&Number(d.sentCount)>0){acuAppendArchiveGap(history,Number(d.sentCount));}return;}
  const count=document.createElement('strong');count.textContent=records.length+' archived update'+(records.length===1?'':'s');status.appendChild(count);
  const message=document.createElement('span');message.textContent='· Newest first · Times shown in UK time';status.appendChild(message);
  if(d.historyTruncated){const warn=document.createElement('span');warn.textContent=' · Only the latest '+records.length+' records could be retrieved';status.appendChild(warn);}
@@ -4139,6 +4155,12 @@ function acuRender(){
    info.append(title,meta);const pill=document.createElement('span');pill.className='acu-timeline-pill';pill.textContent='Sent';head.append(info,pill);
    const body=document.createElement('div');body.className='acu-timeline-body';body.textContent=record.email_body||'Email body not recorded';
    card.append(head,body);item.append(dot,date,card);history.appendChild(item);
+ }
+ // Only show missing-record indicators when we have a complete archive response.
+ // A partial/failed query is a retrieval issue, not proof that records were never archived.
+ if(!d.historyError&&!d.historyTruncated){
+   const missing=Math.max(0,Number(d.sentCount||0)-records.length);
+   if(missing>0)acuAppendArchiveGap(history,missing);
  }
 }
 async function acuCall(action,extra){const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action,...extra})});const data=await res.json();if(!res.ok||!data.ok)throw Error(data.errors?.[0]||'Request failed');return data;}
