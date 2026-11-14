@@ -563,7 +563,7 @@ body.actions-in-workspace .footer-inner{max-width:1100px}
 .rail-switch:hover,.rail-switch:focus-visible{background:#ffffff26;outline:none;border-color:#ffffff83}
 .switch-overlay[hidden]{display:none!important}.switch-overlay{position:fixed;inset:0;z-index:1000;background:#180f1ac2;display:flex;align-items:center;justify-content:center;padding:18px}.switch-dialog{width:min(440px,100%);background:#fff;border-radius:17px;padding:26px;box-shadow:0 18px 70px #150b1640;color:#281a2c}.switch-dialog h3{margin:0 0 7px;font-size:22px}.switch-dialog p{font-size:13px;line-height:1.6;color:#776977;margin:0 0 18px}.switch-dialog label{font-size:12px;font-weight:750;display:block;margin-bottom:7px}.switch-dialog input{width:100%;box-sizing:border-box;border:1px solid #d9cbd8;border-radius:9px;padding:12px;font-family:inherit;font-size:13px}.switch-dialog input:focus{outline:2px solid #f4abcc;outline-offset:1px}.switch-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:19px}.switch-actions button{border:1px solid #e0d4df;border-radius:9px;padding:10px 15px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;background:white}.switch-actions .switch-go{background:#e90076;color:#fff;border-color:#e90076}.switch-error{font-size:12px;color:#785e76;margin-top:11px;min-height:16px}
 .switch-search-row{display:flex;gap:8px}.switch-search-row input{flex:1;min-width:0}.switch-search-row button{flex:none;border:0;border-radius:9px;background:#e90076;color:white;padding:0 17px;font-weight:700;cursor:pointer}.switch-search-row button:disabled{opacity:.55;cursor:wait}
-.switch-results{margin-top:8px;max-height:320px;overflow:auto}.switch-result{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;border:1px solid #eee2eb;background:#fff;border-radius:10px;padding:12px 13px;margin:7px 0;cursor:pointer;font-family:inherit;color:#2f1d30}.switch-result:hover,.switch-result:focus-visible{background:#fff4f9;border-color:#efb4d0}.switch-result strong{display:block;font-size:13px}.switch-result small{display:block;font-size:12px;color:#807080;margin-top:3px}.switch-result .switch-arrow{color:#b00b68;font-size:20px}.switch-empty{font-size:13px;color:#796c78;padding:18px 5px}
+.switch-results{margin-top:8px;max-height:320px;overflow:auto}.switch-result{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;border:1px solid #eee2eb;background:#fff;border-radius:10px;padding:12px 13px;margin:7px 0;cursor:pointer;font-family:inherit;color:#2f1d30}.switch-result:hover,.switch-result:focus-visible{background:#fff4f9;border-color:#efb4d0}.switch-result strong{display:block;font-size:13px}.switch-result small{display:block;font-size:12px;color:#807080;margin-top:3px}.switch-result .switch-arrow{color:#b00b68;font-size:20px}.switch-empty{font-size:13px;color:#796c78;padding:18px 5px}.switch-results{border-radius:12px}.switch-results:not(:empty){border:1px solid #f0e4ed;background:#fff;box-shadow:0 10px 25px #2d142111}.switch-result{border:none;border-radius:0;margin:0;border-bottom:1px solid #f4ecf2}.switch-result:last-child{border-bottom:none}.switch-result .switch-assignee{display:block;font-size:11px;color:#8c6680;margin-top:4px}.switch-loading{padding:15px;font-size:12px;color:#806b7a}
 .rail-links{padding:0 11px;overflow:auto}.rail-group{color:#d7acc4;font-weight:800;font-size:9px;letter-spacing:.13em;padding:19px 11px 8px}
 .rail-link{width:100%;border:0;display:flex;align-items:center;text-align:left;gap:12px;padding:11px 12px;border-radius:10px;background:transparent;color:#e7d1e0;font-family:inherit;font-size:12.5px;font-weight:650;cursor:pointer;margin:3px 0}.rail-link:hover:not(:disabled){background:#ffffff16;color:#fff}.rail-link.is-active{background:#ffd6ea;color:#551438;font-weight:800}.rail-link:disabled{opacity:.38;cursor:not-allowed}.rail-icon{width:20px;text-align:center;font-size:19px;line-height:1}
 .rail-foot{margin-top:auto;padding:22px;font-size:11px;color:#e4bed0;display:flex;gap:9px;align-items:center}.rail-pulse{width:7px;height:7px;background:#f76aa9;border-radius:50%}
@@ -767,10 +767,10 @@ textarea.letters-field{min-height:85px;resize:vertical}
 <div class="switch-overlay" id="switchComplaintOverlay" hidden>
  <div class="switch-dialog" role="dialog" aria-modal="true" aria-labelledby="switchComplaintTitle">
   <h3 id="switchComplaintTitle">Switch complaint</h3>
-  <p>Search complaints assigned to this handler. Select a result to open its existing Complaint Actions link.</p>
+  <p>Find another complaint by reference or customer name. Results show the assigned handler.</p>
   <form id="switchComplaintForm" autocomplete="off">
    <label for="switchComplaintQuery">Complaint reference or customer name</label>
-   <div class="switch-search-row"><input type="search" id="switchComplaintQuery" spellcheck="false" placeholder="CA-5914 or customer name" required minlength="2" maxlength="80"><button type="submit" class="switch-go" id="switchComplaintSearch">Search</button></div>
+   <div class="switch-search-row"><input type="search" id="switchComplaintQuery" spellcheck="false" placeholder="Start typing a reference or customer name…" required minlength="2" maxlength="80" role="combobox" aria-autocomplete="list" aria-controls="switchComplaintResults" aria-expanded="false"><button type="submit" class="switch-go" id="switchComplaintSearch">Search</button></div>
   </form>
   <div class="switch-error" id="switchComplaintError" role="status" aria-live="polite"></div>
   <div class="switch-results" id="switchComplaintResults" aria-live="polite"></div>
@@ -3522,32 +3522,42 @@ function lettersInit(){
 
 function initComplaintSwitcher(){
  var overlay=$('#switchComplaintOverlay'),input=$('#switchComplaintQuery'),err=$('#switchComplaintError'),results=$('#switchComplaintResults'),btn=$('#switchComplaintSearch');
- var requestNo=0;
- function close(){requestNo++;overlay.hidden=true;input.value='';err.textContent='';results.textContent='';btn.disabled=false;}
- $('#railSwitchComplaint').addEventListener('click',function(){overlay.hidden=false;err.textContent='';results.textContent='';input.value='';input.focus();});
+ var requestNo=0,timer=null,controller=null,active=-1,lastButtons=[];
+ function reset(){if(timer)clearTimeout(timer);if(controller)controller.abort();requestNo++;active=-1;lastButtons=[];results.replaceChildren();input.setAttribute('aria-expanded','false');}
+ function close(){reset();overlay.hidden=true;input.value='';err.textContent='';btn.disabled=false;}
+ function open(){overlay.hidden=false;err.textContent='';reset();input.value='';input.focus();}
+ $('#railSwitchComplaint').addEventListener('click',open);
  $('#switchComplaintCancel').addEventListener('click',close);
  overlay.addEventListener('click',function(e){if(e.target===overlay)close();});
  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!overlay.hidden)close();});
- $('#switchComplaintForm').addEventListener('submit',async function(e){
-  e.preventDefault();var query=input.value.trim();if(query.length<2){err.textContent='Enter at least two characters.';return;}
-  var serial=++requestNo;btn.disabled=true;err.textContent='Searching…';results.textContent='';
+ function selectActive(next){if(!lastButtons.length)return;active=(next+lastButtons.length)%lastButtons.length;lastButtons.forEach(function(b,i){b.classList.toggle('is-active',i===active);});lastButtons[active].scrollIntoView({block:'nearest'});}
+ input.addEventListener('keydown',function(e){if(e.key==='ArrowDown'&&lastButtons.length){e.preventDefault();selectActive(active+1);}else if(e.key==='ArrowUp'&&lastButtons.length){e.preventDefault();selectActive(active-1);}else if(e.key==='Enter'&&active>=0&&lastButtons[active]){e.preventDefault();lastButtons[active].click();}});
+ async function search(){
+  var query=input.value.trim();
+  if(query.length<2){reset();err.textContent='';return;}
+  if(controller)controller.abort();controller=new AbortController();var serial=++requestNo;
+  btn.disabled=true;err.textContent='';results.replaceChildren();results.classList.remove('switch-empty');
+  var loading=document.createElement('div');loading.className='switch-loading';loading.textContent='Searching complaints…';results.appendChild(loading);input.setAttribute('aria-expanded','true');
   try{
-   var res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'complaint_switch_search',query:query})});
+   var res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({token:getToken(),action:'complaint_switch_search',query:query})});
    var data=await res.json();if(!res.ok||!data.ok)throw Error((data.errors||[])[0]||'Search failed');
    if(serial!==requestNo||overlay.hidden)return;
-   err.textContent='';var matches=data.complaints||[];
-   if(!matches.length){results.textContent='No matching complaints with accessible links were found.';results.classList.add('switch-empty');return;}
-   results.classList.remove('switch-empty');
+   results.replaceChildren();active=-1;lastButtons=[];
+   var matches=data.complaints||[];
+   if(!matches.length){results.textContent='No matching complaints with accessible links found.';results.classList.add('switch-empty');return;}
    matches.forEach(function(item){
     var button=document.createElement('button');button.type='button';button.className='switch-result';
-    var label=document.createElement('span'),ref=document.createElement('strong'),customer=document.createElement('small'),arrow=document.createElement('span');
-    ref.textContent=item.key;customer.textContent=item.customer||'Customer not recorded';arrow.className='switch-arrow';arrow.textContent='→';
-    label.appendChild(ref);label.appendChild(customer);button.appendChild(label);button.appendChild(arrow);
-    button.addEventListener('click',function(){window.location.assign(item.url);});results.appendChild(button);
+    var label=document.createElement('span'),ref=document.createElement('strong'),customer=document.createElement('small'),assigned=document.createElement('span'),arrow=document.createElement('span');
+    ref.textContent=item.key;customer.textContent=item.customer||'Customer not recorded';assigned.className='switch-assignee';assigned.textContent='Assigned to '+(item.assignee||'Unassigned');arrow.className='switch-arrow';arrow.textContent='→';
+    label.append(ref,customer,assigned);button.append(label,arrow);
+    button.addEventListener('click',function(){window.location.assign(item.url);});results.appendChild(button);lastButtons.push(button);
    });
-  }catch(error){if(serial===requestNo&&!overlay.hidden)err.textContent=error.message||'Unable to search complaints.';}
+  }catch(error){if(error.name==='AbortError')return;if(serial===requestNo&&!overlay.hidden){results.replaceChildren();err.textContent=error.message||'Unable to search complaints.';}}
   finally{if(serial===requestNo)btn.disabled=false;}
- });
+ }
+ function schedule(){if(timer)clearTimeout(timer);if(controller)controller.abort();requestNo++;results.replaceChildren();lastButtons=[];input.setAttribute('aria-expanded','false');if(input.value.trim().length<2)return;timer=setTimeout(search,320);}
+ input.addEventListener('input',schedule);
+ $('#switchComplaintForm').addEventListener('submit',function(e){e.preventDefault();if(timer)clearTimeout(timer);search();});
 }
 
 function boot(){
