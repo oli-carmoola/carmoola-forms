@@ -3405,7 +3405,8 @@ function lettersSelectedType(){return LETTERS_VIEW==='holding'?'holding':letters
 function lettersSelectedDoc(){if(!LETTERS_STATE)return '';return LETTERS_VIEW==='holding'?LETTERS_STATE.holdingDocumentId:LETTERS_STATE.finalDocumentId;}
 function lettersSelectedSent(){if(!LETTERS_STATE)return false;return LETTERS_VIEW==='holding'?LETTERS_STATE.holdingSent:LETTERS_STATE.finalSent;}
 function lettersPending(){if(!LETTERS_STATE)return false;return !!(LETTERS_VIEW==='holding'?LETTERS_STATE.holdingSubmission?.state:LETTERS_STATE.finalSubmission?.state);}
-function lettersLabel(doc,sent,pending){return sent?'Sent':doc?'Draft ready':pending?'Sending requested':'Not created';}
+function lettersGenerationPending(){if(!LETTERS_STATE)return false;return !!(LETTERS_VIEW==='holding'?LETTERS_STATE.holdingGeneration?.state:LETTERS_STATE.finalGeneration?.state);}
+function lettersLabel(doc,sent,pending){return sent?'Sent':pending?'Sending requested':doc?'Draft ready':'Not created';}
 function lettersRender(){
  var type=lettersSelectedType(),holding=LETTERS_VIEW==='holding',afford=type==='affordability',veh=type==='vehicle';
  var finalDoc=!!LETTERS_STATE?.finalDocumentId,holdingDoc=!!LETTERS_STATE?.holdingDocumentId;
@@ -3421,13 +3422,13 @@ function lettersRender(){
  if(outcome.options.length!==wanted.length||Array.from(outcome.options).some(function(o,i){return o.value!==wanted[i]})){
   outcome.replaceChildren();wanted.forEach(function(x){var option=document.createElement('option');option.value=x;option.textContent=x;outcome.appendChild(option);});
  }
- var doc=lettersSelectedDoc(),sent=lettersSelectedSent(),pending=lettersPending();
+ var doc=lettersSelectedDoc(),sent=lettersSelectedSent(),pending=lettersPending(),generating=lettersGenerationPending()||LETTERS_GENERATING;
  var sentDate=holding?LETTERS_STATE?.holdingSentDate:LETTERS_STATE?.finalSentDate;
  var sentLabel=sent?(sentDate?'Sent · '+formatDisplayDate(sentDate):'Sent'):'';
- $('#lettersTopStatus').textContent=sent?sentLabel:pending?'Sending requested':doc?'Draft ready':LETTERS_GENERATING?'Generating':'Not created';
+ $('#lettersTopStatus').textContent=sent?sentLabel:pending?'Sending requested':doc?'Draft ready':generating?'Generating':'Not created';
  $('#lettersExistingCard').hidden=!doc;
- $('#lettersPrepareCard').hidden=!!doc||sent||pending||LETTERS_GENERATING;
- $('#lettersWaitingCard').hidden=!!doc||sent||pending||!LETTERS_GENERATING;
+ $('#lettersPrepareCard').hidden=!!doc||sent||pending||generating;
+ $('#lettersWaitingCard').hidden=!!doc||sent||pending||!generating;
  $('#lettersSentCard').hidden=!sent;
  $('#lettersSendingCard').hidden=!pending||sent;
  $('#lettersSendCard').hidden=!doc||sent||pending;
@@ -3440,7 +3441,7 @@ function lettersRender(){
  $('#lettersSentDescription').textContent=sentDate?'Sent on '+formatDisplayDate(sentDate)+'. The letter remains available in Google Docs.':'Marked as sent. The letter remains available in Google Docs.';
  $('#lettersSendStatus').textContent=doc?'Ready to send':'No draft';
  var a=$('#lettersGoogleLink');a.hidden=!doc;if(doc)a.href='https://docs.google.com/document/d/'+encodeURIComponent(doc)+'/edit';else a.removeAttribute('href');
- $('#lettersGenerate').disabled=LETTERS_BUSY||!!doc||sent||pending||LETTERS_GENERATING;
+ $('#lettersGenerate').disabled=LETTERS_BUSY||!!doc||sent||pending||generating;
  $('#lettersSend').disabled=LETTERS_BUSY||LETTERS_SENDING||pending||!doc||sent||!$('#lettersReviewed').checked;
 }
 async function lettersCall(action,data){
@@ -3453,7 +3454,7 @@ async function lettersRefresh(){
  catch(e){$('#lettersGenerateMessage').textContent=e.message;}
 }
 async function lettersGenerate(){
- if(LETTERS_BUSY||LETTERS_GENERATING||lettersSelectedDoc()||lettersSelectedSent()||lettersPending())return;
+ if(LETTERS_BUSY||LETTERS_GENERATING||lettersGenerationPending()||lettersSelectedDoc()||lettersSelectedSent()||lettersPending())return;
  var type=lettersSelectedType(),summary=$('#lettersSummary').value.trim(),details=$('#lettersDetails').value.trim(),facts=$('#lettersFacts').value.trim(),outcome=$('#lettersOutcome').value;
  if((type==='holding'&&!summary)||(type==='affordability'&&!facts)||(['general','vehicle'].includes(type)&&(!summary||!details))){$('#lettersGenerateMessage').textContent='Complete the required fields before generating the letter.';return;}
  LETTERS_BUSY=true;$('#lettersGenerateMessage').textContent='Requesting draft…';lettersRender();
