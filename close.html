@@ -681,6 +681,45 @@ textarea.letters-field{min-height:85px;resize:vertical}
 
 /* Letters & Responses: single-document, progressive-disclosure layout */
 .letters-wrap{max-width:940px}.letters-top{margin-bottom:18px}.letters-switch{display:flex;gap:8px;margin:0 0 18px}.letters-switch-btn{background:#fff;border:1px solid #e8dce5;color:#59475a;border-radius:11px;padding:12px 16px;font-family:inherit;font-size:13px;font-weight:750;cursor:pointer}.letters-switch-btn.active{color:#a30861;background:#fff4f9;border-color:#edb7d1}.letters-switch-tag{display:inline-block;margin-left:7px;color:#8c7a89;font-size:11px;font-weight:600}.letters-switch-btn.active .letters-switch-tag{color:#a30861}.letters-document-card{padding:26px}.letters-existing-top{display:flex;align-items:center;gap:15px}.letters-existing-meta{flex:1;min-width:0}.letters-existing-meta h3{font-size:19px;margin:3px 0 5px}.letters-document-icon{width:54px;height:62px;display:grid;place-items:center;border-radius:10px;background:#fff0f7;color:#b40a69;font-size:28px;flex:none}.letters-eyebrow{display:block;color:#a11966;font-size:10px;letter-spacing:.12em;font-weight:800;margin-bottom:6px}.letters-state-pill{background:#f6f1f5;color:#665268;font-size:11px;font-weight:750;padding:7px 10px;border-radius:30px;white-space:nowrap}.letters-document-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.letters-btn.quiet{color:#6e5b6b;background:#fff}.letters-complete-icon{width:42px;height:42px;flex:none;border-radius:50%;display:grid;place-items:center;background:#e8f7ef;color:#177b4e;font-size:23px}.letters-finished{background:#fafffc}.letters-working-spinner{border-radius:50%;width:30px;height:30px;border:3px solid #f8dce9;border-top-color:#cf1773;flex:none;animation:lettersSpin 1s linear infinite}@keyframes lettersSpin{to{transform:rotate(360deg)}}.letters-modal[hidden]{display:none!important}.letters-modal{position:fixed;inset:0;z-index:12000;background:rgba(20,9,25,.72);display:flex;align-items:center;justify-content:center;padding:22px}.letters-modal-panel{background:#fff;border-radius:18px;width:min(1250px,98vw);height:min(92vh,1040px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 85px #14081950}.letters-modal-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid #eee4eb}.letters-modal-head h3{font-size:19px;margin:0 0 4px}.letters-modal-frame{width:100%;flex:1;border:0;background:#f4f1f4;min-height:200px}.letters-modal-foot{padding:9px 18px;font-size:11px;color:#746475;border-top:1px solid #eee4eb}.letters-modal-close{border:0;border-radius:9px;background:#f3edf2;color:#583d51;padding:10px 13px;cursor:pointer;font-size:16px}.letters-card[hidden]{display:none!important}@media(max-width:700px){.letters-switch{flex-direction:column}.letters-modal{padding:8px}.letters-modal-panel{height:95vh}.letters-modal-head{padding:12px;align-items:flex-start}.letters-existing-top{align-items:flex-start}.letters-state-pill{font-size:10px}.letters-document-actions .letters-btn{justify-content:center}.letters-modal-head .letters-row{gap:5px}}
+
+/* Initial Customer Call: first-class Complaints Hub workspace and mandatory gate */
+#railInitialCall[hidden]{display:none!important}
+#workspaceRail.rail-is-gated .rail-links .rail-link:disabled{opacity:.48;cursor:not-allowed;pointer-events:none}
+#workspaceRail.rail-is-gated .rail-links .rail-link:disabled::after{content:'\1F512';font-size:10px;margin-left:auto;filter:grayscale(1);opacity:.7}
+#workspaceRail.rail-is-gated .rail-links .rail-link:not(:disabled){background:#ffffff1c;color:#fff;border-left:3px solid #ff55a9}
+#workspaceRail.rail-is-gated .rail-links .rail-group{opacity:.55}
+#actionsInitial .initial-wrap{max-width:930px;margin:4px auto 46px}
+#actionsInitial .initial-page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin:4px 0 22px}
+#actionsInitial .initial-page-kicker{font-size:10.5px;font-weight:800;letter-spacing:.105em;color:#a01361;margin-bottom:8px}
+#actionsInitial .initial-head-dot{padding:0 5px;color:#c4a7bc}
+#actionsInitial .initial-page-head h2{font-size:31px;line-height:1.15;letter-spacing:-.046em;color:#2e2030;margin:0 0 8px}
+#actionsInitial .initial-page-head p{font-size:13px;line-height:1.65;color:#857888;margin:0;max-width:650px}
+#actionsInitial .initial-gate-chip{flex:none;white-space:nowrap;border:1px solid #f1cee0;background:#fff2f9;color:#a11062;padding:9px 12px;border-radius:999px;font-size:11px;font-weight:800}
+#actionsInitial .initial-gate-chip span{color:#ef0080;font-size:8px;margin-right:6px}
+#actionsInitial .initial-case-strip{display:grid;grid-template-columns:1.2fr 1fr .65fr;gap:0;background:#fff;border:1px solid #eadfe8;border-radius:15px;padding:17px 8px;box-shadow:0 4px 18px #24122408;margin-bottom:22px}
+#actionsInitial .initial-case-strip>div{padding:2px 19px;border-right:1px solid #f0e7ee;min-width:0}
+#actionsInitial .initial-case-strip>div:last-child{border:0}
+#actionsInitial .initial-case-strip span{display:block;color:#948797;text-transform:uppercase;font-size:10px;font-weight:800;letter-spacing:.065em;margin-bottom:7px}
+#actionsInitial .initial-case-strip strong{display:block;color:#322436;font-size:14px;overflow-wrap:anywhere}
+#actionsInitial .initial-flow-head{display:flex;align-items:center;gap:13px;color:#938697;font-size:12px;font-weight:750;margin:0 0 20px}
+#actionsInitial .initial-flow-active{color:#a50b60;display:flex;align-items:center;gap:8px}
+#actionsInitial .initial-flow-upcoming{display:flex;align-items:center;gap:8px}
+#actionsInitial .initial-flow-number{display:grid;place-items:center;width:25px;height:25px;border-radius:50%;border:1px solid #e8dde8;font-size:11px;background:#fff}
+#actionsInitial .initial-flow-active .initial-flow-number{background:#f90081;color:#fff;border-color:#f90081}
+#actionsInitial .initial-flow-arrow{color:#b7a9b7}
+#actionsInitial .initial-card{border:1px solid #eae0e9;border-radius:17px;padding:24px 27px;margin:0 0 15px;box-shadow:0 4px 20px #24122408}
+#actionsInitial .initial-card-step{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+#actionsInitial .initial-card-step>span{display:grid;place-items:center;border-radius:10px;background:#fcebf5;color:#b70c67;width:35px;height:35px;flex:none;font-size:12px;font-weight:850}
+#actionsInitial .initial-card-step h3{margin:0;font-size:17px;letter-spacing:-.02em}
+#actionsInitial .initial-card>p{padding-left:47px;margin-bottom:17px}
+#actionsInitial .initial-call-actions,#actionsInitial .initial-callout,#actionsInitial .initial-script{margin-left:47px}
+#actionsInitial .initial-callout{background:#fcf7fa;border-color:#f0e1ea}
+#actionsInitial .initial-choice{background:#fff}
+#actionsInitial .initial-choice:hover{border-color:#ed98c6;background:#fffafd}
+#actionsInitial .initial-footer{border-top:1px solid #f2eaf0;margin-top:17px;padding-top:17px}
+#actionsInitial .initial-footer .btn{border-radius:10px}
+@media(max-width:710px){#actionsInitial .initial-page-head{flex-direction:column;gap:10px}#actionsInitial .initial-page-head h2{font-size:27px}#actionsInitial .initial-case-strip{grid-template-columns:1fr 1fr}#actionsInitial .initial-case-strip>div:nth-child(2){border:0}#actionsInitial .initial-case-strip>div:last-child{grid-column:1/-1;border-top:1px solid #f0e7ee;padding-top:13px;margin-top:12px}#actionsInitial .initial-card{padding:20px}#actionsInitial .initial-card>p{padding-left:0}#actionsInitial .initial-call-actions,#actionsInitial .initial-callout,#actionsInitial .initial-script{margin-left:0}}
+
 </style>
 </head>
 <body>
@@ -751,6 +790,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
   <div class="rail-brand"><div class="rail-logo">carmoola</div><span class="rail-caption">COMPLAINTS HUB</span></div>
   <div class="rail-case"><span>WORKING ON</span><strong id="railCaseRef">Complaint</strong><small id="railCustomer">Customer</small><button type="button" class="rail-switch" id="railSwitchComplaint"><span aria-hidden="true">⇄</span> Switch complaint</button></div>
   <nav class="rail-links" aria-label="Complaint sections">
+    <button type="button" class="rail-link rail-initial-link" data-rail="initial" id="railInitialCall"><span class="rail-icon">☎</span><span>Initial customer call</span></button>
     <button type="button" class="rail-link" data-rail="home"><span class="rail-icon">⌂</span><span>Overview</span></button>
     <div class="rail-group">WORKSPACES</div>
     <button type="button" class="rail-link" data-rail="running"><span class="rail-icon">▤</span><span>Running costs</span></button>
@@ -789,9 +829,17 @@ textarea.letters-field{min-height:85px;resize:vertical}
 </div>
 <section id="actionsInitial" class="actions-page" aria-label="Initial Customer Call" hidden>
  <div class="initial-wrap">
-  <div class="initial-progress"><b>01 · Initial Customer Call</b><span>→</span>02 · Investigation</div>
-  <div class="initial-hero"><div class="initial-eyebrow">COMPLAINT ACTIONS · GETTING STARTED</div><h2>Initial Customer Call</h2><p>Before you start investigating, make an initial attempt to speak with the customer and record what happened. This helps set expectations and makes the process feel more personal.</p></div>
-  <div class="initial-card"><h3>1. Make the introduction call</h3><p>Call <strong id="initialCustomer">the customer</strong> to introduce yourself as their complaint handler. You can adapt the suggestions below to sound natural.</p>
+  <header class="initial-page-head">
+    <div><div class="initial-page-kicker">COMPLAINT <span id="initialCaseReference">—</span> <span class="initial-head-dot">·</span> <span id="initialCaseType">Complaint</span></div><h2>Initial Customer Call</h2><p>Introduce yourself, set expectations and record the outcome before starting the investigation.</p></div>
+    <span class="initial-gate-chip"><span aria-hidden="true">●</span> Required step</span>
+  </header>
+  <div class="initial-case-strip" aria-label="Current complaint details">
+    <div><span>Customer</span><strong id="initialCaseCustomer">—</strong></div>
+    <div><span>Assigned to</span><strong id="initialCaseAssignee">—</strong></div>
+    <div><span>Status</span><strong>Assigned</strong></div>
+  </div>
+  <div class="initial-flow-head"><span class="initial-flow-active"><span class="initial-flow-number">1</span> Initial contact</span><span aria-hidden="true" class="initial-flow-arrow">→</span><span class="initial-flow-upcoming"><span class="initial-flow-number">2</span> Investigation</span></div>
+  <div class="initial-card"><div class="initial-card-step"><span>01</span><h3>Make the introduction call</h3></div><p>Call <strong id="initialCustomer">the customer</strong> to introduce yourself as their complaint handler. You can adapt the suggestions below to sound natural.</p>
    <div class="initial-call-actions" id="initialCallActions" hidden>
      <a class="initial-dial-button" id="initialDialCustomer" href="#" aria-label="Call customer"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72l.57 3a2 2 0 0 1-.57 1.91L8.8 10.9a16 16 0 0 0 4.3 4.3l1.27-1.28a2 2 0 0 1 1.91-.57l3 .57A2 2 0 0 1 22 16.92Z"/></svg>Call customer</a>
      <a class="initial-call-help" href="https://chromewebstore.google.com/detail/talkdesk-click-to-call-ex/adjgicoimjhccdcjgepkmigomegpjplg?authuser=0&amp;pli=1" target="_blank" rel="noopener noreferrer" aria-label="How to enable Talkdesk click-to-call (opens Chrome Web Store)" title="Install the Talkdesk Click-to-Call Chrome extension to call through Talkdesk">i</a>
@@ -811,7 +859,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
     </div>
    </details>
   </div>
-  <div class="initial-card"><h3>2. Record the outcome</h3><p>Choose what happened when you tried to contact the customer.</p><div class="initial-grid" role="radiogroup" aria-label="Call outcome">
+  <div class="initial-card"><div class="initial-card-step"><span>02</span><h3>Record the outcome</h3></div><p>Choose what happened when you tried to contact the customer.</p><div class="initial-grid" role="radiogroup" aria-label="Call outcome">
    <label class="initial-choice"><input type="radio" name="initialOutcome" value="Spoke to customer"><strong>Spoke to customer</strong><small>Introduction call completed</small></label>
    <label class="initial-choice"><input type="radio" name="initialOutcome" value="Voicemail left"><strong>Voicemail left</strong><small>Message left introducing yourself</small></label>
    <label class="initial-choice"><input type="radio" name="initialOutcome" value="No voicemail option"><strong>No voicemail option</strong><small>Tried to call but couldn't leave a message</small></label>
@@ -3152,12 +3200,14 @@ async function solarisSubmit(){
 function solarisInit(){['solarisHpa','solarisInvoice','solarisOther','solarisConfirm'].forEach(function(id){$('#'+id).addEventListener('change',solarisUpdateSubmit);});$('#solarisAmount').addEventListener('input',solarisPopulateBreakdown);$('#solarisBreakdown').addEventListener('input',function(){this.dataset.autogenerated='false';});['solarisPostOpen','solarisStandaloneOpen'].forEach(function(id){$('#'+id).addEventListener('click',solarisOpen);});['solarisClose','solarisCancel'].forEach(function(id){$('#'+id).addEventListener('click',solarisClose);});$('#solarisSubmit').addEventListener('click',solarisSubmit);$('#solarisModal').addEventListener('click',function(ev){if(ev.target===this)solarisClose();});document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&!$('#solarisModal').hidden)solarisClose();});solarisRefresh();}
 
 function hubUpdateRail(page){
- var rail=$('#workspaceRail'),shown=page!=='initial';
+ var rail=$('#workspaceRail'),shown=true,initialGate=PREFILL.statusName==='Assigned';
  rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
- if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=PREFILL.statusName||'Complaints Hub';}
+ if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=initialGate?'Initial call required':(PREFILL.statusName||'Complaints Hub');}
+ var initialLink=$('#railInitialCall');initialLink.hidden=!initialGate;
+ rail.classList.toggle('rail-is-gated',initialGate);
  document.querySelectorAll('[data-rail]').forEach(function(b){
   var target=b.dataset.rail;
-  var allowed=target==='home'||target==='post'&&canOpenPostResolution(PREFILL.statusName)||target==='review'&&PREFILL.fosApplicable||target==='solicitor'&&solarisCanAccess()||!['post','review','solicitor'].includes(target);
+  var allowed=initialGate?target==='initial':(target!=='initial'&&(target==='home'||target==='post'&&canOpenPostResolution(PREFILL.statusName)||target==='review'&&PREFILL.fosApplicable||target==='solicitor'&&solarisCanAccess()||!['post','review','solicitor'].includes(target)));
   b.disabled=!allowed;b.classList.toggle('is-active',target===page);b.setAttribute('aria-current',target===page?'page':'false');
  });
  rail.classList.remove('rail-open');
@@ -3340,6 +3390,10 @@ function initInitialContact(){
  var first=String(p.customerName||'').trim().split(/\s+/)[0]||'the customer';
  var agent=String(p.assigneeName||'').trim().split(/\s+/)[0]||'your complaint handler';
  $('#initialCustomer').textContent=p.customerName||'the customer';
+ $('#initialCaseReference').textContent=p.issueKey||'—';
+ $('#initialCaseType').textContent=p.complaintType||'Complaint';
+ $('#initialCaseCustomer').textContent=p.customerName||'—';
+ $('#initialCaseAssignee').textContent=p.assigneeName||'Unassigned';
  $('#initialScriptCustomer').textContent=first;
   $('#initialScriptEmailCustomer').textContent=first;
   $('#initialScriptClosingCustomer').textContent=first;
