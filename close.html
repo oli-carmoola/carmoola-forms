@@ -928,6 +928,24 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .acu-entry summary{padding:17px;display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer;list-style:none}
 .acu-entry summary::-webkit-details-marker{display:none}.acu-entry summary strong{font-size:13px;display:block}.acu-entry summary small{display:block;margin-top:5px;font-size:12px;color:#85788a}
 .acu-entry .acu-message-body{white-space:pre-wrap;overflow-wrap:anywhere;border-top:1px solid #eee5ed;padding:18px;line-height:1.75;font-size:13px;color:#392c3a;background:#fffbfd}
+/* Customer updates: full chronological feed */
+.acu-timeline-panel{padding-bottom:34px}
+.acu-timeline-summary{display:flex;align-items:center;gap:9px;margin:0 0 28px;color:#827583;font-size:13px}
+.acu-timeline-summary strong{color:#38273a}
+.acu-timeline{position:relative;padding:0 0 0 42px;display:flex;flex-direction:column;gap:25px}
+.acu-timeline:not(:empty):before{content:"";position:absolute;left:13px;top:16px;bottom:34px;width:2px;background:linear-gradient(180deg,#f10080,#ead9e5)}
+.acu-timeline-item{position:relative;min-width:0}
+.acu-timeline-dot{position:absolute;left:-41px;top:23px;width:23px;height:23px;box-sizing:border-box;border:5px solid #fff;background:#f00080;border-radius:50%;box-shadow:0 0 0 2px #f2b5d6;z-index:1}
+.acu-timeline-item:not(:first-child) .acu-timeline-dot{background:#c48aac;box-shadow:0 0 0 2px #e7d1df}
+.acu-timeline-date{font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#9b4b7a;margin:0 0 9px}
+.acu-timeline-card{border:1px solid #e9dce7;border-radius:16px;background:#fff;overflow:hidden;box-shadow:0 5px 18px rgba(43,20,45,.025)}
+.acu-timeline-card-head{padding:17px 21px;display:flex;align-items:flex-start;justify-content:space-between;gap:15px;border-bottom:1px solid #f1e9ef;background:#fffbfe}
+.acu-timeline-card-head h4{font-size:15px;margin:0 0 5px;font-weight:800;color:#352639}
+.acu-timeline-card-head p{font-size:12px;color:#88798a;margin:0}
+.acu-timeline-pill{flex:none;color:#a11b62;background:#fff0f8;border:1px solid #f7d8e8;border-radius:99px;padding:5px 10px;font-size:11px;font-weight:750}
+.acu-timeline-body{padding:19px 22px 21px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.75;font-size:13.5px;color:#403145;max-width:900px}
+.acu-timeline-empty{padding:28px 25px;border:1px dashed #e4d7e4;border-radius:14px;color:#867989;background:#fffcfe}
+@media(max-width:650px){.acu-timeline{padding-left:31px}.acu-timeline:before{left:10px!important}.acu-timeline-dot{left:-31px;width:20px;height:20px}.acu-timeline-card-head{padding:15px}.acu-timeline-body{padding:16px}.acu-timeline-pill{font-size:10px}}
 @media(max-width:800px){.acu-stats,.acu-choice{grid-template-columns:1fr}.acu-header{flex-wrap:wrap}.acu-panel{padding:18px}.acu-header h2{font-size:26px}}
 </style>
 </head>
@@ -1040,7 +1058,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
    <div id="acuPauseRow" hidden><label class="acu-date-label" for="acuPauseDate">Resume on<input type="date" id="acuPauseDate"></label><p class="acu-small">Updates may resume on this date when the scheduled Zap next runs.</p></div>
    <div class="acu-footer"><p id="acuMessage" role="status" aria-live="polite"></p><button type="button" id="acuSave" class="acu-save">Save Settings</button></div>
   </div>
-  <div class="acu-panel"><div class="acu-panel-heading"><div><h3>Sent Email History</h3><p>Messages successfully archived from Zendesk. Open an email to read the full text.</p></div><button type="button" class="acu-refresh" id="acuRefresh">Refresh</button></div><p id="acuHistoryMessage" class="acu-small"></p><div id="acuHistory" class="acu-history"></div></div>
+  <div class="acu-panel acu-timeline-panel"><div class="acu-panel-heading"><div><h3>Customer update timeline</h3><p>Every archived automated email, in chronological context. Full messages are shown below.</p></div><button type="button" class="acu-refresh" id="acuRefresh">Refresh timeline</button></div><div class="acu-timeline-summary" id="acuHistoryMessage" role="status"></div><div id="acuHistory" class="acu-timeline"></div></div>
  </div>
 </section>
 <div id="actionsRootCause" class="actions-page" hidden>
@@ -4102,9 +4120,26 @@ function acuRender(){
  $('#acuCount').textContent=String(d.sentCount??0);$('#acuLast').textContent=acuFormatDate(d.lastSentDate);
  const mode=d.mode||'inactive';const radio=document.querySelector('input[name="acuMode"][value="'+mode+'"]');if(radio)radio.checked=true;
  $('#acuPauseDate').value=d.pausedUntil||'';$('#acuPauseRow').hidden=mode!=='pause';
- const history=$('#acuHistory');history.replaceChildren();const records=d.history||[];
- $('#acuHistoryMessage').textContent=records.length?`Showing ${records.length} most recent archived update${records.length===1?'':'s'}.`:(d.historyError||'No archived customer updates found for this complaint.');
- for(const record of records){const details=document.createElement('details');details.className='acu-entry';const summary=document.createElement('summary');const info=document.createElement('span');const title=document.createElement('strong');title.textContent='Automated update '+(record.email_number||'');const sub=document.createElement('small');sub.textContent=(record.sent_at?new Date(record.sent_at).toLocaleString('en-GB',{timeZone:'Europe/London',dateStyle:'medium',timeStyle:'short'}):'Date not available')+' · Sent via Zendesk';info.append(title,sub);const arrow=document.createElement('span');arrow.textContent='⌄';summary.append(info,arrow);const body=document.createElement('div');body.className='acu-message-body';body.textContent=record.email_body||'Email text not recorded';details.append(summary,body);history.appendChild(details);}
+ const history=$('#acuHistory');history.replaceChildren();const records=[...(d.history||[])].sort((a,b)=>new Date(b.sent_at||0)-new Date(a.sent_at||0));
+ const status=$('#acuHistoryMessage');status.replaceChildren();
+ if(!records.length){const empty=document.createElement('div');empty.className='acu-timeline-empty';empty.textContent=d.historyError||'No automated emails are recorded in the archive for this complaint.';history.appendChild(empty);return;}
+ const count=document.createElement('strong');count.textContent=records.length+' archived update'+(records.length===1?'':'s');status.appendChild(count);
+ const message=document.createElement('span');message.textContent='· Newest first · Times shown in UK time';status.appendChild(message);
+ if(d.historyTruncated){const warn=document.createElement('span');warn.textContent=' · Only the latest '+records.length+' records could be retrieved';status.appendChild(warn);}
+ for(const record of records){
+   const item=document.createElement('article');item.className='acu-timeline-item';
+   const dot=document.createElement('span');dot.className='acu-timeline-dot';dot.setAttribute('aria-hidden','true');
+   const date=document.createElement('div');date.className='acu-timeline-date';
+   const sent=record.sent_at?new Date(record.sent_at):null;
+   date.textContent=sent&&!Number.isNaN(sent.getTime())?sent.toLocaleDateString('en-GB',{timeZone:'Europe/London',weekday:'short',day:'numeric',month:'long',year:'numeric'}):'Date not available';
+   const card=document.createElement('div');card.className='acu-timeline-card';
+   const head=document.createElement('div');head.className='acu-timeline-card-head';
+   const info=document.createElement('div');const title=document.createElement('h4');title.textContent='Automated update'+(record.email_number?' #'+record.email_number:'');
+   const meta=document.createElement('p');meta.textContent=(sent&&!Number.isNaN(sent.getTime())?sent.toLocaleTimeString('en-GB',{timeZone:'Europe/London',hour:'2-digit',minute:'2-digit'}):'Time unavailable')+' · Sent via Zendesk'+(record.handler_name?' · '+record.handler_name:'');
+   info.append(title,meta);const pill=document.createElement('span');pill.className='acu-timeline-pill';pill.textContent='Sent';head.append(info,pill);
+   const body=document.createElement('div');body.className='acu-timeline-body';body.textContent=record.email_body||'Email body not recorded';
+   card.append(head,body);item.append(dot,date,card);history.appendChild(item);
+ }
 }
 async function acuCall(action,extra){const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action,...extra})});const data=await res.json();if(!res.ok||!data.ok)throw Error(data.errors?.[0]||'Request failed');return data;}
 async function acuLoad(){if(ACU_BUSY)return;$('#acuHistoryMessage').textContent='Loading automated updates…';try{const data=await acuCall('customer_updates_get');ACU_DATA=data.updates;acuRender();$('#acuMessage').textContent='';}catch(e){$('#acuHistoryMessage').textContent='Unable to load updates: '+e.message;}}
