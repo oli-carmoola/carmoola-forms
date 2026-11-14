@@ -244,6 +244,21 @@
   .fosdash-action:hover{border-color:#EB88BA;background:#FFF4FA}
   .fosdash-muted{font-size:12px;color:var(--muted);line-height:1.6}
   .fosdash-heading{padding-top:12px}.fosdash-heading h3{font-size:18px;margin:0 0 5px}.fosdash-heading p{color:var(--muted);margin:0;font-size:12.5px}
+
+  /* FOS case management: stage-focused decision panels and case-file actions */
+  .fosdash-stage-list{display:block;min-width:0}
+  .fosdash-stage-panel{border:1px solid var(--line);background:#fcfafc;border-radius:13px;padding:16px 17px;min-width:0}
+  .fosdash-stage-panel+.fosdash-stage-panel{margin-top:13px}
+  .fosdash-stage-title{font-size:14px;font-weight:800;color:var(--ink);margin:0 0 4px}
+  .fosdash-stage-sub{color:var(--muted);font-size:12px;margin:0 0 14px;line-height:1.5}
+  .fosdash-stage-panel .fosdash-fields{gap:14px 18px}
+  .fosdash-stage-pending{color:var(--muted);font-size:12.5px;line-height:1.6;margin:0}
+  .fosdash-document-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:5px}
+  .fosdash-document-actions a{display:inline-flex;align-items:center}
+  .fosdash-linkbutton{border:1px solid #e7d4e0;background:#fff;color:#99195c;border-radius:9px;padding:10px 13px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none}
+  .fosdash-linkbutton:hover{background:#fff4fa;border-color:#eb88ba}
+  .fosdash-file-missing{color:var(--muted);font-size:12.5px}
+  #fosCaseFileModal[hidden]{display:none!important}
   @media(max-width:1100px){.fosdash-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.fosdash-columns{grid-template-columns:1fr}}
   @media(max-width:660px){.fosdash-stats,.fosdash-flow,.fosdash-fields{grid-template-columns:1fr 1fr}.fosdash-card{padding:17px}.fosdash-head h2{font-size:25px}}
   @media(max-width:410px){.fosdash-flow,.fosdash-stats{grid-template-columns:1fr}}
@@ -1222,6 +1237,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
   </div>
 
     <section class="review-shell" id="reviewShell">
+    <div class="letters-modal" id="fosCaseFileModal" hidden role="dialog" aria-modal="true" aria-labelledby="fosCaseFileModalTitle"><div class="letters-modal-panel"><div class="letters-modal-head"><div><h3 id="fosCaseFileModalTitle">FOS Case File</h3><p class="letters-muted">Preview the stored case file. Edit or download it in Google Docs.</p></div><div class="letters-row"><a id="fosCaseFileModalEdit" target="_blank" rel="noopener noreferrer" class="letters-btn">Open in Google Docs ↗</a><button type="button" id="fosCaseFileModalClose" class="letters-modal-close" aria-label="Close case file preview">✕</button></div></div><iframe id="fosCaseFileModalFrame" title="FOS case file preview" class="letters-modal-frame" referrerpolicy="no-referrer"></iframe><div class="letters-modal-foot">If Google blocks the preview, use Open in Google Docs above.</div></div></div>
     <div class="fosdash" id="fosDashboard">
       <div class="fosdash-head"><div><div class="fosdash-overline">Complaints Hub · FOS Case Management</div><h2>Financial Ombudsman</h2><p>A single view of the referral, deadlines, decisions, financial exposure and correspondence. Review the original decision material and record the next step below.</p></div><span class="fosdash-pill" id="fosDashStatus">FOS Case</span></div>
       <div class="fosdash-stats">
@@ -1232,7 +1248,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
       </div>
       <div class="fosdash-card"><div class="fosdash-cardhead"><div><h3>Case Progress</h3><p>Stages and dates recorded against this complaint</p></div></div><div class="fosdash-flow" id="fosDashFlow"></div></div>
       <div class="fosdash-columns">
-        <div class="fosdash-card"><div class="fosdash-cardhead"><div><h3>Investigation &amp; Decisions</h3><p>People, outcomes and links to the correspondence</p></div></div><div class="fosdash-fields" id="fosDashFields"></div></div>
+        <div class="fosdash-card"><div class="fosdash-cardhead"><div><h3>Investigation &amp; Decisions</h3><p>Current stage, decisions and available correspondence</p></div></div><div class="fosdash-stage-list" id="fosDashFields"></div></div>
         <div class="fosdash-card"><div class="fosdash-cardhead"><div><h3>Financial Breakdown</h3><p>Recorded amounts, not a forecast</p></div><button class="fosdash-action" type="button" id="fosDashOpenCosts">Review FOS Costs ↗</button></div><div class="fosdash-breakdown" id="fosDashCosts"></div><div class="fosdash-total"><span>Compensation Subtotal (Excluding Fee)</span><span id="fosDashCostTotal">—</span></div><p class="fosdash-muted" id="fosDashCostNote">Costs are maintained through the existing closure calculator.</p></div>
       </div>
       <div class="fosdash-card"><div class="fosdash-cardhead"><div><h3>Documents &amp; Response</h3><p>Case file, response status and FOS correspondence</p></div></div><div class="fosdash-fields" id="fosDashDocuments"></div></div>
@@ -1640,17 +1656,42 @@ function renderFosDashboard(){
   var safeLink=function(url){return /^https:\/\//i.test(String(url||''));};
   var field=function(host,label,value,url){var div=document.createElement('div');div.className='fosdash-field';var k=document.createElement('div');k.className='k';k.textContent=label;var v=document.createElement('div');v.className='v';if(url&&safeLink(url)){var a=document.createElement('a');a.textContent=value||'Open ticket ↗';a.href=url;a.target='_blank';a.rel='noopener noreferrer';v.appendChild(a);}else v.textContent=n(value);div.append(k,v);host.appendChild(div);};
   set('fosDashReference',n(f.reference));set('fosDashEscalated',f.escalationDate?'Referred '+d(f.escalationDate):'Referral date not recorded');
+  var responseCompleted=yes(f.responseSent)||!!f.responseSentDate;
   set('fosDashDeadline',d(f.deadline));set('fosDashOutcome',n(f.overallOutcome||'Awaiting decision'));set('fosDashClosed',f.closedDate?'Closed '+d(f.closedDate):'Not closed');
   set('fosDashTotal',money(f.totalCost));set('fosDashFee',f.fee===null?'Case fee not recorded':'Case fee '+money(f.fee)+' · shown separately');
   var deadlineCard=document.getElementById('fosDashDeadlineCard');deadlineCard.classList.remove('urgent');
-  if(f.deadline){var end=new Date(String(f.deadline).slice(0,10)+'T12:00:00Z');var now=new Date();var days=Math.ceil((end-now)/86400000);if(!isNaN(days)){set('fosDashDeadlineHint',days<0?Math.abs(days)+' days overdue':days===0?'Due today':days+' days remaining');if(days<=3&&!f.closedDate)deadlineCard.classList.add('urgent');}}
+  if(responseCompleted){
+    set('fosDashDeadlineHint',f.responseSentDate?'Response sent '+d(f.responseSentDate):'Response sent');
+  }else if(f.closedDate){
+    set('fosDashDeadlineHint','Case closed');
+  }else if(f.deadline){
+    var end=new Date(String(f.deadline).slice(0,10)+'T12:00:00Z');var now=new Date();var days=Math.ceil((end-now)/86400000);
+    if(!isNaN(days)){set('fosDashDeadlineHint',days<0?Math.abs(days)+' days overdue':days===0?'Due today':days+' days remaining');if(days<=3)deadlineCard.classList.add('urgent');}
+    else set('fosDashDeadlineHint','Provided by FOS');
+  }else set('fosDashDeadlineHint','No response deadline recorded');
   set('fosDashStatus',PREFILL.statusName||'FOS Case');
   var stages=[['Referral',f.escalationDate,'Referred'],['Carmoola Response',f.responseSentDate,yes(f.responseSent)?'Sent':'Pending'],['Investigator',f.investigatorDecisionDate,f.investigatorOutcome||'Awaiting decision'],['Ombudsman',f.ombudsmanDecisionDate,f.ombudsmanOutcome||'Not reached']];
   var flow=document.getElementById('fosDashFlow');flow.replaceChildren();
   stages.forEach(function(s,i){var done=!!(s[1]||(i===1&&yes(f.responseSent))||(i===2&&f.investigatorOutcome)||(i===3&&f.ombudsmanOutcome));var card=document.createElement('div');card.className='fosdash-step'+(done?' done':'')+(!done&&i===2&&r.latestStage==='investigator'?' current':'')+(!done&&i===3&&r.latestStage==='ombudsman'?' current':'');var index=document.createElement('div');index.className='n';index.textContent=(i+1)+' / 4 '+(done?'· RECORDED':'');var name=document.createElement('div');name.className='label';name.textContent=s[0];var detail=document.createElement('div');detail.className='detail';detail.textContent=(s[1]?d(s[1])+' · ':'')+s[2];card.append(index,name,detail);flow.appendChild(card);});
   var fields=document.getElementById('fosDashFields');fields.replaceChildren();
-  field(fields,'Investigator',f.investigatorName);field(fields,'Investigator Outcome',f.investigatorOutcome);field(fields,'Investigator Decision Date',d(f.investigatorDecisionDate));field(fields,'Investigator Correspondence','Open Zendesk Ticket ↗',f.investigatorZendesk);
-  field(fields,'Ombudsman',f.ombudsmanName);field(fields,'Ombudsman Outcome',f.ombudsmanOutcome);field(fields,'Ombudsman Decision Date',d(f.ombudsmanDecisionDate));field(fields,'Ombudsman Correspondence','Open Zendesk Ticket ↗',f.ombudsmanZendesk);
+  var currentStatus=String(PREFILL.statusName||'').toLowerCase();
+  var ombudsmanReached=!!(f.ombudsmanName||f.ombudsmanOutcome||f.ombudsmanDecisionDate||f.ombudsmanZendesk||r.latestStage==='ombudsman'||currentStatus.includes('ombudsman'));
+  var stagePanel=function(title,description){var panel=document.createElement('div');panel.className='fosdash-stage-panel';var h=document.createElement('h4');h.className='fosdash-stage-title';h.textContent=title;var sub=document.createElement('p');sub.className='fosdash-stage-sub';sub.textContent=description;var grid=document.createElement('div');grid.className='fosdash-fields';panel.append(h,sub,grid);fields.appendChild(panel);return grid;};
+  // Only show correspondence links if there is a real, safe URL in Jira.
+  var invFields=stagePanel('Investigator',f.investigatorOutcome||f.investigatorDecisionDate?'Investigator decision recorded':'Awaiting the Investigator’s decision');
+  if(f.investigatorName)field(invFields,'Investigator',f.investigatorName);
+  if(f.investigatorOutcome)field(invFields,'Outcome',f.investigatorOutcome);
+  if(f.investigatorDecisionDate)field(invFields,'Decision Date',d(f.investigatorDecisionDate));
+  if(f.investigatorZendesk&&safeLink(f.investigatorZendesk))field(invFields,'Correspondence','Open Zendesk Ticket ↗',f.investigatorZendesk);
+  if(!invFields.children.length){var pending=document.createElement('p');pending.className='fosdash-stage-pending';pending.textContent='No Investigator details recorded yet.';invFields.appendChild(pending);}
+  if(ombudsmanReached){
+    var ombFields=stagePanel('Ombudsman',f.ombudsmanOutcome||f.ombudsmanDecisionDate?'Ombudsman decision recorded':'Referred to the Ombudsman · awaiting decision');
+    if(f.ombudsmanName)field(ombFields,'Ombudsman',f.ombudsmanName);
+    if(f.ombudsmanOutcome)field(ombFields,'Outcome',f.ombudsmanOutcome);
+    if(f.ombudsmanDecisionDate)field(ombFields,'Decision Date',d(f.ombudsmanDecisionDate));
+    if(f.ombudsmanZendesk&&safeLink(f.ombudsmanZendesk))field(ombFields,'Correspondence','Open Zendesk Ticket ↗',f.ombudsmanZendesk);
+    if(!ombFields.children.length){var waiting=document.createElement('p');waiting.className='fosdash-stage-pending';waiting.textContent='Awaiting Ombudsman details.';ombFields.appendChild(waiting);}
+  }
   var costs=document.getElementById('fosDashCosts');costs.replaceChildren();
   var entries=[['Direct Compensation',f.direct],['Distress & Inconvenience',f.distress],['Repair Costs',f.repair],['Rejection Loss',f.rejectionLoss],['Inspection, Storage & Recovery',f.inspection],['Courtesy Car & Travel',f.courtesy],['Other Costs',f.other],['FOS Case Fee',f.fee]];
   var sum=0,has=false;entries.forEach(function(item){if(item[1]===null||item[1]===undefined||item[1]==='')return;has=true;var v=Number(item[1]);if(Number.isFinite(v)&&item[0]!=='FOS Case Fee')sum+=v;var line=document.createElement('div');line.className='fosdash-costline';var label=document.createElement('span');label.textContent=item[0];var value=document.createElement('strong');value.textContent=money(item[1]);line.append(label,value);costs.appendChild(line);});
@@ -1659,9 +1700,38 @@ function renderFosDashboard(){
   if(f.totalCost!==null&&f.totalCost!==undefined){set('fosDashCostNote','Jira FOS Total Cost: '+money(f.totalCost)+'. This is the recorded compensation total; the case fee is shown separately.');}
   var detailMap=f.explanations||{};var detailRows=[['Direct Compensation',detailMap.direct],['Distress & Inconvenience',detailMap.distress],['Repair Costs',detailMap.repair],['Inspection / Storage / Recovery',detailMap.inspection],['Courtesy Car & Travel',detailMap.courtesy],['Other Costs',detailMap.other]];detailRows.forEach(function(item){if(!String(item[1]||'').trim())return;var details=document.createElement('details');details.style.cssText='margin-top:8px;border:1px solid var(--line);border-radius:9px;padding:9px 11px';var summary=document.createElement('summary');summary.textContent=item[0]+' · View breakdown';summary.style.cssText='cursor:pointer;font-weight:750;font-size:11.5px;color:#9B1A61';var txt=document.createElement('div');txt.style.cssText='white-space:pre-wrap;overflow-wrap:anywhere;font-size:11.5px;line-height:1.6;color:var(--muted);margin-top:8px';txt.textContent=String(item[1]);details.append(summary,txt);costs.appendChild(details);});
   var documents=document.getElementById('fosDashDocuments');documents.replaceChildren();
-  field(documents,'FOS Case File',f.caseFileId?'Document ID: '+f.caseFileId:'Not recorded');field(documents,'Response Sent',yes(f.responseSent)?'Yes':'Not recorded');field(documents,'Response Sent Date',d(f.responseSentDate));field(documents,'FOS Fee Invoiced From Partner',f.feeInvoicedFromPartner);
-  field(documents,'FOS Reference',f.reference);field(documents,'Date FOS Closed',d(f.closedDate));
+  var caseFile=document.createElement('div');caseFile.className='fosdash-field';
+  var caseLabel=document.createElement('div');caseLabel.className='k';caseLabel.textContent='FOS Case File';caseFile.appendChild(caseLabel);
+  var docId=String(f.caseFileId||'').trim();
+  if(/^[A-Za-z0-9_-]{15,}$/.test(docId)){
+    var docActions=document.createElement('div');docActions.className='fosdash-document-actions';
+    var preview=document.createElement('button');preview.type='button';preview.className='fosdash-linkbutton';preview.textContent='Preview Case File';preview.addEventListener('click',function(){fosOpenCaseFile(docId);});
+    var open=document.createElement('a');open.className='fosdash-linkbutton';open.textContent='Open in Google Docs ↗';open.href='https://docs.google.com/document/d/'+encodeURIComponent(docId)+'/edit';open.target='_blank';open.rel='noopener noreferrer';
+    docActions.append(preview,open);caseFile.appendChild(docActions);
+  }else{var missing=document.createElement('div');missing.className='fosdash-file-missing';missing.textContent=docId?'Case file link unavailable':'No case file recorded';caseFile.appendChild(missing);}
+  documents.appendChild(caseFile);
+  field(documents,'Response Sent',responseCompleted?'Yes':'Not recorded');
+  if(f.responseSentDate)field(documents,'Response Sent Date',d(f.responseSentDate));
+  if(f.feeInvoicedFromPartner)field(documents,'FOS Fee Invoiced From Partner',f.feeInvoicedFromPartner);
+  if(f.closedDate)field(documents,'Date FOS Closed',d(f.closedDate));
+
 }
+
+function fosOpenCaseFile(docId){
+  if(!/^[A-Za-z0-9_-]{15,}$/.test(String(docId||'')))return;
+  var base='https://docs.google.com/document/d/'+encodeURIComponent(docId);
+  document.getElementById('fosCaseFileModalEdit').href=base+'/edit';
+  document.getElementById('fosCaseFileModalFrame').src=base+'/preview';
+  document.getElementById('fosCaseFileModal').hidden=false;document.body.style.overflow='hidden';
+  document.getElementById('fosCaseFileModalClose').focus();
+}
+function fosCloseCaseFile(){
+  document.getElementById('fosCaseFileModal').hidden=true;
+  document.getElementById('fosCaseFileModalFrame').removeAttribute('src');document.body.style.overflow='';
+}
+document.getElementById('fosCaseFileModalClose').addEventListener('click',fosCloseCaseFile);
+document.getElementById('fosCaseFileModal').addEventListener('click',function(e){if(e.target===this)fosCloseCaseFile();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!document.getElementById('fosCaseFileModal').hidden)fosCloseCaseFile();});
 
 function renderReview(){
   var r=PREFILL.fosReview;if(!fosReviewIsAvailable())return;
