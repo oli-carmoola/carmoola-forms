@@ -896,6 +896,39 @@ textarea.letters-field{min-height:85px;resize:vertical}
 #prCostModal .pr-cost-footer{display:flex;justify-content:flex-end;gap:10px;align-items:center;padding:18px 32px 26px}
 #prCostModal .pr-cost-footer button{min-height:44px;padding:10px 18px;border-radius:10px;white-space:normal}
 @media(max-width:620px){#prCostModal .pr-cost-heading{padding:24px 20px 18px}#prCostModal .pr-cost-form{padding:22px 20px 8px}#prCostModal .pr-cost-footer{padding:16px 20px 22px;flex-wrap:wrap}#prCostModal .pr-cost-footer button{flex:1}}
+
+/* Automated Customer Updates workspace */
+.acu-wrap{max-width:1280px;margin:0 auto;padding:8px 0 50px;color:#302032}
+.acu-header{display:flex;justify-content:space-between;gap:20px;align-items:start;margin:0 0 26px}
+.acu-header h2{font-size:34px;letter-spacing:-.045em;margin:8px 0 7px;line-height:1.14}
+.acu-header p,.acu-panel-heading p{color:#807485;font-size:14px;line-height:1.6;margin:0}
+.acu-status{background:#fbf0f6;border:1px solid #f4d4e4;color:#a80c63;border-radius:999px;padding:9px 14px;font-size:12px;font-weight:750;white-space:nowrap}
+.acu-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.acu-stat{border:1px solid #ecdfeb;border-radius:16px;background:#fff;padding:22px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.acu-stat>span{font-size:11px;font-weight:750;color:#89798b;letter-spacing:.075em}
+.acu-stat>strong{font-size:22px;overflow-wrap:anywhere}
+.acu-panel{background:#fff;border:1px solid #e9dfea;border-radius:17px;margin-bottom:20px;padding:27px;box-shadow:0 7px 25px rgba(31,14,35,.025)}
+.acu-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:22px}
+.acu-panel-heading h3{font-size:19px;margin:0 0 5px}
+.acu-choice{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.acu-choice label{display:flex;gap:10px;align-items:flex-start;border:1px solid #e8dfe9;border-radius:12px;padding:17px;cursor:pointer;background:#fff}
+.acu-choice label:has(input:checked){border-color:#f60081;background:#fff5fa;box-shadow:0 0 0 1px #f6008133}
+.acu-choice input{accent-color:#ed0080;margin:3px 0 0;flex:none}
+.acu-choice strong,.acu-choice small{display:block}.acu-choice strong{font-size:14px;margin-bottom:5px}.acu-choice small{font-size:12px;line-height:1.5;color:#7d7180}
+.acu-date-label{display:flex;flex-direction:column;gap:8px;font-weight:700;font-size:13px;margin-top:18px;max-width:320px}
+.acu-date-label input{border:1px solid #e4d8e6;border-radius:10px;padding:12px 14px;width:100%;box-sizing:border-box;color:#302032;font:inherit}
+.acu-small{color:#837886;font-size:13px;line-height:1.6;margin:8px 0}
+.acu-footer{display:flex;align-items:center;justify-content:flex-end;gap:18px;margin-top:22px;flex-wrap:wrap}
+.acu-footer p{font-size:13px;color:#a00b5b;margin:0;flex:1}
+.acu-save{background:#f00080;color:#fff;border:0;border-radius:10px;padding:13px 19px;font-size:13px;font-weight:800;cursor:pointer}
+.acu-save:disabled{opacity:.55;cursor:wait}
+.acu-refresh{background:#fff;border:1px solid #e5d8e5;border-radius:9px;color:#8f245f;padding:10px 15px;font-weight:700;cursor:pointer}
+.acu-history{display:flex;flex-direction:column;gap:10px}
+.acu-entry{border:1px solid #eae2ea;border-radius:11px;overflow:hidden}
+.acu-entry summary{padding:17px;display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer;list-style:none}
+.acu-entry summary::-webkit-details-marker{display:none}.acu-entry summary strong{font-size:13px;display:block}.acu-entry summary small{display:block;margin-top:5px;font-size:12px;color:#85788a}
+.acu-entry .acu-message-body{white-space:pre-wrap;overflow-wrap:anywhere;border-top:1px solid #eee5ed;padding:18px;line-height:1.75;font-size:13px;color:#392c3a;background:#fffbfd}
+@media(max-width:800px){.acu-stats,.acu-choice{grid-template-columns:1fr}.acu-header{flex-wrap:wrap}.acu-panel{padding:18px}.acu-header h2{font-size:26px}}
 </style>
 </head>
 <body>
@@ -974,6 +1007,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <button type="button" class="rail-link" data-rail="rejection"><span class="rail-icon">◇</span><span>Vehicle Rejection</span></button>
     <button type="button" class="rail-link" data-rail="post"><span class="rail-icon">▣</span><span>Post-Resolution Hub</span></button>
     <button type="button" class="rail-link" data-rail="letters"><span class="rail-icon">✉</span><span>Letters &amp; Responses</span></button>
+    <button type="button" class="rail-link" data-rail="updates" id="railCustomerUpdates" hidden><span class="rail-icon">✉</span><span>Automated Customer Updates</span></button>
     <button type="button" class="rail-link" data-rail="rootcause"><span class="rail-icon">◎</span><span>Root Cause Analysis</span></button>
     <button type="button" class="rail-link" data-rail="closure"><span class="rail-icon">✓</span><span>Complaint Closure</span></button>
     <button type="button" class="rail-link" data-rail="review"><span class="rail-icon">▤</span><span>Financial Ombudsman</span></button>
@@ -997,6 +1031,18 @@ textarea.letters-field{min-height:85px;resize:vertical}
 </div>
 <button type="button" id="railMobileToggle" class="rail-mobile-toggle" aria-label="Open workspace menu" hidden>☰ &nbsp; Workspaces</button>
 <div class="solaris-overlay" id="solarisModal" hidden><div class="solaris-dialog" role="dialog" aria-modal="true" aria-labelledby="solarisTitle"><div class="solaris-dialog-header"><div><span class="solaris-tag">SOLICITOR ESCALATION · SOLARIS LAW</span><h3 id="solarisTitle">Prepare solicitor escalation</h3><p>Review the debt and confirm the evidence is ready before submitting.</p></div><button type="button" class="solaris-x" id="solarisClose" aria-label="Close">×</button></div><div class="solaris-dialog-body"><div class="solaris-grid"><label class="solaris-field">Debtor · dealership<input type="text" id="solarisDebtor" readonly></label><label class="solaris-field">Amount to recover<div class="solaris-money"><span>£</span><input type="number" min="0.01" max="100000000" step="0.01" id="solarisAmount" required></div><small class="solaris-helper">Changing this amount will not alter the recovery ledger.</small></label></div><label class="solaris-field">Debt amount breakdown <span class="solaris-helper">Required</span><textarea id="solarisBreakdown" maxlength="3500" placeholder="Calculation from the saved Post-Resolution recovery details" required></textarea></label><label class="solaris-field">Notes for Solaris Law <span class="solaris-helper">Required</span><textarea id="solarisNotes" maxlength="5000" placeholder="What happened, contact so far and why legal recovery is needed" required></textarea></label><div class="solaris-checks"><strong style="font-size:12px;color:#4b3048">Confirm documents have been added to the complaint folder</strong><label><input type="checkbox" id="solarisHpa"> Hire Purchase Agreement added</label><label><input type="checkbox" id="solarisInvoice"> Vehicle invoice added</label><label><input type="checkbox" id="solarisOther"> Other relevant evidence and documents reviewed and added</label></div><label class="solaris-checks"><span style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" id="solarisConfirm"> <span style="font-size:12px;line-height:1.5">I confirm this is a dealership recovery, the details are accurate and I authorise submission to Solaris Law. This action can only be submitted once.</span></span></label><p class="solaris-error" id="solarisError" role="alert"></p></div><div class="solaris-dialog-footer"><button class="hub-btn hub-btn-quiet" type="button" id="solarisCancel">Cancel</button><button type="button" class="solaris-btn" id="solarisSubmit" disabled>Submit to Solaris Law</button></div></div></div>
+<section id="actionsUpdates" class="actions-page" hidden>
+ <div class="acu-wrap">
+  <div class="acu-header"><div><span class="hub-overline">COMPLAINT WORKSPACE / CUSTOMER COMMUNICATIONS</span><h2>Automated Customer Updates</h2><p>Manage regular progress emails and review the updates already sent to the customer.</p></div><span class="acu-status" id="acuStatus">Loading…</span></div>
+  <div class="acu-stats"><div class="acu-stat"><span>UPDATES SENT</span><strong id="acuCount">—</strong></div><div class="acu-stat"><span>LAST UPDATE</span><strong id="acuLast">—</strong></div><div class="acu-stat"><span>CURRENT SETTING</span><strong id="acuState">—</strong></div></div>
+  <div class="acu-panel"><div class="acu-panel-heading"><div><h3>Automation Settings</h3><p>The scheduled Zap remains responsible for deciding when to send an update.</p></div></div>
+   <div class="acu-choice" role="group" aria-label="Automated update status"><label><input type="radio" name="acuMode" value="active"> <span><strong>Active</strong><small>Allow updates when the complaint is eligible.</small></span></label><label><input type="radio" name="acuMode" value="pause"> <span><strong>Pause Until</strong><small>Temporarily stop updates until the selected date.</small></span></label><label><input type="radio" name="acuMode" value="inactive"> <span><strong>Inactive</strong><small>Stop automated updates indefinitely.</small></span></label></div>
+   <div id="acuPauseRow" hidden><label class="acu-date-label" for="acuPauseDate">Resume on<input type="date" id="acuPauseDate"></label><p class="acu-small">Updates may resume on this date when the scheduled Zap next runs.</p></div>
+   <div class="acu-footer"><p id="acuMessage" role="status" aria-live="polite"></p><button type="button" id="acuSave" class="acu-save">Save Settings</button></div>
+  </div>
+  <div class="acu-panel"><div class="acu-panel-heading"><div><h3>Sent Email History</h3><p>Messages successfully archived from Zendesk. Open an email to read the full text.</p></div><button type="button" class="acu-refresh" id="acuRefresh">Refresh</button></div><p id="acuHistoryMessage" class="acu-small"></p><div id="acuHistory" class="acu-history"></div></div>
+ </div>
+</section>
 <div id="actionsRootCause" class="actions-page" hidden>
  <div class="rca-page">
   <div class="rca-heading"><div><span class="hub-overline">COMPLAINT WORKSPACE / QUALITY &amp; LEARNING</span><h2>Root Cause Analysis</h2><p>Understand what caused the complaint and how we can prevent it happening again.</p></div><span class="rca-tag" id="rcaStatusTag">Loading…</span></div>
@@ -3575,6 +3621,7 @@ function hubUpdateRail(page){
  var rail=$('#workspaceRail'),shown=true,initialGate=PREFILL.statusName==='Assigned';
  rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
  if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=initialGate?'Initial call required':(PREFILL.statusName||'Complaints Hub');}
+ $('#railCustomerUpdates').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
  var suspenseCount=Number(PREFILL.suspensePayments?.matchCount||0);
  var suspenseAvailable=Number.isFinite(suspenseCount)&&suspenseCount>0;
  $('#railSuspensePayments').hidden=!suspenseAvailable;
@@ -3605,6 +3652,7 @@ function gotoActionsPage(page){
   if(page==='review'&&!PREFILL.fosApplicable)return;
   if(page==='solicitor'&&!solarisCanAccess())return;
   if(page==='suspense'&&!(Number(PREFILL.suspensePayments?.matchCount||0)>0))return;
+  if(page==='updates'&&String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues')return;
   ACTION_PAGE=page;
   hubUpdateRail(page);
   if(page==='home'||page==='suspense')overviewRender();
@@ -3627,6 +3675,9 @@ function gotoActionsPage(page){
   $('#actionsLetters').classList.toggle('active',page==='letters');
   $('#actionsRootCause').hidden=page!=='rootcause';
   $('#actionsRootCause').classList.toggle('active',page==='rootcause');
+  $('#actionsUpdates').hidden=page!=='updates';
+  $('#actionsUpdates').classList.toggle('active',page==='updates');
+  if(page==='updates')acuLoad();
   if(page==='rootcause')rcaRender();
   if(page==='letters')lettersRefresh();
   if(page==='post' && POST_DATA){prRender();solarisRefresh();prAutoReconcile();$('#deConsole').hidden=!['Post-Resolution Tasks','Partner Funds Outstanding'].includes(PREFILL.statusName);if(!$('#deConsole').hidden)deFetch();}else{$('#deConsole').hidden=true;}
@@ -3634,7 +3685,7 @@ function gotoActionsPage(page){
   $('#reviewShell').classList.toggle('active',page==='review');
   $('#reviewViewSwitch').hidden=true;
   $('#actionsNav').hidden=true;
-  $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','suspense':'/ Suspense Payments','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position','rootcause':'/ Root Cause Analysis'}[page]||'';
+  $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','suspense':'/ Suspense Payments','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position','rootcause':'/ Root Cause Analysis','updates':'/ Automated Customer Updates'}[page]||'';
   $('#footer').hidden=page!=='closure';
   $('#manageBtn').style.display=page==='closure'?'':'none';
   $('#closedBanner').style.display=(page==='closure'&&PREFILL.alreadyClosed&&$('#unlockBtn').dataset.unlocked!=='1')?'block':'none';
@@ -4041,6 +4092,24 @@ function initComplaintSwitcher(){
  $('#switchComplaintForm').addEventListener('submit',function(e){e.preventDefault();if(timer)clearTimeout(timer);search();});
 }
 
+
+// Automated Customer Updates: all reads/writes stay behind the signed complaint token.
+let ACU_DATA=null,ACU_BUSY=false;
+function acuFormatDate(value){return value?formatDisplayDate(value):'Not recorded';}
+function acuRender(){
+ const d=ACU_DATA;if(!d)return;
+ $('#acuStatus').textContent=d.label||'Not configured';$('#acuState').textContent=d.label||'Not configured';
+ $('#acuCount').textContent=String(d.sentCount??0);$('#acuLast').textContent=acuFormatDate(d.lastSentDate);
+ const mode=d.mode||'inactive';const radio=document.querySelector('input[name="acuMode"][value="'+mode+'"]');if(radio)radio.checked=true;
+ $('#acuPauseDate').value=d.pausedUntil||'';$('#acuPauseRow').hidden=mode!=='pause';
+ const history=$('#acuHistory');history.replaceChildren();const records=d.history||[];
+ $('#acuHistoryMessage').textContent=records.length?`Showing ${records.length} most recent archived update${records.length===1?'':'s'}.`:(d.historyError||'No archived customer updates found for this complaint.');
+ for(const record of records){const details=document.createElement('details');details.className='acu-entry';const summary=document.createElement('summary');const info=document.createElement('span');const title=document.createElement('strong');title.textContent='Automated update '+(record.email_number||'');const sub=document.createElement('small');sub.textContent=(record.sent_at?new Date(record.sent_at).toLocaleString('en-GB',{timeZone:'Europe/London',dateStyle:'medium',timeStyle:'short'}):'Date not available')+' · Sent via Zendesk';info.append(title,sub);const arrow=document.createElement('span');arrow.textContent='⌄';summary.append(info,arrow);const body=document.createElement('div');body.className='acu-message-body';body.textContent=record.email_body||'Email text not recorded';details.append(summary,body);history.appendChild(details);}
+}
+async function acuCall(action,extra){const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action,...extra})});const data=await res.json();if(!res.ok||!data.ok)throw Error(data.errors?.[0]||'Request failed');return data;}
+async function acuLoad(){if(ACU_BUSY)return;$('#acuHistoryMessage').textContent='Loading automated updates…';try{const data=await acuCall('customer_updates_get');ACU_DATA=data.updates;acuRender();$('#acuMessage').textContent='';}catch(e){$('#acuHistoryMessage').textContent='Unable to load updates: '+e.message;}}
+function acuInit(){document.querySelectorAll('input[name="acuMode"]').forEach(el=>el.addEventListener('change',()=>{$('#acuPauseRow').hidden=document.querySelector('input[name="acuMode"]:checked')?.value!=='pause';}));$('#acuRefresh').addEventListener('click',acuLoad);$('#acuSave').addEventListener('click',async function(){if(ACU_BUSY)return;const mode=document.querySelector('input[name="acuMode"]:checked')?.value||'inactive';const date=$('#acuPauseDate').value;const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());if(mode==='pause'&&(!date||date<=today)){$('#acuMessage').textContent='Choose a future date to resume updates.';return;}if(!confirm('Save '+(mode==='pause'?'a temporary pause':mode==='active'?'Active':'Inactive')+' for automated customer updates?'))return;ACU_BUSY=true;this.disabled=true;$('#acuMessage').textContent='Saving…';try{const result=await acuCall('customer_updates_manage',{mode,pausedUntil:mode==='pause'?date:null});ACU_DATA={...ACU_DATA,...result.updates,history:ACU_DATA?.history||[]};acuRender();$('#acuMessage').textContent='Settings saved successfully.';showActionsSaveToast('Automated customer updates settings saved.');}catch(e){$('#acuMessage').textContent='Could not save settings: '+e.message;}finally{ACU_BUSY=false;this.disabled=false;}});}
+
 function boot(){
   var token=getToken();
   if(!token){$('#loading').textContent='This link is missing its access token. Please regenerate it from the complaint.';return;}
@@ -4056,7 +4125,7 @@ function boot(){
       initRejCalc();initInspCalc();initCostEditors();
       applyPrefill();restoreRejectionBreakdowns();restoreCostBreakdowns();restoreInspectionBreakdowns();syncRej();syncFos();recompute();initRunningCosts();updateCostRequirements();renderFosRequiredActions();initRunningOnlySave();initSubmit();initManagementActions();initClosedLock();initReview();
       // Outside FOS Decision Review, keep the existing default-to-FOS behaviour.
-      initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();
+      initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();acuInit();
     })
     .catch(function(){$('#loading').textContent='Network error loading the complaint.';});
 }
