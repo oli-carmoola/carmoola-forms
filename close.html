@@ -209,6 +209,45 @@
   .management-option{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--tint-soft)}.management-option h4{margin:0 0 4px;font-size:14px}.management-option p{margin:0;font-size:12.5px;color:var(--muted)}
   .passcode-wrap{margin-top:12px}.passcode-wrap label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}.passcode-wrap input{width:100%;font-family:inherit;font-size:15px;border:1.5px solid var(--line-strong);border-radius:10px;padding:10px 12px}
 
+
+  /* Financial Ombudsman dashboard */
+  .fosdash{display:grid;gap:17px;margin-bottom:18px}
+  .fosdash-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:6px 1px 4px;flex-wrap:wrap}
+  .fosdash-overline{color:var(--pink-dark);font-size:11px;font-weight:800;letter-spacing:.095em;text-transform:uppercase}
+  .fosdash-head h2{margin:5px 0 7px;font-size:31px;letter-spacing:-.035em;line-height:1.15}
+  .fosdash-head p{margin:0;color:var(--muted);font-size:13.5px;max-width:680px;line-height:1.6}
+  .fosdash-pill{border:1px solid #F3C5DC;background:#FFF1F8;border-radius:100px;padding:9px 14px;color:#A81161;font-size:12px;font-weight:800;white-space:nowrap}
+  .fosdash-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  .fosdash-stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px 18px;min-width:0;box-shadow:0 4px 17px rgba(56,30,52,.025)}
+  .fosdash-stat .k{font-size:11px;font-weight:750;color:var(--muted);letter-spacing:.02em;margin-bottom:10px}
+  .fosdash-stat .v{font-size:18px;font-weight:800;color:var(--ink);overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+  .fosdash-stat .sub{color:var(--muted);font-size:11px;margin-top:7px;line-height:1.4}
+  .fosdash-stat.urgent{border-color:#E9A6BB;background:#FFF8FB}.fosdash-stat.urgent .v{color:#B3135A}
+  .fosdash-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:21px 23px;box-shadow:0 5px 26px rgba(56,30,52,.035);min-width:0}
+  .fosdash-cardhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px;flex-wrap:wrap}
+  .fosdash-cardhead h3{font-size:17px;margin:0;letter-spacing:-.014em}.fosdash-cardhead p{margin:4px 0 0;font-size:12px;color:var(--muted)}
+  .fosdash-flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  .fosdash-step{border:1px solid var(--line);border-radius:11px;padding:14px 13px;background:#FBF9FC;position:relative;min-width:0}
+  .fosdash-step.done{background:#FFF4FA;border-color:#F4C8DF}.fosdash-step.current{box-shadow:0 0 0 2px #F6ADCF inset;background:#FFF6FB}
+  .fosdash-step .n{font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--pink-dark);margin-bottom:9px}
+  .fosdash-step .label{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:7px}
+  .fosdash-step .detail{font-size:11.5px;color:var(--muted);line-height:1.5;overflow-wrap:anywhere}
+  .fosdash-columns{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:15px;align-items:start}
+  .fosdash-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 16px}
+  .fosdash-field{min-width:0}.fosdash-field .k{color:var(--muted);font-size:11px;font-weight:700;margin-bottom:6px}.fosdash-field .v{font-size:13px;font-weight:750;color:var(--ink);overflow-wrap:anywhere;line-height:1.5}
+  .fosdash-field a,.fosdash-link{color:#AE1165;font-weight:800;text-decoration:none}.fosdash-field a:hover,.fosdash-link:hover{text-decoration:underline}
+  .fosdash-breakdown{display:grid;gap:0}.fosdash-costline{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+  .fosdash-costline:last-child{border-bottom:0}.fosdash-costline strong{font-variant-numeric:tabular-nums}.fosdash-costline span{color:var(--muted)}
+  .fosdash-total{margin-top:12px;border-top:1.5px solid var(--line);padding-top:14px;display:flex;justify-content:space-between;gap:12px;font-weight:800;font-size:14px}
+  .fosdash-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .fosdash-action{border:1px solid #E7D4E0;background:#fff;color:#99195C;border-radius:9px;padding:10px 13px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit}
+  .fosdash-action:hover{border-color:#EB88BA;background:#FFF4FA}
+  .fosdash-muted{font-size:12px;color:var(--muted);line-height:1.6}
+  .fosdash-heading{padding-top:12px}.fosdash-heading h3{font-size:18px;margin:0 0 5px}.fosdash-heading p{color:var(--muted);margin:0;font-size:12.5px}
+  @media(max-width:1100px){.fosdash-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.fosdash-columns{grid-template-columns:1fr}}
+  @media(max-width:660px){.fosdash-stats,.fosdash-flow,.fosdash-fields{grid-template-columns:1fr 1fr}.fosdash-card{padding:17px}.fosdash-head h2{font-size:25px}}
+  @media(max-width:410px){.fosdash-flow,.fosdash-stats{grid-template-columns:1fr}}
+
   /* FOS Decision Review workspace */
   .view-switch{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 18px}
   .view-switch[hidden]{display:none!important}
@@ -843,17 +882,17 @@ textarea.letters-field{min-height:85px;resize:vertical}
   <div class="rail-brand"><div class="rail-logo">carmoola</div><span class="rail-caption">COMPLAINTS HUB</span></div>
   <div class="rail-case"><span>WORKING ON</span><strong id="railCaseRef">Complaint</strong><small id="railCustomer">Customer</small><button type="button" class="rail-switch" id="railSwitchComplaint"><span aria-hidden="true">⇄</span> Switch complaint</button></div>
   <nav class="rail-links" aria-label="Complaint sections">
-    <button type="button" class="rail-link rail-initial-link" data-rail="initial" id="railInitialCall"><span class="rail-icon">☎</span><span>Initial customer call</span></button>
+    <button type="button" class="rail-link rail-initial-link" data-rail="initial" id="railInitialCall"><span class="rail-icon">☎</span><span>Initial Customer Call</span></button>
     <button type="button" class="rail-link" data-rail="home"><span class="rail-icon">⌂</span><span>Overview</span></button>
     <div class="rail-group">WORKSPACES</div>
-    <button type="button" class="rail-link" data-rail="running"><span class="rail-icon">▤</span><span>Running costs</span></button>
-    <button type="button" class="rail-link" data-rail="rejection"><span class="rail-icon">◇</span><span>Vehicle rejection</span></button>
+    <button type="button" class="rail-link" data-rail="running"><span class="rail-icon">▤</span><span>Running Costs</span></button>
+    <button type="button" class="rail-link" data-rail="rejection"><span class="rail-icon">◇</span><span>Vehicle Rejection</span></button>
     <button type="button" class="rail-link" data-rail="post"><span class="rail-icon">▣</span><span>Post-Resolution Hub</span></button>
     <button type="button" class="rail-link" data-rail="letters"><span class="rail-icon">✉</span><span>Letters &amp; Responses</span></button>
-    <button type="button" class="rail-link" data-rail="closure"><span class="rail-icon">✓</span><span>Complaint closure</span></button>
-    <button type="button" class="rail-link" data-rail="review"><span class="rail-icon">▤</span><span>FOS decision review</span></button>
-    <button type="button" class="rail-link" data-rail="dealer"><span class="rail-icon">♧</span><span>Dealership position</span></button>
-    <button type="button" class="rail-link" data-rail="solicitor"><span class="rail-icon">⚖</span><span>Solicitor escalation</span></button>
+    <button type="button" class="rail-link" data-rail="closure"><span class="rail-icon">✓</span><span>Complaint Closure</span></button>
+    <button type="button" class="rail-link" data-rail="review"><span class="rail-icon">▤</span><span>Financial Ombudsman</span></button>
+    <button type="button" class="rail-link" data-rail="dealer"><span class="rail-icon">♧</span><span>Dealership Position</span></button>
+    <button type="button" class="rail-link" data-rail="solicitor"><span class="rail-icon">⚖</span><span>Solicitor Escalation</span></button>
   </nav>
   <div class="rail-foot"><span class="rail-pulse"></span><span id="railStatus">Complaints Hub</span></div>
 </aside>
@@ -1182,7 +1221,23 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <button type="button" class="switchbtn" id="reviewViewToggle">Open Financial Ombudsman</button>
   </div>
 
-  <section class="review-shell" id="reviewShell">
+    <section class="review-shell" id="reviewShell">
+    <div class="fosdash" id="fosDashboard">
+      <div class="fosdash-head"><div><div class="fosdash-overline">Complaints Hub · FOS Case Management</div><h2>Financial Ombudsman</h2><p>A single view of the referral, deadlines, decisions, financial exposure and correspondence. Review the original decision material and record the next step below.</p></div><span class="fosdash-pill" id="fosDashStatus">FOS Case</span></div>
+      <div class="fosdash-stats">
+        <div class="fosdash-stat"><div class="k">FOS Reference</div><div class="v" id="fosDashReference">—</div><div class="sub" id="fosDashEscalated">Referral date not recorded</div></div>
+        <div class="fosdash-stat" id="fosDashDeadlineCard"><div class="k">Response Deadline</div><div class="v" id="fosDashDeadline">Not recorded</div><div class="sub" id="fosDashDeadlineHint">Provided by FOS</div></div>
+        <div class="fosdash-stat"><div class="k">Overall Outcome</div><div class="v" id="fosDashOutcome">Awaiting decision</div><div class="sub" id="fosDashClosed">Not closed</div></div>
+        <div class="fosdash-stat"><div class="k">Total FOS Cost</div><div class="v" id="fosDashTotal">—</div><div class="sub" id="fosDashFee">Case fee shown separately</div></div>
+      </div>
+      <div class="fosdash-card"><div class="fosdash-cardhead"><div><h3>Case Progress</h3><p>Stages and dates recorded against this complaint</p></div></div><div class="fosdash-flow" id="fosDashFlow"></div></div>
+      <div class="fosdash-columns">
+        <div class="fosdash-card"><div class="fosdash-cardhead"><div><h3>Investigation &amp; Decisions</h3><p>People, outcomes and links to the correspondence</p></div></div><div class="fosdash-fields" id="fosDashFields"></div></div>
+        <div class="fosdash-card"><div class="fosdash-cardhead"><div><h3>Financial Breakdown</h3><p>Recorded amounts, not a forecast</p></div><button class="fosdash-action" type="button" id="fosDashOpenCosts">Review FOS Costs ↗</button></div><div class="fosdash-breakdown" id="fosDashCosts"></div><div class="fosdash-total"><span>Compensation Subtotal (Excluding Fee)</span><span id="fosDashCostTotal">—</span></div><p class="fosdash-muted" id="fosDashCostNote">Costs are maintained through the existing closure calculator.</p></div>
+      </div>
+      <div class="fosdash-card"><div class="fosdash-cardhead"><div><h3>Documents &amp; Response</h3><p>Case file, response status and FOS correspondence</p></div></div><div class="fosdash-fields" id="fosDashDocuments"></div></div>
+      <div class="fosdash-heading"><h3>Decision Review &amp; Next Steps</h3><p>Read the evidence and AI summary, record your decision and complete any required actions.</p></div>
+    </div>
     <div class="review-hero">
       <div class="review-eyebrow">Financial Ombudsman Service</div>
       <h2>Financial Ombudsman</h2>
@@ -1574,6 +1629,40 @@ function reviewSelectDoc(kind){
   var link=$('#rvReaderLink');if(doc.url){link.href=doc.url;link.hidden=false;}else{link.hidden=true;link.removeAttribute('href');}
 }
 
+
+function renderFosDashboard(){
+  var f=PREFILL&&PREFILL.fosDashboard||{},r=PREFILL&&PREFILL.fosReview||{};
+  var n=function(v){return v===null||v===undefined||String(v).trim()===''?'Not recorded':String(v);};
+  var d=function(v){return v?formatDisplayDate(v):'Not recorded';};
+  var money=function(v){return v===null||v===undefined||v===''?'Not recorded':gbp.format(Number(v)||0);};
+  var set=function(id,val){var e=document.getElementById(id);if(e)e.textContent=val;};
+  var yes=function(v){return /^(yes|y|sent|true)$/i.test(String(v||'').trim());};
+  var safeLink=function(url){return /^https:\/\//i.test(String(url||''));};
+  var field=function(host,label,value,url){var div=document.createElement('div');div.className='fosdash-field';var k=document.createElement('div');k.className='k';k.textContent=label;var v=document.createElement('div');v.className='v';if(url&&safeLink(url)){var a=document.createElement('a');a.textContent=value||'Open ticket ↗';a.href=url;a.target='_blank';a.rel='noopener noreferrer';v.appendChild(a);}else v.textContent=n(value);div.append(k,v);host.appendChild(div);};
+  set('fosDashReference',n(f.reference));set('fosDashEscalated',f.escalationDate?'Referred '+d(f.escalationDate):'Referral date not recorded');
+  set('fosDashDeadline',d(f.deadline));set('fosDashOutcome',n(f.overallOutcome||'Awaiting decision'));set('fosDashClosed',f.closedDate?'Closed '+d(f.closedDate):'Not closed');
+  set('fosDashTotal',money(f.totalCost));set('fosDashFee',f.fee===null?'Case fee not recorded':'Case fee '+money(f.fee)+' · shown separately');
+  var deadlineCard=document.getElementById('fosDashDeadlineCard');deadlineCard.classList.remove('urgent');
+  if(f.deadline){var end=new Date(String(f.deadline).slice(0,10)+'T12:00:00Z');var now=new Date();var days=Math.ceil((end-now)/86400000);if(!isNaN(days)){set('fosDashDeadlineHint',days<0?Math.abs(days)+' days overdue':days===0?'Due today':days+' days remaining');if(days<=3&&!f.closedDate)deadlineCard.classList.add('urgent');}}
+  set('fosDashStatus',PREFILL.statusName||'FOS Case');
+  var stages=[['Referral',f.escalationDate,'Referred'],['Carmoola Response',f.responseSentDate,yes(f.responseSent)?'Sent':'Pending'],['Investigator',f.investigatorDecisionDate,f.investigatorOutcome||'Awaiting decision'],['Ombudsman',f.ombudsmanDecisionDate,f.ombudsmanOutcome||'Not reached']];
+  var flow=document.getElementById('fosDashFlow');flow.replaceChildren();
+  stages.forEach(function(s,i){var done=!!(s[1]||(i===1&&yes(f.responseSent))||(i===2&&f.investigatorOutcome)||(i===3&&f.ombudsmanOutcome));var card=document.createElement('div');card.className='fosdash-step'+(done?' done':'')+(!done&&i===2&&r.latestStage==='investigator'?' current':'')+(!done&&i===3&&r.latestStage==='ombudsman'?' current':'');var index=document.createElement('div');index.className='n';index.textContent=(i+1)+' / 4 '+(done?'· RECORDED':'');var name=document.createElement('div');name.className='label';name.textContent=s[0];var detail=document.createElement('div');detail.className='detail';detail.textContent=(s[1]?d(s[1])+' · ':'')+s[2];card.append(index,name,detail);flow.appendChild(card);});
+  var fields=document.getElementById('fosDashFields');fields.replaceChildren();
+  field(fields,'Investigator',f.investigatorName);field(fields,'Investigator Outcome',f.investigatorOutcome);field(fields,'Investigator Decision Date',d(f.investigatorDecisionDate));field(fields,'Investigator Correspondence','Open Zendesk Ticket ↗',f.investigatorZendesk);
+  field(fields,'Ombudsman',f.ombudsmanName);field(fields,'Ombudsman Outcome',f.ombudsmanOutcome);field(fields,'Ombudsman Decision Date',d(f.ombudsmanDecisionDate));field(fields,'Ombudsman Correspondence','Open Zendesk Ticket ↗',f.ombudsmanZendesk);
+  var costs=document.getElementById('fosDashCosts');costs.replaceChildren();
+  var entries=[['Direct Compensation',f.direct],['Distress & Inconvenience',f.distress],['Repair Costs',f.repair],['Rejection Loss',f.rejectionLoss],['Inspection, Storage & Recovery',f.inspection],['Courtesy Car & Travel',f.courtesy],['Other Costs',f.other],['FOS Case Fee',f.fee]];
+  var sum=0,has=false;entries.forEach(function(item){if(item[1]===null||item[1]===undefined||item[1]==='')return;has=true;var v=Number(item[1]);if(Number.isFinite(v)&&item[0]!=='FOS Case Fee')sum+=v;var line=document.createElement('div');line.className='fosdash-costline';var label=document.createElement('span');label.textContent=item[0];var value=document.createElement('strong');value.textContent=money(item[1]);line.append(label,value);costs.appendChild(line);});
+  if(!has){var p=document.createElement('p');p.className='fosdash-muted';p.textContent='No FOS costs recorded yet.';costs.appendChild(p);}
+  set('fosDashCostTotal',has?gbp.format(sum):'Not recorded');
+  if(f.totalCost!==null&&f.totalCost!==undefined){set('fosDashCostNote','Jira FOS Total Cost: '+money(f.totalCost)+'. This is the recorded compensation total; the case fee is shown separately.');}
+  var detailMap=f.explanations||{};var detailRows=[['Direct Compensation',detailMap.direct],['Distress & Inconvenience',detailMap.distress],['Repair Costs',detailMap.repair],['Inspection / Storage / Recovery',detailMap.inspection],['Courtesy Car & Travel',detailMap.courtesy],['Other Costs',detailMap.other]];detailRows.forEach(function(item){if(!String(item[1]||'').trim())return;var details=document.createElement('details');details.style.cssText='margin-top:8px;border:1px solid var(--line);border-radius:9px;padding:9px 11px';var summary=document.createElement('summary');summary.textContent=item[0]+' · View breakdown';summary.style.cssText='cursor:pointer;font-weight:750;font-size:11.5px;color:#9B1A61';var txt=document.createElement('div');txt.style.cssText='white-space:pre-wrap;overflow-wrap:anywhere;font-size:11.5px;line-height:1.6;color:var(--muted);margin-top:8px';txt.textContent=String(item[1]);details.append(summary,txt);costs.appendChild(details);});
+  var documents=document.getElementById('fosDashDocuments');documents.replaceChildren();
+  field(documents,'FOS Case File',f.caseFileId?'Document ID: '+f.caseFileId:'Not recorded');field(documents,'Response Sent',yes(f.responseSent)?'Yes':'Not recorded');field(documents,'Response Sent Date',d(f.responseSentDate));field(documents,'FOS Fee Invoiced From Partner',f.feeInvoicedFromPartner);
+  field(documents,'FOS Reference',f.reference);field(documents,'Date FOS Closed',d(f.closedDate));
+}
+
 function renderReview(){
   var r=PREFILL.fosReview;if(!fosReviewIsAvailable())return;
   var resp=r.documents.response||{},inv=r.documents.investigator||{},omb=r.documents.ombudsman||{};
@@ -1638,7 +1727,9 @@ function submitReviewAction(action){
     .catch(function(e){er.textContent=e.message||'Could not complete the review action.';er.classList.add('show');go.disabled=false;go.textContent=action==='escalate_ombudsman'?'Yes, Escalate':(action==='accept_ombudsman'?'Yes, Continue':'Yes, Accept View');});
 }
 function initReview(){
-  if(!fosReviewIsAvailable()){ $('#reviewViewSwitch').hidden=true; $('#reviewShell').innerHTML='<div class="actions-subhero"><h2>Financial Ombudsman</h2><p>This section is available where the Financial Ombudsman field is Yes.</p></div>'; return; }
+  if(!fosReviewIsAvailable()){ $('#reviewViewSwitch').hidden=true; renderFosDashboard(); $('#reviewShell .review-hero').hidden=true; $('#reviewShell .review-grid').hidden=true; var heading=$('#fosDashboard .fosdash-heading');if(heading)heading.hidden=true;return; }
+  renderFosDashboard();
+  $('#fosDashOpenCosts').addEventListener('click',function(){gotoActionsPage('closure');var tab=$('#tab-fos');if(tab&&!tab.disabled)tab.click();});
   renderReview();
   document.querySelectorAll('[data-review-doc]').forEach(function(btn){
     btn.addEventListener('click',function(){
