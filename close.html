@@ -3731,7 +3731,7 @@ function showActionsSaveToast(message){
   actionsToastTimer=setTimeout(function(){toast.classList.remove('show');},5000);
 }
 function overviewRender(){
- var p=PREFILL||{},o=p.overview||{},post=POST_DATA||p.postResolution||{},vd=p.vehicleDetails||{};
+ var p=PREFILL||{},o=p.overview||{},post=POST_DATA||p.postResolution||{},vd=p.vehicleDetails||{},fos=p.fosDashboard||{};
  var put=function(id,v,fallback){var el=document.getElementById(id);if(el)el.textContent=(v===undefined||v===null||String(v).trim()==='')?(fallback||'Not recorded'):String(v);};
  var plain=function(v){return String(v||'').trim();};
  var isYes=function(v){return /^(yes|y|true|sent|complete|completed)$/i.test(plain(v));};
@@ -3781,11 +3781,33 @@ function overviewRender(){
   steps.push({label:'8-week holding',date:o.eightWeekHoldingSentDate,done:true,fallback:'Sent · date not recorded'});
  }
  steps.push({label:'Final response',date:o.finalResponseSentDate,done:isYes(o.finalResponseSent)||!!plain(o.finalResponseSentDate),fallback:'Sent · date not recorded'});
- if(plain(o.fosEscalationDate)){
-  steps.push({label:'FOS referral',date:o.fosEscalationDate,done:true});
- }
+ if(plain(o.fosEscalationDate))steps.push({label:'FOS referral',date:o.fosEscalationDate,done:true});
+ if(plain(fos.responseSentDate))steps.push({label:'FOS response sent',date:fos.responseSentDate,done:true});
+ if(plain(fos.investigatorDecisionDate))steps.push({label:'FOS Investigator decision',date:fos.investigatorDecisionDate,done:true});
+ if(plain(fos.ombudsmanDecisionDate))steps.push({label:'Ombudsman decision',date:fos.ombudsmanDecisionDate,done:true});
+ if(plain(fos.closedDate))steps.push({label:'FOS case closed',date:fos.closedDate,done:true});
  if(plain(o.resolvedDate))steps.push({label:'Resolved',date:o.resolvedDate,done:true});
  steps.push({label:'Closed',date:o.firstClosedDate,done:!!plain(o.firstClosedDate),fallback:p.statusName==='Complaint Closed'?'Date not recorded':''});
+ // Order all actual dated events by date, never by their workflow category.
+ // Retain the original order for events on the same date. Undated completed
+ // events and pending milestones are placed after the known dated history.
+ function milestoneTime(value){
+  var raw=plain(value),m=/^(\d{4})-(\d{2})-(\d{2})(?:T.*)?$/.exec(raw);
+  if(!m)return null;
+  var year=Number(m[1]),month=Number(m[2]),day=Number(m[3]);
+  var time=Date.UTC(year,month-1,day);
+  var valid=new Date(time);
+  if(valid.getUTCFullYear()!==year||valid.getUTCMonth()!==month-1||valid.getUTCDate()!==day)return null;
+  return time;
+ }
+ steps=steps.map(function(step,index){return Object.assign({},step,{_order:index,_dateSort:milestoneTime(step.date)});});
+ steps.sort(function(a,b){
+  var aRank=a._dateSort!==null?0:(a.done?1:2);
+  var bRank=b._dateSort!==null?0:(b.done?1:2);
+  if(aRank!==bRank)return aRank-bRank;
+  if(aRank===0&&a._dateSort!==b._dateSort)return a._dateSort-b._dateSort;
+  return a._order-b._order;
+ });
  var timeline=$('#overviewTimeline');timeline.replaceChildren();
  steps.forEach(function(step){
   var el=document.createElement('div');el.className='overview-timeline-step '+(step.done?'is-complete':'is-pending');el.setAttribute('role','listitem');
