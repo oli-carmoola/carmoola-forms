@@ -719,6 +719,18 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 .overview-timeline-step.is-pending strong{color:#8a7d8c}
 .overview-details-panel{margin-top:15px}
 .overview-suspense-panel[hidden]{display:none!important}
+.rail-link[hidden],#actionsSuspense[hidden]{display:none!important}
+.overview-suspense-panel{margin-top:20px}
+.suspense-workspace{max-width:1150px;margin:0 auto;padding:5px 0 35px}
+.suspense-workspace-head{margin-bottom:22px}
+.suspense-workspace-head .hub-overline{margin-bottom:8px}
+.suspense-workspace-head h2{font-size:31px;letter-spacing:-.04em;margin:0 0 8px;color:#2c1d2e}
+.suspense-workspace-head p{color:#807484;font-size:13px;margin:0;line-height:1.6}
+.suspense-workspace .overview-suspense-panel{margin-top:0;padding:25px}
+.suspense-workspace .overview-suspense-stats{margin-top:14px;margin-bottom:20px}
+.suspense-workspace .overview-suspense-stat{padding:19px}
+.suspense-workspace .overview-suspense-stat strong{font-size:22px}
+.suspense-workspace .overview-suspense-table td{padding-top:15px;padding-bottom:15px}
 .overview-suspense-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:6px 0 15px}
 .overview-suspense-stat{border:1px solid #eee3ed;background:#fcf9fc;padding:12px 14px;border-radius:12px;min-width:0}
 .overview-suspense-stat span{display:block;font-size:11px;color:#817383;margin-bottom:6px}
@@ -840,6 +852,31 @@ textarea.letters-field{min-height:85px;resize:vertical}
 
 
 #overviewAttentionSection[hidden]{display:none!important}
+
+/* Root Cause Analysis workspace */
+.rca-page{max-width:1100px;margin:0 auto 42px;padding:5px 0 22px}
+.rca-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:22px}
+.rca-heading h2{font-size:29px;letter-spacing:-.8px;margin:3px 0 8px;color:#321c30}
+.rca-heading p{font-size:14px;color:#786c78;margin:0;line-height:1.55}
+.rca-tag{display:inline-block;background:#f8e9f2;color:#8b2567;border-radius:99px;padding:8px 12px;font-size:12px;font-weight:750;white-space:nowrap}
+.rca-card{background:#fff;border:1px solid #e9e0e8;border-radius:17px;padding:24px;margin-bottom:18px;box-shadow:0 5px 25px #35163308}
+.rca-card h3{margin:0 0 7px;font-size:18px;color:#352339}
+.rca-card>p{margin:0 0 20px;color:#877884;font-size:13px}
+.rca-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.rca-field{display:flex;flex-direction:column;gap:8px;color:#483845;font-weight:700;font-size:13px}
+.rca-field select,.rca-field textarea{width:100%;font-family:inherit;font-weight:400;font-size:14px;color:#352339;background:#fff;border:1px solid #ddd0dc;border-radius:10px;padding:12px;min-height:45px}
+.rca-field textarea{min-height:145px;resize:vertical;line-height:1.6}
+.rca-field-wide{grid-column:1/-1}
+.rca-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px}
+.rca-btn{background:#e9007a;border:0;border-radius:10px;color:#fff;padding:12px 19px;font-size:13px;font-weight:800;cursor:pointer}
+.rca-btn:disabled{opacity:.5;cursor:wait}
+.rca-btn-alt{background:#fff;color:#722351;border:1px solid #e3cadb}
+.rca-message{color:#a02550;font-size:13px;min-height:20px;margin:12px 0}
+.rca-summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.rca-summary-item{padding:14px;border-radius:10px;background:#faf7fa}
+.rca-summary-item small{display:block;color:#8b7786;font-weight:650;margin-bottom:6px}
+.rca-summary-item strong{font-weight:600;color:#38293b;line-height:1.5;overflow-wrap:anywhere}
+@media(max-width:710px){.rca-fields,.rca-summary-grid{grid-template-columns:1fr}.rca-card{padding:17px}.rca-heading{flex-direction:column}}
 </style>
 </head>
 <body>
@@ -914,9 +951,11 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <button type="button" class="rail-link" data-rail="home"><span class="rail-icon">⌂</span><span>Overview</span></button>
     <div class="rail-group">WORKSPACES</div>
     <button type="button" class="rail-link" data-rail="running"><span class="rail-icon">▤</span><span>Running Costs</span></button>
+    <button type="button" class="rail-link" data-rail="suspense" id="railSuspensePayments" hidden><span class="rail-icon">⇄</span><span>Suspense Payments</span></button>
     <button type="button" class="rail-link" data-rail="rejection"><span class="rail-icon">◇</span><span>Vehicle Rejection</span></button>
     <button type="button" class="rail-link" data-rail="post"><span class="rail-icon">▣</span><span>Post-Resolution Hub</span></button>
     <button type="button" class="rail-link" data-rail="letters"><span class="rail-icon">✉</span><span>Letters &amp; Responses</span></button>
+    <button type="button" class="rail-link" data-rail="rootcause"><span class="rail-icon">◎</span><span>Root Cause Analysis</span></button>
     <button type="button" class="rail-link" data-rail="closure"><span class="rail-icon">✓</span><span>Complaint Closure</span></button>
     <button type="button" class="rail-link" data-rail="review"><span class="rail-icon">▤</span><span>Financial Ombudsman</span></button>
     <button type="button" class="rail-link" data-rail="dealer"><span class="rail-icon">♧</span><span>Dealership Position</span></button>
@@ -939,6 +978,16 @@ textarea.letters-field{min-height:85px;resize:vertical}
 </div>
 <button type="button" id="railMobileToggle" class="rail-mobile-toggle" aria-label="Open workspace menu" hidden>☰ &nbsp; Workspaces</button>
 <div class="solaris-overlay" id="solarisModal" hidden><div class="solaris-dialog" role="dialog" aria-modal="true" aria-labelledby="solarisTitle"><div class="solaris-dialog-header"><div><span class="solaris-tag">SOLICITOR ESCALATION · SOLARIS LAW</span><h3 id="solarisTitle">Prepare solicitor escalation</h3><p>Review the debt and confirm the evidence is ready before submitting.</p></div><button type="button" class="solaris-x" id="solarisClose" aria-label="Close">×</button></div><div class="solaris-dialog-body"><div class="solaris-grid"><label class="solaris-field">Debtor · dealership<input type="text" id="solarisDebtor" readonly></label><label class="solaris-field">Amount to recover<div class="solaris-money"><span>£</span><input type="number" min="0.01" max="100000000" step="0.01" id="solarisAmount" required></div><small class="solaris-helper">Changing this amount will not alter the recovery ledger.</small></label></div><label class="solaris-field">Debt amount breakdown <span class="solaris-helper">Required</span><textarea id="solarisBreakdown" maxlength="3500" placeholder="Calculation from the saved Post-Resolution recovery details" required></textarea></label><label class="solaris-field">Notes for Solaris Law <span class="solaris-helper">Required</span><textarea id="solarisNotes" maxlength="5000" placeholder="What happened, contact so far and why legal recovery is needed" required></textarea></label><div class="solaris-checks"><strong style="font-size:12px;color:#4b3048">Confirm documents have been added to the complaint folder</strong><label><input type="checkbox" id="solarisHpa"> Hire Purchase Agreement added</label><label><input type="checkbox" id="solarisInvoice"> Vehicle invoice added</label><label><input type="checkbox" id="solarisOther"> Other relevant evidence and documents reviewed and added</label></div><label class="solaris-checks"><span style="display:flex;gap:10px;align-items:flex-start"><input type="checkbox" id="solarisConfirm"> <span style="font-size:12px;line-height:1.5">I confirm this is a dealership recovery, the details are accurate and I authorise submission to Solaris Law. This action can only be submitted once.</span></span></label><p class="solaris-error" id="solarisError" role="alert"></p></div><div class="solaris-dialog-footer"><button class="hub-btn hub-btn-quiet" type="button" id="solarisCancel">Cancel</button><button type="button" class="solaris-btn" id="solarisSubmit" disabled>Submit to Solaris Law</button></div></div></div>
+<div id="actionsRootCause" class="actions-page" hidden>
+ <div class="rca-page">
+  <div class="rca-heading"><div><span class="hub-overline">COMPLAINT WORKSPACE / QUALITY &amp; LEARNING</span><h2>Root Cause Analysis</h2><p>Understand what caused the complaint and how we can prevent it happening again.</p></div><span class="rca-tag" id="rcaStatusTag">Loading…</span></div>
+  <div id="rcaSummary" hidden><div class="rca-card"><h3>Recorded Analysis</h3><p id="rcaCompletedDate"></p><div id="rcaSummaryGrid" class="rca-summary-grid"></div></div><div class="rca-actions"><button type="button" class="rca-btn rca-btn-alt" id="rcaEdit">Edit Analysis</button></div></div>
+  <form id="rcaForm" hidden><div class="rca-card"><h3>Contributing Factors</h3><p>Select the most relevant cause in each category, or indicate that none apply.</p><div class="rca-fields" id="rcaCauseFields"></div></div>
+  <div class="rca-card"><h3>Assessment &amp; Prevention</h3><p>Capture customer impact, the risk of recurrence and which teams should learn from this complaint.</p><div class="rca-fields" id="rcaAssessmentFields"></div></div>
+  <div class="rca-card"><label class="rca-field rca-field-wide">Further Details<textarea id="rcaDetails" required minlength="10" maxlength="10000" placeholder="Explain the root cause, any improvements already made and what could prevent similar complaints."></textarea></label></div>
+  <p class="rca-message" id="rcaMessage" role="status"></p><div class="rca-actions"><button type="button" class="rca-btn rca-btn-alt" id="rcaCancel" hidden>Cancel</button><button class="rca-btn" type="submit" id="rcaSave">Save Analysis</button></div></form>
+ </div>
+</div>
 <div class="actions-nav" id="actionsNav" hidden><button type="button" class="actions-home-link" id="actionsHomeBtn">⌂ &nbsp;Complaint Home</button><span class="actions-current" id="actionsCurrent"></span></div>
 <div id="actionsSaveToast" class="actions-toast" role="status" aria-live="polite"><span class="actions-toast-icon">✓</span><span>Running costs updated successfully.</span></div>
 <div class="closure-recovery-overlay" id="closureRecoveryModal" hidden role="dialog" aria-modal="true" aria-label="Post-Resolution recovery">
@@ -1123,6 +1172,16 @@ textarea.letters-field{min-height:85px;resize:vertical}
  <div class="letters-modal" id="lettersPreviewModal" hidden role="dialog" aria-modal="true" aria-labelledby="lettersModalTitle"><div class="letters-modal-panel"><div class="letters-modal-head"><div><h3 id="lettersModalTitle">Letter preview</h3><p class="letters-muted">Preview only — use Google Docs to make changes.</p></div><div class="letters-row"><a id="lettersModalEdit" target="_blank" rel="noopener noreferrer" class="letters-btn">Edit in Google Docs ↗</a><button type="button" id="lettersModalClose" class="letters-modal-close" aria-label="Close preview">✕</button></div></div><iframe title="Google Docs letter preview" id="lettersModalFrame" class="letters-modal-frame" referrerpolicy="no-referrer"></iframe><div class="letters-modal-foot">If Google blocks the embedded preview, select Edit in Google Docs above to view the document.</div></div></div>
 </section>
 
+<section id="actionsSuspense" class="actions-page" aria-label="Suspense Payments" hidden>
+  <div class="suspense-workspace">
+    <div class="suspense-workspace-head">
+      <span class="hub-overline">COMPLAINTS HUB · MATCHED RECEIPTS</span>
+      <h2>Suspense Payments</h2>
+      <p>View the suspense receipts matched to this complaint. Financial allocation and reconciliation are managed separately in the Post-Resolution Hub.</p>
+    </div>
+    <div id="suspenseWorkspaceContent"></div>
+  </div>
+</section>
 <section id="actionsRunning" class="actions-page">
   <div class="costs-page-intro"><div><span class="costs-eyebrow">COST TRACKING</span><h2>Running Costs</h2><p>Keep an accurate record of expenses incurred throughout the complaint.</p></div><div class="costs-overview"><span>TOTAL RECORDED</span><strong id="runningHeroTotal">£0.00</strong></div></div>
   <div class="costs-ledger" id="runningCostsCard">
@@ -3437,10 +3496,54 @@ async function solarisSubmit(){
 }
 function solarisInit(){['solarisHpa','solarisInvoice','solarisOther','solarisConfirm'].forEach(function(id){$('#'+id).addEventListener('change',solarisUpdateSubmit);});$('#solarisAmount').addEventListener('input',solarisPopulateBreakdown);$('#solarisBreakdown').addEventListener('input',function(){this.dataset.autogenerated='false';});['solarisPostOpen','solarisStandaloneOpen'].forEach(function(id){$('#'+id).addEventListener('click',solarisOpen);});['solarisClose','solarisCancel'].forEach(function(id){$('#'+id).addEventListener('click',solarisClose);});$('#solarisSubmit').addEventListener('click',solarisSubmit);$('#solarisModal').addEventListener('click',function(ev){if(ev.target===this)solarisClose();});document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&!$('#solarisModal').hidden)solarisClose();});solarisRefresh();}
 
+
+const RCA_LABELS={peoplecauses:'People',processcauses:'Process',productcauses:'Product',policycauses:'Policy',thirdpartycauses:'Third Party',impact:'Customer Impact',likelihood:'Likelihood of Recurrence',prevention:'Prevention',feedbackloop:'Feedback Loop',details:'Further Details'};
+const RCA_CAUSES=['peoplecauses','processcauses','productcauses','policycauses','thirdpartycauses'];
+const RCA_ASSESS=['impact','likelihood','prevention','feedbackloop'];
+let RCA_EDITING=false;
+function rcaEscape(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function rcaRender(){
+ const r=PREFILL.rootCause||{},values=r.values||{},options=r.options||{};
+ const completed=!!r.completed;
+ $('#rcaStatusTag').textContent=(r.required?'Required · ':'Optional · ')+(completed?'Completed':'Not Completed');
+ $('#rcaSummary').hidden=!completed||RCA_EDITING;
+ $('#rcaForm').hidden=completed&&!RCA_EDITING;
+ $('#rcaCancel').hidden=!completed;
+ if(completed&&!RCA_EDITING){
+   $('#rcaCompletedDate').textContent=r.completedDate?'Completed '+r.completedDate:'Completed';
+   $('#rcaSummaryGrid').innerHTML=Object.keys(RCA_LABELS).map(k=>'<div class="rca-summary-item"><small>'+rcaEscape(RCA_LABELS[k])+'</small><strong>'+rcaEscape(values[k]||'Not recorded')+'</strong></div>').join('');
+   return;
+ }
+ const selectField=k=>'<label class="rca-field" for="rca_'+k+'">'+rcaEscape(RCA_LABELS[k])+'<select id="rca_'+k+'" data-rca="'+k+'" required><option value="">Select an option…</option>'+(options[k]||[]).map(opt=>'<option value="'+rcaEscape(opt)+'" '+(values[k]===opt?'selected':'')+'>'+rcaEscape(opt)+'</option>').join('')+'</select></label>';
+ $('#rcaCauseFields').innerHTML=RCA_CAUSES.map(selectField).join('');
+ $('#rcaAssessmentFields').innerHTML=RCA_ASSESS.map(selectField).join('');
+ $('#rcaDetails').value=values.details||'';
+ $('#rcaMessage').textContent='';
+}
+function rcaInit(){
+ $('#rcaEdit').addEventListener('click',()=>{RCA_EDITING=true;rcaRender();});
+ $('#rcaCancel').addEventListener('click',()=>{RCA_EDITING=false;rcaRender();});
+ $('#rcaForm').addEventListener('submit',async event=>{
+   event.preventDefault();const btn=$('#rcaSave');
+   const values={details:$('#rcaDetails').value.trim()};
+   for(const el of document.querySelectorAll('[data-rca]'))values[el.dataset.rca]=el.value;
+   btn.disabled=true;$('#rcaMessage').textContent='';
+   try{
+     const response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'root_cause_save',values})});
+     const data=await response.json();if(!response.ok||!data.ok)throw new Error((data.errors||[])[0]||'Could not save analysis.');
+     PREFILL.rootCause=data.rootCause;RCA_EDITING=false;rcaRender();showActionsSaveToast('Root Cause Analysis saved successfully.');
+   }catch(e){$('#rcaMessage').textContent=String(e.message||e);}
+   finally{btn.disabled=false;}
+ });
+}
+
 function hubUpdateRail(page){
  var rail=$('#workspaceRail'),shown=true,initialGate=PREFILL.statusName==='Assigned';
  rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
  if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=initialGate?'Initial call required':(PREFILL.statusName||'Complaints Hub');}
+ var suspenseCount=Number(PREFILL.suspensePayments?.matchCount||0);
+ var suspenseAvailable=Number.isFinite(suspenseCount)&&suspenseCount>0;
+ $('#railSuspensePayments').hidden=!suspenseAvailable;
  var initialLink=$('#railInitialCall');initialLink.hidden=!initialGate;
  rail.classList.toggle('rail-is-gated',initialGate);
  document.querySelectorAll('[data-rail]').forEach(function(b){
@@ -3467,9 +3570,11 @@ function gotoActionsPage(page){
   if(page==='post'&&!canOpenPostResolution(PREFILL.statusName))return;
   if(page==='review'&&!PREFILL.fosApplicable)return;
   if(page==='solicitor'&&!solarisCanAccess())return;
+  if(page==='suspense'&&!(Number(PREFILL.suspensePayments?.matchCount||0)>0))return;
   ACTION_PAGE=page;
   hubUpdateRail(page);
-  if(page==='home')overviewRender();
+  if(page==='home'||page==='suspense')overviewRender();
+  if(page==='suspense')suspenseRenderWorkspace();
   if(page==='solicitor')solarisRefresh();
   document.body.classList.toggle('actions-on-home',false);
   document.body.classList.toggle('actions-overview',page==='home');
@@ -3479,18 +3584,23 @@ function gotoActionsPage(page){
   $('#actionsInitial').classList.toggle('active',page==='initial');
   $('#actionsHome').classList.toggle('active',page==='home');
   $('#actionsRunning').classList.toggle('active',page==='running');
+  $('#actionsSuspense').hidden=page!=='suspense';
+  $('#actionsSuspense').classList.toggle('active',page==='suspense');
   $('#actionsPost').classList.toggle('active',page==='post');
   $('#actionsDealer').classList.toggle('active',page==='dealer');
   $('#actionsRejection').classList.toggle('active',page==='rejection');
   $('#actionsSolicitor').classList.toggle('active',page==='solicitor');
   $('#actionsLetters').classList.toggle('active',page==='letters');
+  $('#actionsRootCause').hidden=page!=='rootcause';
+  $('#actionsRootCause').classList.toggle('active',page==='rootcause');
+  if(page==='rootcause')rcaRender();
   if(page==='letters')lettersRefresh();
   if(page==='post' && POST_DATA){prRender();solarisRefresh();prAutoReconcile();$('#deConsole').hidden=!['Post-Resolution Tasks','Partner Funds Outstanding'].includes(PREFILL.statusName);if(!$('#deConsole').hidden)deFetch();}else{$('#deConsole').hidden=true;}
   $('#closureShell').style.display=page==='closure'?'':'none';
   $('#reviewShell').classList.toggle('active',page==='review');
   $('#reviewViewSwitch').hidden=true;
   $('#actionsNav').hidden=true;
-  $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position'}[page]||'';
+  $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','suspense':'/ Suspense Payments','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position','rootcause':'/ Root Cause Analysis'}[page]||'';
   $('#footer').hidden=page!=='closure';
   $('#manageBtn').style.display=page==='closure'?'':'none';
   $('#closedBanner').style.display=(page==='closure'&&PREFILL.alreadyClosed&&$('#unlockBtn').dataset.unlocked!=='1')?'block':'none';
@@ -3525,6 +3635,7 @@ function overviewRender(){
  });
  $('#overviewShortcuts').hidden=!linkHolder.children.length;
  var attention=[];
+ if(p.rootCause&&p.rootCause.required&&!p.rootCause.completed&&p.statusName!=='Complaint Closed')attention.push({name:'Root Cause Analysis',description:'Required before complaint closure',target:'rootcause'});
  var intro=p.initialCall||{};
  // The initial customer call is a one-time entry gate, not a retrospective action.
  var tasks=(post.tasks||[]).filter(function(t){return t.status==='outstanding';});
@@ -3598,7 +3709,21 @@ function overviewRender(){
  $('#overviewBottom').hidden=!hasRecovery&&!hasSolicitor;
 }
 
+function suspenseRenderWorkspace(){
+ var target=document.getElementById('suspenseWorkspaceContent');
+ var original=document.getElementById('overviewSuspenseSection');
+ if(!target||!original||original.hidden)return;
+ var clone=original.cloneNode(true);
+ clone.hidden=false;
+ // The overview retains its live data IDs. The copy is display-only.
+ clone.querySelectorAll('[id]').forEach(function(el){el.removeAttribute('id');});
+ clone.removeAttribute('id');
+ clone.removeAttribute('aria-labelledby');
+ target.replaceChildren(clone);
+}
+
 function initActionsHome(){
+ rcaInit();
   var p=PREFILL;
   var values={homeReference:p.issueKey,homeDealership:p.dealershipName,homeIntroducer:p.introducerName,homeAssignee:p.assigneeName,homeReceived:formatDisplayDate(p.receivedDate),homeStatus:p.statusName,homeFooterRef:p.issueKey,homeComplaintType:p.complaintType};
   Object.keys(values).forEach(function(id){document.getElementById(id).textContent=values[id]||'Not recorded';});
