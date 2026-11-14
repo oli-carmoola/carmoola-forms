@@ -3544,7 +3544,7 @@ function initComplaintSwitcher(){
    if(serial!==requestNo||overlay.hidden)return;
    results.replaceChildren();active=-1;lastButtons=[];
    var matches=data.complaints||[];
-   if(!matches.length){results.textContent='No matching complaints with accessible links found.';results.classList.add('switch-empty');return;}
+   if(!matches.length){results.textContent=data.message||'No matching complaints found.';results.classList.add('switch-empty');return;}
    matches.forEach(function(item){
     var button=document.createElement('button');button.type='button';button.className='switch-result';
     var label=document.createElement('span'),ref=document.createElement('strong'),customer=document.createElement('small'),assigned=document.createElement('span'),arrow=document.createElement('span');
