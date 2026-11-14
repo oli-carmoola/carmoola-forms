@@ -953,6 +953,11 @@ textarea.letters-field{min-height:85px;resize:vertical}
 @media(max-width:650px){.acu-history-gap-dots{left:-29px}}
 @media(max-width:650px){.acu-timeline{padding-left:31px}.acu-timeline:before{left:10px!important}.acu-timeline-dot{left:-31px;width:20px;height:20px}.acu-timeline-card-head{padding:15px}.acu-timeline-body{padding:16px}.acu-timeline-pill{font-size:10px}}
 @media(max-width:800px){.acu-stats,.acu-choice{grid-template-columns:1fr}.acu-header{flex-wrap:wrap}.acu-panel{padding:18px}.acu-header h2{font-size:26px}}
+
+/* Milestone timeline retains enough room for longer labels and scrolls on small screens. */
+.overview-timeline-step{min-width:126px}
+.overview-timeline-step strong{max-width:130px}
+.overview-timeline-step small{max-width:136px}
 </style>
 </head>
 <body>
@@ -3756,22 +3761,30 @@ function overviewRender(){
  $('#overviewAttentionSection').hidden = attention.length === 0;
  if(attention.length)attention.slice(0,4).forEach(function(item){var btn=document.createElement('button');btn.type='button';btn.className='overview-attention-item';var name=document.createElement('strong');name.textContent=item.name;var desc=document.createElement('span');desc.textContent=item.description;var arrow=document.createElement('i');arrow.textContent='↗';btn.append(name,desc,arrow);btn.addEventListener('click',function(){gotoActionsPage(item.target);});att.appendChild(btn);});
  $('#overviewAttentionCount').textContent=attention.length?attention.length+' item'+(attention.length===1?'':'s'):'';
- // Only recorded events are marked complete. Do not infer dates from the current Jira status.
+ // Use recorded milestone fields only; do not infer dates from the current status.
+ // Optional holding/FOS milestones appear only where a date or explicit sent flag exists.
  var steps=[
   {label:'Received',date:p.receivedDate,done:!!plain(p.receivedDate)},
-  {label:'Acknowledged',done:isYes(o.acknowledgementSent),fallback:'Sent'},
-  {label:'Final response',date:isYes(o.finalResponseSent)?o.finalResponseSentDate:'',done:isYes(o.finalResponseSent),fallback:'Sent'},
-  {label:'Closed',date:o.firstClosedDate,done:!!plain(o.firstClosedDate),fallback:p.statusName==='Complaint Closed'?'Date not recorded':''}
+  {label:'Assigned',date:o.complaintAssignedDate,done:!!plain(o.complaintAssignedDate),fallback:'Date not recorded'},
+  {label:'Acknowledged',date:o.acknowledgementSentDate,done:isYes(o.acknowledgementSent)||!!plain(o.acknowledgementSentDate),fallback:'Sent · date not recorded'}
  ];
- // Initial calls apply only to non-outsourced complaints. Show completed calls
- // at any stage; show an incomplete call only while the complaint is Assigned.
  var initialCallDone=!!plain(o.initialCallDate)||!!plain(intro.outcome);
  if(!out&&(initialCallDone||plain(p.statusName).toLowerCase()==='assigned')){
-  steps.splice(1,0,{label:'Initial call',date:o.initialCallDate,done:initialCallDone,fallback:'Recorded'});
+  steps.push({label:'Initial call',date:o.initialCallDate,done:initialCallDone,fallback:'Recorded'});
  }
- // An eight-week holding letter is an optional milestone, not a required stage.
- if(isYes(o.eightWeekHoldingSent)||plain(o.eightWeekHoldingSentDate))steps.splice(3,0,{label:'8-week holding',date:o.eightWeekHoldingSentDate,done:true,fallback:'Sent'});
- if(plain(o.resolvedDate))steps.splice(steps.length-1,0,{label:'Resolved',date:o.resolvedDate,done:true});
+ steps.push({label:'Investigation',date:o.investigationStartedDate,done:!!plain(o.investigationStartedDate),fallback:'Not yet recorded'});
+ if(isYes(o.holdingResponseSent)||plain(o.holdingResponseSentDate)){
+  steps.push({label:'4-week holding',date:o.holdingResponseSentDate,done:true,fallback:'Sent · date not recorded'});
+ }
+ if(isYes(o.eightWeekHoldingSent)||plain(o.eightWeekHoldingSentDate)){
+  steps.push({label:'8-week holding',date:o.eightWeekHoldingSentDate,done:true,fallback:'Sent · date not recorded'});
+ }
+ steps.push({label:'Final response',date:o.finalResponseSentDate,done:isYes(o.finalResponseSent)||!!plain(o.finalResponseSentDate),fallback:'Sent · date not recorded'});
+ if(plain(o.fosEscalationDate)){
+  steps.push({label:'FOS referral',date:o.fosEscalationDate,done:true});
+ }
+ if(plain(o.resolvedDate))steps.push({label:'Resolved',date:o.resolvedDate,done:true});
+ steps.push({label:'Closed',date:o.firstClosedDate,done:!!plain(o.firstClosedDate),fallback:p.statusName==='Complaint Closed'?'Date not recorded':''});
  var timeline=$('#overviewTimeline');timeline.replaceChildren();
  steps.forEach(function(step){
   var el=document.createElement('div');el.className='overview-timeline-step '+(step.done?'is-complete':'is-pending');el.setAttribute('role','listitem');
@@ -3807,7 +3820,7 @@ function overviewRender(){
   $('#overviewSuspenseNote').textContent=notes.join(' ');$('#overviewSuspenseNote').hidden=!notes.length;
  }
  var details=$('#overviewDetails');details.replaceChildren();
- var pairs=[['Dealership',p.dealershipName],['Vehicle',[vd.make,vd.model].filter(Boolean).join(' ')],['Registration',vd.registration],['Complaint type',p.complaintType]];
+ var pairs=[['First assignee',o.firstAssignee],['First assigned',plain(o.complaintAssignedDate)?formatDisplayDate(o.complaintAssignedDate):''],['Investigation started',plain(o.investigationStartedDate)?formatDisplayDate(o.investigationStartedDate):''],['Dealership',p.dealershipName],['Vehicle',[vd.make,vd.model].filter(Boolean).join(' ')],['Registration',vd.registration],['Complaint type',p.complaintType]];
  pairs.forEach(function(pair){if(!plain(pair[1]))return;var row=document.createElement('div');row.className='overview-data-row';var a=document.createElement('span');a.textContent=pair[0];var b=document.createElement('strong');b.textContent=pair[1];row.append(a,b);details.appendChild(row);});
  if(!details.children.length)details.textContent='No further details recorded.';
  var hasRecovery=post.currentBalance!==null&&post.currentBalance!==undefined&&Number.isFinite(Number(post.currentBalance));
