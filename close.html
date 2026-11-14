@@ -650,6 +650,23 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 @media(max-width:710px){.overview-heading{align-items:flex-start;flex-direction:column}.overview-heading h2{font-size:26px}.overview-columns{grid-template-columns:1fr}.overview-attention{grid-template-columns:1fr}.overview-shortcuts{margin-bottom:14px}}
 
 
+
+/* Complaint history as a full-width, responsive milestone timeline. */
+.overview-timeline-panel{margin-top:24px;padding:22px 24px 25px}
+.overview-timeline{display:flex;gap:0;align-items:stretch;margin:19px 0 0;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#e6c5d6 transparent;padding-bottom:5px}
+.overview-timeline-step{position:relative;flex:1 0 0;min-width:116px;padding:36px 13px 0 0;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.overview-timeline-step:not(:last-child):before{content:"";position:absolute;top:12px;left:12px;right:0;height:3px;background:#ebe4eb}
+.overview-timeline-step.is-complete:not(:last-child):before{background:#f4aacd}
+.overview-timeline-dot{position:absolute;top:2px;left:0;width:23px;height:23px;box-sizing:border-box;border:2px solid #ded4de;border-radius:50%;background:#fff;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:900;z-index:1}
+.overview-timeline-step.is-complete .overview-timeline-dot{border-color:#e9007b;background:#e9007b}
+.overview-timeline-step.is-pending .overview-timeline-dot{background:#fff}
+.overview-timeline-step strong{font-size:12px;font-weight:800;color:#372439;line-height:1.35}
+.overview-timeline-step small{font-size:11px;color:#8d7f8e;line-height:1.4}
+.overview-timeline-step.is-pending strong{color:#8a7d8c}
+.overview-details-panel{margin-top:15px}
+.overview-details-panel .overview-detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:26px}
+@media(max-width:710px){.overview-timeline-panel{padding:17px}.overview-timeline-step{min-width:124px}.overview-details-panel .overview-detail-list{grid-template-columns:1fr}}
+
 /* Letters & Responses: calm, focused workspace */
 .letters-wrap{max-width:1100px;margin:0 auto;padding:4px 0 40px}
 .letters-top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}
@@ -754,6 +771,8 @@ textarea.letters-field{min-height:85px;resize:vertical}
   body.actions-with-rail .footer-inner { margin-left: 0; }
 }
 
+
+#overviewAttentionSection[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -920,14 +939,15 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <div class="overview-shortcuts" id="overviewShortcuts" aria-label="Quick links">
       <span>QUICK LINKS</span><div id="overviewLinks"></div>
     </div>
-    <section class="overview-attention-section" id="overviewAttentionSection" aria-labelledby="overviewAttentionTitle">
+    <section class="overview-attention-section" id="overviewAttentionSection" aria-labelledby="overviewAttentionTitle" hidden>
       <div class="overview-section-head"><h3 id="overviewAttentionTitle">Needs attention</h3><span id="overviewAttentionCount"></span></div>
       <div class="overview-attention" id="overviewAttention"></div>
     </section>
-    <div class="overview-columns">
-      <section class="overview-panel" aria-labelledby="overviewDatesTitle"><div class="overview-panel-head"><h3 id="overviewDatesTitle">Important dates</h3><span>COMPLAINT HISTORY</span></div><div class="overview-date-list" id="overviewDates"></div></section>
-      <section class="overview-panel" aria-labelledby="overviewDetailsTitle"><div class="overview-panel-head"><h3 id="overviewDetailsTitle">Key details</h3></div><div class="overview-detail-list" id="overviewDetails"></div></section>
-    </div>
+    <section class="overview-panel overview-timeline-panel" aria-labelledby="overviewTimelineTitle">
+      <div class="overview-panel-head"><h3 id="overviewTimelineTitle">Complaint timeline</h3><span>KEY MILESTONES</span></div>
+      <div class="overview-timeline" id="overviewTimeline" role="list" aria-label="Complaint milestones"></div>
+    </section>
+    <section class="overview-panel overview-details-panel" aria-labelledby="overviewDetailsTitle"><div class="overview-panel-head"><h3 id="overviewDetailsTitle">Key details</h3></div><div class="overview-detail-list" id="overviewDetails"></div></section>
     <div class="overview-bottom" id="overviewBottom" hidden>
       <button type="button" class="overview-bottom-link" id="overviewRecoveryLink" hidden><span>Financial recovery</span><strong id="overviewRecoveryText">—</strong><span aria-hidden="true">↗</span></button>
       <button type="button" class="overview-bottom-link" id="overviewSolicitorLink" hidden><span>Solicitor escalation</span><strong id="overviewSolicitorText">—</strong><span aria-hidden="true">↗</span></button>
@@ -3329,29 +3349,28 @@ function overviewRender(){
  var es=plain(o.dealershipEscalationStatus);
  if(['Post-Resolution Tasks','Partner Funds Outstanding'].includes(p.statusName)&&!isYes(es)&&!/^active$/i.test(es)&&/vehicle/i.test(p.complaintType||''))attention.push({name:'Dealership follow-up',description:'Automated escalation not active',target:'post'});
  var att=$('#overviewAttention');att.replaceChildren();
- if(!attention.length){var empty=document.createElement('div');empty.className='overview-no-attention';empty.textContent='No outstanding actions flagged in the available complaint data.';att.appendChild(empty);}
- else attention.slice(0,4).forEach(function(item){var btn=document.createElement('button');btn.type='button';btn.className='overview-attention-item';var name=document.createElement('strong');name.textContent=item.name;var desc=document.createElement('span');desc.textContent=item.description;var arrow=document.createElement('i');arrow.textContent='↗';btn.append(name,desc,arrow);btn.addEventListener('click',function(){gotoActionsPage(item.target);});att.appendChild(btn);});
+ $('#overviewAttentionSection').hidden = attention.length === 0;
+ if(attention.length)attention.slice(0,4).forEach(function(item){var btn=document.createElement('button');btn.type='button';btn.className='overview-attention-item';var name=document.createElement('strong');name.textContent=item.name;var desc=document.createElement('span');desc.textContent=item.description;var arrow=document.createElement('i');arrow.textContent='↗';btn.append(name,desc,arrow);btn.addEventListener('click',function(){gotoActionsPage(item.target);});att.appendChild(btn);});
  $('#overviewAttentionCount').textContent=attention.length?attention.length+' item'+(attention.length===1?'':'s'):'';
- var dates=[
-  ['Complaint received',p.receivedDate,'date'],
-  ['Initial customer call',o.initialCallDate,(o.initialCallDate?'date':(intro.outcome?'text':'')),intro.outcome],
-  ['Acknowledgement',o.acknowledgementSent,'flag'],
-  ['8-week holding letter',o.eightWeekHoldingSentDate,o.eightWeekHoldingSentDate?'date':'flag',o.eightWeekHoldingSent],
-  ['Final response',o.finalResponseSentDate&&isYes(o.finalResponseSent)?o.finalResponseSentDate:o.finalResponseSent,o.finalResponseSentDate&&isYes(o.finalResponseSent)?'date':'flag'],
-  ['Resolved for customer',o.resolvedDate,'date'],
-  ['Complaint closed',o.firstClosedDate,'date']
+ // Only recorded events are marked complete. Do not infer dates from the current Jira status.
+ var steps=[
+  {label:'Received',date:p.receivedDate,done:!!plain(p.receivedDate)},
+  {label:'Initial call',date:o.initialCallDate,done:!!plain(o.initialCallDate)||!!plain(intro.outcome),fallback:plain(intro.outcome)?'Recorded':''},
+  {label:'Acknowledged',done:isYes(o.acknowledgementSent),fallback:'Sent'},
+  {label:'Final response',date:isYes(o.finalResponseSent)?o.finalResponseSentDate:'',done:isYes(o.finalResponseSent),fallback:'Sent'},
+  {label:'Closed',date:o.firstClosedDate,done:!!plain(o.firstClosedDate),fallback:p.statusName==='Complaint Closed'?'Date not recorded':''}
  ];
- var list=$('#overviewDates');list.replaceChildren();
- dates.forEach(function(it){var label=it[0],v=it[1],kind=it[2],alt=it[3]||'';var result='';
-  if(kind==='date'&&v)result=formatDisplayDate(v);
-  else if(kind==='text'&&alt)result=alt;
-  else if(kind==='flag'&&isYes(v||alt))result='Sent';
-  else if(kind==='flag'&&plain(v||alt)&&!isYes(v||alt))result='Not sent';
-  if(!result&&label==='Complaint closed'&&p.statusName==='Complaint Closed')result='Date not recorded';
-  if(!result)return;
-  var row=document.createElement('div');row.className='overview-data-row';var k=document.createElement('span');k.textContent=label;var value=document.createElement('strong');value.textContent=result;row.append(k,value);list.appendChild(row);
+ // An eight-week holding letter is an optional milestone, not a required stage.
+ if(isYes(o.eightWeekHoldingSent)||plain(o.eightWeekHoldingSentDate))steps.splice(3,0,{label:'8-week holding',date:o.eightWeekHoldingSentDate,done:true,fallback:'Sent'});
+ if(plain(o.resolvedDate))steps.splice(steps.length-1,0,{label:'Resolved',date:o.resolvedDate,done:true});
+ var timeline=$('#overviewTimeline');timeline.replaceChildren();
+ steps.forEach(function(step){
+  var el=document.createElement('div');el.className='overview-timeline-step '+(step.done?'is-complete':'is-pending');el.setAttribute('role','listitem');
+  var dot=document.createElement('span');dot.className='overview-timeline-dot';dot.setAttribute('aria-hidden','true');dot.textContent=step.done?'✓':'';
+  var label=document.createElement('strong');label.textContent=step.label;
+  var detail=document.createElement('small');detail.textContent=step.done?(plain(step.date)?formatDisplayDate(step.date):(step.fallback||'Recorded')):'Pending';
+  el.setAttribute('aria-label',step.label+': '+detail.textContent);el.append(dot,label,detail);timeline.appendChild(el);
  });
- if(!list.children.length){list.textContent='No dates recorded.';}
  var details=$('#overviewDetails');details.replaceChildren();
  var pairs=[['Dealership',p.dealershipName],['Vehicle',[vd.make,vd.model].filter(Boolean).join(' ')],['Registration',vd.registration],['Complaint type',p.complaintType]];
  pairs.forEach(function(pair){if(!plain(pair[1]))return;var row=document.createElement('div');row.className='overview-data-row';var a=document.createElement('span');a.textContent=pair[0];var b=document.createElement('strong');b.textContent=pair[1];row.append(a,b);details.appendChild(row);});
