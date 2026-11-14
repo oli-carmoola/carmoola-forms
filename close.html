@@ -718,6 +718,19 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 .overview-timeline-step small{font-size:11px;color:#8d7f8e;line-height:1.4}
 .overview-timeline-step.is-pending strong{color:#8a7d8c}
 .overview-details-panel{margin-top:15px}
+.overview-suspense-panel[hidden]{display:none!important}
+.overview-suspense-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:6px 0 15px}
+.overview-suspense-stat{border:1px solid #eee3ed;background:#fcf9fc;padding:12px 14px;border-radius:12px;min-width:0}
+.overview-suspense-stat span{display:block;font-size:11px;color:#817383;margin-bottom:6px}
+.overview-suspense-stat strong{font-size:18px;letter-spacing:-.025em;color:#3d2238;overflow-wrap:anywhere}
+.overview-suspense-table{width:100%;border-collapse:collapse;font-size:12px}
+.overview-suspense-table th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.055em;color:#958797;padding:10px 12px;border-bottom:1px solid #eee3ed}
+.overview-suspense-table td{padding:11px 12px;border-bottom:1px solid #f1eaf0;color:#4a3a47;vertical-align:top;overflow-wrap:anywhere}
+.overview-suspense-table tbody tr:last-child td{border-bottom:none}
+.overview-suspense-table td:last-child,.overview-suspense-table th:last-child{text-align:right;white-space:nowrap}
+.overview-suspense-scroll{overflow-x:auto}
+.overview-suspense-note{font-size:11px;color:#8b7d89;margin:10px 0 0}
+@media(max-width:620px){.overview-suspense-stats{grid-template-columns:1fr}.overview-suspense-table{min-width:450px}}
 .overview-details-panel .overview-detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:26px}
 @media(max-width:710px){.overview-timeline-panel{padding:17px}.overview-timeline-step{min-width:124px}.overview-details-panel .overview-detail-list{grid-template-columns:1fr}}
 
@@ -1000,6 +1013,16 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <section class="overview-panel overview-timeline-panel" aria-labelledby="overviewTimelineTitle">
       <div class="overview-panel-head"><h3 id="overviewTimelineTitle">Complaint timeline</h3><span>KEY MILESTONES</span></div>
       <div class="overview-timeline" id="overviewTimeline" role="list" aria-label="Complaint milestones"></div>
+    </section>
+    <section class="overview-panel overview-suspense-panel" id="overviewSuspenseSection" aria-labelledby="overviewSuspenseTitle" hidden>
+      <div class="overview-panel-head"><h3 id="overviewSuspenseTitle">Suspense Payments</h3><span>MATCHED RECEIPTS</span></div>
+      <div class="overview-suspense-stats">
+        <div class="overview-suspense-stat"><span>Payments Matched</span><strong id="overviewSuspenseCount">—</strong></div>
+        <div class="overview-suspense-stat"><span>Total Received</span><strong id="overviewSuspenseTotal">—</strong></div>
+        <div class="overview-suspense-stat"><span>Latest Receipt</span><strong id="overviewSuspenseLatest">—</strong></div>
+      </div>
+      <div class="overview-suspense-scroll"><table class="overview-suspense-table"><thead><tr><th>Suspense Item</th><th>Payment Reference</th><th>Amount</th></tr></thead><tbody id="overviewSuspenseRows"></tbody></table></div>
+      <p class="overview-suspense-note" id="overviewSuspenseNote" hidden></p>
     </section>
     <section class="overview-panel overview-details-panel" aria-labelledby="overviewDetailsTitle"><div class="overview-panel-head"><h3 id="overviewDetailsTitle">Key details</h3></div><div class="overview-detail-list" id="overviewDetails"></div></section>
     <div class="overview-bottom" id="overviewBottom" hidden>
@@ -3537,6 +3560,32 @@ function overviewRender(){
   var detail=document.createElement('small');detail.textContent=step.done?(plain(step.date)?formatDisplayDate(step.date):(step.fallback||'Recorded')):'Pending';
   el.setAttribute('aria-label',step.label+': '+detail.textContent);el.append(dot,label,detail);timeline.appendChild(el);
  });
+ // Suspense data is read-only here. The Post-Resolution workflow owns classification and reconciliation.
+ var suspense=p.suspensePayments||{},matchCount=Number(suspense.matchCount||0);
+ var suspenseSection=$('#overviewSuspenseSection');
+ suspenseSection.hidden=!(Number.isFinite(matchCount)&&matchCount>0);
+ if(!suspenseSection.hidden){
+  var split=function(v){return String(v||'').split(';').map(function(x){return x.trim();}).filter(function(x){return x.length>0;});};
+  var amounts=split(suspense.amounts),refs=split(suspense.references),ids=split(suspense.itemIds);
+  var count=Math.max(amounts.length,refs.length,ids.length);
+  put('overviewSuspenseCount',String(matchCount));
+  put('overviewSuspenseTotal',money(suspense.totalReceived));
+  var latest=suspense.lastAmount==null?'Not recorded':money(suspense.lastAmount);
+  if(plain(suspense.lastDate))latest+=' · '+formatDisplayDate(suspense.lastDate);
+  put('overviewSuspenseLatest',latest);
+  var tbody=$('#overviewSuspenseRows');tbody.replaceChildren();
+  for(var i=count-1;i>=0;i--){
+   var tr=document.createElement('tr');
+   var cells=[ids[i]||'—',refs[i]||'—',amounts[i]!==undefined?money(amounts[i]):'—'];
+   cells.forEach(function(value){var td=document.createElement('td');td.textContent=value;tr.appendChild(td);});
+   tbody.appendChild(tr);
+  }
+  if(!count){var row=document.createElement('tr'),cell=document.createElement('td');cell.colSpan=3;cell.textContent='Individual payment details are not yet recorded.';row.appendChild(cell);tbody.appendChild(row);}
+  var notes=[];
+  if(count!==matchCount)notes.push('The recorded payment count differs from the number of itemised receipts. Please check Jira.');
+  if(amounts.length!==refs.length||amounts.length!==ids.length)notes.push('Some receipt fields have different numbers of entries. Items are shown in their recorded order.');
+  $('#overviewSuspenseNote').textContent=notes.join(' ');$('#overviewSuspenseNote').hidden=!notes.length;
+ }
  var details=$('#overviewDetails');details.replaceChildren();
  var pairs=[['Dealership',p.dealershipName],['Vehicle',[vd.make,vd.model].filter(Boolean).join(' ')],['Registration',vd.registration],['Complaint type',p.complaintType]];
  pairs.forEach(function(pair){if(!plain(pair[1]))return;var row=document.createElement('div');row.className='overview-data-row';var a=document.createElement('span');a.textContent=pair[0];var b=document.createElement('strong');b.textContent=pair[1];row.append(a,b);details.appendChild(row);});
