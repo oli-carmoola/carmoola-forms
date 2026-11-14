@@ -3355,11 +3355,16 @@ function overviewRender(){
  // Only recorded events are marked complete. Do not infer dates from the current Jira status.
  var steps=[
   {label:'Received',date:p.receivedDate,done:!!plain(p.receivedDate)},
-  {label:'Initial call',date:o.initialCallDate,done:!!plain(o.initialCallDate)||!!plain(intro.outcome),fallback:plain(intro.outcome)?'Recorded':''},
   {label:'Acknowledged',done:isYes(o.acknowledgementSent),fallback:'Sent'},
   {label:'Final response',date:isYes(o.finalResponseSent)?o.finalResponseSentDate:'',done:isYes(o.finalResponseSent),fallback:'Sent'},
   {label:'Closed',date:o.firstClosedDate,done:!!plain(o.firstClosedDate),fallback:p.statusName==='Complaint Closed'?'Date not recorded':''}
  ];
+ // Initial calls apply only to non-outsourced complaints. Show completed calls
+ // at any stage; show an incomplete call only while the complaint is Assigned.
+ var initialCallDone=!!plain(o.initialCallDate)||!!plain(intro.outcome);
+ if(!out&&(initialCallDone||plain(p.statusName).toLowerCase()==='assigned')){
+  steps.splice(1,0,{label:'Initial call',date:o.initialCallDate,done:initialCallDone,fallback:'Recorded'});
+ }
  // An eight-week holding letter is an optional milestone, not a required stage.
  if(isYes(o.eightWeekHoldingSent)||plain(o.eightWeekHoldingSentDate))steps.splice(3,0,{label:'8-week holding',date:o.eightWeekHoldingSentDate,done:true,fallback:'Sent'});
  if(plain(o.resolvedDate))steps.splice(steps.length-1,0,{label:'Resolved',date:o.resolvedDate,done:true});
