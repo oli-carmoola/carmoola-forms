@@ -3765,6 +3765,7 @@ function overviewRender(){
  // Optional holding/FOS milestones appear only where a date or explicit sent flag exists.
  var steps=[
   {label:'Received',date:p.receivedDate,done:!!plain(p.receivedDate)},
+  ...(plain(o.triageCompletedDate)?[{label:'Triage completed',date:o.triageCompletedDate,done:true}]:[]),
   {label:'Assigned',date:o.complaintAssignedDate,done:!!plain(o.complaintAssignedDate),fallback:'Date not recorded'},
   {label:'Acknowledged',date:o.acknowledgementSentDate,done:isYes(o.acknowledgementSent)||!!plain(o.acknowledgementSentDate),fallback:'Sent · date not recorded'}
  ];
