@@ -774,6 +774,20 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .letters-doc-preview{width:100%;height:440px;border:1px solid #e7dce6;border-radius:12px;background:#fcfafc;margin:14px 0 0}
 .letters-inline-check{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;color:#403044}
 .letters-inline-check input{accent-color:#ed0081;margin-top:4px}
+/* Letters: modern, accessible option cards */
+.letters-choice-card{display:flex;align-items:center;gap:13px;padding:14px 16px;border:1px solid #e8dce6;border-radius:12px;background:#fcfafc;cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s;box-sizing:border-box}
+.letters-choice-card:hover{border-color:#e6a9cb;background:#fff9fc}
+.letters-choice-card:has(input:checked){background:#fff3f9;border-color:#e6a0c5}
+.letters-choice-card:focus-within{outline:2px solid #eaa9cf;outline-offset:2px}
+.letters-choice-card input[type=checkbox]{appearance:none;-webkit-appearance:none;flex:0 0 20px;width:20px;height:20px;border:1.5px solid #b8a7b7;border-radius:6px;background:#fff;margin:0;display:grid;place-items:center;cursor:pointer}
+.letters-choice-card input[type=checkbox]:checked{background:#ed0081;border-color:#ed0081}
+.letters-choice-card input[type=checkbox]:checked::after{content:'✓';font-size:14px;color:white;font-weight:800;line-height:1}
+.letters-choice-content{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.letters-choice-title{font-size:13px;font-weight:750;color:#37263a;line-height:1.35}
+.letters-choice-hint{font-size:12px;color:#867586;line-height:1.45}
+.letters-choice-indicator{display:none}
+.letters-choice-card[hidden]{display:none!important}
+
 @media(max-width:750px){.letters-form-grid{grid-template-columns:1fr}.letters-card{padding:17px}.letters-top h2{font-size:25px}}
 
 
@@ -1272,8 +1286,16 @@ textarea.letters-field{min-height:85px;resize:vertical}
       <label class="letters-full" id="lettersSummaryWrap"><span class="letters-label" id="lettersSummaryLabel">Why have you reached this decision?</span><textarea id="lettersSummary" class="letters-field" placeholder="Explain the decision and supporting evidence"></textarea></label>
       <label class="letters-full" id="lettersDetailsWrap"><span class="letters-label">Remediation, goodwill and other details</span><textarea id="lettersDetails" class="letters-field" placeholder="Agreed actions, payments or next steps"></textarea></label>
       <label class="letters-full" id="lettersFactsWrap" hidden><span class="letters-label">Affordability decisioning facts</span><textarea id="lettersFacts" class="letters-field" style="min-height:160px" placeholder="Paste the complete affordability decisioning facts"></textarea><span class="letters-note">The affordability generator requires the full decisioning facts.</span></label>
-      <label class="letters-inline-check letters-full" id="lettersDekraWrap" hidden><input type="checkbox" id="lettersDekra">DEKRA inspection completed</label>
-      <label class="letters-inline-check letters-full" id="lettersGoodstandingWrap" hidden><input type="checkbox" id="lettersGoodstanding">Customer's agreement is in good standing</label>
+      <label class="letters-choice-card letters-full" id="lettersDekraWrap" hidden>
+        <input type="checkbox" id="lettersDekra" aria-describedby="lettersDekraHint">
+        <span class="letters-choice-content"><span class="letters-choice-title">DEKRA inspection completed</span><span class="letters-choice-hint" id="lettersDekraHint">Tick if the inspection has been completed. We'll preselect this where a DEKRA request or cost is recorded.</span></span>
+        <span class="letters-choice-indicator" aria-hidden="true">✓</span>
+      </label>
+      <label class="letters-choice-card letters-full" id="lettersGoodstandingWrap" hidden>
+        <input type="checkbox" id="lettersGoodstanding">
+        <span class="letters-choice-content"><span class="letters-choice-title">Customer's agreement is in good standing</span><span class="letters-choice-hint">Only relevant to unaffordable lending complaints.</span></span>
+        <span class="letters-choice-indicator" aria-hidden="true">✓</span>
+      </label>
     </div>
     <div class="letters-actions"><button type="button" id="lettersGenerate" class="letters-btn primary">Generate letter</button></div>
   </div>
@@ -4092,6 +4114,21 @@ var LETTERS_VEHICLE_OPTIONS=[
 'Not Upheld (Post 6 months. No Evidence Provided)'];
 function lettersSuggestedType(){var type=String(LETTERS_STATE?.complaintType||PREFILL?.complaintType||'');return /^vehicle issues?$/i.test(type)?'vehicle':/unafford|affordability|responsible lending/i.test(type)?'affordability':'general';}
 function lettersSelectedType(){return LETTERS_VIEW==='holding'?'holding':lettersSuggestedType();}
+// Preselect DEKRA when a request date or a DEKRA running-cost entry is recorded.
+// This is a convenience default only; handlers can untick it if the inspection has not happened.
+function lettersDekraEvidence(){
+ var overview=PREFILL?.overview||{};
+ if(String(overview.dekraRequestedDate||'').trim()||String(overview.dekraReceivedDate||'').trim())return true;
+ var rows=typeof runningCostsRows!=='undefined'?normaliseRunningRows(runningCostsRows):[];
+ if(rows.some(function(r){return /^dekra$/i.test(String(r.type||'').trim())||/\bdekra\b/i.test(String(r.desc||''));}))return true;
+ return /\bdekra\b/i.test(String(PREFILL?.runningCosts||''));
+}
+function lettersDefaultDekra(){
+ var el=$('#lettersDekra');
+ if(!el||el.dataset.userEdited==='true')return;
+ el.checked=lettersDekraEvidence();
+}
+
 function lettersSelectedDoc(){if(!LETTERS_STATE)return '';return LETTERS_VIEW==='holding'?LETTERS_STATE.holdingDocumentId:LETTERS_STATE.finalDocumentId;}
 function lettersSelectedSent(){if(!LETTERS_STATE)return false;return LETTERS_VIEW==='holding'?LETTERS_STATE.holdingSent:LETTERS_STATE.finalSent;}
 function lettersPending(){if(!LETTERS_STATE)return false;return !!(LETTERS_VIEW==='holding'?LETTERS_STATE.holdingSubmission?.state:LETTERS_STATE.finalSubmission?.state);}
@@ -4106,6 +4143,7 @@ function lettersRender(){
  $('#lettersOutcomeWrap').hidden=holding||afford;$('#lettersIssuesWrap').hidden=afford;
  $('#lettersSummaryWrap').hidden=afford;$('#lettersDetailsWrap').hidden=afford||holding;
  $('#lettersFactsWrap').hidden=!afford;$('#lettersDekraWrap').hidden=!veh;$('#lettersGoodstandingWrap').hidden=!afford;
+ if(veh)lettersDefaultDekra();
  $('#lettersReviewWrap').hidden=holding;
  $('#lettersSummaryLabel').textContent=holding?'Why is the investigation not yet complete?':'Why have you reached this decision?';
  var outcome=$('#lettersOutcome'),wanted=veh?LETTERS_VEHICLE_OPTIONS:['Upheld','Not Upheld'];
@@ -4177,6 +4215,8 @@ function lettersChoose(view){
  $('#lettersReviewed').checked=false;$('#lettersGenerateMessage').textContent='';$('#lettersSendMessage').textContent='';LETTERS_SENDING=false;lettersRender();
 }
 function lettersInit(){
+ $('#lettersDekra').addEventListener('change',function(){this.dataset.userEdited='true';});
+ lettersDefaultDekra();
  $('#lettersTabFinal').addEventListener('click',function(){lettersChoose('final');});
  $('#lettersTabHolding').addEventListener('click',function(){lettersChoose('holding');});
  $('#lettersReviewed').addEventListener('change',lettersRender);
