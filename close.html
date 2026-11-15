@@ -3786,6 +3786,8 @@ function overviewRender(){
  if(plain(fos.investigatorDecisionDate))steps.push({label:'FOS Investigator decision',date:fos.investigatorDecisionDate,done:true});
  if(plain(fos.ombudsmanDecisionDate))steps.push({label:'Ombudsman decision',date:fos.ombudsmanDecisionDate,done:true});
  if(plain(fos.closedDate))steps.push({label:'FOS case closed',date:fos.closedDate,done:true});
+ // Show Solaris solicitor instruction when its recorded escalation date exists.
+ if(plain(p.solicitorEscalation&&p.solicitorEscalation.escalationDate))steps.push({label:'Solicitor escalation',date:p.solicitorEscalation.escalationDate,done:true});
  if(plain(o.resolvedDate))steps.push({label:'Resolved',date:o.resolvedDate,done:true});
  steps.push({label:'Closed',date:o.firstClosedDate,done:!!plain(o.firstClosedDate),fallback:p.statusName==='Complaint Closed'?'Closed':''});
  // Show dated milestones in strict chronological order. Undated milestones
