@@ -707,10 +707,10 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 
 /* Complaint history as a full-width, responsive milestone timeline. */
 .overview-timeline-panel{margin-top:24px;padding:22px 24px 25px}
-.overview-timeline{display:flex;gap:0;align-items:stretch;margin:19px 0 0;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#e6c5d6 transparent;padding-bottom:5px}
-.overview-timeline-step{position:relative;flex:1 0 0;min-width:116px;padding:36px 13px 0 0;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
-.overview-timeline-step:not(:last-child):before{content:"";position:absolute;top:12px;left:12px;right:0;height:3px;background:#ebe4eb}
-.overview-timeline-step.is-complete:not(:last-child):before{background:#f4aacd}
+.overview-timeline{display:grid;grid-template-columns:repeat(var(--timeline-columns, 1),minmax(0,1fr));column-gap:0;row-gap:24px;align-items:start;margin:19px 0 0;overflow:visible;min-width:0}
+.overview-timeline-step{position:relative;min-width:0;padding:36px 10px 0 0;display:flex;flex-direction:column;align-items:flex-start;gap:6px;overflow-wrap:break-word}
+.overview-timeline-step:not(.is-row-end):before{content:"";position:absolute;top:12px;left:12px;right:-1px;height:3px;background:#ebe4eb}
+.overview-timeline-step.is-complete:not(.is-row-end):before{background:#f4aacd}
 .overview-timeline-dot{position:absolute;top:2px;left:0;width:23px;height:23px;box-sizing:border-box;border:2px solid #ded4de;border-radius:50%;background:#fff;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:900;z-index:1}
 .overview-timeline-step.is-complete .overview-timeline-dot{border-color:#e9007b;background:#e9007b}
 .overview-timeline-step.is-pending .overview-timeline-dot{background:#fff}
@@ -744,7 +744,7 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 .overview-suspense-note{font-size:11px;color:#8b7d89;margin:10px 0 0}
 @media(max-width:620px){.overview-suspense-stats{grid-template-columns:1fr}.overview-suspense-table{min-width:450px}}
 .overview-details-panel .overview-detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:26px}
-@media(max-width:710px){.overview-timeline-panel{padding:17px}.overview-timeline-step{min-width:124px}.overview-details-panel .overview-detail-list{grid-template-columns:1fr}}
+@media(max-width:710px){.overview-timeline-panel{padding:17px}.overview-timeline{row-gap:20px}.overview-timeline-step{padding-right:8px}.overview-details-panel .overview-detail-list{grid-template-columns:1fr}}
 
 /* Letters & Responses: calm, focused workspace */
 .letters-wrap{max-width:1100px;margin:0 auto;padding:4px 0 40px}
@@ -3859,6 +3859,26 @@ function overviewRender(){
   var detail=document.createElement('small');detail.textContent=step.done?(plain(step.date)?formatDisplayDate(step.date):(step.fallback||'Recorded')):'Pending';
   el.setAttribute('aria-label',step.label+': '+detail.textContent);el.append(dot,label,detail);timeline.appendChild(el);
  });
+ // Fit milestones without a horizontal scrollbar. When a single row would make
+ // labels cramped, split into balanced rows and end the connecting line per row.
+ function layoutOverviewTimeline(){
+  var nodes=Array.from(timeline.querySelectorAll('.overview-timeline-step'));
+  if(!nodes.length)return;
+  var width=timeline.clientWidth||timeline.parentElement.clientWidth||700;
+  var minMilestoneWidth=width<520?125:width<900?140:155;
+  var maxColumns=Math.max(1,Math.floor(width/minMilestoneWidth));
+  var rows=Math.ceil(nodes.length/maxColumns);
+  var columns=Math.ceil(nodes.length/rows);
+  timeline.style.setProperty('--timeline-columns',String(columns));
+  nodes.forEach(function(node,index){
+   node.classList.toggle('is-row-end',(index+1)%columns===0||index===nodes.length-1);
+  });
+ }
+ layoutOverviewTimeline();
+ if(!timeline._overviewResizeObserver&&typeof ResizeObserver!=='undefined'){
+  timeline._overviewResizeObserver=new ResizeObserver(layoutOverviewTimeline);
+  timeline._overviewResizeObserver.observe(timeline);
+ }
  // Suspense data is read-only here. The Post-Resolution workflow owns classification and reconciliation.
  var suspense=p.suspensePayments||{},matchCount=Number(suspense.matchCount||0);
  var suspenseSection=$('#overviewSuspenseSection');
