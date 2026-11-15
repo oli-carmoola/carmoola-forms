@@ -958,6 +958,21 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .overview-timeline-step{min-width:126px}
 .overview-timeline-step strong{max-width:130px}
 .overview-timeline-step small{max-width:136px}
+
+/* DEKRA portal copy workspace */
+.dekra-head{padding:24px 26px;border:1px solid var(--line);border-radius:16px;background:#fff;margin-bottom:16px;box-shadow:var(--shadow)}
+.dekra-head .eyebrow{font-size:11px;letter-spacing:.09em;font-weight:800;color:var(--pink-dark);text-transform:uppercase}
+.dekra-head h2{margin:7px 0 6px;font-size:25px;letter-spacing:-.025em}.dekra-head p{margin:0;font-size:13px;color:var(--muted);line-height:1.65;max-width:790px}
+.dekra-notice{padding:12px 15px;background:#FFF5E9;border:1px solid #F6DEC0;border-radius:10px;color:#795023;font-size:12.5px;margin-bottom:17px;line-height:1.6}
+.dekra-section{background:white;border:1px solid var(--line);border-radius:15px;margin-bottom:15px;padding:21px 23px;box-shadow:var(--shadow)}
+.dekra-section-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:17px}.dekra-section h3{font-size:16px;margin:0}.dekra-section-header small{font-size:11px;color:var(--muted)}
+.dekra-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.dekra-field{min-width:0}.dekra-field.wide{grid-column:1/-1}
+.dekra-field label{display:block;font-size:11px;font-weight:750;color:#6C526B;margin-bottom:7px}.dekra-input-wrap{display:flex;gap:5px;align-items:stretch;background:#fff;border:1px solid #E5DBE6;border-radius:10px;overflow:hidden;transition:border-color .12s}.dekra-input-wrap:focus-within{border-color:#F90081;box-shadow:0 0 0 2px rgba(249,0,129,.08)}
+.dekra-input-wrap input,.dekra-input-wrap textarea{width:100%;min-width:0;border:0!important;box-shadow:none!important;outline:none!important;background:transparent;resize:vertical;padding:11px 12px;font:500 13px 'DM Sans',sans-serif;color:var(--ink)}.dekra-input-wrap textarea{min-height:90px;line-height:1.6}.dekra-input-wrap textarea.tall{min-height:140px}
+.dekra-copy{border:0;border-left:1px solid #F0E7EF;background:#FCF7FA;color:#864068;cursor:pointer;display:flex;align-items:center;justify-content:center;min-width:43px;align-self:stretch;font-size:18px}.dekra-copy:hover{background:#FAE6F1;color:var(--pink-dark)}.dekra-copy:focus-visible{outline:2px solid #F90081;outline-offset:-3px}.dekra-hint{font-size:11px;color:var(--muted);margin:7px 0 0;line-height:1.5}
+.dekra-footer{display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:12px;padding:17px 0 4px}.dekra-footer-actions{display:flex;flex-wrap:wrap;gap:9px}.dekra-secondary{background:#fff;color:#4C2D47;border:1px solid #DCD0DF;border-radius:9px;font-weight:750;padding:11px 15px;cursor:pointer;font-family:inherit}.dekra-secondary:hover{background:#FCF4F9}.dekra-save{background:var(--pink);color:#fff;border:0;border-radius:9px;font:750 13px 'DM Sans',sans-serif;cursor:pointer;padding:11px 17px}.dekra-save:disabled{opacity:.6;cursor:wait}.dekra-status{font-size:12px;color:#715F74;line-height:1.5}.dekra-status.error{color:#A62844}
+@media(max-width:690px){.dekra-grid{grid-template-columns:1fr}.dekra-section{padding:17px}.dekra-head{padding:19px}.dekra-footer{align-items:stretch;flex-direction:column}.dekra-footer-actions{width:100%}.dekra-footer-actions button{flex:1}}
+
 </style>
 </head>
 <body>
@@ -1035,6 +1050,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <button type="button" class="rail-link" data-rail="suspense" id="railSuspensePayments" hidden><span class="rail-icon">⇄</span><span>Suspense Payments</span></button>
     <button type="button" class="rail-link" data-rail="rejection"><span class="rail-icon">◇</span><span>Vehicle Rejection</span></button>
     <button type="button" class="rail-link" data-rail="post"><span class="rail-icon">▣</span><span>Post-Resolution Hub</span></button>
+    <button type="button" class="rail-link" data-rail="dekra" id="railDekraRequest" hidden><span class="rail-icon">▧</span><span>DEKRA Inspection Request</span></button>
     <button type="button" class="rail-link" data-rail="letters"><span class="rail-icon">✉</span><span>Letters &amp; Responses</span></button>
     <button type="button" class="rail-link" data-rail="updates" id="railCustomerUpdates" hidden><span class="rail-icon">✉</span><span>Automated Customer Updates</span></button>
     <button type="button" class="rail-link" data-rail="rootcause"><span class="rail-icon">◎</span><span>Root Cause Analysis</span></button>
@@ -1187,6 +1203,14 @@ textarea.letters-field{min-height:85px;resize:vertical}
   <div class="home-footer-note">COMPLAINT ACTIONS <span>·</span> <span id="homeFooterRef">—</span></div>
 </div>
 </section>
+
+<section id="actionsDekra" class="actions-page" aria-label="DEKRA inspection portal request" hidden>
+  <div class="dekra-head"><span class="eyebrow">Vehicle issues · inspection request</span><h2>DEKRA Inspection Request</h2><p>Prepare the inspection request and copy each detail directly into the DEKRA portal. Details are prefilled from the complaint where available and can be corrected before copying.</p></div>
+  <div class="dekra-notice"><strong>Portal submission is manual.</strong> Preparing this form or saving its Jira record does not submit an inspection to DEKRA or notify the customer. Confirm the request in the DEKRA portal before using any existing sent/booked workflow.</div>
+  <div id="dekraPortalFields"></div>
+  <div class="dekra-footer"><span class="dekra-status" id="dekraStatus" role="status" aria-live="polite">Review the information before copying into the portal.</span><div class="dekra-footer-actions"><button class="dekra-secondary" type="button" id="dekraCopyAll">▤ &nbsp;Copy all fields</button><button class="dekra-save" type="button" id="dekraSaveComment">Save details to Jira</button></div></div>
+</section>
+
 <section id="actionsDealer" class="actions-page" aria-label="Dealership Position">
 <div class="actions-subhero"><h2>Dealership Position</h2><p>Record the dealership’s current trading or insolvency position for this Vehicle Issues complaint.</p></div>
 <div class="dealer-card"><h3>Current dealership position</h3><div class="dealer-summary"><strong id="dealerCurrent">Not yet recorded</strong><p id="dealerNameDisplay"></p></div><button class="post-btn-secondary" id="dealerEditBtn" type="button">Add / edit position</button><div id="dealerEditor" hidden><label class="dealer-field">Dealership outcome<select id="dealerPositionSelect"><option value="">Select an outcome</option><option>Trading normally</option><option>No longer trading</option><option>In administration</option><option>In liquidation</option><option>Dissolved</option><option>Subject to winding-up proceedings</option><option>Unable to contact</option></select></label><label class="dealer-field">Reason for update<textarea id="dealerReason" placeholder="Evidence, context or reason for the change"></textarea></label><div id="dealerError" class="post-error" role="alert"></div><div class="post-actions"><button type="button" class="post-btn-secondary" id="dealerCancel">Cancel</button><button type="button" class="btn" id="dealerSave">Save dealership position</button></div></div></div>
@@ -3650,6 +3674,7 @@ function hubUpdateRail(page){
  var rail=$('#workspaceRail'),shown=true,initialGate=PREFILL.statusName==='Assigned';
  rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
  if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=initialGate?'Initial call required':(PREFILL.statusName||'Complaints Hub');}
+ $('#railDekraRequest').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
  $('#railCustomerUpdates').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
  var suspenseCount=Number(PREFILL.suspensePayments?.matchCount||0);
  var suspenseAvailable=Number.isFinite(suspenseCount)&&suspenseCount>0;
@@ -3681,7 +3706,7 @@ function gotoActionsPage(page){
   if(page==='review'&&!PREFILL.fosApplicable)return;
   if(page==='solicitor'&&!solarisCanAccess())return;
   if(page==='suspense'&&!(Number(PREFILL.suspensePayments?.matchCount||0)>0))return;
-  if(page==='updates'&&String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues')return;
+  if(['updates','dekra'].includes(page)&&String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues')return;
   ACTION_PAGE=page;
   hubUpdateRail(page);
   if(page==='home'||page==='suspense')overviewRender();
@@ -3699,6 +3724,8 @@ function gotoActionsPage(page){
   $('#actionsSuspense').classList.toggle('active',page==='suspense');
   $('#actionsPost').classList.toggle('active',page==='post');
   $('#actionsDealer').classList.toggle('active',page==='dealer');
+  $('#actionsDekra').hidden=page!=='dekra';
+  $('#actionsDekra').classList.toggle('active',page==='dekra');
   $('#actionsRejection').classList.toggle('active',page==='rejection');
   $('#actionsSolicitor').classList.toggle('active',page==='solicitor');
   $('#actionsLetters').classList.toggle('active',page==='letters');
@@ -3714,7 +3741,7 @@ function gotoActionsPage(page){
   $('#reviewShell').classList.toggle('active',page==='review');
   $('#reviewViewSwitch').hidden=true;
   $('#actionsNav').hidden=true;
-  $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','suspense':'/ Suspense Payments','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position','rootcause':'/ Root Cause Analysis','updates':'/ Automated Customer Updates'}[page]||'';
+  $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','suspense':'/ Suspense Payments','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position','dekra':'/ DEKRA Inspection Request','rootcause':'/ Root Cause Analysis','updates':'/ Automated Customer Updates'}[page]||'';
   $('#footer').hidden=page!=='closure';
   $('#manageBtn').style.display=page==='closure'?'':'none';
   $('#closedBanner').style.display=(page==='closure'&&PREFILL.alreadyClosed&&$('#unlockBtn').dataset.unlocked!=='1')?'block':'none';
@@ -3780,9 +3807,9 @@ function overviewRender(){
  if(isYes(o.eightWeekHoldingSent)||plain(o.eightWeekHoldingSentDate)){
   steps.push({label:'8-week holding',date:o.eightWeekHoldingSentDate,done:true,fallback:'Sent'});
  }
- steps.push({label:'Final response',date:o.finalResponseSentDate,done:isYes(o.finalResponseSent)||!!plain(o.finalResponseSentDate),fallback:'Sent'});
  if(plain(o.dekraRequestedDate))steps.push({label:'DEKRA inspection requested',date:o.dekraRequestedDate,done:true});
  if(plain(o.dekraReceivedDate))steps.push({label:'DEKRA report received',date:o.dekraReceivedDate,done:true});
+ steps.push({label:'Final response',date:o.finalResponseSentDate,done:isYes(o.finalResponseSent)||!!plain(o.finalResponseSentDate),fallback:'Sent'});
  if(plain(o.fosEscalationDate))steps.push({label:'FOS referral',date:o.fosEscalationDate,done:true});
  if(plain(fos.responseSentDate))steps.push({label:'FOS response sent',date:fos.responseSentDate,done:true});
  if(plain(fos.investigatorDecisionDate))steps.push({label:'FOS Investigator decision',date:fos.investigatorDecisionDate,done:true});
@@ -4215,6 +4242,50 @@ async function acuCall(action,extra){const res=await fetch(API,{method:'POST',he
 async function acuLoad(){if(ACU_BUSY)return;$('#acuHistoryMessage').textContent='Loading automated updates…';try{const data=await acuCall('customer_updates_get');ACU_DATA=data.updates;acuRender();$('#acuMessage').textContent='';}catch(e){$('#acuHistoryMessage').textContent='Unable to load updates: '+e.message;}}
 function acuInit(){document.querySelectorAll('input[name="acuMode"]').forEach(el=>el.addEventListener('change',()=>{$('#acuPauseRow').hidden=document.querySelector('input[name="acuMode"]:checked')?.value!=='pause';}));$('#acuRefresh').addEventListener('click',acuLoad);$('#acuSave').addEventListener('click',async function(){if(ACU_BUSY)return;const mode=document.querySelector('input[name="acuMode"]:checked')?.value||'inactive';const date=$('#acuPauseDate').value;const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());if(mode==='pause'&&(!date||date<=today)){$('#acuMessage').textContent='Choose a future date to resume updates.';return;}if(!confirm('Save '+(mode==='pause'?'a temporary pause':mode==='active'?'Active':'Inactive')+' for automated customer updates?'))return;ACU_BUSY=true;this.disabled=true;$('#acuMessage').textContent='Saving…';try{const result=await acuCall('customer_updates_manage',{mode,pausedUntil:mode==='pause'?date:null});ACU_DATA={...ACU_DATA,...result.updates,history:ACU_DATA?.history||[]};acuRender();$('#acuMessage').textContent='Settings saved successfully.';showActionsSaveToast('Automated customer updates settings saved.');}catch(e){$('#acuMessage').textContent='Could not save settings: '+e.message;}finally{ACU_BUSY=false;this.disabled=false;}});}
 
+
+// The DEKRA portal is external. Values are editable and copied by the handler.
+const DEKRA_SCOPE='Please provide your professional opinion on the following:\n• Confirm the reported issues exist and identify their root cause.\n• Consider whether the issues were likely present or developing at the time of purchase and whether the vehicle was of satisfactory quality when supplied.\n• Identify the repairs required.\n• Comment on other issues found and whether they were likely present or developing at purchase.\n• Confirm whether the vehicle is safe to drive.';
+const DEKRA_GROUPS=[
+ {title:'Complaint & vehicle',hint:'Check the vehicle and where the inspection should take place.',fields:[['reference','Complaint reference'],['make','Make'],['model','Model'],['registration','Registration'],['location','Vehicle location']]},
+ {title:'Customer contact',hint:'Details DEKRA can use to arrange access.',fields:[['customer','Customer name'],['phone','Contact number'],['email','Email address']]},
+ {title:'Reported vehicle concern',hint:'Review the summary carefully and amend it to reflect the latest known issues.',fields:[['concern','Reported concern','tall']]},
+ {title:'Purchase, dates & mileage',hint:'Copy the dates and mileage readings into the corresponding portal fields.',fields:[['supplied','Date vehicle supplied'],['purchaseMileage','Mileage at purchase'],['complaintMileage','Mileage at complaint'],['reported','Date issue first reported'],['milesTravelled','Miles travelled since purchase'],['daysOwned','Days in customer possession'],['service','Most recent service']]},
+ {title:'Inspection instructions',hint:'The standard inspection questions can be edited for the particular vehicle.',fields:[['scope','Scope of inspection','tall']]}
+];
+function dekraValue(id){return document.getElementById('dekra_v_'+id)?.value.trim()||'';}
+function dekraDateValue(s){const x=String(s||'').trim();if(!x)return '';if(/^\d{4}-\d\d-\d\d$/.test(x)){const [y,m,d]=x.split('-');return d+'/'+m+'/'+y;}return x;}
+function dekraPopulate(){
+ const p=PREFILL||{},v=p.vehicleDetails||{},d=p.dekraPortal||{};
+ const a=Number(String(v.originalMileage||'').replace(/,/g,'')),b=Number(String(v.complaintMileage||'').replace(/,/g,''));
+ const values={reference:p.issueKey||'',make:v.make||'',model:v.model||'',registration:v.registration||'',location:d.location||'',customer:p.customerName||'',phone:p.customerPhone||'',email:d.email||'',concern:d.concern||'',supplied:dekraDateValue(d.supplied),purchaseMileage:v.originalMileage??'',complaintMileage:v.complaintMileage??'',reported:dekraDateValue(d.reported||p.receivedDate),milesTravelled:Number.isFinite(a)&&Number.isFinite(b)&&b>=a&&String(v.originalMileage||'')!==''&&String(v.complaintMileage??'')!==''?String(b-a):'',daysOwned:d.daysOwned||'',service:dekraDateValue(d.service),scope:DEKRA_SCOPE};
+ for(const [key,value]of Object.entries(values)){const el=document.getElementById('dekra_v_'+key);if(el)el.value=String(value??'');}
+}
+async function dekraCopy(value){
+ if(!value){$('#dekraStatus').textContent='This field is empty. Add the details before copying.';return false;}
+ try{await navigator.clipboard.writeText(value);return true;}catch(e){
+  const el=document.createElement('textarea');el.value=value;el.style.position='fixed';el.style.left='-9999px';document.body.appendChild(el);el.select();const ok=document.execCommand('copy');el.remove();if(!ok)throw new Error('Clipboard unavailable');return true;
+ }
+}
+function dekraInit(){
+ const target=$('#dekraPortalFields');target.replaceChildren();
+ for(const group of DEKRA_GROUPS){
+  const section=document.createElement('section');section.className='dekra-section';const header=document.createElement('div');header.className='dekra-section-header';const title=document.createElement('h3');title.textContent=group.title;const hint=document.createElement('small');hint.textContent=group.hint;header.append(title,hint);section.appendChild(header);
+  const grid=document.createElement('div');grid.className='dekra-grid';
+  for(const [id,label,kind] of group.fields){const field=document.createElement('div');field.className='dekra-field'+(kind?' wide':'');const lab=document.createElement('label');lab.htmlFor='dekra_v_'+id;lab.textContent=label;const wrap=document.createElement('div');wrap.className='dekra-input-wrap';const el=document.createElement(kind?'textarea':'input');el.id='dekra_v_'+id;if(kind)el.className=kind;else el.type='text';el.autocomplete='off';const btn=document.createElement('button');btn.className='dekra-copy';btn.type='button';btn.title='Copy '+label;btn.setAttribute('aria-label','Copy '+label);btn.textContent='⧉';btn.addEventListener('click',async()=>{try{if(await dekraCopy(dekraValue(id))){btn.textContent='✓';$('#dekraStatus').textContent=label+' copied to clipboard.';setTimeout(()=>btn.textContent='⧉',1200);}}catch(e){$('#dekraStatus').textContent='Could not copy. Select the field and copy it manually.';}});wrap.append(el,btn);field.append(lab,wrap);grid.appendChild(field);}
+  section.appendChild(grid);target.appendChild(section);
+ }
+ dekraPopulate();
+ $('#dekraCopyAll').addEventListener('click',async()=>{const parts=[];for(const group of DEKRA_GROUPS){const rows=group.fields.map(([id,label])=>[label,dekraValue(id)]).filter(([,v])=>v);if(rows.length)parts.push(group.title+'\n'+rows.map(([l,v])=>l+': '+v).join('\n'));}try{if(await dekraCopy(parts.join('\n\n')))$('#dekraStatus').textContent='All populated DEKRA details copied.';}catch(e){$('#dekraStatus').textContent='Copy failed. Please copy fields individually.';}});
+ $('#dekraSaveComment').addEventListener('click',async function(){
+  if(!dekraValue('reference')||!dekraValue('concern')){$('#dekraStatus').textContent='Complete the complaint reference and reported concern before saving.';$('#dekraStatus').classList.add('error');return;}
+  if(!confirm('Save these prepared DEKRA portal details as an internal Jira comment? This does not submit the inspection to DEKRA.'))return;
+  const fields={};for(const group of DEKRA_GROUPS)for(const [id]of group.fields)fields[id]=dekraValue(id);
+  this.disabled=true;$('#dekraStatus').textContent='Saving Jira record…';$('#dekraStatus').classList.remove('error');
+  try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'dekra_portal_comment',fields})});const result=await r.json();if(!r.ok||!result.ok)throw new Error(result.errors?.[0]||'Save failed');$('#dekraStatus').textContent='Prepared DEKRA details saved as an internal Jira comment. Portal submission is still required.';showActionsSaveToast('DEKRA preparation saved to Jira.');}
+  catch(e){$('#dekraStatus').textContent='Unable to save: '+e.message;$('#dekraStatus').classList.add('error');}finally{this.disabled=false;}
+ });
+}
+
 function boot(){
   var token=getToken();
   if(!token){$('#loading').textContent='This link is missing its access token. Please regenerate it from the complaint.';return;}
@@ -4230,7 +4301,7 @@ function boot(){
       initRejCalc();initInspCalc();initCostEditors();
       applyPrefill();restoreRejectionBreakdowns();restoreCostBreakdowns();restoreInspectionBreakdowns();syncRej();syncFos();recompute();initRunningCosts();updateCostRequirements();renderFosRequiredActions();initRunningOnlySave();initSubmit();initManagementActions();initClosedLock();initReview();
       // Outside FOS Decision Review, keep the existing default-to-FOS behaviour.
-      initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();acuInit();
+      initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();dekraInit();acuInit();
     })
     .catch(function(){$('#loading').textContent='Network error loading the complaint.';});
 }
