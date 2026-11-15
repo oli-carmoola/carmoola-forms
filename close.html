@@ -719,6 +719,21 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 .overview-timeline-lines{position:absolute;inset:0;width:100%;height:100%;z-index:1;overflow:hidden;pointer-events:none}
 .overview-timeline-lines path{fill:none;stroke:#e8dfe8;stroke-width:2.4;stroke-linecap:round}
 .overview-timeline-lines path.is-complete{stroke:#ef9ac4}
+/* Compact, read-only customer statement and breach panels on Overview. */
+.overview-customer-panel,.overview-breaches-panel{margin-top:15px}
+.overview-customer-intro{font-size:11px;color:#8b7a8c;margin:-3px 0 12px}
+.overview-customer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.overview-customer-entry{border:1px solid #eee4ed;background:#fcfafd;border-radius:12px;padding:11px 13px;min-width:0}
+.overview-customer-entry summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer}
+.overview-customer-entry summary::-webkit-details-marker{display:none}
+.overview-customer-entry summary strong{font-size:12px;color:#39233a}
+.overview-customer-entry summary span{font-size:11px;color:#aa3e76;white-space:nowrap}
+.overview-customer-preview{font-size:12px;color:#695b6c;line-height:1.55;margin-top:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap;overflow-wrap:anywhere}
+.overview-customer-entry[open] .overview-customer-preview{display:block;overflow:visible;-webkit-line-clamp:unset}
+.overview-breaches-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.overview-breach-item{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff8fb;border:1px solid #f3dfeb;border-radius:10px;padding:10px 12px;min-width:0}
+.overview-breach-item strong{font-size:12px;color:#673451}.overview-breach-item small{font-size:11px;color:#897784;white-space:nowrap}
+@media(max-width:760px){.overview-customer-grid,.overview-breaches-list{grid-template-columns:1fr}}
 .overview-details-panel{margin-top:15px}
 .overview-suspense-panel[hidden]{display:none!important}
 .rail-link[hidden],#actionsSuspense[hidden]{display:none!important}
@@ -1186,6 +1201,15 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <section class="overview-panel overview-timeline-panel" aria-labelledby="overviewTimelineTitle">
       <div class="overview-panel-head"><h3 id="overviewTimelineTitle">Complaint timeline</h3><span>KEY MILESTONES</span></div>
       <div class="overview-timeline" id="overviewTimeline" role="list" aria-label="Complaint milestones"></div>
+    </section>
+    <section class="overview-panel overview-customer-panel" id="overviewCustomerStatements" aria-labelledby="overviewCustomerStatementsTitle" hidden>
+      <div class="overview-panel-head"><h3 id="overviewCustomerStatementsTitle">In the customer's own words</h3><span>CUSTOMER-PROVIDED TEXT</span></div>
+      <p class="overview-customer-intro">The customer's original description and the outcome they asked for, recorded in the complaint.</p>
+      <div class="overview-customer-grid" id="overviewCustomerStatementEntries"></div>
+    </section>
+    <section class="overview-panel overview-breaches-panel" id="overviewBreaches" aria-labelledby="overviewBreachesTitle" hidden>
+      <div class="overview-panel-head"><h3 id="overviewBreachesTitle">Recorded breaches</h3><span id="overviewBreachCount"></span></div>
+      <div class="overview-breaches-list" id="overviewBreachesList"></div>
     </section>
     <section class="overview-panel overview-suspense-panel" id="overviewSuspenseSection" aria-labelledby="overviewSuspenseTitle" hidden>
       <div class="overview-panel-head"><h3 id="overviewSuspenseTitle">Suspense Payments</h3><span>MATCHED RECEIPTS</span></div>
@@ -3917,6 +3941,34 @@ function overviewRender(){
   timeline._overviewResizeObserver=new ResizeObserver(layoutOverviewTimeline);
   timeline._overviewResizeObserver.observe(timeline);
  }
+ // Compact customer-provided text: display as supplied, never AI-rewrite or treat as handler notes.
+ var customerWords=[['Customer issue description',o.customerIssueText],['Customer ideal outcome',o.customerIdealOutcomeText]];
+ var wordsHolder=$('#overviewCustomerStatementEntries');wordsHolder.replaceChildren();
+ customerWords.forEach(function(pair){
+  var text=plain(pair[1]);if(!text)return;
+  var details=document.createElement('details');details.className='overview-customer-entry';
+  var summary=document.createElement('summary');var title=document.createElement('strong');title.textContent=pair[0];
+  var control=document.createElement('span');control.textContent='Read full text ↓';summary.append(title,control);
+  var body=document.createElement('div');body.className='overview-customer-preview';body.textContent=text;
+  details.addEventListener('toggle',function(){control.textContent=details.open?'Show less ↑':'Read full text ↓';});
+  details.append(summary,body);wordsHolder.appendChild(details);
+ });
+ $('#overviewCustomerStatements').hidden=!wordsHolder.children.length;
+ // A breach is present only with an affirmative status or a dated breach
+ // where the flag is not explicitly negative. Empty/No/None never trigger a card.
+ var recorded=(Array.isArray(o.breaches)?o.breaches:[]).filter(function(b){
+  var status=plain(b.status);var negative=/^(no(?:\b|\s|\s*-)|n$|false\b|none\b|not\s+(?:breached|applicable|yet)\b|n\/a\b)/i.test(status);
+  var affirmative=/^(yes\b|y$|true\b|breach(?:ed)?\b|late\b|missed\b)/i.test(status);
+  return !negative&&(affirmative||!!plain(b.date));
+ });
+ var breachesHolder=$('#overviewBreachesList');breachesHolder.replaceChildren();
+ recorded.forEach(function(b){var item=document.createElement('div');item.className='overview-breach-item';
+  var label=document.createElement('strong');label.textContent=b.label;
+  var date=document.createElement('small');date.textContent=plain(b.date)?formatDisplayDate(b.date):(plain(b.status)||'Recorded');
+  item.append(label,date);breachesHolder.appendChild(item);
+ });
+ $('#overviewBreaches').hidden=!recorded.length;
+ $('#overviewBreachCount').textContent=recorded.length+' BREACH'+(recorded.length===1?'':'ES');
  // Suspense data is read-only here. The Post-Resolution workflow owns classification and reconciliation.
  var suspense=p.suspensePayments||{},matchCount=Number(suspense.matchCount||0);
  var suspenseSection=$('#overviewSuspenseSection');
