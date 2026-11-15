@@ -973,6 +973,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .dekra-footer{display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:12px;padding:17px 0 4px}.dekra-footer-actions{display:flex;flex-wrap:wrap;gap:9px}.dekra-secondary{background:#fff;color:#4C2D47;border:1px solid #DCD0DF;border-radius:9px;font-weight:750;padding:11px 15px;cursor:pointer;font-family:inherit}.dekra-secondary:hover{background:#FCF4F9}.dekra-save{background:var(--pink);color:#fff;border:0;border-radius:9px;font:750 13px 'DM Sans',sans-serif;cursor:pointer;padding:11px 17px}.dekra-save:disabled{opacity:.6;cursor:wait}.dekra-status{font-size:12px;color:#715F74;line-height:1.5}.dekra-status.error{color:#A62844}
 @media(max-width:690px){.dekra-grid{grid-template-columns:1fr}.dekra-section{padding:17px}.dekra-head{padding:19px}.dekra-footer{align-items:stretch;flex-direction:column}.dekra-footer-actions{width:100%}.dekra-footer-actions button{flex:1}}
 
+.dekra-builder p,.dekra-confirm p{font-size:13px;color:var(--muted);line-height:1.6;max-width:820px;margin:9px 0 18px}.dekra-builder-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:17px}.dekra-check{display:flex;align-items:center;gap:10px;margin:12px 0;font-size:13px;color:#342738}.dekra-check input{accent-color:#ed007b;width:17px;height:17px}.dekra-confirm{margin-top:16px}.dekra-builder .dekra-field input{width:100%;border:1px solid #ddd0df;border-radius:10px;padding:12px;font:inherit;margin-top:7px}.dekra-builder-actions .dekra-save:disabled{opacity:.55}
 </style>
 </head>
 <body>
@@ -1192,6 +1193,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
   <div class="overview-legacy-controls" aria-hidden="true">
   <div class="home-action-heading"><div><h3>What would you like to do?</h3><p>Select a workspace to continue managing this complaint.</p></div><span class="home-action-count">7 WORKSPACES</span></div>
   <div class="actions-tiles home-tiles home-tiles-five">
+    <button type="button" class="actions-tile" data-go="dekra" id="dekraHomeTile" hidden><span class="tile-top"><span class="glyph">⌕</span><span class="arrow">↗</span></span><span class="tile-copy"><strong>DEKRA Inspection Request</strong><small>Generate an AI request and copy details to the DEKRA portal</small></span></button>
     <button type="button" class="actions-tile" data-go="running"><span class="tile-top"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M8 15h3"/></svg></span><span class="arrow">↗</span></span><span class="tile-copy"><strong>Running Costs</strong><small>Record and manage complaint expenses</small></span></button>
     <button type="button" class="actions-tile" id="homeRejectionTile"><span class="tile-top"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 7h8M8 12h3M8 17h8M15 11v5M12.5 13.5h5"/></svg></span><span class="arrow">↗</span></span><span class="tile-copy"><strong>Calculate Vehicle Rejection Loss</strong><small>Calculate and save the customer-side loss to Complaints Hub</small></span></button>
     <button type="button" class="actions-tile" id="dealerHomeTile" hidden data-go="dealer"><span class="tile-top"><span class="glyph">▣</span><span class="arrow">↗</span></span><span class="tile-copy"><strong>Dealership Position</strong><small id="dealerHomeHint">Record trading or insolvency position</small></span></button>
@@ -1206,9 +1208,10 @@ textarea.letters-field{min-height:85px;resize:vertical}
 
 <section id="actionsDekra" class="actions-page" aria-label="DEKRA inspection portal request" hidden>
   <div class="dekra-head"><span class="eyebrow">Vehicle issues · inspection request</span><h2>DEKRA Inspection Request</h2><p>Prepare the inspection request and copy each detail directly into the DEKRA portal. Details are prefilled from the complaint where available and can be corrected before copying.</p></div>
-  <div class="dekra-notice"><strong>Portal submission is manual.</strong> Preparing this form or saving its Jira record does not submit an inspection to DEKRA or notify the customer. Confirm the request in the DEKRA portal before using any existing sent/booked workflow.</div>
+  <div class="dekra-notice"><strong>Portal submission is manual.</strong> Generating the request records DEKRA Requested in Jira. You must still copy the details into DEKRA’s portal and submit them manually. Generating does not mean an appointment is booked.</div>
+  <div class="dekra-section dekra-builder"><h3>Prepare inspection request</h3><p>Start here to generate a concise AI summary of the reported vehicle faults, populate the portal fields and save a structured internal Jira comment. You can review the details before or after generating.</p><label class="dekra-field" style="max-width:750px"><span>Override vehicle location (optional)</span><input type="text" id="dekraOverrideLocation" placeholder="Leave empty to use the saved car location" /></label><label class="dekra-check"><input type="checkbox" id="dekraEmailCustomer"> Email the customer that an inspection has been requested</label><div class="dekra-builder-actions"><button type="button" class="dekra-save" id="dekraGenerate">Generate DEKRA request</button><span class="dekra-status" id="dekraGenerateStatus" role="status">No request generated yet.</span></div></div>
   <div id="dekraPortalFields"></div>
-  <div class="dekra-footer"><span class="dekra-status" id="dekraStatus" role="status" aria-live="polite">Review the information before copying into the portal.</span><div class="dekra-footer-actions"><button class="dekra-secondary" type="button" id="dekraCopyAll">▤ &nbsp;Copy all fields</button><button class="dekra-save" type="button" id="dekraSaveComment">Save details to Jira</button></div></div>
+  <div class="dekra-footer"><span class="dekra-status" id="dekraStatus" role="status" aria-live="polite">Generate the request, review the values and copy them into the DEKRA portal.</span><div class="dekra-footer-actions"><button class="dekra-secondary" type="button" id="dekraCopyAll">▤ &nbsp;Copy all fields</button><button class="dekra-secondary" type="button" id="dekraSaveComment">Save edited details to Jira</button></div></div>
 </section>
 
 <section id="actionsDealer" class="actions-page" aria-label="Dealership Position">
@@ -3675,6 +3678,7 @@ function hubUpdateRail(page){
  rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
  if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=initialGate?'Initial call required':(PREFILL.statusName||'Complaints Hub');}
  $('#railDekraRequest').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
+ $('#dekraHomeTile').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
  $('#railCustomerUpdates').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
  var suspenseCount=Number(PREFILL.suspensePayments?.matchCount||0);
  var suspenseAvailable=Number.isFinite(suspenseCount)&&suspenseCount>0;
@@ -4276,14 +4280,35 @@ function dekraInit(){
  }
  dekraPopulate();
  $('#dekraCopyAll').addEventListener('click',async()=>{const parts=[];for(const group of DEKRA_GROUPS){const rows=group.fields.map(([id,label])=>[label,dekraValue(id)]).filter(([,v])=>v);if(rows.length)parts.push(group.title+'\n'+rows.map(([l,v])=>l+': '+v).join('\n'));}try{if(await dekraCopy(parts.join('\n\n')))$('#dekraStatus').textContent='All populated DEKRA details copied.';}catch(e){$('#dekraStatus').textContent='Copy failed. Please copy fields individually.';}});
+ let generated=false;
+ const DEKRA_API='https://dpbwnmjqcbaebszwqgea.supabase.co/functions/v1/dekra-inspection-request';
+ async function dekraCall(action,extra={}){
+   const r=await fetch(DEKRA_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action,...extra})});
+   const d=await r.json();if(!r.ok||!d.ok)throw Error(d.errors?.[0]||'DEKRA request failed');return d;
+ }
+ function applyDekraFields(fields){if(!fields)return;for(const [name,value] of Object.entries(fields)){const el=document.getElementById('dekra_v_'+name);if(el)el.value=String(value??'');}}
+ async function loadDekraSaved(){
+   try{const data=await dekraCall('load');if(data.fields){applyDekraFields(data.fields);generated=true;$('#dekraGenerateStatus').textContent='Previously generated request loaded from Jira. Copy the fields into DEKRA’s portal.';}
+   if(data.requested){$('#dekraGenerate').textContent='Already requested';$('#dekraGenerate').disabled=true;if(!data.fields)$('#dekraGenerateStatus').textContent='DEKRA is already marked as requested. A saved request is not available here.';}}
+   catch(e){$('#dekraGenerateStatus').textContent='Unable to check an existing DEKRA request: '+e.message;$('#dekraGenerate').disabled=true;}
+ }
  $('#dekraSaveComment').addEventListener('click',async function(){
-  if(!dekraValue('reference')||!dekraValue('concern')){$('#dekraStatus').textContent='Complete the complaint reference and reported concern before saving.';$('#dekraStatus').classList.add('error');return;}
-  if(!confirm('Save these prepared DEKRA portal details as an internal Jira comment? This does not submit the inspection to DEKRA.'))return;
-  const fields={};for(const group of DEKRA_GROUPS)for(const [id]of group.fields)fields[id]=dekraValue(id);
-  this.disabled=true;$('#dekraStatus').textContent='Saving Jira record…';$('#dekraStatus').classList.remove('error');
-  try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'dekra_portal_comment',fields})});const result=await r.json();if(!r.ok||!result.ok)throw new Error(result.errors?.[0]||'Save failed');$('#dekraStatus').textContent='Prepared DEKRA details saved as an internal Jira comment. Portal submission is still required.';showActionsSaveToast('DEKRA preparation saved to Jira.');}
-  catch(e){$('#dekraStatus').textContent='Unable to save: '+e.message;$('#dekraStatus').classList.add('error');}finally{this.disabled=false;}
+   const fields={};for(const group of DEKRA_GROUPS)for(const [id] of group.fields)fields[id]=dekraValue(id);
+   if(!fields.concern){$('#dekraStatus').textContent='Enter a reported concern first.';return;}
+   if(!confirm('Save these edited DEKRA details as an additional internal Jira comment?'))return;
+   this.disabled=true;try{await dekraCall('save_comment',{fields});$('#dekraStatus').textContent='Edited details saved in a Jira comment.';}catch(e){$('#dekraStatus').textContent=e.message;}finally{this.disabled=false;}
  });
+ $('#dekraGenerate').addEventListener('click',async function(){
+   this.disabled=true;$('#dekraGenerateStatus').textContent='Generating an AI summary and saving the DEKRA request…';
+   try{
+     const data=await dekraCall('generate',{overrideLocation:$('#dekraOverrideLocation').value.trim(),emailCustomer:$('#dekraEmailCustomer').checked});
+     applyDekraFields(data.fields);generated=true;
+     $('#dekraGenerateStatus').textContent=data.message+(data.notification?' '+data.notification:'');
+     $('#dekraStatus').textContent='Copy each field into the DEKRA portal and submit the request there.';
+     this.textContent='Already requested';showActionsSaveToast('DEKRA request recorded in Jira.');
+   }catch(e){$('#dekraGenerateStatus').textContent='Could not generate request: '+e.message;this.disabled=false;}
+ });
+ loadDekraSaved();
 }
 
 function boot(){
