@@ -705,18 +705,20 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 
 
 
-/* Complaint history as a full-width, responsive milestone timeline. */
-.overview-timeline-panel{margin-top:24px;padding:22px 24px 25px}
-.overview-timeline{display:grid;grid-template-columns:repeat(var(--timeline-columns, 1),minmax(0,1fr));column-gap:0;row-gap:24px;align-items:start;margin:19px 0 0;overflow:visible;min-width:0}
-.overview-timeline-step{position:relative;min-width:0;padding:36px 10px 0 0;display:flex;flex-direction:column;align-items:flex-start;gap:6px;overflow-wrap:break-word}
-.overview-timeline-step:not(.is-row-end):before{content:"";position:absolute;top:12px;left:12px;right:-1px;height:3px;background:#ebe4eb}
-.overview-timeline-step.is-complete:not(.is-row-end):before{background:#f4aacd}
-.overview-timeline-dot{position:absolute;top:2px;left:0;width:23px;height:23px;box-sizing:border-box;border:2px solid #ded4de;border-radius:50%;background:#fff;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:900;z-index:1}
+/* Compact, connected complaint milestone journey — no horizontal scrollbar. */
+.overview-timeline-panel{margin-top:18px;padding:18px 21px 19px}
+.overview-timeline{position:relative;display:grid;grid-template-columns:repeat(var(--timeline-columns, 1),minmax(0,1fr));column-gap:0;row-gap:30px;align-items:start;margin:15px 0 0;overflow:visible;min-width:0}
+.overview-timeline-step{position:relative;z-index:2;min-width:0;min-height:62px;padding:30px 9px 0 0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;overflow-wrap:break-word}
+.overview-timeline-step:before{display:none!important}
+.overview-timeline-dot{position:absolute;top:3px;left:0;width:21px;height:21px;box-sizing:border-box;border:2px solid #ded4de;border-radius:50%;background:#fff;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:900;z-index:2}
 .overview-timeline-step.is-complete .overview-timeline-dot{border-color:#e9007b;background:#e9007b}
 .overview-timeline-step.is-pending .overview-timeline-dot{background:#fff}
-.overview-timeline-step strong{font-size:12px;font-weight:800;color:#372439;line-height:1.35}
-.overview-timeline-step small{font-size:11px;color:#8d7f8e;line-height:1.4}
+.overview-timeline-step strong{font-size:11.5px;font-weight:800;color:#372439;line-height:1.27;max-width:100%}
+.overview-timeline-step small{font-size:10.5px;color:#8d7f8e;line-height:1.3;max-width:100%}
 .overview-timeline-step.is-pending strong{color:#8a7d8c}
+.overview-timeline-lines{position:absolute;inset:0;width:100%;height:100%;z-index:1;overflow:visible;pointer-events:none}
+.overview-timeline-lines path{fill:none;stroke:#ebe4eb;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.overview-timeline-lines path.is-complete{stroke:#f09ac4}
 .overview-details-panel{margin-top:15px}
 .overview-suspense-panel[hidden]{display:none!important}
 .rail-link[hidden],#actionsSuspense[hidden]{display:none!important}
@@ -744,7 +746,7 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 .overview-suspense-note{font-size:11px;color:#8b7d89;margin:10px 0 0}
 @media(max-width:620px){.overview-suspense-stats{grid-template-columns:1fr}.overview-suspense-table{min-width:450px}}
 .overview-details-panel .overview-detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:26px}
-@media(max-width:710px){.overview-timeline-panel{padding:17px}.overview-timeline{row-gap:20px}.overview-timeline-step{padding-right:8px}.overview-details-panel .overview-detail-list{grid-template-columns:1fr}}
+@media(max-width:710px){.overview-timeline-panel{padding:16px}.overview-timeline{row-gap:25px}.overview-timeline-step{padding-right:5px}.overview-details-panel .overview-detail-list{grid-template-columns:1fr}}
 
 /* Letters & Responses: calm, focused workspace */
 .letters-wrap{max-width:1100px;margin:0 auto;padding:4px 0 40px}
@@ -954,10 +956,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
 @media(max-width:650px){.acu-timeline{padding-left:31px}.acu-timeline:before{left:10px!important}.acu-timeline-dot{left:-31px;width:20px;height:20px}.acu-timeline-card-head{padding:15px}.acu-timeline-body{padding:16px}.acu-timeline-pill{font-size:10px}}
 @media(max-width:800px){.acu-stats,.acu-choice{grid-template-columns:1fr}.acu-header{flex-wrap:wrap}.acu-panel{padding:18px}.acu-header h2{font-size:26px}}
 
-/* Milestone timeline retains enough room for longer labels and scrolls on small screens. */
-.overview-timeline-step{min-width:126px}
-.overview-timeline-step strong{max-width:130px}
-.overview-timeline-step small{max-width:136px}
+/* Timeline widths are responsive; do not enforce a per-step minimum. */
 
 /* DEKRA portal copy workspace */
 .dekra-head{padding:24px 26px;border:1px solid var(--line);border-radius:16px;background:#fff;margin-bottom:16px;box-shadow:var(--shadow)}
@@ -3859,20 +3858,58 @@ function overviewRender(){
   var detail=document.createElement('small');detail.textContent=step.done?(plain(step.date)?formatDisplayDate(step.date):(step.fallback||'Recorded')):'Pending';
   el.setAttribute('aria-label',step.label+': '+detail.textContent);el.append(dot,label,detail);timeline.appendChild(el);
  });
- // Fit milestones without a horizontal scrollbar. When a single row would make
- // labels cramped, split into balanced rows and end the connecting line per row.
+ // Keep the journey compact. Connect wrapped rows with an unobtrusive
+ // continuous line, rather than showing disconnected rows or a scrollbar.
  function layoutOverviewTimeline(){
+  var previous=timeline.querySelector('.overview-timeline-lines');
+  if(previous)previous.remove();
   var nodes=Array.from(timeline.querySelectorAll('.overview-timeline-step'));
   if(!nodes.length)return;
   var width=timeline.clientWidth||timeline.parentElement.clientWidth||700;
-  var minMilestoneWidth=width<520?125:width<900?140:155;
-  var maxColumns=Math.max(1,Math.floor(width/minMilestoneWidth));
+  var minWidth=width<520?120:width<900?130:145;
+  var maxColumns=Math.max(1,Math.floor(width/minWidth));
   var rows=Math.ceil(nodes.length/maxColumns);
   var columns=Math.ceil(nodes.length/rows);
   timeline.style.setProperty('--timeline-columns',String(columns));
-  nodes.forEach(function(node,index){
-   node.classList.toggle('is-row-end',(index+1)%columns===0||index===nodes.length-1);
+  nodes.forEach(function(node,index){node.classList.toggle('is-row-end',(index+1)%columns===0||index===nodes.length-1);});
+  // Measure after the grid has its final column count.
+  var svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('class','overview-timeline-lines');
+  svg.setAttribute('aria-hidden','true');
+  svg.setAttribute('preserveAspectRatio','none');
+  var bounds=timeline.getBoundingClientRect();
+  svg.setAttribute('viewBox','0 0 '+Math.max(1,bounds.width)+' '+Math.max(1,bounds.height));
+  var dots=nodes.map(function(node){
+   var r=node.querySelector('.overview-timeline-dot').getBoundingClientRect();
+   return {x:r.left-bounds.left+r.width/2,y:r.top-bounds.top+r.height/2};
   });
+  nodes.forEach(function(node,i){
+   if(i===nodes.length-1)return;
+   var a=dots[i],b=dots[i+1],sameRow=Math.abs(a.y-b.y)<6;
+   var d;
+   if(sameRow){d='M '+a.x+' '+a.y+' L '+b.x+' '+b.y;}
+   else{
+    // Wrap around the outer edge, then reconnect to the start of the next row.
+    // Rounded corners avoid a hard break between rows.
+    var right=Math.min(bounds.width-6,Math.max(a.x,b.x)+14);
+    var left=Math.max(6,b.x-13);
+    var middle=(a.y+b.y)/2;
+    var radius=Math.min(10,Math.max(3,(b.y-a.y)/5));
+    d='M '+a.x+' '+a.y+' L '+(right-radius)+' '+a.y+
+      ' Q '+right+' '+a.y+' '+right+' '+(a.y+radius)+
+      ' L '+right+' '+(middle-radius)+
+      ' Q '+right+' '+middle+' '+(right-radius)+' '+middle+
+      ' L '+(left+radius)+' '+middle+
+      ' Q '+left+' '+middle+' '+left+' '+(middle+radius)+
+      ' L '+left+' '+(b.y-radius)+
+      ' Q '+left+' '+b.y+' '+b.x+' '+b.y;
+   }
+   var path=document.createElementNS('http://www.w3.org/2000/svg','path');
+   path.setAttribute('d',d);
+   if(node.classList.contains('is-complete')&&nodes[i+1].classList.contains('is-complete'))path.setAttribute('class','is-complete');
+   svg.appendChild(path);
+  });
+  timeline.prepend(svg);
  }
  layoutOverviewTimeline();
  if(!timeline._overviewResizeObserver&&typeof ResizeObserver!=='undefined'){
