@@ -1003,6 +1003,25 @@ textarea.letters-field{min-height:85px;resize:vertical}
 
 .dekra-builder p,.dekra-confirm p{font-size:13px;color:var(--muted);line-height:1.6;max-width:820px;margin:9px 0 18px}.dekra-builder-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:17px}.dekra-check{display:flex;align-items:center;gap:10px;margin:12px 0;font-size:13px;color:#342738}.dekra-check input{accent-color:#ed007b;width:17px;height:17px}.dekra-confirm{margin-top:16px}.dekra-builder .dekra-field input{width:100%;border:1px solid #ddd0df;border-radius:10px;padding:12px;font:inherit;margin-top:7px}.dekra-builder-actions .dekra-save:disabled{opacity:.55}
 
+
+/* Two-step DEKRA generator: input stage and separate copyable output */
+.dekra-step-label{font-size:10px;font-weight:850;letter-spacing:.11em;color:#a14379;margin-bottom:8px}
+.dekra-preflight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0 18px}
+.dekra-preflight-field{display:flex;flex-direction:column;gap:7px;min-width:0}.dekra-preflight-field.wide{grid-column:1/-1}
+.dekra-preflight-field>span{font-size:12px;font-weight:750;color:#49394c;display:flex;align-items:center;gap:8px}
+.dekra-preflight-field em{font-size:10px;font-style:normal;font-weight:750;color:#a63067;background:#fff0f7;padding:3px 7px;border-radius:12px}
+.dekra-preflight-field small{font-size:11px;font-weight:500;color:var(--muted)}
+.dekra-preflight-field input,.dekra-preflight-field textarea{box-sizing:border-box;width:100%;border:1px solid #e4d7e5;border-radius:10px;background:#fff;padding:11px 13px;color:var(--ink);font:500 13px 'DM Sans',sans-serif;outline:0}
+.dekra-preflight-field textarea{resize:vertical;min-height:75px;line-height:1.55}
+.dekra-preflight-field input:focus,.dekra-preflight-field textarea:focus{border-color:#e60078;box-shadow:0 0 0 3px rgba(230,0,120,.09)}
+.dekra-preflight-field input[aria-invalid="true"]{border-color:#c13d4b;background:#fff8f9}
+.dekra-email-choice{display:flex;align-items:flex-start;gap:11px;padding:13px 15px;background:#fdf9fc;border:1px solid #f0e6ef;border-radius:11px;cursor:pointer}
+.dekra-email-choice input{width:17px;height:17px;accent-color:#ec0078;margin-top:2px;flex:none}.dekra-email-choice span{display:grid;gap:4px}.dekra-email-choice strong{font-size:12.5px;color:#403047}.dekra-email-choice small{font-size:11.5px;color:var(--muted)}
+.dekra-output-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:22px 0 15px;padding:0 2px}.dekra-output-head h3{font-size:20px;margin:0 0 5px;color:var(--ink)}.dekra-output-head p{color:var(--muted);font-size:12.5px;margin:0}
+.dekra-output-head button{white-space:nowrap}.dekra-section-header{align-items:flex-start}
+#dekraGeneratedResult[hidden]{display:none!important}
+@media(max-width:690px){.dekra-preflight-grid{grid-template-columns:1fr}.dekra-output-head{align-items:flex-start;flex-direction:column}.dekra-preflight-field.wide{grid-column:auto}}
+
 /* Compact four-week holding form and editable email */
 #lettersFourWorkspace .fourwk-card{max-width:940px}
 .fourwk-preview{border-top:1px solid #f0e9ef;margin-top:22px;padding-top:19px}
@@ -1260,9 +1279,24 @@ textarea.letters-field{min-height:85px;resize:vertical}
 <section id="actionsDekra" class="actions-page" aria-label="DEKRA inspection portal request" hidden>
   <div class="dekra-head"><span class="eyebrow">Vehicle issues · inspection request</span><h2>DEKRA Inspection Request</h2><p>Prepare the inspection request and copy each detail directly into the DEKRA portal. Details are prefilled from the complaint where available and can be corrected before copying.</p></div>
   <div class="dekra-notice"><strong>Portal submission is manual.</strong> Generating the request records DEKRA Requested in Jira. You must still copy the details into DEKRA’s portal and submit them manually. Generating does not mean an appointment is booked.</div>
-  <div class="dekra-section dekra-builder"><h3>Prepare inspection request</h3><p>Start here to generate a concise AI summary of the reported vehicle faults, populate the portal fields and save a structured internal Jira comment. You can review the details before or after generating.</p><label class="dekra-field" style="max-width:750px"><span>Override vehicle location (optional)</span><input type="text" id="dekraOverrideLocation" placeholder="Leave empty to use the saved car location" /></label><label class="dekra-check"><input type="checkbox" id="dekraEmailCustomer"> Email the customer that an inspection has been requested</label><div class="dekra-builder-actions"><button type="button" class="dekra-save" id="dekraGenerate">Generate DEKRA request</button><span class="dekra-status" id="dekraGenerateStatus" role="status">No request generated yet.</span></div></div>
-  <div id="dekraPortalFields"></div>
-  <div class="dekra-footer"><span class="dekra-status" id="dekraStatus" role="status" aria-live="polite">Generate the request, review the values and copy them into the DEKRA portal.</span><div class="dekra-footer-actions"><button class="dekra-secondary" type="button" id="dekraCopyAll">▤ &nbsp;Copy all fields</button><button class="dekra-secondary" type="button" id="dekraSaveComment">Save edited details to Jira</button></div></div>
+  <section class="dekra-section dekra-builder" aria-labelledby="dekraInputsTitle">
+    <div class="dekra-step-label">STEP 1 OF 2</div>
+    <h3 id="dekraInputsTitle">Required inputs</h3>
+    <p>Check the prefilled details before generating. The original mileage and vehicle location are required. You can add further fault information to help the AI produce an accurate summary.</p>
+    <div class="dekra-preflight-grid">
+      <label class="dekra-preflight-field"><span>Vehicle location <em>Required</em></span><input id="dekraOverrideLocation" type="text" autocomplete="off" placeholder="Where DEKRA should inspect the vehicle" required></label>
+      <label class="dekra-preflight-field"><span>Mileage at purchase <em>Required</em></span><input id="dekraOriginalMileage" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 42,000" required></label>
+      <label class="dekra-preflight-field"><span>Mileage at complaint <small>Optional</small></span><input id="dekraCurrentMileage" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 44,200"></label>
+      <label class="dekra-preflight-field wide"><span>Additional vehicle issue information <small>Optional</small></span><textarea id="dekraIssueNotes" rows="3" placeholder="Any new symptoms, diagnosis or repairs DEKRA should know about"></textarea></label>
+    </div>
+    <label class="dekra-email-choice"><input type="checkbox" id="dekraEmailCustomer"><span><strong>Email the customer</strong><small>Send a Zendesk update after the request has been generated.</small></span></label>
+    <div class="dekra-builder-actions"><button type="button" class="dekra-save" id="dekraGenerate">✦ &nbsp;Generate DEKRA request</button><span class="dekra-status" id="dekraGenerateStatus" role="status">Nothing generated yet.</span></div>
+  </section>
+  <div id="dekraGeneratedResult" hidden>
+    <div class="dekra-output-head"><div><div class="dekra-step-label">STEP 2 OF 2</div><h3>Generated request</h3><p>Copy each field into the DEKRA portal, or copy the full formatted request in one go.</p></div><button class="dekra-save" type="button" id="dekraCopyFullTop">▤ &nbsp;Copy full request</button></div>
+    <div id="dekraPortalFields"></div>
+    <div class="dekra-footer"><span class="dekra-status" id="dekraStatus" role="status" aria-live="polite">Use the copy buttons to transfer the request to DEKRA's portal.</span><div class="dekra-footer-actions"><button class="dekra-secondary" type="button" id="dekraCopyAll">Copy all field values</button><button class="dekra-secondary" type="button" id="dekraSaveComment">Save edited details to Jira</button></div></div>
+  </div>
 </section>
 
 <section id="actionsDealer" class="actions-page" aria-label="Dealership Position">
@@ -1361,7 +1395,7 @@ Consider the appropriate resolution</textarea></label>
     </div>
     <div class="letters-actions"><button type="button" id="lettersGenerate" class="letters-btn primary">Generate letter</button></div>
   </div>
-  <div class="letters-card" id="lettersHoldingBlockedCard" hidden><div class="letters-existing-top"><div class="letters-document-icon" aria-hidden="true">✓</div><div><h3>No holding letter needed</h3><p class="letters-muted">The final response has already been sent, so a new eight-week holding letter cannot be generated.</p></div></div></div>
+  <div class="letters-card" id="lettersHoldingBlockedCard" hidden><div class="letters-existing-top"><div class="letters-document-icon" aria-hidden="true">⏳</div><div><h3 id="lettersHoldingBlockedTitle">Eight-week holding letter unavailable</h3><p class="letters-muted" id="lettersHoldingBlockedReason"></p></div></div></div>
   <div class="letters-card letters-working" id="lettersWaitingCard" hidden><div class="letters-existing-top"><span class="letters-working-spinner" aria-hidden="true"></span><div><h3>Draft generation requested</h3><p class="letters-muted">The Zap is creating the document in Google Drive. Refresh once it has finished.</p></div></div><div class="letters-actions"><button type="button" id="lettersWaitingRefresh" class="letters-btn">↻ Check for document</button></div></div>
   <div id="lettersGenerateMessage" class="letters-message" role="status" aria-live="polite"></div>
   <div class="letters-card" id="lettersSendCard" hidden>
@@ -4316,7 +4350,13 @@ function lettersRender(){
   outcome.replaceChildren();wanted.forEach(function(x){var option=document.createElement('option');option.value=x;option.textContent=x;outcome.appendChild(option);});
  }
  var doc=lettersSelectedDoc(),sent=lettersSelectedSent(),pending=lettersPending(),generating=lettersGenerationPending()||LETTERS_GENERATING;
- var holdingBlocked=holding&&!!LETTERS_STATE?.finalSent&&!doc&&!sent;
+ var holdingTooEarly=holding&&LETTERS_STATE?.holdingGenerateEligible===false;
+ var holdingBlocked=holding&&!doc&&!sent&&(!!LETTERS_STATE?.finalSent||holdingTooEarly);
+ if(holdingBlocked){
+  var finalBlocked=!!LETTERS_STATE?.finalSent;
+  $('#lettersHoldingBlockedTitle').textContent=finalBlocked?'No holding letter needed':'Eight-week holding letter not yet available';
+  $('#lettersHoldingBlockedReason').textContent=finalBlocked?'The final response has already been sent, so a new eight-week holding letter cannot be generated.':(LETTERS_STATE?.holdingAvailableDate?'You can generate this letter from '+formatDisplayDate(LETTERS_STATE.holdingAvailableDate)+' (53 calendar days after the complaint was received).':'The Complaint Received Date is missing or invalid. Add it in Jira before generating an eight-week holding letter.');
+ }
  var sentDate=holding?LETTERS_STATE?.holdingSentDate:LETTERS_STATE?.finalSentDate;
  var sentLabel=sent?(sentDate?'Sent · '+formatDisplayDate(sentDate):'Sent'):'';
  $('#lettersTopStatus').textContent=sent?sentLabel:pending?'Sending requested':doc?'Draft ready':generating?'Generating':'Not created';
@@ -4351,6 +4391,7 @@ async function lettersRefresh(){
 async function lettersGenerate(){
  if(LETTERS_BUSY||LETTERS_GENERATING||lettersGenerationPending()||lettersSelectedDoc()||lettersSelectedSent()||lettersPending())return;
  if(LETTERS_VIEW==='holding'&&LETTERS_STATE?.finalSent){$('#lettersGenerateMessage').textContent='An eight-week holding letter cannot be generated after the final response has been sent.';return;}
+ if(LETTERS_VIEW==='holding'&&LETTERS_STATE?.holdingGenerateEligible===false){$('#lettersGenerateMessage').textContent='An eight-week holding letter is not available yet. '+(LETTERS_STATE?.holdingAvailableDate?'Available from '+formatDisplayDate(LETTERS_STATE.holdingAvailableDate)+'.':'Add the Complaint Received Date in Jira first.');return;}
  var type=lettersSelectedType(),summary=$('#lettersSummary').value.trim(),details=$('#lettersDetails').value.trim(),facts=$('#lettersFacts').value.trim(),outcome=$('#lettersOutcome').value;
  if((type==='holding'&&!summary)||(type==='affordability'&&!facts)||(['general','vehicle'].includes(type)&&(!summary||!details))){$('#lettersGenerateMessage').textContent='Complete the required fields before generating the letter.';return;}
  LETTERS_BUSY=true;$('#lettersGenerateMessage').textContent='Requesting draft…';lettersRender();
@@ -4523,6 +4564,21 @@ function dekraInit(){
   section.appendChild(grid);target.appendChild(section);
  }
  dekraPopulate();
+ const p=PREFILL||{},v=p.vehicleDetails||{},d=p.dekraPortal||{};
+ $('#dekraOverrideLocation').value=String(d.location||'');
+ $('#dekraOriginalMileage').value=String(v.originalMileage??'');
+ $('#dekraCurrentMileage').value=String(v.complaintMileage??'');
+ function revealDekraOutput(){ $('#dekraGeneratedResult').hidden=false; }
+ function dekraFullComment(){
+   const lines=['DEKRA INSPECTION REQUEST - GENERATED IN COMPLAINTS HUB','Generated for manual copying into the DEKRA portal. No portal submission is verified.',''];
+   const jiraLabels={concern:'Reported vehicle concern',milesTravelled:'Miles travelled',daysOwned:'Days in possession'};
+   for(const group of DEKRA_GROUPS)for(const [id,label] of group.fields)lines.push(jiraLabels[id]||label,dekraValue(id)||'(not recorded)','');
+   return lines.join('\n').trim();
+ }
+ $('#dekraCopyFullTop').addEventListener('click',async function(){
+   try{if(await dekraCopy(dekraFullComment())){const original=this.textContent;this.textContent='✓ Copied full request';$('#dekraStatus').textContent='Complete Jira-style request copied.';setTimeout(()=>this.textContent=original,1600);}}
+   catch(e){$('#dekraStatus').textContent='Unable to copy the full request. Please try the individual copy buttons.';}
+ });
  $('#dekraCopyAll').addEventListener('click',async()=>{const parts=[];for(const group of DEKRA_GROUPS){const rows=group.fields.map(([id,label])=>[label,dekraValue(id)]).filter(([,v])=>v);if(rows.length)parts.push(group.title+'\n'+rows.map(([l,v])=>l+': '+v).join('\n'));}try{if(await dekraCopy(parts.join('\n\n')))$('#dekraStatus').textContent='All populated DEKRA details copied.';}catch(e){$('#dekraStatus').textContent='Copy failed. Please copy fields individually.';}});
  let generated=false;
  const DEKRA_API='https://dpbwnmjqcbaebszwqgea.supabase.co/functions/v1/dekra-inspection-request';
@@ -4532,7 +4588,7 @@ function dekraInit(){
  }
  function applyDekraFields(fields){if(!fields)return;for(const [name,value] of Object.entries(fields)){const el=document.getElementById('dekra_v_'+name);if(el)el.value=String(value??'');}}
  async function loadDekraSaved(){
-   try{const data=await dekraCall('load');if(data.fields){applyDekraFields(data.fields);generated=true;$('#dekraGenerateStatus').textContent='Previously generated request loaded from Jira. Copy the fields into DEKRA’s portal.';}
+   try{const data=await dekraCall('load');if(data.fields){applyDekraFields(data.fields);generated=true;revealDekraOutput();$('#dekraGenerateStatus').textContent='Previously generated request loaded. Your output is below.';}
    if(data.requested){$('#dekraGenerate').textContent='Already requested';$('#dekraGenerate').disabled=true;if(!data.fields)$('#dekraGenerateStatus').textContent='DEKRA is already marked as requested. A saved request is not available here.';}}
    catch(e){$('#dekraGenerateStatus').textContent='Unable to check an existing DEKRA request: '+e.message;$('#dekraGenerate').disabled=true;}
  }
@@ -4543,10 +4599,20 @@ function dekraInit(){
    this.disabled=true;try{await dekraCall('save_comment',{fields});$('#dekraStatus').textContent='Edited details saved in a Jira comment.';}catch(e){$('#dekraStatus').textContent=e.message;}finally{this.disabled=false;}
  });
  $('#dekraGenerate').addEventListener('click',async function(){
+   const location=$('#dekraOverrideLocation').value.trim();
+   const purchase=$('#dekraOriginalMileage').value.trim();
+   const current=$('#dekraCurrentMileage').value.trim();
+   const digits=/^\d[\d,]*$/;
+   const locationEl=$('#dekraOverrideLocation'),mileageEl=$('#dekraOriginalMileage');
+   locationEl.setAttribute('aria-invalid',String(!location));
+   mileageEl.setAttribute('aria-invalid',String(!digits.test(purchase)));
+   if(!location||!digits.test(purchase)){$('#dekraGenerateStatus').textContent='Enter a vehicle location and a valid mileage at purchase before generating.';(!location?locationEl:mileageEl).focus();return;}
+   if(current&&!digits.test(current)){$('#dekraGenerateStatus').textContent='Mileage at complaint must contain digits only.';$('#dekraCurrentMileage').focus();return;}
+   if(current&&Number(current.replace(/,/g,''))<Number(purchase.replace(/,/g,''))){$('#dekraGenerateStatus').textContent='Mileage at complaint cannot be lower than mileage at purchase.';$('#dekraCurrentMileage').focus();return;}
    this.disabled=true;$('#dekraGenerateStatus').textContent='Generating an AI summary and saving the DEKRA request…';
    try{
-     const data=await dekraCall('generate',{overrideLocation:$('#dekraOverrideLocation').value.trim(),emailCustomer:$('#dekraEmailCustomer').checked});
-     applyDekraFields(data.fields);generated=true;
+     const data=await dekraCall('generate',{overrideLocation:location,originalMileage:purchase,complaintMileage:current,additionalIssueNotes:$('#dekraIssueNotes').value.trim(),emailCustomer:$('#dekraEmailCustomer').checked});
+     applyDekraFields(data.fields);generated=true;revealDekraOutput();
      $('#dekraGenerateStatus').textContent=data.message+(data.notification?' '+data.notification:'');
      $('#dekraStatus').textContent='Copy each field into the DEKRA portal and submit the request there.';
      this.textContent='Already requested';showActionsSaveToast('DEKRA request recorded in Jira.');
