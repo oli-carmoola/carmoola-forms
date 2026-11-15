@@ -3781,6 +3781,8 @@ function overviewRender(){
   steps.push({label:'8-week holding',date:o.eightWeekHoldingSentDate,done:true,fallback:'Sent'});
  }
  steps.push({label:'Final response',date:o.finalResponseSentDate,done:isYes(o.finalResponseSent)||!!plain(o.finalResponseSentDate),fallback:'Sent'});
+ if(plain(o.dekraRequestedDate))steps.push({label:'DEKRA inspection requested',date:o.dekraRequestedDate,done:true});
+ if(plain(o.dekraReceivedDate))steps.push({label:'DEKRA report received',date:o.dekraReceivedDate,done:true});
  if(plain(o.fosEscalationDate))steps.push({label:'FOS referral',date:o.fosEscalationDate,done:true});
  if(plain(fos.responseSentDate))steps.push({label:'FOS response sent',date:fos.responseSentDate,done:true});
  if(plain(fos.investigatorDecisionDate))steps.push({label:'FOS Investigator decision',date:fos.investigatorDecisionDate,done:true});
