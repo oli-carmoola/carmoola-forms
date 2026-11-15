@@ -1012,6 +1012,8 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .fourwk-approve{display:flex;align-items:flex-start;gap:11px;padding:15px 16px;margin-top:14px;border:1px solid #eee2eb;background:#faf7f9;border-radius:13px;cursor:pointer;font-size:13px;color:#422c41;line-height:1.5}
 .fourwk-approve input{width:17px;height:17px;accent-color:#b3257e;flex-shrink:0;margin-top:1px}
 .fourwk-complete{display:flex;align-items:flex-start;gap:16px;padding-top:18px}
+/* Honour the native hidden attribute; flex/button display rules must never reveal unsent confirmations. */
+#lettersFourWorkspace [hidden]{display:none!important}
 #fourState{white-space:nowrap}
 @media(max-width:680px){.fourwk-preview-title{flex-direction:column}#lettersFourWorkspace .letters-summary{gap:12px}}
 </style>
