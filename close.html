@@ -1002,6 +1002,18 @@ textarea.letters-field{min-height:85px;resize:vertical}
 @media(max-width:690px){.dekra-grid{grid-template-columns:1fr}.dekra-section{padding:17px}.dekra-head{padding:19px}.dekra-footer{align-items:stretch;flex-direction:column}.dekra-footer-actions{width:100%}.dekra-footer-actions button{flex:1}}
 
 .dekra-builder p,.dekra-confirm p{font-size:13px;color:var(--muted);line-height:1.6;max-width:820px;margin:9px 0 18px}.dekra-builder-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:17px}.dekra-check{display:flex;align-items:center;gap:10px;margin:12px 0;font-size:13px;color:#342738}.dekra-check input{accent-color:#ed007b;width:17px;height:17px}.dekra-confirm{margin-top:16px}.dekra-builder .dekra-field input{width:100%;border:1px solid #ddd0df;border-radius:10px;padding:12px;font:inherit;margin-top:7px}.dekra-builder-actions .dekra-save:disabled{opacity:.55}
+
+/* Compact four-week holding form and editable email */
+#lettersFourWorkspace .fourwk-card{max-width:940px}
+.fourwk-preview{border-top:1px solid #f0e9ef;margin-top:22px;padding-top:19px}
+.fourwk-preview-title{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:16px}
+.fourwk-preview-title h3{margin:4px 0}
+.fourwk-email{display:block;width:100%;line-height:1.65;min-height:260px;resize:vertical;white-space:pre-wrap}
+.fourwk-approve{display:flex;align-items:flex-start;gap:11px;padding:15px 16px;margin-top:14px;border:1px solid #eee2eb;background:#faf7f9;border-radius:13px;cursor:pointer;font-size:13px;color:#422c41;line-height:1.5}
+.fourwk-approve input{width:17px;height:17px;accent-color:#b3257e;flex-shrink:0;margin-top:1px}
+.fourwk-complete{display:flex;align-items:flex-start;gap:16px;padding-top:18px}
+#fourState{white-space:nowrap}
+@media(max-width:680px){.fourwk-preview-title{flex-direction:column}#lettersFourWorkspace .letters-summary{gap:12px}}
 </style>
 </head>
 <body>
@@ -1296,7 +1308,31 @@ textarea.letters-field{min-height:85px;resize:vertical}
 <section id="actionsLetters" class="actions-page" aria-label="Letters and Responses">
  <div class="letters-wrap">
   <div class="letters-top"><div><h2>Letters &amp; Responses</h2><p>Create a letter once, review it in Google Docs, then send it.</p></div><span class="letters-chip" id="lettersTopStatus">Loading…</span></div>
-  <div class="letters-switch" role="group" aria-label="Response type"><button type="button" id="lettersTabFinal" class="letters-switch-btn active" aria-pressed="true">Final response <span id="lettersFinalTag" class="letters-switch-tag">—</span></button><button type="button" id="lettersTabHolding" class="letters-switch-btn" aria-pressed="false">Eight-week holding <span id="lettersHoldingTag" class="letters-switch-tag">—</span></button></div>
+  <div class="letters-switch" role="group" aria-label="Response type"><button type="button" id="lettersTabFinal" class="letters-switch-btn active" aria-pressed="true">Final response <span id="lettersFinalTag" class="letters-switch-tag">—</span></button><button type="button" id="lettersTabFour" class="letters-switch-btn" aria-pressed="false">Four-week holding <span id="lettersFourTag" class="letters-switch-tag">—</span></button><button type="button" id="lettersTabHolding" class="letters-switch-btn" aria-pressed="false">Eight-week holding <span id="lettersHoldingTag" class="letters-switch-tag">—</span></button></div>
+  <div id="lettersFourWorkspace" hidden>
+    <div class="letters-card fourwk-card">
+      <div class="letters-summary"><div><span class="letters-eyebrow">FOUR-WEEK PROGRESS UPDATE</span><h3>Prepare a holding response</h3><p class="letters-muted">Describe the work completed and the next steps. Generate a draft, review every word and send it as a public reply on the customer's Zendesk ticket.</p></div><span class="letters-state-pill" id="fourState">Not sent</span></div>
+      <div id="fourCompose">
+        <div class="letters-form-grid" style="margin-top:18px">
+          <label class="letters-full"><span class="letters-label">What have you done so far?</span><textarea id="fourDone" class="letters-field" rows="4" placeholder="Summarise the investigation activity completed">Reviewed the materials shared
+Engaged with the dealership
+Conducted an inspection of the vehicle</textarea><span class="letters-note">Remove any suggestions that aren't true for this complaint.</span></label>
+          <label class="letters-full"><span class="letters-label">What are the next steps?</span><textarea id="fourTodo" class="letters-field" rows="4" placeholder="Explain what still needs to happen">Continue investigating with the dealership
+Consider the appropriate resolution</textarea></label>
+        </div>
+        <div class="letters-actions"><button class="letters-btn primary" type="button" id="fourGenerate">✧ Generate email preview</button></div>
+        <div class="letters-message" id="fourGenerateStatus" role="status" aria-live="polite"></div>
+      </div>
+      <div id="fourPreview" class="fourwk-preview" hidden>
+        <div class="fourwk-preview-title"><div><span class="letters-eyebrow">REVIEW BEFORE SENDING</span><h3>Customer email</h3><p class="letters-muted">You can edit the generated message. Nothing has been sent yet.</p></div><button id="fourRegenerate" class="letters-btn quiet" type="button">↻ Regenerate</button></div>
+        <label class="letters-full"><span class="letters-label">Email body</span><textarea class="letters-field fourwk-email" id="fourEmail" rows="13" spellcheck="true"></textarea></label>
+        <label class="fourwk-approve"><input type="checkbox" id="fourApproved"><span>I've reviewed this email and confirm it is accurate and ready to send to the customer.</span></label>
+        <div class="letters-actions"><button class="letters-btn primary" type="button" id="fourSend" disabled>Send to customer</button></div>
+      </div>
+      <div id="fourSentPanel" hidden class="fourwk-complete"><span class="letters-complete-icon">✓</span><div><h3>Four-week holding response sent</h3><p id="fourSentDetails" class="letters-muted">The response has been recorded.</p><button type="button" id="fourReconcile" class="letters-btn" hidden>Reconcile Jira fields</button></div></div>
+      <div id="fourSafety" class="letters-message" role="status" aria-live="polite"></div>
+    </div>
+  </div>
   <div class="letters-card letters-document-card" id="lettersExistingCard" hidden>
     <div class="letters-existing-top"><div class="letters-document-icon" aria-hidden="true">▤</div><div class="letters-existing-meta"><span class="letters-eyebrow" id="lettersDocumentKind">FINAL RESPONSE LETTER</span><h3 id="lettersDocumentHeading">Your letter is ready</h3><p class="letters-muted" id="lettersDraftSummary">The document is saved in the complaint folder.</p></div><span class="letters-state-pill" id="lettersDocumentState">Draft ready</span></div>
     <div class="letters-document-actions"><button type="button" class="letters-btn primary" id="lettersOpenPreview">↗ Preview letter</button><a id="lettersGoogleLink" class="letters-btn" target="_blank" rel="noopener noreferrer">Edit in Google Docs ↗</a><button type="button" id="lettersRefresh" class="letters-btn quiet">↻ Refresh</button></div>
@@ -3784,7 +3820,7 @@ function gotoActionsPage(page){
   $('#actionsUpdates').classList.toggle('active',page==='updates');
   if(page==='updates')acuLoad();
   if(page==='rootcause')rcaRender();
-  if(page==='letters')lettersRefresh();
+  if(page==='letters'){lettersRefresh();fourLoad();}
   if(page==='post' && POST_DATA){prRender();solarisRefresh();prAutoReconcile();$('#deConsole').hidden=!['Post-Resolution Tasks','Partner Funds Outstanding'].includes(PREFILL.statusName);if(!$('#deConsole').hidden)deFetch();}else{$('#deConsole').hidden=true;}
   $('#closureShell').style.display=page==='closure'?'':'none';
   $('#reviewShell').classList.toggle('active',page==='review');
@@ -4156,6 +4192,72 @@ function initDealer(){
 }
 
 
+
+// Four-week holding: a separate Edge Function; main closure API is unchanged.
+var FOUR_API=API.replace(/\/complaint-closure-form$/,'/four-week-holding-response');
+var FOUR_STATE=null,FOUR_BUSY=false,FOUR_DRAFT='';
+async function fourCall(action,extra){
+ var response=await fetch(FOUR_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({action:action,token:getToken()},extra||{}))});
+ var data=await response.json().catch(function(){return {error:'Invalid response from holding response service'};});
+ if(!response.ok||!data.ok)throw Error(data.error||'Four-week holding request failed');
+ return data;
+}
+function fourRender(){
+ var state=FOUR_STATE||{},sent=!!state.sent,blocked=state.state==='sending'||state.state==='uncertain',draft=!!FOUR_DRAFT;
+ $('#lettersFourTag').textContent=sent?'Sent':blocked?'Check status':'Not sent';
+ $('#fourState').textContent=sent?'Sent':blocked?'Requires review':'Not sent';
+ $('#fourCompose').hidden=sent||blocked;
+ $('#fourPreview').hidden=sent||blocked||!draft;
+ $('#fourSentPanel').hidden=!sent;
+ $('#fourGenerate').disabled=FOUR_BUSY||blocked||sent;
+ $('#fourRegenerate').disabled=FOUR_BUSY;
+ $('#fourEmail').disabled=FOUR_BUSY;
+ $('#fourSend').disabled=FOUR_BUSY||!$('#fourApproved').checked||!draft||!$('#fourEmail').value.trim();
+ $('#fourSentDetails').textContent=state.sentDate?'Sent on '+formatDisplayDate(state.sentDate)+'.':'The four-week holding response is recorded as sent.';
+ $('#fourReconcile').hidden=!sent||!state.needsReconciliation;
+ if(blocked)$('#fourSafety').textContent='A previous send is awaiting confirmation. Check Zendesk before taking further action; the system will not send another copy automatically.';
+}
+async function fourLoad(){
+ if(FOUR_BUSY)return;
+ try{FOUR_STATE=await fourCall('status');$('#fourSafety').textContent='';fourRender();}
+ catch(e){$('#fourSafety').textContent=e.message;}
+}
+async function fourGenerate(){
+ if(FOUR_BUSY)return;
+ FOUR_BUSY=true;$('#fourGenerateStatus').textContent='Generating the preview…';fourRender();
+ try{
+   var result=await fourCall('preview',{doneSoFar:$('#fourDone').value,stillToDo:$('#fourTodo').value});
+   FOUR_DRAFT=result.emailBody;$('#fourEmail').value=FOUR_DRAFT;$('#fourApproved').checked=false;
+   $('#fourGenerateStatus').textContent='Draft ready. Review and edit below before sending.';
+ }catch(e){$('#fourGenerateStatus').textContent=e.message;}
+ finally{FOUR_BUSY=false;fourRender();}
+}
+async function fourSend(){
+ if(FOUR_BUSY||!$('#fourApproved').checked||!FOUR_DRAFT)return;
+ if(!window.confirm('Send this four-week holding response to the customer now? This will send a public Zendesk reply.'))return;
+ FOUR_BUSY=true;$('#fourSafety').textContent='Sending to Zendesk…';fourRender();
+ try{
+   var result=await fourCall('send',{confirmed:true,emailBody:$('#fourEmail').value});
+   FOUR_STATE={state:'sent',sent:true,sentDate:result.sentDate,needsReconciliation:!result.jiraSynced};
+   $('#fourSafety').textContent=result.message+(result.warning?' '+result.warning:'');
+   await lettersRefresh();
+ }catch(e){$('#fourSafety').textContent=e.message+' Check Zendesk before trying again.';await fourLoad();}
+ finally{FOUR_BUSY=false;fourRender();}
+}
+async function fourReconcile(){
+ if(FOUR_BUSY)return;FOUR_BUSY=true;$('#fourSafety').textContent='Reconciling Jira…';
+ try{var d=await fourCall('reconcile');$('#fourSafety').textContent=d.message;await fourLoad();}catch(e){$('#fourSafety').textContent=e.message;}
+ finally{FOUR_BUSY=false;fourRender();}
+}
+function fourInit(){
+ $('#fourGenerate').addEventListener('click',fourGenerate);
+ $('#fourRegenerate').addEventListener('click',fourGenerate);
+ $('#fourApproved').addEventListener('change',fourRender);
+ $('#fourEmail').addEventListener('input',function(){if(this.value!==FOUR_DRAFT)$('#fourApproved').checked=false;fourRender();});
+ $('#fourSend').addEventListener('click',fourSend);
+ $('#fourReconcile').addEventListener('click',fourReconcile);
+}
+
 // Letters & Responses: all API calls are authenticated using the existing signed complaint link.
 var LETTERS_STATE=null,LETTERS_BUSY=false,LETTERS_SENDING=false,LETTERS_VIEW='final',LETTERS_GENERATING=false;
 var LETTERS_VEHICLE_OPTIONS=[
@@ -4187,6 +4289,15 @@ function lettersPending(){if(!LETTERS_STATE)return false;return !!(LETTERS_VIEW=
 function lettersGenerationPending(){if(!LETTERS_STATE)return false;return !!(LETTERS_VIEW==='holding'?LETTERS_STATE.holdingGeneration?.state:LETTERS_STATE.finalGeneration?.state);}
 function lettersLabel(doc,sent,pending){return sent?'Sent':pending?'Sending requested':doc?'Draft ready':'Not created';}
 function lettersRender(){
+ if(LETTERS_VIEW==='four'){
+   $('#lettersFourWorkspace').hidden=false;$('#lettersGenerateMessage').hidden=true;$('#lettersGenerateMessage').textContent='';
+   ['lettersExistingCard','lettersPrepareCard','lettersHoldingBlockedCard','lettersWaitingCard','lettersSendCard','lettersSentCard','lettersSendingCard'].forEach(function(id){$('#'+id).hidden=true;});
+   $('#lettersTopStatus').textContent=FOUR_STATE&&FOUR_STATE.sent?'Sent':FOUR_STATE&&FOUR_STATE.state==='sending'?'Sending requested':'Four-week holding';
+   [['lettersTabFinal',false],['lettersTabFour',true],['lettersTabHolding',false]].forEach(function(pair){var b=$('#'+pair[0]);b.classList.toggle('active',pair[1]);b.setAttribute('aria-pressed',String(pair[1]));});
+   fourRender();return;
+ }
+ $('#lettersFourWorkspace').hidden=true;$('#lettersGenerateMessage').hidden=false;
+ $('#lettersTabFour').classList.remove('active');$('#lettersTabFour').setAttribute('aria-pressed','false');
  var type=lettersSelectedType(),holding=LETTERS_VIEW==='holding',afford=type==='affordability',veh=type==='vehicle';
  var finalDoc=!!LETTERS_STATE?.finalDocumentId,holdingDoc=!!LETTERS_STATE?.holdingDocumentId;
  $('#lettersFinalTag').textContent=lettersLabel(finalDoc,LETTERS_STATE?.finalSent,LETTERS_STATE?.finalSubmission?.state);
@@ -4264,6 +4375,7 @@ function lettersOpenModal(){
 function lettersCloseModal(){$('#lettersPreviewModal').hidden=true;$('#lettersModalFrame').removeAttribute('src');document.body.style.overflow='';}
 function lettersChoose(view){
  if(LETTERS_VIEW===view)return;LETTERS_VIEW=view;LETTERS_GENERATING=false;
+ if(view==='four')fourLoad();
  $('#lettersReviewed').checked=false;$('#lettersGenerateMessage').textContent='';$('#lettersSendMessage').textContent='';LETTERS_SENDING=false;lettersRender();
 }
 function lettersInit(){
@@ -4271,6 +4383,8 @@ function lettersInit(){
  lettersDefaultDekra();
  $('#lettersTabFinal').addEventListener('click',function(){lettersChoose('final');});
  $('#lettersTabHolding').addEventListener('click',function(){lettersChoose('holding');});
+ $('#lettersTabFour').addEventListener('click',function(){lettersChoose('four');});
+ fourInit();
  $('#lettersReviewed').addEventListener('change',lettersRender);
  $('#lettersRefresh').addEventListener('click',function(){LETTERS_SENDING=false;lettersRefresh();});
  $('#lettersWaitingRefresh').addEventListener('click',lettersRefresh);
