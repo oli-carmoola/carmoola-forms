@@ -4671,6 +4671,9 @@ async function ideRequest(action,more={}){
 }
 function ideRefreshSent(state){
  const done=!!state?.alreadySent,possible=!!state?.ticketLink;
+ // A sent initial dealership email is read-only: show its archived email instead of the generator.
+ $('#ideInputPanel').hidden=done;
+ if(done)$('#idePreviewPanel').hidden=true;
  $('#ideAlreadySent').hidden=!done&&!possible;
  if(done||possible)$('#ideAlreadySent').textContent=done?'The initial dealership email is already recorded as sent. A second email cannot be sent from here.':'A dealership Zendesk ticket is already linked to this complaint. Check the existing ticket before sending another enquiry.';
  $('#ideGenerate').disabled=done||possible||!state?.eligible;
@@ -4692,6 +4695,8 @@ async function ideLoadHistory(){
  const root=$('#ideHistoryList');root.replaceChildren();const loading=document.createElement('p');loading.className='ide-history-empty';loading.textContent='Loading sent emails…';root.append(loading);
  try{
   const d=await ideRequest('initial_dealership_history');root.replaceChildren();const emails=Array.isArray(d.emails)?d.emails:[];
+  // Show the sent-status fallback only if the archive has no email to display.
+  if(IDE_STATE?.alreadySent)$('#ideSentPanel').hidden=emails.length>0;
   if(!emails.length){const p=document.createElement('p');p.className='ide-history-empty';p.textContent='No archived email yet. Older emails will appear when the historical backfill is complete.';root.append(p);return;}
   for(const mail of emails){
    const details=document.createElement('details');details.className='ide-history-entry';
