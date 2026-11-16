@@ -1077,13 +1077,13 @@ textarea.letters-field{min-height:85px;resize:vertical}
 @media(max-width:680px){.fourwk-preview-title{flex-direction:column}#lettersFourWorkspace .letters-summary{gap:12px}}
 
 /* Compact, responsive related Zendesk table */
-.overview-tickets-panel{width:min(100%,790px);max-width:790px;box-sizing:border-box;padding:16px 18px;margin:0 0 16px}
-.overview-tickets-panel .overview-panel-head{margin-bottom:13px}
-.overview-tickets-panel .overview-panel-head h3{font-size:14px}
+.overview-tickets-panel{width:min(100%,700px);max-width:700px;box-sizing:border-box;padding:13px 15px;margin:2px 0 15px;border-color:#eee8ee;box-shadow:none;background:#fff}
+.overview-tickets-panel .overview-panel-head{margin-bottom:6px}
+.overview-tickets-panel .overview-panel-head h3{font-size:13px;font-weight:650}
 .overview-ticket-table-wrap{width:100%;overflow-x:auto}
-.overview-ticket-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px;text-align:left}
-.overview-ticket-table th{font-size:10px;letter-spacing:.055em;text-transform:uppercase;font-weight:750;color:#958697;padding:9px 9px;border-bottom:1px solid #eee6ec;white-space:nowrap}
-.overview-ticket-table td{vertical-align:middle;padding:11px 9px;border-bottom:1px solid #f2edf1;color:#453b46}
+.overview-ticket-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px;text-align:left}
+.overview-ticket-table th{font-size:10px;letter-spacing:.055em;text-transform:uppercase;font-weight:750;color:#958697;padding:7px 6px;border-bottom:1px solid #eee6ec;white-space:nowrap}
+.overview-ticket-table td{vertical-align:middle;padding:8px 6px;border-bottom:1px solid #f2edf1;color:#453b46}
 .overview-ticket-table tbody tr:last-child td{border-bottom:none}
 .overview-ticket-table tbody tr:hover{background:#fcf8fb}
 .overview-ticket-table .ov-ticket-id{font-weight:750;color:#a41f64;text-decoration:none;white-space:nowrap}
@@ -1095,7 +1095,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .overview-ticket-table .ov-ticket-status[data-status="pending"],.overview-ticket-table .ov-ticket-status[data-status="hold"]{background:#f1f5ff;border-color:#dce5fb;color:#52659c}
 .overview-ticket-table .ov-ticket-status[data-status="solved"],.overview-ticket-table .ov-ticket-status[data-status="closed"]{background:#edf8f2;border-color:#d7ebdd;color:#34744f}
 .overview-ticket-table .ov-fos-pill{display:inline-block;border-radius:20px;padding:3px 7px;background:#fff0f7;border:1px solid #f2cee0;color:#a41f64;font-size:10px;font-weight:800}
-.overview-ticket-table th:nth-child(1){width:92px}.overview-ticket-table th:nth-child(2){width:auto}.overview-ticket-table th:nth-child(3){width:78px}.overview-ticket-table th:nth-child(4){width:100px}.overview-ticket-table th:nth-child(5){width:43px}
+.overview-ticket-table th:nth-child(1){width:84px}.overview-ticket-table th:nth-child(2){width:auto}.overview-ticket-table th:nth-child(3){width:67px}.overview-ticket-table th:nth-child(4){width:90px}.overview-ticket-table th:nth-child(5){width:35px}
 .overview-tickets-notice{font-size:11px;color:#857788;padding-top:9px}
 @media(max-width:780px){.overview-tickets-panel{max-width:100%}.overview-ticket-table{min-width:570px}}
 </style>
@@ -1291,16 +1291,6 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <div class="overview-shortcuts" id="overviewShortcuts" aria-label="Quick links">
       <span>QUICK LINKS</span><div id="overviewLinks"></div>
     </div>
-    <section class="overview-panel overview-tickets-panel" id="overviewTicketsSection" aria-labelledby="overviewTicketsTitle" hidden>
-      <div class="overview-panel-head"><h3 id="overviewTicketsTitle">Related Zendesk tickets</h3><span id="overviewTicketsCount"></span></div>
-      <div class="overview-ticket-table-wrap">
-        <table class="overview-ticket-table" aria-label="Related Zendesk tickets">
-          <thead><tr><th>Ticket</th><th>Subject</th><th>Status</th><th>Last updated</th><th>FOS</th></tr></thead>
-          <tbody id="overviewTicketRows"></tbody>
-        </table>
-      </div>
-      <div class="overview-tickets-notice" id="overviewTicketsNotice" aria-live="polite" hidden></div>
-    </section>
     <section class="overview-attention-section" id="overviewAttentionSection" aria-labelledby="overviewAttentionTitle" hidden>
       <div class="overview-section-head"><h3 id="overviewAttentionTitle">Needs attention</h3><span id="overviewAttentionCount"></span></div>
       <div class="overview-attention" id="overviewAttention"></div>
@@ -1327,6 +1317,16 @@ textarea.letters-field{min-height:85px;resize:vertical}
       </div>
       <div class="overview-suspense-scroll"><table class="overview-suspense-table"><thead><tr><th>Suspense Item</th><th>Payment Reference</th><th>Amount</th></tr></thead><tbody id="overviewSuspenseRows"></tbody></table></div>
       <p class="overview-suspense-note" id="overviewSuspenseNote" hidden></p>
+    </section>
+    <section class="overview-panel overview-tickets-panel" id="overviewTicketsSection" aria-labelledby="overviewTicketsTitle" hidden>
+      <div class="overview-panel-head"><h3 id="overviewTicketsTitle">Related Zendesk tickets</h3><span id="overviewTicketsCount"></span></div>
+      <div class="overview-ticket-table-wrap">
+        <table class="overview-ticket-table" aria-label="Related Zendesk tickets">
+          <thead><tr><th>Ticket</th><th>Subject</th><th>Status</th><th>Last updated</th><th>FOS</th></tr></thead>
+          <tbody id="overviewTicketRows"></tbody>
+        </table>
+      </div>
+      <div class="overview-tickets-notice" id="overviewTicketsNotice" aria-live="polite" hidden></div>
     </section>
     <section class="overview-panel overview-details-panel" aria-labelledby="overviewDetailsTitle"><div class="overview-panel-head"><h3 id="overviewDetailsTitle">Key details</h3></div><div class="overview-detail-list" id="overviewDetails"></div></section>
     <div class="overview-bottom" id="overviewBottom" hidden>
@@ -4021,7 +4021,7 @@ function overviewRender(){
  var notice=document.getElementById('overviewTicketsNotice');notice.hidden=true;notice.textContent='';
  var cells=new Map();
  ids.forEach(function(id){
-  var tr=document.createElement('tr');
+  var tr=document.createElement('tr');tr.dataset.ticketId=id;
   var ticketTd=document.createElement('td');var link=document.createElement('a');
   link.className='ov-ticket-id';link.href='https://carmoola.zendesk.com/agent/tickets/'+encodeURIComponent(id);
   link.target='_blank';link.rel='noopener noreferrer';link.textContent='#'+id+' ↗';
@@ -4035,31 +4035,47 @@ function overviewRender(){
  });
  document.getElementById('overviewTicketsSection').hidden=ids.length===0;
  document.getElementById('overviewTicketsCount').textContent=ids.length+' TICKET'+(ids.length===1?'':'S');
- // Metadata is fetched securely via complaint-closure-form; no Zendesk API credentials in HTML.
+ // Ticket metadata comes from the authenticated Edge Function. Cache the in-flight
+ // request across overview re-renders so responses cannot be discarded indefinitely.
  if(ids.length){
   var fetchKey=String(p.issueKey||'')+'|'+ids.join(',');
-  {
-   var fetchSerial=window._overviewTicketsFetchSerial=(window._overviewTicketsFetchSerial||0)+1;
-   window._overviewTicketsFetchKey=fetchKey;
-   fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'overview_zendesk_tickets'})})
-   .then(function(resp){return resp.json().then(function(data){if(!resp.ok||!data.ok)throw Error((data.errors||[])[0]||'Zendesk details unavailable');return data;});})
-   .then(function(data){
-    if(window._overviewTicketsFetchSerial!==fetchSerial)return;
+  var metaCache=window._overviewTicketMetadataCache||(window._overviewTicketMetadataCache=new Map());
+  var cached=metaCache.get(fetchKey);
+  if(!cached){
+   var controller=new AbortController();
+   var timer=setTimeout(function(){controller.abort();},12000);
+   var promise=fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,
+    body:JSON.stringify({token:getToken(),action:'overview_zendesk_tickets'})})
+    .then(function(resp){return resp.text().then(function(raw){
+     var data;try{data=JSON.parse(raw);}catch(e){throw Error('Invalid response from ticket lookup');}
+     if(!resp.ok||!data.ok)throw Error((data.errors||[])[0]||'Zendesk details unavailable');return data;
+    });})
+    .finally(function(){clearTimeout(timer);});
+   cached={promise:promise};metaCache.set(fetchKey,cached);
+   promise.catch(function(){metaCache.delete(fetchKey);});
+  }
+  cached.promise.then(function(data){
+    // Locate the CURRENT rows rather than retaining old DOM nodes across renders.
+    if(window._overviewTicketMetadataCache?.get(fetchKey)!==cached)return;
+    var body=document.getElementById('overviewTicketRows');
     var rows=new Map((data.tickets||[]).map(function(t){return [String(t.id),t];}));
     var dateFormat=new Intl.DateTimeFormat('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'Europe/London'});
-    cells.forEach(function(c,id){var t=rows.get(id);
-     c.subject.classList.remove('ov-ticket-muted');
-     c.subject.textContent=t&&t.subject?t.subject:'Subject unavailable';
-     c.subject.title=t&&t.subject?t.subject:'';
-     if(!t)c.subject.classList.add('ov-ticket-muted');
-     c.status.textContent=t&&t.status?t.status.replace(/_/g,' '):'—';
-     if(t&&t.status)c.status.dataset.status=t.status.toLowerCase();
-     if(t&&t.updated_at){var d=new Date(t.updated_at);if(!Number.isNaN(d.getTime())){c.date.textContent=dateFormat.format(d);c.date.title=d.toLocaleString('en-GB',{timeZone:'Europe/London'});}}
+    Array.from(body.rows).forEach(function(row){
+     var id=row.dataset.ticketId;var t=rows.get(id);
+     var subject=row.querySelector('.ov-ticket-subject');var status=row.querySelector('.ov-ticket-status');var date=row.cells[3];
+     subject.classList.remove('ov-ticket-muted');subject.textContent=t&&t.subject?t.subject:'Subject unavailable';subject.title=t&&t.subject?t.subject:'';
+     if(!t)subject.classList.add('ov-ticket-muted');
+     status.textContent=t&&t.status?t.status.replace(/_/g,' '):'—';
+     if(t&&t.status)status.dataset.status=t.status.toLowerCase();
+     if(t&&t.updated_at){var d=new Date(t.updated_at);if(!Number.isNaN(d.getTime())){date.textContent=dateFormat.format(d);date.title=d.toLocaleString('en-GB',{timeZone:'Europe/London'});}}
     });
-    if(data.warning){notice.textContent=data.warning;notice.hidden=false;}
-   })
-   .catch(function(err){if(window._overviewTicketsFetchSerial!==fetchSerial)return;cells.forEach(function(c){c.subject.textContent='Details unavailable';c.subject.classList.add('ov-ticket-muted');});notice.textContent='Zendesk details could not be loaded. Ticket links remain available.';notice.hidden=false;console.warn('Related ticket metadata',err);});
-  }
+    var n=document.getElementById('overviewTicketsNotice');n.hidden=!data.warning;n.textContent=data.warning||'';
+   }).catch(function(err){
+    var body=document.getElementById('overviewTicketRows');
+    Array.from(body.rows).forEach(function(row){var subject=row.querySelector('.ov-ticket-subject');if(subject){subject.textContent='Details unavailable';subject.classList.add('ov-ticket-muted');}});
+    var n=document.getElementById('overviewTicketsNotice');n.textContent='Ticket details unavailable — open a ticket to view its information.';n.hidden=false;
+    console.warn('Related ticket metadata failed',err);
+   });
  }
 
  var attention=[];
