@@ -3928,6 +3928,7 @@ function overviewRender(){
  if(isYes(o.eightWeekHoldingSent)||plain(o.eightWeekHoldingSentDate)){
   steps.push({label:'8-week holding',date:o.eightWeekHoldingSentDate,done:true,fallback:'Sent'});
  }
+ if(plain(o.initialDealershipEmailSentDate))steps.push({label:'Initial dealership email sent',date:o.initialDealershipEmailSentDate,done:true});
  if(plain(o.dekraRequestedDate))steps.push({label:'DEKRA inspection requested',date:o.dekraRequestedDate,done:true});
  if(plain(o.dekraReceivedDate))steps.push({label:'DEKRA report received',date:o.dekraReceivedDate,done:true});
  steps.push({label:'Final response',date:o.finalResponseSentDate,done:isYes(o.finalResponseSent)||!!plain(o.finalResponseSentDate),fallback:'Sent'});
