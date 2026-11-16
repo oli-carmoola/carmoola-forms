@@ -1493,10 +1493,11 @@ textarea.letters-field{min-height:85px;resize:vertical}
 <section id="actionsLetters" class="actions-page" aria-label="Letters and Responses">
  <div class="letters-wrap">
   <div class="letters-top"><div><h2>Letters &amp; Responses</h2><p>Create a letter once, review it in Google Docs, then send it.</p></div><span class="letters-chip" id="lettersTopStatus">Loading…</span></div>
-  <div class="letters-switch" role="group" aria-label="Response type"><button type="button" id="lettersTabFinal" class="letters-switch-btn active" aria-pressed="true">Final response <span id="lettersFinalTag" class="letters-switch-tag">—</span></button><button type="button" id="lettersTabFour" class="letters-switch-btn" aria-pressed="false">Four-week holding <span id="lettersFourTag" class="letters-switch-tag">—</span></button><button type="button" id="lettersTabHolding" class="letters-switch-btn" aria-pressed="false">Eight-week holding <span id="lettersHoldingTag" class="letters-switch-tag">—</span></button></div>
+  <div class="letters-switch" role="group" aria-label="Response type"><button type="button" id="lettersTabFour" class="letters-switch-btn" aria-pressed="false">Four-week holding <span id="lettersFourTag" class="letters-switch-tag">—</span></button><button type="button" id="lettersTabFinal" class="letters-switch-btn active" aria-pressed="true">Final response <span id="lettersFinalTag" class="letters-switch-tag">—</span></button><button type="button" id="lettersTabHolding" class="letters-switch-btn" aria-pressed="false">Eight-week holding <span id="lettersHoldingTag" class="letters-switch-tag">—</span></button></div>
   <div id="lettersFourWorkspace" hidden>
     <div class="letters-card fourwk-card">
       <div class="letters-summary"><div><span class="letters-eyebrow">FOUR-WEEK PROGRESS UPDATE</span><h3>Prepare a holding response</h3><p class="letters-muted">Describe the work completed and the next steps. Generate a draft, review every word and send it as a public reply on the customer's Zendesk ticket.</p></div><span class="letters-state-pill" id="fourState">Not sent</span></div>
+      <div id="fourFinalResponseNotice" class="letters-message" role="status" hidden style="margin-top:14px;padding:12px 14px;border:1px solid var(--border,#e5e7eb);border-radius:10px;background:var(--surface,#fafafa);color:inherit">The Final Response has already been sent. A four-week holding response can no longer be created or sent.</div>
       <div id="fourCompose">
         <div class="letters-form-grid" style="margin-top:18px">
           <label class="letters-full"><span class="letters-label">What have you done so far?</span><textarea id="fourDone" class="letters-field" rows="4" placeholder="Summarise the investigation activity completed">Reviewed the materials shared
@@ -4576,16 +4577,17 @@ async function fourCall(action,extra){
  return data;
 }
 function fourRender(){
- var state=FOUR_STATE||{},sent=!!state.sent,blocked=state.state==='sending'||state.state==='uncertain',draft=!!FOUR_DRAFT;
+ var state=FOUR_STATE||{},sent=!!state.sent,blocked=state.state==='sending'||state.state==='uncertain',draft=!!FOUR_DRAFT,finalSent=!!(LETTERS_STATE?.finalSent||state.finalResponseSent);
+ $('#fourFinalResponseNotice').hidden=sent||!finalSent;
  $('#lettersFourTag').textContent=sent?'Sent':blocked?'Check status':'Not sent';
  $('#fourState').textContent=sent?'Sent':blocked?'Requires review':'Not sent';
- $('#fourCompose').hidden=sent||blocked;
- $('#fourPreview').hidden=sent||blocked||!draft;
+ $('#fourCompose').hidden=sent||blocked||finalSent;
+ $('#fourPreview').hidden=sent||blocked||finalSent||!draft;
  $('#fourSentPanel').hidden=!sent;
- $('#fourGenerate').disabled=FOUR_BUSY||blocked||sent;
- $('#fourRegenerate').disabled=FOUR_BUSY;
- $('#fourEmail').disabled=FOUR_BUSY;
- $('#fourSend').disabled=FOUR_BUSY||!$('#fourApproved').checked||!draft||!$('#fourEmail').value.trim();
+ $('#fourGenerate').disabled=FOUR_BUSY||blocked||sent||finalSent;
+ $('#fourRegenerate').disabled=FOUR_BUSY||finalSent;
+ $('#fourEmail').disabled=FOUR_BUSY||finalSent;
+ $('#fourSend').disabled=FOUR_BUSY||finalSent||!$('#fourApproved').checked||!draft||!$('#fourEmail').value.trim();
  $('#fourSentDetails').textContent=state.sentDate?'Sent on '+formatDisplayDate(state.sentDate)+'.':'The four-week holding response is recorded as sent.';
  $('#fourReconcile').hidden=!sent||!state.needsReconciliation;
  if(blocked)$('#fourSafety').textContent='A previous send is awaiting confirmation. Check Zendesk before taking further action; the system will not send another copy automatically.';
@@ -4597,6 +4599,7 @@ async function fourLoad(){
 }
 async function fourGenerate(){
  if(FOUR_BUSY)return;
+ if(LETTERS_STATE?.finalSent||FOUR_STATE?.finalResponseSent){$('#fourGenerateStatus').textContent='A four-week holding response cannot be created after the Final Response has been sent.';fourRender();return;}
  FOUR_BUSY=true;$('#fourGenerateStatus').textContent='Generating the preview…';fourRender();
  try{
    var result=await fourCall('preview',{doneSoFar:$('#fourDone').value,stillToDo:$('#fourTodo').value});
@@ -4607,6 +4610,7 @@ async function fourGenerate(){
 }
 async function fourSend(){
  if(FOUR_BUSY||!$('#fourApproved').checked||!FOUR_DRAFT)return;
+ if(LETTERS_STATE?.finalSent||FOUR_STATE?.finalResponseSent){$('#fourSafety').textContent='The Final Response has been sent. A four-week holding response cannot now be sent.';fourRender();return;}
  if(!window.confirm('Send this four-week holding response to the customer now? This will send a public Zendesk reply.'))return;
  FOUR_BUSY=true;$('#fourSafety').textContent='Sending to Zendesk…';fourRender();
  try{
@@ -4722,7 +4726,7 @@ async function lettersCall(action,data){
 }
 async function lettersRefresh(){
  if(LETTERS_BUSY)return;
- try{var result=await lettersCall('letters_status');LETTERS_STATE=result.letters;if(lettersSelectedDoc())LETTERS_GENERATING=false;lettersRender();}
+ try{var result=await lettersCall('letters_status');LETTERS_STATE=result.letters;if(lettersSelectedDoc())LETTERS_GENERATING=false;lettersRender();fourRender();}
  catch(e){$('#lettersGenerateMessage').textContent=e.message;}
 }
 async function lettersGenerate(){
