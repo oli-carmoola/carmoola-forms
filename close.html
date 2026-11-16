@@ -1075,6 +1075,18 @@ textarea.letters-field{min-height:85px;resize:vertical}
 #lettersFourWorkspace [hidden]{display:none!important}
 #fourState{white-space:nowrap}
 @media(max-width:680px){.fourwk-preview-title{flex-direction:column}#lettersFourWorkspace .letters-summary{gap:12px}}
+
+/* Compact linked Zendesk ticket overview */
+.overview-tickets-panel{padding:15px 19px;margin:0 0 15px}
+.overview-tickets-panel .overview-panel-head{margin-bottom:12px}
+.overview-tickets-panel .overview-panel-head h3{font-size:14px}
+.overview-ticket-groups{display:flex;flex-direction:column;gap:11px}
+.overview-ticket-group{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.overview-ticket-label{font-size:11px;color:#847587;font-weight:700;min-width:135px;padding-top:6px}
+.overview-ticket-links{display:flex;gap:7px;flex-wrap:wrap;min-width:0;flex:1}
+.overview-ticket-links a{font-size:11px;font-weight:750;text-decoration:none;color:#79254e;background:#fff8fb;border:1px solid #efdce7;border-radius:8px;padding:6px 9px}
+.overview-ticket-links a:hover{border-color:#f90081;background:#ffedf6}
+@media(max-width:710px){.overview-ticket-group{display:block}.overview-ticket-label{display:block;margin-bottom:7px}}
 </style>
 </head>
 <body>
@@ -1268,6 +1280,13 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <div class="overview-shortcuts" id="overviewShortcuts" aria-label="Quick links">
       <span>QUICK LINKS</span><div id="overviewLinks"></div>
     </div>
+    <section class="overview-panel overview-tickets-panel" id="overviewTicketsSection" aria-labelledby="overviewTicketsTitle" hidden>
+      <div class="overview-panel-head"><h3 id="overviewTicketsTitle">Related Zendesk tickets</h3><span id="overviewTicketsCount"></span></div>
+      <div class="overview-ticket-groups">
+        <div class="overview-ticket-group" id="overviewRelatedTicketsGroup"><span class="overview-ticket-label">All related tickets</span><div class="overview-ticket-links" id="overviewRelatedTickets"></div></div>
+        <div class="overview-ticket-group" id="overviewFosTicketsGroup"><span class="overview-ticket-label">FOS related tickets</span><div class="overview-ticket-links" id="overviewFosTickets"></div></div>
+      </div>
+    </section>
     <section class="overview-attention-section" id="overviewAttentionSection" aria-labelledby="overviewAttentionTitle" hidden>
       <div class="overview-section-head"><h3 id="overviewAttentionTitle">Needs attention</h3><span id="overviewAttentionCount"></span></div>
       <div class="overview-attention" id="overviewAttention"></div>
@@ -3354,8 +3373,9 @@ function initSubmit(){
       var check=await checkClosureRecoveryFresh();
       if(check.blockers&&check.blockers.length){showErrors(check.blockers);return;}
       var canMoveClosed=!!check.canMoveToClosed;
-      if((check.warnings&&check.warnings.length)||canMoveClosed){
-        $('#closureCheckDescription').textContent=(check.warnings&&check.warnings.length?check.warnings.join(' ')+' ':'')+'Review the details, then save the complaint closure information.';
+      var finalResponseBlocker=check.finalResponseBlocker||'';
+      if((check.warnings&&check.warnings.length)||canMoveClosed||finalResponseBlocker){
+        $('#closureCheckDescription').textContent=(finalResponseBlocker?finalResponseBlocker+' ':'')+(check.warnings&&check.warnings.length?check.warnings.join(' ')+' ':'')+'Review the details, then save the complaint closure information.';
         $('#closureMoveClosedRow').hidden=!canMoveClosed;
         $('#closureMoveClosed').checked=false;
         $('#closureCheckModal').hidden=false;
@@ -3470,8 +3490,14 @@ function prCustomerSave(btn){
 }
 var prOpeningStarted=false;var prFinancialMode='view';
 function prIsOutsourced(){return !!(PREFILL.dealershipPosition&&PREFILL.dealershipPosition.outsourced);}
+function finalResponseGateMessage(){
+  var o=(PREFILL&&PREFILL.overview)||{};
+  if(prIsOutsourced()||/^(yes|y|true)$/i.test(String(o.finalResponseSent||'').trim()))return '';
+  return 'A Final Response must be sent before a non-outsourced complaint can move to Post-Resolution or Complaint Closed. Please send it through Letters & Responses first.';
+}
 function prEntryTarget(tasksOnly){return tasksOnly?'Post-Resolution Tasks':prIsOutsourced()?'Partner Funds Outstanding':'Post-Resolution Tasks';}
 function prDecisionBlocker(){
+  if(PREFILL.statusName!=='Complaint Closed'&&finalResponseGateMessage())return finalResponseGateMessage();
   if(PREFILL.statusName==='Ombudsman Investigation'&&!String(PREFILL.fos&&PREFILL.fos.ombudsman||'').trim())return 'Record the Ombudsman Decision in Complaints Hub before moving to Post-Resolution.';
   if(PREFILL.statusName==='FOS Investigation'&&!String(PREFILL.fos&&PREFILL.fos.investigator||'').trim())return 'Record the FOS Investigator Outcome in Complaints Hub before moving to Post-Resolution.';
   return '';
@@ -3484,7 +3510,7 @@ function prUpdateDestinationPreview(){
 }
 
 function prRender(){var p=POST_DATA,s=PREFILL.statusName,nonOut=['Investigation','Holding Letter Due','Final Response Due','Ombudsman Investigation'];var target=s==='Complaint Closed'?'REOPEN':(s==='Outsourced'||s==='FOS Investigation'||nonOut.includes(s))?prEntryTarget(false):'';var active=['Post-Resolution Tasks','Partner Funds Outstanding'].includes(s);$('#postStageChip').textContent=s||'Unknown status';$('#postTransition').hidden=!target;$('#postWorkspace').hidden=!(active||(target&&prOpeningStarted));$('#postNotAvailable').hidden=!!target||active;$('#prDashboard').hidden=!active||!$('#postWorkspace').classList.contains('pr-editor-hidden')&&prOpeningStarted;$('#postWorkspace').classList.toggle('pr-editor-hidden',active&&!prOpeningStarted&&!$('#postWorkspace').classList.contains('pr-details-modal'));if(active){$('#prDashboard').hidden=false;prDisplayTasks();}
-  if(target==='REOPEN'){$('#postBeginOpening').disabled=false;$('#postTransitionTitle').textContent='Reopen this complaint';$('#postTransitionDesc').textContent='This complaint is closed. Reopen it for further recovery or outstanding tasks without changing the existing recovery history.';$('#postBeginOpening').textContent='Reopen complaint';$('#postTransitionStart').hidden=false;$('#postTransitionInstructions').hidden=true;}else if(target){var blocker=prDecisionBlocker();$('#postBeginOpening').disabled=!!blocker;$('#postTransitionTitle').textContent=blocker?'Decision required before Post-Resolution':'Move to Post-Resolution';$('#postTransitionDesc').textContent=blocker||('This complaint is currently in '+s+'. Choose whether there are funds to recover or tasks only. Your choice determines the destination.');$('#postBeginOpening').textContent='Choose Post-Resolution Route';$('#postTargetStatus').textContent=target;$('#postOpeningSaveLabel').textContent='Save & Move to '+target;$('#postTransitionStart').hidden=prOpeningStarted;$('#postTransitionInstructions').hidden=!prOpeningStarted;$('#postSave').textContent='Save & Move to '+target;}else{$('#postSave').textContent=prFinancialMode==='correct'?'Save corrected original breakdown':'Save non-financial details';}
+  if(target==='REOPEN'){$('#postBeginOpening').disabled=!!finalResponseGateMessage();$('#postTransitionTitle').textContent='Reopen this complaint';$('#postTransitionDesc').textContent=finalResponseGateMessage()||'This complaint is closed. Reopen it for further recovery or outstanding tasks without changing the existing recovery history.';$('#postBeginOpening').textContent='Reopen complaint';$('#postTransitionStart').hidden=false;$('#postTransitionInstructions').hidden=true;}else if(target){var blocker=prDecisionBlocker();$('#postBeginOpening').disabled=!!blocker;$('#postTransitionTitle').textContent=blocker?'Decision required before Post-Resolution':'Move to Post-Resolution';$('#postTransitionDesc').textContent=blocker||('This complaint is currently in '+s+'. Choose whether there are funds to recover or tasks only. Your choice determines the destination.');$('#postBeginOpening').textContent='Choose Post-Resolution Route';$('#postTargetStatus').textContent=target;$('#postOpeningSaveLabel').textContent='Save & Move to '+target;$('#postTransitionStart').hidden=prOpeningStarted;$('#postTransitionInstructions').hidden=!prOpeningStarted;$('#postSave').textContent='Save & Move to '+target;}else{$('#postSave').textContent=prFinancialMode==='correct'?'Save corrected original breakdown':'Save non-financial details';}
   if(!active&&!target)return;
   $('#postVehicle').value=(p.auction&&p.auction.sold)?'Carmoola Auction — Completed':(p.vehicleResolution||'Not Yet Decided');prRenderVehicle();prRenderSuspense();
   $('#postParty').value=p.party||(s==='Partner Funds Outstanding'?PREFILL.introducerName:PREFILL.dealershipName)||'';
@@ -3618,6 +3644,7 @@ function prUpdateReopenPreview(){
 }
 function prOpenReopen(){
   if(PREFILL.statusName!=='Complaint Closed')return;
+  if(finalResponseGateMessage()){prError(finalResponseGateMessage());return;}
   var outsourced=prIsOutsourced();
   $('#prReopenChoices').hidden=!outsourced;
   var hasFunds=Number(POST_DATA&&POST_DATA.currentBalance||0)>0.005;
@@ -3964,6 +3991,33 @@ function overviewRender(){
   try{var u=new URL(plain(pair[1]));if(u.protocol!=='https:')return;var a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener noreferrer';a.textContent=pair[0]+' ↗';linkHolder.appendChild(a);}catch(e){}
  });
  $('#overviewShortcuts').hidden=!linkHolder.children.length;
+ // IDs are saved in Complaints Hub as semicolon-separated text (not Zendesk URLs).
+ var ticketIds=function(value){
+  return [...new Set(String(value||'').split(/[;,\n\r]+/).map(function(part){
+   var trimmed=part.trim();
+   var match=trimmed.match(/^(?:https:\/\/[^\s/]+\.zendesk\.com\/agent\/tickets\/)?(\d+)\/?$/i);
+   return match?match[1]:null;
+  }).filter(Boolean))];
+ };
+ var allTickets=ticketIds(o.relatedZendeskTickets);
+ var fosTickets=ticketIds(o.relatedFosZendeskTickets);
+ var renderTickets=function(holderId,groupId,ids){
+  var holder=document.getElementById(holderId),group=document.getElementById(groupId);
+  holder.replaceChildren();group.hidden=!ids.length;
+  ids.forEach(function(id){
+   var link=document.createElement('a');
+   link.href='https://carmoola.zendesk.com/agent/tickets/'+encodeURIComponent(id);
+   link.target='_blank';link.rel='noopener noreferrer';link.textContent='#'+id+' ↗';
+   link.setAttribute('aria-label','Open Zendesk ticket '+id+' in a new tab');
+   holder.appendChild(link);
+  });
+ };
+ renderTickets('overviewRelatedTickets','overviewRelatedTicketsGroup',allTickets);
+ renderTickets('overviewFosTickets','overviewFosTicketsGroup',fosTickets);
+ var uniqueTickets=new Set(allTickets.concat(fosTickets));
+ document.getElementById('overviewTicketsSection').hidden=uniqueTickets.size===0;
+ document.getElementById('overviewTicketsCount').textContent=uniqueTickets.size+' TICKET'+(uniqueTickets.size===1?'':'S');
+
  var attention=[];
  if(p.rootCause&&p.rootCause.required&&!p.rootCause.completed&&p.statusName!=='Complaint Closed')attention.push({name:'Root Cause Analysis',description:'Required before complaint closure',target:'rootcause'});
  var intro=p.initialCall||{};
