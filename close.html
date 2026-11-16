@@ -763,6 +763,35 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 .overview-details-panel .overview-detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:26px}
 @media(max-width:710px){.overview-timeline-panel{padding:16px}.overview-timeline{row-gap:18px}.overview-timeline-step{padding-right:5px}.overview-details-panel .overview-detail-list{grid-template-columns:1fr}}
 
+
+/* Overview: key information first; supporting records share a quieter two-column row. */
+.overview-secondary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start;margin-top:14px}
+.overview-secondary-grid>.overview-panel{width:100%;max-width:none;min-width:0;box-sizing:border-box;margin:0;padding:15px 17px;box-shadow:none}
+.overview-secondary-grid>.overview-panel[hidden]{display:none!important}
+.overview-secondary-grid>.overview-suspense-panel .overview-panel-head,.overview-secondary-grid>.overview-tickets-panel .overview-panel-head{margin-bottom:9px}
+.overview-secondary-grid>.overview-suspense-panel .overview-panel-head h3,.overview-secondary-grid>.overview-tickets-panel .overview-panel-head h3{font-size:14px;font-weight:700}
+.overview-secondary-grid .overview-panel-head>span{font-size:9px}
+.overview-secondary-grid .overview-suspense-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:4px 0 11px}
+.overview-secondary-grid .overview-suspense-stat{padding:9px 11px;border-radius:9px}
+.overview-secondary-grid .overview-suspense-stat:last-child{grid-column:1/-1;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.overview-secondary-grid .overview-suspense-stat span{font-size:10px;margin-bottom:3px}
+.overview-secondary-grid .overview-suspense-stat strong{font-size:15px}
+.overview-secondary-grid .overview-suspense-stat:last-child strong{font-size:13px;text-align:right}
+.overview-secondary-grid .overview-suspense-table{font-size:11px}
+.overview-secondary-grid .overview-suspense-table th{padding:8px 7px;font-size:9px}
+.overview-secondary-grid .overview-suspense-table td{padding:9px 7px}
+.overview-secondary-grid .overview-ticket-table{font-size:10px}
+.overview-secondary-grid .overview-ticket-table th{font-size:9px;padding:7px 4px}
+.overview-secondary-grid .overview-ticket-table td{padding:9px 4px}
+.overview-secondary-grid .overview-ticket-table th:nth-child(1){width:74px}
+.overview-secondary-grid .overview-ticket-table th:nth-child(3){width:60px}
+.overview-secondary-grid .overview-ticket-table th:nth-child(4){width:84px}
+.overview-secondary-grid .overview-ticket-table th:nth-child(5){width:29px}
+.overview-secondary-grid .overview-ticket-table .ov-ticket-status{font-size:9px;padding:2px 5px}
+@media(min-width:901px){.overview-secondary-grid>.overview-tickets-panel:only-child{max-width:700px}}
+@media(max-width:1100px){.overview-secondary-grid{grid-template-columns:1fr}.overview-secondary-grid>.overview-panel{max-width:none}.overview-secondary-grid .overview-ticket-table{min-width:490px}}
+@media(max-width:620px){.overview-secondary-grid .overview-suspense-stat:last-child{display:block}.overview-secondary-grid .overview-suspense-stat:last-child strong{text-align:left}.overview-secondary-grid .overview-suspense-table{min-width:380px}}
+
 /* Letters & Responses: calm, focused workspace */
 .letters-wrap{max-width:1100px;margin:0 auto;padding:4px 0 40px}
 .letters-top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}
@@ -1098,6 +1127,17 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .overview-ticket-table th:nth-child(1){width:84px}.overview-ticket-table th:nth-child(2){width:auto}.overview-ticket-table th:nth-child(3){width:67px}.overview-ticket-table th:nth-child(4){width:90px}.overview-ticket-table th:nth-child(5){width:35px}
 .overview-tickets-notice{font-size:11px;color:#857788;padding-top:9px}
 @media(max-width:780px){.overview-tickets-panel{max-width:100%}.overview-ticket-table{min-width:570px}}
+
+/* Shared, neutral closed-complaint financial notice */
+.closed-financial-banner{background:#FBFAFC;border:1px solid #E5DDE5;border-radius:13px;padding:15px 17px;margin:0 0 18px;color:#382C3B}
+.closed-financial-banner[hidden]{display:none!important}
+.closed-financial-banner-inner{display:flex;align-items:flex-start;gap:12px}
+.closed-financial-icon{display:grid;place-items:center;flex:none;width:32px;height:32px;border-radius:9px;background:#F1ECF1;color:#715F72;font-size:15px}
+.closed-financial-copy strong{display:block;font-size:14px;font-weight:750;letter-spacing:-.1px}
+.closed-financial-copy p{margin:4px 0 10px;max-width:600px;font-size:12.5px;line-height:1.5;color:#786C7A}
+.closed-financial-unlock{font:inherit;font-size:12.5px;font-weight:750;color:#8B235F;background:#fff;border:1px solid #DAC9D6;border-radius:8px;padding:8px 12px;cursor:pointer}
+.closed-financial-unlock:hover{background:#F8F0F6;border-color:#C9A9BF}
+#runningCostsCard .running-summary-action:disabled{opacity:.45!important;cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -1122,13 +1162,11 @@ textarea.letters-field{min-height:85px;resize:vertical}
 
   <div class="errbox" id="errbox"></div>
 
-  <div id="closedBanner" style="display:none;background:linear-gradient(180deg,#EAF3FF 0%,#F5F9FF 100%);border:1px solid #BAD4F5;border-radius:12px;padding:14px 16px;margin-bottom:20px">
-    <div style="display:flex;gap:12px;align-items:flex-start">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563B0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      <div style="flex:1">
-        <div style="font-weight:700;font-size:14.5px;color:#1B4C8A">This complaint is already closed</div>
-        <div style="font-size:13px;color:#3A5A7D;margin-top:2px">Costs and losses have already been logged. The form is locked to prevent accidental changes.</div>
-        <button type="button" id="unlockBtn" style="margin-top:11px;font-family:inherit;font-size:13.5px;font-weight:700;color:#fff;background:#2563B0;border:0;border-radius:9px;padding:9px 15px;cursor:pointer">Update Costs &amp; Losses</button>
+  <div id="closedBanner" class="closed-financial-banner" hidden>
+    <div class="closed-financial-banner-inner">
+      <span class="closed-financial-icon" aria-hidden="true">&#128274;</span>
+      <div class="closed-financial-copy"><strong>This complaint is closed</strong><p>Costs and losses are read-only to protect the final complaint record. Unlock financial editing if a correction is needed.</p>
+        <button type="button" id="unlockBtn" class="closed-financial-unlock">Unlock financial editing</button>
       </div>
     </div>
   </div>
@@ -1308,6 +1346,8 @@ textarea.letters-field{min-height:85px;resize:vertical}
       <div class="overview-panel-head"><h3 id="overviewBreachesTitle">Recorded breaches</h3><span id="overviewBreachCount"></span></div>
       <div class="overview-breaches-list" id="overviewBreachesList"></div>
     </section>
+    <section class="overview-panel overview-details-panel" aria-labelledby="overviewDetailsTitle"><div class="overview-panel-head"><h3 id="overviewDetailsTitle">Key details</h3></div><div class="overview-detail-list" id="overviewDetails"></div></section>
+    <div class="overview-secondary-grid" id="overviewSecondaryGrid">
     <section class="overview-panel overview-suspense-panel" id="overviewSuspenseSection" aria-labelledby="overviewSuspenseTitle" hidden>
       <div class="overview-panel-head"><h3 id="overviewSuspenseTitle">Suspense Payments</h3><span>MATCHED RECEIPTS</span></div>
       <div class="overview-suspense-stats">
@@ -1328,7 +1368,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
       </div>
       <div class="overview-tickets-notice" id="overviewTicketsNotice" aria-live="polite" hidden></div>
     </section>
-    <section class="overview-panel overview-details-panel" aria-labelledby="overviewDetailsTitle"><div class="overview-panel-head"><h3 id="overviewDetailsTitle">Key details</h3></div><div class="overview-detail-list" id="overviewDetails"></div></section>
+    </div>
     <div class="overview-bottom" id="overviewBottom" hidden>
       <button type="button" class="overview-bottom-link" id="overviewRecoveryLink" hidden><span>Financial recovery</span><strong id="overviewRecoveryText">—</strong><span aria-hidden="true">↗</span></button>
       <button type="button" class="overview-bottom-link" id="overviewSolicitorLink" hidden><span>Solicitor escalation</span><strong id="overviewSolicitorText">—</strong><span aria-hidden="true">↗</span></button>
@@ -1518,6 +1558,14 @@ Consider the appropriate resolution</textarea></label>
 </section>
 <section id="actionsRunning" class="actions-page">
   <div class="costs-page-intro"><div><span class="costs-eyebrow">COST TRACKING</span><h2>Running Costs</h2><p>Keep an accurate record of expenses incurred throughout the complaint.</p></div><div class="costs-overview"><span>TOTAL RECORDED</span><strong id="runningHeroTotal">£0.00</strong></div></div>
+  <div id="runningClosedBanner" class="closed-financial-banner" hidden>
+    <div class="closed-financial-banner-inner">
+      <span class="closed-financial-icon" aria-hidden="true">&#128274;</span>
+      <div class="closed-financial-copy"><strong>Running costs are read-only</strong><p>This complaint is closed. To correct a recorded expense, unlock financial editing. This also unlocks the Closure Form for the current session.</p>
+        <button type="button" id="runningUnlockBtn" class="closed-financial-unlock">Unlock financial editing</button>
+      </div>
+    </div>
+  </div>
   <div class="costs-ledger" id="runningCostsCard">
     <div class="costs-ledger-head"><div><h3>Cost ledger</h3><p>Every recorded expense, with its category and value.</p></div><button type="button" class="running-summary-action" id="runningEditBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span id="runningEditLabel">Add Running Cost</span></button></div>
     <div class="costs-ledger-list" id="runningList"></div>
@@ -2887,15 +2935,28 @@ function initOtherCalc(){
   });
 }
 
+var financialEditingUnlocked=false;
+var lastFinancialLockedState=null;
+function syncClosedFinancialEditing(){
+  var locked=!!(PREFILL&&PREFILL.alreadyClosed&&!financialEditingUnlocked);
+  if(PREFILL&&PREFILL.alreadyClosed&&lastFinancialLockedState!==locked){lockAll(locked);lastFinancialLockedState=locked;}
+  var edit=document.getElementById('runningEditBtn');
+  if(edit){edit.disabled=locked;edit.title=locked?'Unlock financial editing to update running costs':'';}
+  var closure=document.getElementById('closedBanner');
+  if(closure)closure.hidden=!(locked&&ACTION_PAGE==='closure');
+  var running=document.getElementById('runningClosedBanner');
+  if(running)running.hidden=!(locked&&ACTION_PAGE==='running');
+  var overlay=document.getElementById('runningOverlay');
+  if(locked&&overlay)overlay.classList.remove('show');
+}
+function unlockFinancialEditing(){
+  financialEditingUnlocked=true;
+  syncClosedFinancialEditing();
+}
 function initClosedLock(){
-  if(!PREFILL.alreadyClosed) return;
-  $('#closedBanner').style.display='block';
-  lockAll(true);
-  $('#unlockBtn').addEventListener('click',function(){
-    lockAll(false);
-    $('#closedBanner').style.display='none';
-    $('#unlockBtn').dataset.unlocked='1';
-  });
+  document.getElementById('unlockBtn').addEventListener('click',unlockFinancialEditing);
+  document.getElementById('runningUnlockBtn').addEventListener('click',unlockFinancialEditing);
+  syncClosedFinancialEditing();
 }
 // Lock (or unlock) every interactive control on the form.
 // When unlocking, we DON'T blindly enable everything; we re-run the normal
@@ -3085,6 +3146,7 @@ function rcEditorRow(r){
   return wrap;
 }
 function openRunningEditor(){
+  if(PREFILL.alreadyClosed&&!financialEditingUnlocked){syncClosedFinancialEditing();return;}
   var box=$('#rc_rows');box.innerHTML='';var rows=normaliseRunningRows(runningCostsRows);if(!rows.length)rows=[{desc:'',amount:0,type:''}];
   rows.forEach(function(r){box.appendChild(rcEditorRow(r))});$('#rcEditorError').classList.remove('show');$('#rcEditorError').textContent='';rcEditorCompute();$('#runningOverlay').classList.add('show');
 }
@@ -3101,6 +3163,7 @@ function initRunningCosts(){
   $('#runningCancel').addEventListener('click',function(){$('#runningOverlay').classList.remove('show')});
   $('#runningOverlay').addEventListener('click',function(e){if(e.target===$('#runningOverlay'))$('#runningOverlay').classList.remove('show')});
   $('#runningSave').addEventListener('click',async function(){
+    if(PREFILL.alreadyClosed&&!financialEditingUnlocked){syncClosedFinancialEditing();return;}
     var got=collectRunningEditor(),er=$('#rcEditorError'),button=this;
     er.textContent='';er.classList.remove('show');
     if(got.error){er.textContent=got.error;er.classList.add('show');return;}
@@ -3894,14 +3957,42 @@ function rcaInit(){
  });
 }
 
+// Closed-complaint vehicle workflow visibility: outputs remain viewable, no new writes.
+function closedVehicleWorkflowState(){
+ const closed=String(PREFILL?.statusName||'').trim().toLowerCase()==='complaint closed';
+ const o=PREFILL?.overview||{};
+ const sent=!!String(o.initialDealershipEmailSentDate||'').trim()||!!IDE_STATE?.alreadySent;
+ const dekraRequested=!!String(o.dekraRequestedDate||'').trim()||!!String(o.dekraReceivedDate||'').trim();
+ return {closed,sent,dekraRequested};
+}
+function updateClosedVehicleControls(){
+ const state=closedVehicleWorkflowState();
+ const vehicle=String(PREFILL?.complaintType||'').trim().toLowerCase()==='vehicle issues';
+ const showEmail=vehicle&&(!state.closed||state.sent);
+ const showDekra=vehicle&&(!state.closed||state.dekraRequested);
+ for(const id of ['railInitialDealerEmail','initialDealerHomeTile']){const el=document.getElementById(id);if(el)el.hidden=!showEmail;}
+ for(const id of ['railDekraRequest','dekraHomeTile']){const el=document.getElementById(id);if(el)el.hidden=!showDekra;}
+ if(state.closed){
+   const ideInput=$('#ideInputPanel'),idePreview=$('#idePreviewPanel');
+   if(ideInput)ideInput.hidden=true;
+   if(idePreview)idePreview.hidden=true;
+   for(const id of ['ideGenerate','ideSend']){const b=document.getElementById(id);if(b)b.disabled=true;}
+   const builder=document.querySelector('#actionsDekra .dekra-builder');if(builder)builder.hidden=true;
+   const save=document.getElementById('dekraSaveComment');if(save)save.hidden=true;
+   document.querySelectorAll('#dekraPortalFields input,#dekraPortalFields textarea').forEach(el=>{el.readOnly=true;});
+   document.querySelectorAll('#actionsDekra .dekra-copy').forEach(b=>{b.disabled=false;});
+   const copyHead=$('#actionsDekra .dekra-output-head p');
+   if(copyHead)copyHead.textContent='Previously saved DEKRA request (read-only). You can copy the original details.';
+ }
+}
 function hubUpdateRail(page){
  var rail=$('#workspaceRail'),shown=true,initialGate=PREFILL.statusName==='Assigned';
  rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
  if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=initialGate?'Initial call required':(PREFILL.statusName||'Complaints Hub');}
- $('#railInitialDealerEmail').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
- $('#initialDealerHomeTile').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
- $('#railDekraRequest').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
- $('#dekraHomeTile').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
+ // Visibility is controlled by updateClosedVehicleControls().
+ 
+ 
+ updateClosedVehicleControls();
  $('#railCustomerUpdates').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
  var suspenseCount=Number(PREFILL.suspensePayments?.matchCount||0);
  var suspenseAvailable=Number.isFinite(suspenseCount)&&suspenseCount>0;
@@ -3934,6 +4025,9 @@ function gotoActionsPage(page){
   if(page==='solicitor'&&!solarisCanAccess())return;
   if(page==='suspense'&&!(Number(PREFILL.suspensePayments?.matchCount||0)>0))return;
   if(['updates','dekra','initialdealer'].includes(page)&&String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues')return;
+  const closedVehicle=closedVehicleWorkflowState();
+  if(page==='dekra'&&closedVehicle.closed&&!closedVehicle.dekraRequested)return;
+  if(page==='initialdealer'&&closedVehicle.closed&&!closedVehicle.sent)return;
   ACTION_PAGE=page;
   hubUpdateRail(page);
   if(page==='home'||page==='suspense')overviewRender();
@@ -3962,7 +4056,7 @@ function gotoActionsPage(page){
   $('#actionsRootCause').classList.toggle('active',page==='rootcause');
   $('#actionsUpdates').hidden=page!=='updates';
   $('#actionsUpdates').classList.toggle('active',page==='updates');
-  if(page==='updates')acuLoad();
+  if(page==='updates'){acuApplyReadOnly();acuLoad();}
   if(page==='initialdealer')ideLoad();
   if(page==='rootcause')rcaRender();
   if(page==='letters'){lettersRefresh();fourLoad();}
@@ -3974,7 +4068,7 @@ function gotoActionsPage(page){
   $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','suspense':'/ Suspense Payments','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position','initialdealer':'/ Initial Dealership Email','dekra':'/ DEKRA Inspection Request','rootcause':'/ Root Cause Analysis','updates':'/ Automated Customer Updates'}[page]||'';
   $('#footer').hidden=page!=='closure';
   $('#manageBtn').style.display=page==='closure'?'':'none';
-  $('#closedBanner').style.display=(page==='closure'&&PREFILL.alreadyClosed&&$('#unlockBtn').dataset.unlocked!=='1')?'block':'none';
+  syncClosedFinancialEditing();
   $('#formTitle').textContent='Complaint Actions';
   document.title=PREFILL.issueKey+' | Complaint Actions | Carmoola';
   window.scrollTo({top:0,behavior:'smooth'});
@@ -4664,6 +4758,28 @@ function initComplaintSwitcher(){
 }
 
 
+// Eligibility mirrors the backend. Historical messages remain viewable.
+function acuRestrictedReason(){
+ const status=String(PREFILL?.statusName||'').trim().toLowerCase();
+ const outsourced=!!PREFILL?.dealershipPosition?.outsourced || ['yes','y','true'].includes(String(PREFILL?.overview?.outsourced||'').trim().toLowerCase()) || ['outsourced','partner funds outstanding'].includes(status);
+ if(outsourced)return 'This complaint is outsourced. Automated customer updates are not available.';
+ if(['complaint closed','post-resolution tasks'].includes(status))return 'Automated customer updates are unavailable while the complaint is '+(status==='complaint closed'?'closed':'in Post-Resolution Tasks')+'.';
+ return '';
+}
+function acuApplyReadOnly(){
+ const reason=acuRestrictedReason()||ACU_DATA?.restrictionReason||'';
+ const disabled=!!reason;
+ const control=document.querySelector('#actionsUpdates .acu-choice');
+ if(control)control.hidden=disabled;
+ const pause=document.getElementById('acuPauseRow');if(pause&&disabled)pause.hidden=true;
+ const save=document.getElementById('acuSave');if(save){save.hidden=disabled;save.disabled=disabled;}
+ for(const el of document.querySelectorAll('#actionsUpdates input[name="acuMode"], #acuPauseDate'))el.disabled=disabled;
+ const message=document.getElementById('acuMessage');if(message&&disabled)message.textContent=reason+' Previously sent updates remain available below.';
+ const status=document.getElementById('acuStatus'),state=document.getElementById('acuState');
+ if(disabled){if(status)status.textContent='Not applicable';if(state)state.textContent='Not applicable';}
+ const header=document.querySelector('#actionsUpdates .acu-panel-heading p');
+ if(header)header.textContent=disabled?'Read-only: automated updates cannot be managed at this stage.':'The scheduled Zap remains responsible for deciding when to send an update.';
+}
 // Automated Customer Updates: all reads/writes stay behind the signed complaint token.
 let ACU_DATA=null,ACU_BUSY=false;
 function acuFormatDate(value){return value?formatDisplayDate(value):'Not recorded';}
@@ -4682,7 +4798,7 @@ function acuRender(){
  $('#acuStatus').textContent=d.label||'Not configured';$('#acuState').textContent=d.label||'Not configured';
  $('#acuCount').textContent=String(d.sentCount??0);$('#acuLast').textContent=acuFormatDate(d.lastSentDate);
  const mode=d.mode||'inactive';const radio=document.querySelector('input[name="acuMode"][value="'+mode+'"]');if(radio)radio.checked=true;
- $('#acuPauseDate').value=d.pausedUntil||'';$('#acuPauseRow').hidden=mode!=='pause';
+ $('#acuPauseDate').value=d.pausedUntil||'';$('#acuPauseRow').hidden=mode!=='pause';acuApplyReadOnly();
  const history=$('#acuHistory');history.replaceChildren();const records=[...(d.history||[])].sort((a,b)=>new Date(b.sent_at||0)-new Date(a.sent_at||0));
  const status=$('#acuHistoryMessage');status.replaceChildren();
  if(!records.length){const empty=document.createElement('div');empty.className='acu-timeline-empty';empty.textContent=d.historyError||'No automated emails are recorded in the archive for this complaint.';history.appendChild(empty);if(!d.historyError&&Number(d.sentCount)>0){acuAppendArchiveGap(history,Number(d.sentCount));}return;}
@@ -4711,8 +4827,8 @@ function acuRender(){
  }
 }
 async function acuCall(action,extra){const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action,...extra})});const data=await res.json();if(!res.ok||!data.ok)throw Error(data.errors?.[0]||'Request failed');return data;}
-async function acuLoad(){if(ACU_BUSY)return;$('#acuHistoryMessage').textContent='Loading automated updates…';try{const data=await acuCall('customer_updates_get');ACU_DATA=data.updates;acuRender();$('#acuMessage').textContent='';}catch(e){$('#acuHistoryMessage').textContent='Unable to load updates: '+e.message;}}
-function acuInit(){document.querySelectorAll('input[name="acuMode"]').forEach(el=>el.addEventListener('change',()=>{$('#acuPauseRow').hidden=document.querySelector('input[name="acuMode"]:checked')?.value!=='pause';}));$('#acuRefresh').addEventListener('click',acuLoad);$('#acuSave').addEventListener('click',async function(){if(ACU_BUSY)return;const mode=document.querySelector('input[name="acuMode"]:checked')?.value||'inactive';const date=$('#acuPauseDate').value;const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());if(mode==='pause'&&(!date||date<=today)){$('#acuMessage').textContent='Choose a future date to resume updates.';return;}if(!confirm('Save '+(mode==='pause'?'a temporary pause':mode==='active'?'Active':'Inactive')+' for automated customer updates?'))return;ACU_BUSY=true;this.disabled=true;$('#acuMessage').textContent='Saving…';try{const result=await acuCall('customer_updates_manage',{mode,pausedUntil:mode==='pause'?date:null});ACU_DATA={...ACU_DATA,...result.updates,history:ACU_DATA?.history||[]};acuRender();$('#acuMessage').textContent='Settings saved successfully.';showActionsSaveToast('Automated customer updates settings saved.');}catch(e){$('#acuMessage').textContent='Could not save settings: '+e.message;}finally{ACU_BUSY=false;this.disabled=false;}});}
+async function acuLoad(){acuApplyReadOnly();if(ACU_BUSY)return;$('#acuHistoryMessage').textContent='Loading automated updates…';try{const data=await acuCall('customer_updates_get');ACU_DATA=data.updates;acuRender();$('#acuMessage').textContent='';}catch(e){$('#acuHistoryMessage').textContent='Unable to load updates: '+e.message;}}
+function acuInit(){document.querySelectorAll('input[name="acuMode"]').forEach(el=>el.addEventListener('change',()=>{$('#acuPauseRow').hidden=document.querySelector('input[name="acuMode"]:checked')?.value!=='pause';}));$('#acuRefresh').addEventListener('click',acuLoad);$('#acuSave').addEventListener('click',async function(){if(acuRestrictedReason()||ACU_DATA?.restrictionReason){acuApplyReadOnly();return;}if(ACU_BUSY)return;const mode=document.querySelector('input[name="acuMode"]:checked')?.value||'inactive';const date=$('#acuPauseDate').value;const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());if(mode==='pause'&&(!date||date<=today)){$('#acuMessage').textContent='Choose a future date to resume updates.';return;}if(!confirm('Save '+(mode==='pause'?'a temporary pause':mode==='active'?'Active':'Inactive')+' for automated customer updates?'))return;ACU_BUSY=true;this.disabled=true;$('#acuMessage').textContent='Saving…';try{const result=await acuCall('customer_updates_manage',{mode,pausedUntil:mode==='pause'?date:null});ACU_DATA={...ACU_DATA,...result.updates,history:ACU_DATA?.history||[]};acuRender();$('#acuMessage').textContent='Settings saved successfully.';showActionsSaveToast('Automated customer updates settings saved.');}catch(e){$('#acuMessage').textContent='Could not save settings: '+e.message;}finally{ACU_BUSY=false;this.disabled=false;acuApplyReadOnly();}});}
 
 
 // The DEKRA portal is external. Values are editable and copied by the handler.
@@ -4766,6 +4882,7 @@ function dekraInit(){
  let generated=false;
  const DEKRA_API='https://dpbwnmjqcbaebszwqgea.supabase.co/functions/v1/dekra-inspection-request';
  async function dekraCall(action,extra={}){
+   if(closedVehicleWorkflowState().closed&&action!=='load')throw Error('This complaint is closed. The saved DEKRA request is view-only.');
    const r=await fetch(DEKRA_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action,...extra})});
    const d=await r.json();if(!r.ok||!d.ok)throw Error(d.errors?.[0]||'DEKRA request failed');return d;
  }
@@ -4774,6 +4891,7 @@ function dekraInit(){
    try{const data=await dekraCall('load');if(data.fields){applyDekraFields(data.fields);generated=true;revealDekraOutput();$('#dekraGenerateStatus').textContent='Previously generated request loaded. Your output is below.';}
    if(data.requested){$('#dekraGenerate').textContent='Already requested';$('#dekraGenerate').disabled=true;if(!data.fields)$('#dekraGenerateStatus').textContent='DEKRA is already marked as requested. A saved request is not available here.';}}
    catch(e){$('#dekraGenerateStatus').textContent='Unable to check an existing DEKRA request: '+e.message;$('#dekraGenerate').disabled=true;}
+   updateClosedVehicleControls();
  }
  $('#dekraSaveComment').addEventListener('click',async function(){
    const fields={};for(const group of DEKRA_GROUPS)for(const [id] of group.fields)fields[id]=dekraValue(id);
@@ -4807,18 +4925,19 @@ function dekraInit(){
 let IDE_STATE=null,IDE_PREVIEW=null,IDE_LOADING=false;
 const IDE_API='https://dpbwnmjqcbaebszwqgea.supabase.co/functions/v1/initial-dealership-email';
 async function ideRequest(action,more={}){
+ if(closedVehicleWorkflowState().closed&&!['initial_dealership_status','initial_dealership_history'].includes(action))throw Error('This complaint is closed. The sent dealership email is view-only.');
  const r=await fetch(IDE_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action,...more})});
  const d=await r.json();if(!r.ok||!d.ok)throw Error(d.errors?.[0]||'Unable to complete dealership email action.');return d;
 }
 function ideRefreshSent(state){
- const done=!!state?.alreadySent,possible=!!state?.ticketLink;
+ const done=!!state?.alreadySent,possible=!!state?.ticketLink,closed=closedVehicleWorkflowState().closed;
  // A sent initial dealership email is read-only: show its archived email instead of the generator.
- $('#ideInputPanel').hidden=done;
- $('#idePageDescription').textContent=done?'View the original dealership email sent through Zendesk, including its recorded date and full content.':'Check the dealership details, generate a draft, then review and send the enquiry. The email is sent through Zendesk and recorded in the complaint timeline.';
- if(done)$('#idePreviewPanel').hidden=true;
+ $('#ideInputPanel').hidden=done||closed;
+ $('#idePageDescription').textContent=done||closed?'View the original dealership email sent through Zendesk. This closed complaint is read-only.':'Check the dealership details, generate a draft, then review and send the enquiry. The email is sent through Zendesk and recorded in the complaint timeline.';
+ if(done||closed)$('#idePreviewPanel').hidden=true;
  $('#ideAlreadySent').hidden=!done&&!possible;
  if(done||possible)$('#ideAlreadySent').textContent=done?'The initial dealership email is already recorded as sent. A second email cannot be sent from here.':'A dealership Zendesk ticket is already linked to this complaint. Check the existing ticket before sending another enquiry.';
- $('#ideGenerate').disabled=done||possible||!state?.eligible;
+ $('#ideGenerate').disabled=closed||done||possible||!state?.eligible;
  if(done||possible){$('#idePreviewPanel').hidden=true;$('#ideSentPanel').hidden=false;$('#ideSuccessText').textContent=done?'Initial dealership email sent'+(state.sentDate?' on '+state.sentDate:'')+'.':'Existing dealership Zendesk ticket found; sending has been disabled to prevent duplication.';
  $('#ideTicketLink').hidden=!state.ticketLink;if(state.ticketLink)$('#ideTicketLink').href=state.ticketLink;
  }else{$('#ideSentPanel').hidden=true;}
@@ -4880,9 +4999,9 @@ function ideInit(){
   this.disabled=true;$('#ideLoadError').textContent='';$('#idePreviewStatus').textContent='Writing the email draft…';
   try{const d=await ideRequest('initial_dealership_preview',{recipient});IDE_PREVIEW=d;$('#ideSubject').value=d.subject;$('#ideEmailBody').value=d.emailBody;$('#idePreviewPanel').hidden=false;$('#ideConfirm').checked=false;$('#ideSend').disabled=true;$('#ideSendMessage').textContent='';$('#idePreviewStatus').textContent='Draft ready to review.';$('#idePreviewPanel').scrollIntoView({behavior:'smooth',block:'start'});}
   catch(e){$('#ideLoadError').textContent=e.message;$('#idePreviewStatus').textContent='';}
-  finally{this.disabled=!!IDE_STATE?.alreadySent||!!IDE_STATE?.ticketLink||!IDE_STATE?.eligible;}
+  finally{this.disabled=closedVehicleWorkflowState().closed||!!IDE_STATE?.alreadySent||!!IDE_STATE?.ticketLink||!IDE_STATE?.eligible;}
  });
- $('#ideConfirm').addEventListener('change',function(){$('#ideSend').disabled=!this.checked;});
+ $('#ideConfirm').addEventListener('change',function(){$('#ideSend').disabled=closedVehicleWorkflowState().closed||!this.checked;});
  $('#ideSend').addEventListener('click',async function(){
   if(!IDE_PREVIEW||!$('#ideConfirm').checked)return;
   if(!confirm('Send this email to '+$('#ideRecipient').value.trim()+' now? This cannot be undone.'))return;
@@ -4890,9 +5009,9 @@ function ideInit(){
   try{const d=await ideRequest('initial_dealership_send',{recipient:$('#ideRecipient').value.trim(),subject:$('#ideSubject').value.trim(),emailBody:$('#ideEmailBody').value.trim(),confirmed:true});
    IDE_STATE=d.state;ideRefreshSent(d.state);$('#idePreviewPanel').hidden=true;$('#ideSuccessText').textContent=d.message||'Initial dealership email sent.';$('#ideSentPanel').hidden=false;$('#ideSendStatus').textContent='';
    PREFILL.overview.initialDealershipEmailSentDate=d.state.sentDate||'';PREFILL.overview.dealershipZendesk=d.state.ticketLink||'';
-   ideLoadHistory();showActionsSaveToast('Initial dealership email sent.');
+   updateClosedVehicleControls();ideLoadHistory();showActionsSaveToast('Initial dealership email sent.');
   }catch(e){$('#ideSendMessage').textContent=e.message+' Check Zendesk and Jira before retrying.';$('#ideSendStatus').textContent='';await ideLoad();}
-  finally{this.disabled=!$('#ideConfirm').checked||$('#idePreviewPanel').hidden;}
+  finally{this.disabled=closedVehicleWorkflowState().closed||!$('#ideConfirm').checked||$('#idePreviewPanel').hidden;}
  });
 }
 function boot(){
@@ -4910,7 +5029,7 @@ function boot(){
       initRejCalc();initInspCalc();initCostEditors();
       applyPrefill();restoreRejectionBreakdowns();restoreCostBreakdowns();restoreInspectionBreakdowns();syncRej();syncFos();recompute();initRunningCosts();updateCostRequirements();renderFosRequiredActions();initRunningOnlySave();initSubmit();initManagementActions();initClosedLock();initReview();
       // Outside FOS Decision Review, keep the existing default-to-FOS behaviour.
-      initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();dekraInit();acuInit();ideInit();
+      initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();dekraInit();acuInit();ideInit();updateClosedVehicleControls();
     })
     .catch(function(){$('#loading').textContent='Network error loading the complaint.';});
 }
