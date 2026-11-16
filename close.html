@@ -1076,18 +1076,28 @@ textarea.letters-field{min-height:85px;resize:vertical}
 #fourState{white-space:nowrap}
 @media(max-width:680px){.fourwk-preview-title{flex-direction:column}#lettersFourWorkspace .letters-summary{gap:12px}}
 
-/* Compact linked Zendesk ticket overview */
-.overview-tickets-panel{padding:15px 19px;margin:0 0 15px}
-.overview-tickets-panel .overview-panel-head{margin-bottom:12px}
+/* Compact, responsive related Zendesk table */
+.overview-tickets-panel{width:min(100%,790px);max-width:790px;box-sizing:border-box;padding:16px 18px;margin:0 0 16px}
+.overview-tickets-panel .overview-panel-head{margin-bottom:13px}
 .overview-tickets-panel .overview-panel-head h3{font-size:14px}
-.overview-ticket-groups{display:flex;flex-direction:column;gap:11px}
-.overview-ticket-group{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
-.overview-ticket-label{font-size:11px;color:#847587;font-weight:700;min-width:135px;padding-top:6px}
-.overview-ticket-links{display:flex;gap:7px;flex-wrap:wrap;min-width:0;flex:1}
-.overview-ticket-links a{font-size:11px;font-weight:750;text-decoration:none;color:#79254e;background:#fff8fb;border:1px solid #efdce7;border-radius:8px;padding:6px 9px}
-.overview-ticket-links a:hover{border-color:#f90081;background:#ffedf6}
-@media(max-width:710px){.overview-ticket-group{display:block}.overview-ticket-label{display:block;margin-bottom:7px}}
-#actionsDekra .dekra-builder[hidden]{display:none!important}
+.overview-ticket-table-wrap{width:100%;overflow-x:auto}
+.overview-ticket-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px;text-align:left}
+.overview-ticket-table th{font-size:10px;letter-spacing:.055em;text-transform:uppercase;font-weight:750;color:#958697;padding:9px 9px;border-bottom:1px solid #eee6ec;white-space:nowrap}
+.overview-ticket-table td{vertical-align:middle;padding:11px 9px;border-bottom:1px solid #f2edf1;color:#453b46}
+.overview-ticket-table tbody tr:last-child td{border-bottom:none}
+.overview-ticket-table tbody tr:hover{background:#fcf8fb}
+.overview-ticket-table .ov-ticket-id{font-weight:750;color:#a41f64;text-decoration:none;white-space:nowrap}
+.overview-ticket-table .ov-ticket-id:hover{text-decoration:underline}
+.overview-ticket-table .ov-ticket-subject{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;max-width:100%;color:#38303b}
+.overview-ticket-table .ov-ticket-muted{color:#a096a1}
+.overview-ticket-table .ov-ticket-status{display:inline-block;border:1px solid #e9e4e9;background:#f8f6f8;border-radius:20px;padding:3px 7px;font-weight:650;font-size:10px;white-space:nowrap;text-transform:capitalize}
+.overview-ticket-table .ov-ticket-status[data-status="open"],.overview-ticket-table .ov-ticket-status[data-status="new"]{background:#fff6e5;border-color:#f4e0b9;color:#916418}
+.overview-ticket-table .ov-ticket-status[data-status="pending"],.overview-ticket-table .ov-ticket-status[data-status="hold"]{background:#f1f5ff;border-color:#dce5fb;color:#52659c}
+.overview-ticket-table .ov-ticket-status[data-status="solved"],.overview-ticket-table .ov-ticket-status[data-status="closed"]{background:#edf8f2;border-color:#d7ebdd;color:#34744f}
+.overview-ticket-table .ov-fos-pill{display:inline-block;border-radius:20px;padding:3px 7px;background:#fff0f7;border:1px solid #f2cee0;color:#a41f64;font-size:10px;font-weight:800}
+.overview-ticket-table th:nth-child(1){width:92px}.overview-ticket-table th:nth-child(2){width:auto}.overview-ticket-table th:nth-child(3){width:78px}.overview-ticket-table th:nth-child(4){width:100px}.overview-ticket-table th:nth-child(5){width:43px}
+.overview-tickets-notice{font-size:11px;color:#857788;padding-top:9px}
+@media(max-width:780px){.overview-tickets-panel{max-width:100%}.overview-ticket-table{min-width:570px}}
 </style>
 </head>
 <body>
@@ -1283,10 +1293,13 @@ textarea.letters-field{min-height:85px;resize:vertical}
     </div>
     <section class="overview-panel overview-tickets-panel" id="overviewTicketsSection" aria-labelledby="overviewTicketsTitle" hidden>
       <div class="overview-panel-head"><h3 id="overviewTicketsTitle">Related Zendesk tickets</h3><span id="overviewTicketsCount"></span></div>
-      <div class="overview-ticket-groups">
-        <div class="overview-ticket-group" id="overviewRelatedTicketsGroup"><span class="overview-ticket-label">All related tickets</span><div class="overview-ticket-links" id="overviewRelatedTickets"></div></div>
-        <div class="overview-ticket-group" id="overviewFosTicketsGroup"><span class="overview-ticket-label">FOS related tickets</span><div class="overview-ticket-links" id="overviewFosTickets"></div></div>
+      <div class="overview-ticket-table-wrap">
+        <table class="overview-ticket-table" aria-label="Related Zendesk tickets">
+          <thead><tr><th>Ticket</th><th>Subject</th><th>Status</th><th>Last updated</th><th>FOS</th></tr></thead>
+          <tbody id="overviewTicketRows"></tbody>
+        </table>
       </div>
+      <div class="overview-tickets-notice" id="overviewTicketsNotice" aria-live="polite" hidden></div>
     </section>
     <section class="overview-attention-section" id="overviewAttentionSection" aria-labelledby="overviewAttentionTitle" hidden>
       <div class="overview-section-head"><h3 id="overviewAttentionTitle">Needs attention</h3><span id="overviewAttentionCount"></span></div>
@@ -1361,7 +1374,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
 </section>
 <section id="actionsDekra" class="actions-page" aria-label="DEKRA inspection portal request" hidden>
   <div class="dekra-head"><span class="eyebrow">Vehicle issues · inspection request</span><h2>DEKRA Inspection Request</h2><p>Prepare the inspection request and copy each detail directly into the DEKRA portal. Details are prefilled from the complaint where available and can be corrected before copying.</p></div>
-  <div class="dekra-notice"><strong>Portal submission is manual.</strong> Generating the request records the DEKRA request in the Complaints Hub. You must still copy the details into DEKRA’s portal and submit them manually. Generating does not mean an appointment is booked.</div>
+  <div class="dekra-notice"><strong>Portal submission is manual.</strong> Generating the request records DEKRA Requested in Jira. You must still copy the details into DEKRA’s portal and submit them manually. Generating does not mean an appointment is booked.</div>
   <section class="dekra-section dekra-builder" aria-labelledby="dekraInputsTitle">
     <div class="dekra-step-label">STEP 1 OF 2</div>
     <h3 id="dekraInputsTitle">Required inputs</h3>
@@ -1376,9 +1389,9 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <div class="dekra-builder-actions"><button type="button" class="dekra-save" id="dekraGenerate">✦ &nbsp;Generate DEKRA request</button><span class="dekra-status" id="dekraGenerateStatus" role="status">Nothing generated yet.</span></div>
   </section>
   <div id="dekraGeneratedResult" hidden>
-    <div class="dekra-output-head"><div><div class="dekra-step-label">INSPECTION DETAILS</div><h3>Generated request</h3><p>Copy each field into the DEKRA portal, or copy the full formatted request in one go.</p></div><button class="dekra-save" type="button" id="dekraCopyFullTop">▤ &nbsp;Copy full request</button></div>
+    <div class="dekra-output-head"><div><div class="dekra-step-label">STEP 2 OF 2</div><h3>Generated request</h3><p>Copy each field into the DEKRA portal, or copy the full formatted request in one go.</p></div><button class="dekra-save" type="button" id="dekraCopyFullTop">▤ &nbsp;Copy full request</button></div>
     <div id="dekraPortalFields"></div>
-    <div class="dekra-footer"><span class="dekra-status" id="dekraStatus" role="status" aria-live="polite">Use the copy buttons to transfer the request to DEKRA's portal.</span><div class="dekra-footer-actions"><button class="dekra-secondary" type="button" id="dekraCopyAll">Copy all field values</button><button class="dekra-secondary" type="button" id="dekraSaveComment">Save edited details</button></div></div>
+    <div class="dekra-footer"><span class="dekra-status" id="dekraStatus" role="status" aria-live="polite">Use the copy buttons to transfer the request to DEKRA's portal.</span><div class="dekra-footer-actions"><button class="dekra-secondary" type="button" id="dekraCopyAll">Copy all field values</button><button class="dekra-secondary" type="button" id="dekraSaveComment">Save edited details to Jira</button></div></div>
   </div>
 </section>
 
@@ -1448,7 +1461,7 @@ Consider the appropriate resolution</textarea></label>
         <label class="fourwk-approve"><input type="checkbox" id="fourApproved"><span>I've reviewed this email and confirm it is accurate and ready to send to the customer.</span></label>
         <div class="letters-actions"><button class="letters-btn primary" type="button" id="fourSend" disabled>Send to customer</button></div>
       </div>
-      <div id="fourSentPanel" hidden class="fourwk-complete"><span class="letters-complete-icon">✓</span><div><h3>Four-week holding response sent</h3><p id="fourSentDetails" class="letters-muted">The response has been recorded.</p><button type="button" id="fourReconcile" class="letters-btn" hidden>Reconcile Complaints Hub fields</button></div></div>
+      <div id="fourSentPanel" hidden class="fourwk-complete"><span class="letters-complete-icon">✓</span><div><h3>Four-week holding response sent</h3><p id="fourSentDetails" class="letters-muted">The response has been recorded.</p><button type="button" id="fourReconcile" class="letters-btn" hidden>Reconcile Jira fields</button></div></div>
       <div id="fourSafety" class="letters-message" role="status" aria-live="polite"></div>
     </div>
   </div>
@@ -2115,7 +2128,7 @@ function renderFosDashboard(){
   var sum=0,has=false;entries.forEach(function(item){if(item[1]===null||item[1]===undefined||item[1]==='')return;has=true;var v=Number(item[1]);if(Number.isFinite(v)&&item[0]!=='FOS Case Fee')sum+=v;var line=document.createElement('div');line.className='fosdash-costline';var label=document.createElement('span');label.textContent=item[0];var value=document.createElement('strong');value.textContent=money(item[1]);line.append(label,value);costs.appendChild(line);});
   if(!has){var p=document.createElement('p');p.className='fosdash-muted';p.textContent='No FOS costs recorded yet.';costs.appendChild(p);}
   set('fosDashCostTotal',has?gbp.format(sum):'Not recorded');
-  if(f.totalCost!==null&&f.totalCost!==undefined){set('fosDashCostNote','Complaints Hub FOS Total Cost: '+money(f.totalCost)+'. This is the recorded compensation total; the case fee is shown separately.');}
+  if(f.totalCost!==null&&f.totalCost!==undefined){set('fosDashCostNote','Jira FOS Total Cost: '+money(f.totalCost)+'. This is the recorded compensation total; the case fee is shown separately.');}
   var detailMap=f.explanations||{};var detailRows=[['Direct Compensation',detailMap.direct],['Distress & Inconvenience',detailMap.distress],['Repair Costs',detailMap.repair],['Inspection / Storage / Recovery',detailMap.inspection],['Courtesy Car & Travel',detailMap.courtesy],['Other Costs',detailMap.other]];detailRows.forEach(function(item){if(!String(item[1]||'').trim())return;var details=document.createElement('details');details.style.cssText='margin-top:8px;border:1px solid var(--line);border-radius:9px;padding:9px 11px';var summary=document.createElement('summary');summary.textContent=item[0]+' · View breakdown';summary.style.cssText='cursor:pointer;font-weight:750;font-size:11.5px;color:#9B1A61';var txt=document.createElement('div');txt.style.cssText='white-space:pre-wrap;overflow-wrap:anywhere;font-size:11.5px;line-height:1.6;color:var(--muted);margin-top:8px';txt.textContent=String(item[1]);details.append(summary,txt);costs.appendChild(details);});
   var documents=document.getElementById('fosDashDocuments');documents.replaceChildren();
   var caseFile=document.createElement('div');caseFile.className='fosdash-field';
@@ -4002,22 +4015,52 @@ function overviewRender(){
  };
  var allTickets=ticketIds(o.relatedZendeskTickets);
  var fosTickets=ticketIds(o.relatedFosZendeskTickets);
- var renderTickets=function(holderId,groupId,ids){
-  var holder=document.getElementById(holderId),group=document.getElementById(groupId);
-  holder.replaceChildren();group.hidden=!ids.length;
-  ids.forEach(function(id){
-   var link=document.createElement('a');
-   link.href='https://carmoola.zendesk.com/agent/tickets/'+encodeURIComponent(id);
-   link.target='_blank';link.rel='noopener noreferrer';link.textContent='#'+id+' ↗';
-   link.setAttribute('aria-label','Open Zendesk ticket '+id+' in a new tab');
-   holder.appendChild(link);
-  });
- };
- renderTickets('overviewRelatedTickets','overviewRelatedTicketsGroup',allTickets);
- renderTickets('overviewFosTickets','overviewFosTicketsGroup',fosTickets);
- var uniqueTickets=new Set(allTickets.concat(fosTickets));
- document.getElementById('overviewTicketsSection').hidden=uniqueTickets.size===0;
- document.getElementById('overviewTicketsCount').textContent=uniqueTickets.size+' TICKET'+(uniqueTickets.size===1?'':'S');
+ var fosSet=new Set(fosTickets);
+ var ids=[...new Set(allTickets.concat(fosTickets))];
+ var tbody=document.getElementById('overviewTicketRows');tbody.replaceChildren();
+ var notice=document.getElementById('overviewTicketsNotice');notice.hidden=true;notice.textContent='';
+ var cells=new Map();
+ ids.forEach(function(id){
+  var tr=document.createElement('tr');
+  var ticketTd=document.createElement('td');var link=document.createElement('a');
+  link.className='ov-ticket-id';link.href='https://carmoola.zendesk.com/agent/tickets/'+encodeURIComponent(id);
+  link.target='_blank';link.rel='noopener noreferrer';link.textContent='#'+id+' ↗';
+  link.setAttribute('aria-label','Open Zendesk ticket '+id+' in a new tab');ticketTd.appendChild(link);
+  var subjectTd=document.createElement('td');var subject=document.createElement('span');subject.className='ov-ticket-subject ov-ticket-muted';subject.textContent='Loading…';subjectTd.appendChild(subject);
+  var statusTd=document.createElement('td');var status=document.createElement('span');status.className='ov-ticket-status';status.textContent='—';statusTd.appendChild(status);
+  var dateTd=document.createElement('td');dateTd.className='ov-ticket-muted';dateTd.textContent='—';
+  var fosTd=document.createElement('td');if(fosSet.has(id)){var pill=document.createElement('span');pill.className='ov-fos-pill';pill.textContent='FOS';fosTd.appendChild(pill);}
+  tr.append(ticketTd,subjectTd,statusTd,dateTd,fosTd);tbody.appendChild(tr);
+  cells.set(id,{subject:subject,status:status,date:dateTd});
+ });
+ document.getElementById('overviewTicketsSection').hidden=ids.length===0;
+ document.getElementById('overviewTicketsCount').textContent=ids.length+' TICKET'+(ids.length===1?'':'S');
+ // Metadata is fetched securely via complaint-closure-form; no Zendesk API credentials in HTML.
+ if(ids.length){
+  var fetchKey=String(p.issueKey||'')+'|'+ids.join(',');
+  {
+   var fetchSerial=window._overviewTicketsFetchSerial=(window._overviewTicketsFetchSerial||0)+1;
+   window._overviewTicketsFetchKey=fetchKey;
+   fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action:'overview_zendesk_tickets'})})
+   .then(function(resp){return resp.json().then(function(data){if(!resp.ok||!data.ok)throw Error((data.errors||[])[0]||'Zendesk details unavailable');return data;});})
+   .then(function(data){
+    if(window._overviewTicketsFetchSerial!==fetchSerial)return;
+    var rows=new Map((data.tickets||[]).map(function(t){return [String(t.id),t];}));
+    var dateFormat=new Intl.DateTimeFormat('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'Europe/London'});
+    cells.forEach(function(c,id){var t=rows.get(id);
+     c.subject.classList.remove('ov-ticket-muted');
+     c.subject.textContent=t&&t.subject?t.subject:'Subject unavailable';
+     c.subject.title=t&&t.subject?t.subject:'';
+     if(!t)c.subject.classList.add('ov-ticket-muted');
+     c.status.textContent=t&&t.status?t.status.replace(/_/g,' '):'—';
+     if(t&&t.status)c.status.dataset.status=t.status.toLowerCase();
+     if(t&&t.updated_at){var d=new Date(t.updated_at);if(!Number.isNaN(d.getTime())){c.date.textContent=dateFormat.format(d);c.date.title=d.toLocaleString('en-GB',{timeZone:'Europe/London'});}}
+    });
+    if(data.warning){notice.textContent=data.warning;notice.hidden=false;}
+   })
+   .catch(function(err){if(window._overviewTicketsFetchSerial!==fetchSerial)return;cells.forEach(function(c){c.subject.textContent='Details unavailable';c.subject.classList.add('ov-ticket-muted');});notice.textContent='Zendesk details could not be loaded. Ticket links remain available.';notice.hidden=false;console.warn('Related ticket metadata',err);});
+  }
+ }
 
  var attention=[];
  if(p.rootCause&&p.rootCause.required&&!p.rootCause.completed&&p.statusName!=='Complaint Closed')attention.push({name:'Root Cause Analysis',description:'Required before complaint closure',target:'rootcause'});
@@ -4187,7 +4230,7 @@ function overviewRender(){
   }
   if(!count){var row=document.createElement('tr'),cell=document.createElement('td');cell.colSpan=3;cell.textContent='Individual payment details are not yet recorded.';row.appendChild(cell);tbody.appendChild(row);}
   var notes=[];
-  if(count!==matchCount)notes.push('The recorded payment count differs from the number of itemised receipts. Please check the Complaints Hub.');
+  if(count!==matchCount)notes.push('The recorded payment count differs from the number of itemised receipts. Please check Jira.');
   if(amounts.length!==refs.length||amounts.length!==ids.length)notes.push('Some receipt fields have different numbers of entries. Items are shown in their recorded order.');
   $('#overviewSuspenseNote').textContent=notes.join(' ');$('#overviewSuspenseNote').hidden=!notes.length;
  }
@@ -4405,7 +4448,7 @@ async function fourSend(){
  finally{FOUR_BUSY=false;fourRender();}
 }
 async function fourReconcile(){
- if(FOUR_BUSY)return;FOUR_BUSY=true;$('#fourSafety').textContent='Reconciling Complaints Hub records…';
+ if(FOUR_BUSY)return;FOUR_BUSY=true;$('#fourSafety').textContent='Reconciling Jira…';
  try{var d=await fourCall('reconcile');$('#fourSafety').textContent=d.message;await fourLoad();}catch(e){$('#fourSafety').textContent=e.message;}
  finally{FOUR_BUSY=false;fourRender();}
 }
@@ -4479,7 +4522,7 @@ function lettersRender(){
  if(holdingBlocked){
   var finalBlocked=!!LETTERS_STATE?.finalSent;
   $('#lettersHoldingBlockedTitle').textContent=finalBlocked?'No holding letter needed':'Eight-week holding letter not yet available';
-  $('#lettersHoldingBlockedReason').textContent=finalBlocked?'The final response has already been sent, so a new eight-week holding letter cannot be generated.':(LETTERS_STATE?.holdingAvailableDate?'You can generate this letter from '+formatDisplayDate(LETTERS_STATE.holdingAvailableDate)+' (53 calendar days after the complaint was received).':'The Complaint Received Date is missing or invalid. Add it in the Complaints Hub before generating an eight-week holding letter.');
+  $('#lettersHoldingBlockedReason').textContent=finalBlocked?'The final response has already been sent, so a new eight-week holding letter cannot be generated.':(LETTERS_STATE?.holdingAvailableDate?'You can generate this letter from '+formatDisplayDate(LETTERS_STATE.holdingAvailableDate)+' (53 calendar days after the complaint was received).':'The Complaint Received Date is missing or invalid. Add it in Jira before generating an eight-week holding letter.');
  }
  var sentDate=holding?LETTERS_STATE?.holdingSentDate:LETTERS_STATE?.finalSentDate;
  var sentLabel=sent?(sentDate?'Sent · '+formatDisplayDate(sentDate):'Sent'):'';
@@ -4515,7 +4558,7 @@ async function lettersRefresh(){
 async function lettersGenerate(){
  if(LETTERS_BUSY||LETTERS_GENERATING||lettersGenerationPending()||lettersSelectedDoc()||lettersSelectedSent()||lettersPending())return;
  if(LETTERS_VIEW==='holding'&&LETTERS_STATE?.finalSent){$('#lettersGenerateMessage').textContent='An eight-week holding letter cannot be generated after the final response has been sent.';return;}
- if(LETTERS_VIEW==='holding'&&LETTERS_STATE?.holdingGenerateEligible===false){$('#lettersGenerateMessage').textContent='An eight-week holding letter is not available yet. '+(LETTERS_STATE?.holdingAvailableDate?'Available from '+formatDisplayDate(LETTERS_STATE.holdingAvailableDate)+'.':'Add the Complaint Received Date in the Complaints Hub first.');return;}
+ if(LETTERS_VIEW==='holding'&&LETTERS_STATE?.holdingGenerateEligible===false){$('#lettersGenerateMessage').textContent='An eight-week holding letter is not available yet. '+(LETTERS_STATE?.holdingAvailableDate?'Available from '+formatDisplayDate(LETTERS_STATE.holdingAvailableDate)+'.':'Add the Complaint Received Date in Jira first.');return;}
  var type=lettersSelectedType(),summary=$('#lettersSummary').value.trim(),details=$('#lettersDetails').value.trim(),facts=$('#lettersFacts').value.trim(),outcome=$('#lettersOutcome').value;
  if((type==='holding'&&!summary)||(type==='affordability'&&!facts)||(['general','vehicle'].includes(type)&&(!summary||!details))){$('#lettersGenerateMessage').textContent='Complete the required fields before generating the letter.';return;}
  LETTERS_BUSY=true;$('#lettersGenerateMessage').textContent='Requesting draft…';lettersRender();
@@ -4692,19 +4735,15 @@ function dekraInit(){
  $('#dekraOverrideLocation').value=String(d.location||'');
  $('#dekraOriginalMileage').value=String(v.originalMileage??'');
  $('#dekraCurrentMileage').value=String(v.complaintMileage??'');
- function revealDekraOutput(){ $('#dekraGeneratedResult').hidden=false; const inputs=document.querySelector('#actionsDekra .dekra-builder'); if(inputs)inputs.hidden=true; }
+ function revealDekraOutput(){ $('#dekraGeneratedResult').hidden=false; }
  function dekraFullComment(){
-   const lines=[];
-   for(const group of DEKRA_GROUPS){
-     for(const [id,label] of group.fields){
-       const value=dekraValue(id);
-       if(value)lines.push(label+': '+value);
-     }
-   }
-   return lines.join('\n');
+   const lines=['DEKRA INSPECTION REQUEST - GENERATED IN COMPLAINTS HUB','Generated for manual copying into the DEKRA portal. No portal submission is verified.',''];
+   const jiraLabels={concern:'Reported vehicle concern',milesTravelled:'Miles travelled',daysOwned:'Days in possession'};
+   for(const group of DEKRA_GROUPS)for(const [id,label] of group.fields)lines.push(jiraLabels[id]||label,dekraValue(id)||'(not recorded)','');
+   return lines.join('\n').trim();
  }
  $('#dekraCopyFullTop').addEventListener('click',async function(){
-   try{if(await dekraCopy(dekraFullComment())){const original=this.textContent;this.textContent='✓ Copied full request';$('#dekraStatus').textContent='Full DEKRA request copied.';setTimeout(()=>this.textContent=original,1600);}}
+   try{if(await dekraCopy(dekraFullComment())){const original=this.textContent;this.textContent='✓ Copied full request';$('#dekraStatus').textContent='Complete Jira-style request copied.';setTimeout(()=>this.textContent=original,1600);}}
    catch(e){$('#dekraStatus').textContent='Unable to copy the full request. Please try the individual copy buttons.';}
  });
  $('#dekraCopyAll').addEventListener('click',async()=>{const parts=[];for(const group of DEKRA_GROUPS){const rows=group.fields.map(([id,label])=>[label,dekraValue(id)]).filter(([,v])=>v);if(rows.length)parts.push(group.title+'\n'+rows.map(([l,v])=>l+': '+v).join('\n'));}try{if(await dekraCopy(parts.join('\n\n')))$('#dekraStatus').textContent='All populated DEKRA details copied.';}catch(e){$('#dekraStatus').textContent='Copy failed. Please copy fields individually.';}});
@@ -4723,8 +4762,8 @@ function dekraInit(){
  $('#dekraSaveComment').addEventListener('click',async function(){
    const fields={};for(const group of DEKRA_GROUPS)for(const [id] of group.fields)fields[id]=dekraValue(id);
    if(!fields.concern){$('#dekraStatus').textContent='Enter a reported concern first.';return;}
-   if(!confirm('Save these edited DEKRA details to the Complaints Hub?'))return;
-   this.disabled=true;try{await dekraCall('save_comment',{fields});$('#dekraStatus').textContent='Edited details saved in the Complaints Hub.';}catch(e){$('#dekraStatus').textContent=e.message;}finally{this.disabled=false;}
+   if(!confirm('Save these edited DEKRA details as an additional internal Jira comment?'))return;
+   this.disabled=true;try{await dekraCall('save_comment',{fields});$('#dekraStatus').textContent='Edited details saved in a Jira comment.';}catch(e){$('#dekraStatus').textContent=e.message;}finally{this.disabled=false;}
  });
  $('#dekraGenerate').addEventListener('click',async function(){
    const location=$('#dekraOverrideLocation').value.trim();
@@ -4743,7 +4782,7 @@ function dekraInit(){
      applyDekraFields(data.fields);generated=true;revealDekraOutput();
      $('#dekraGenerateStatus').textContent=data.message+(data.notification?' '+data.notification:'');
      $('#dekraStatus').textContent='Copy each field into the DEKRA portal and submit the request there.';
-     this.textContent='Already requested';showActionsSaveToast('DEKRA request recorded in the Complaints Hub.');
+     this.textContent='Already requested';showActionsSaveToast('DEKRA request recorded in Jira.');
    }catch(e){$('#dekraGenerateStatus').textContent='Could not generate request: '+e.message;this.disabled=false;}
  });
  loadDekraSaved();
