@@ -987,46 +987,6 @@ textarea.letters-field{min-height:85px;resize:vertical}
 
 /* Timeline widths are responsive; do not enforce a per-step minimum. */
 
-
-/* Send initial dealership email: review then send */
-.ide-panel[hidden],.ide-note[hidden],#ideTicketLink[hidden]{display:none!important}
-
-.ide-history-head{display:flex;align-items:start;justify-content:space-between;gap:12px}.ide-history-refresh,.ide-history-copy{border:1px solid #ddcddd;border-radius:8px;background:white;color:#734468;padding:8px 12px;font:700 12px 'DM Sans',sans-serif;cursor:pointer}.ide-history-list{display:grid;gap:11px}.ide-history-entry{border:1px solid #e7dae6;border-radius:12px;overflow:hidden}.ide-history-entry summary{cursor:pointer;padding:13px 16px;background:#fffbfe;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.ide-history-entry summary strong{font-size:13px;color:#34223a}.ide-history-entry summary span{font-size:11px;color:#806c7d}.ide-history-details{padding:14px 16px}.ide-history-meta{font-size:11px;color:#685568;margin-bottom:10px}.ide-history-body{white-space:pre-wrap;overflow-wrap:anywhere;font:400 12.5px/1.65 'DM Sans',sans-serif;background:#faf7fa;border-radius:9px;padding:15px;max-height:380px;overflow:auto}.ide-history-tools{display:flex;align-items:center;flex-wrap:wrap;gap:11px;margin:12px 0 0}.ide-history-empty{font-size:12px;color:#817383}
-.ide-wrap{max-width:1040px;margin:auto}.ide-header{padding:24px 27px;border:1px solid var(--line);border-radius:16px;background:#fff;margin-bottom:16px;box-shadow:var(--shadow)}
-.ide-header .eyebrow{font-size:10px;letter-spacing:.13em;color:var(--pink-dark);font-weight:800}.ide-header h2{font-size:25px;letter-spacing:-.025em;margin:7px 0 7px}.ide-header p{font-size:13px;color:var(--muted);line-height:1.6;margin:0;max-width:760px}
-.ide-panel{border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--shadow);padding:23px 25px;margin-bottom:16px}.ide-panel h3{margin:0 0 8px;font-size:16px}.ide-panel p{font-size:12px;color:var(--muted);line-height:1.6;margin:0 0 16px}
-.ide-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:16px 0}.ide-fact{border:1px solid #efe6ef;border-radius:10px;background:#fffcfe;padding:12px 14px;min-width:0}.ide-fact span{font-size:11px;color:#8e798c;display:block;margin-bottom:5px}.ide-fact strong{font-size:13px;color:#38283c;overflow-wrap:anywhere}
-.ide-field{display:block;font-size:12px;font-weight:750;color:#49354c;margin:14px 0}.ide-field input,.ide-field textarea{display:block;width:100%;box-sizing:border-box;border:1px solid #ded0e0;border-radius:9px;padding:12px 13px;font:500 13px 'DM Sans',sans-serif;color:var(--ink);background:#fff;margin-top:7px}.ide-field textarea{min-height:235px;resize:vertical;line-height:1.7}.ide-field input:focus,.ide-field textarea:focus{outline:none;border-color:var(--pink);box-shadow:0 0 0 3px #f9008119}
-.ide-note{border:1px solid #f1e0ba;background:#fffaf0;padding:12px 14px;border-radius:10px;font-size:12px;color:#75562f;line-height:1.55;margin-bottom:15px}.ide-error{color:#b22752;font-size:12px;line-height:1.55;white-space:pre-wrap}.ide-success{color:#367151;font-size:12px;line-height:1.55}.ide-check{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:#49354c;line-height:1.5;padding:12px 0}.ide-check input{accent-color:#ed007b;width:17px;height:17px;margin-top:2px}.ide-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:17px}.ide-actions button{border:0;border-radius:10px;background:var(--pink);padding:12px 19px;color:#fff;font:750 13px 'DM Sans',sans-serif;cursor:pointer}.ide-actions button:disabled{opacity:.55;cursor:not-allowed}.ide-link{color:#a02067;text-decoration:underline;font-weight:750}
-@media(max-width:650px){.ide-summary{grid-template-columns:1fr}.ide-panel,.ide-header{padding:18px}}
-
-
-/* Read-only dealership correspondence: full email on the page, not an accordion. */
-.ide-history-panel{padding:26px 28px}
-.ide-history-head{align-items:center;margin-bottom:19px}
-.ide-history-head h3{font-size:18px;margin-bottom:6px}
-.ide-history-head p{margin-bottom:0}
-.ide-mail-card+.ide-mail-card{margin-top:22px;padding-top:22px;border-top:1px solid #efe6ee}
-.ide-mail-top{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:20px}
-.ide-mail-heading{display:flex;align-items:center;gap:13px;min-width:0}
-.ide-mail-heading h4{font-size:17px;font-weight:800;letter-spacing:-.015em;color:#302238;margin:0 0 4px}
-.ide-mail-heading p{margin:0;font-size:12px;color:#817183}
-.ide-mail-sent{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;border-radius:10px;padding:10px 13px;background:#e9f8ea;color:#237143;font-size:12px;font-weight:800}
-.ide-mail-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.ide-mail-action{display:inline-flex;align-items:center;justify-content:center;background:#fff;border:1px solid #dfd0df;border-radius:9px;color:#62385c;text-decoration:none;padding:10px 13px;font:750 12px 'DM Sans',sans-serif;cursor:pointer;transition:background .15s,border-color .15s}
-.ide-mail-action:hover{background:#fbf5f9;border-color:#c6a8c5}
-.ide-mail-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:0;background:#fdf8fc;border:1px solid #eadce9;border-radius:11px;padding:14px 6px;margin:0 0 23px}
-.ide-mail-stat{padding:3px 17px;min-width:0}
-.ide-mail-stat+.ide-mail-stat{border-left:1px solid #e7d7e5}
-.ide-mail-stat span{display:block;font-size:11px;color:#807081;margin-bottom:7px}
-.ide-mail-stat strong{display:block;font-size:12.5px;color:#34243c;font-weight:750;overflow-wrap:anywhere}
-.ide-mail-content-label{font-size:12.5px;font-weight:800;color:#4a3850;margin:0 0 11px}
-.ide-mail-content{border:1px solid #e8dce8;background:#fcf9fc;border-radius:12px;padding:22px 24px}
-.ide-mail-subject{font-weight:750;font-size:13px;color:#33253a;border-bottom:1px solid #eadfea;padding-bottom:15px;margin-bottom:18px}
-.ide-mail-body{font:450 13.2px/1.85 'DM Sans',sans-serif;color:#362b3b;white-space:pre-wrap;overflow-wrap:anywhere;user-select:text}
-@media(max-width:700px){.ide-history-panel{padding:19px}.ide-mail-top{align-items:flex-start}.ide-mail-heading{align-items:flex-start}.ide-mail-stats{grid-template-columns:1fr 1fr;row-gap:13px}.ide-mail-stat:nth-child(odd){border-left:none}.ide-mail-content{padding:17px}.ide-mail-actions{width:100%}}
-@media(max-width:460px){.ide-mail-stats{grid-template-columns:1fr}.ide-mail-stat+.ide-mail-stat{border-left:0;border-top:1px solid #eadfea;padding-top:12px}}
-
 /* DEKRA portal copy workspace */
 .dekra-head{padding:24px 26px;border:1px solid var(--line);border-radius:16px;background:#fff;margin-bottom:16px;box-shadow:var(--shadow)}
 .dekra-head .eyebrow{font-size:11px;letter-spacing:.09em;font-weight:800;color:var(--pink-dark);text-transform:uppercase}
@@ -1075,18 +1035,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
 #lettersFourWorkspace [hidden]{display:none!important}
 #fourState{white-space:nowrap}
 @media(max-width:680px){.fourwk-preview-title{flex-direction:column}#lettersFourWorkspace .letters-summary{gap:12px}}
-
-/* Compact linked Zendesk ticket overview */
-.overview-tickets-panel{padding:15px 19px;margin:0 0 15px}
-.overview-tickets-panel .overview-panel-head{margin-bottom:12px}
-.overview-tickets-panel .overview-panel-head h3{font-size:14px}
-.overview-ticket-groups{display:flex;flex-direction:column;gap:11px}
-.overview-ticket-group{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
-.overview-ticket-label{font-size:11px;color:#847587;font-weight:700;min-width:135px;padding-top:6px}
-.overview-ticket-links{display:flex;gap:7px;flex-wrap:wrap;min-width:0;flex:1}
-.overview-ticket-links a{font-size:11px;font-weight:750;text-decoration:none;color:#79254e;background:#fff8fb;border:1px solid #efdce7;border-radius:8px;padding:6px 9px}
-.overview-ticket-links a:hover{border-color:#f90081;background:#ffedf6}
-@media(max-width:710px){.overview-ticket-group{display:block}.overview-ticket-label{display:block;margin-bottom:7px}}
+#actionsDekra .dekra-builder[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -1164,7 +1113,6 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <button type="button" class="rail-link" data-rail="suspense" id="railSuspensePayments" hidden><span class="rail-icon">⇄</span><span>Suspense Payments</span></button>
     <button type="button" class="rail-link" data-rail="rejection"><span class="rail-icon">◇</span><span>Vehicle Rejection</span></button>
     <button type="button" class="rail-link" data-rail="post"><span class="rail-icon">▣</span><span>Post-Resolution Hub</span></button>
-    <button type="button" class="rail-link" data-rail="initialdealer" id="railInitialDealerEmail" hidden><span class="rail-icon">✉</span><span>Initial Dealership Email</span></button>
     <button type="button" class="rail-link" data-rail="dekra" id="railDekraRequest" hidden><span class="rail-icon">▧</span><span>DEKRA Inspection Request</span></button>
     <button type="button" class="rail-link" data-rail="letters"><span class="rail-icon">✉</span><span>Letters &amp; Responses</span></button>
     <button type="button" class="rail-link" data-rail="updates" id="railCustomerUpdates" hidden><span class="rail-icon">✉</span><span>Automated Customer Updates</span></button>
@@ -1280,13 +1228,6 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <div class="overview-shortcuts" id="overviewShortcuts" aria-label="Quick links">
       <span>QUICK LINKS</span><div id="overviewLinks"></div>
     </div>
-    <section class="overview-panel overview-tickets-panel" id="overviewTicketsSection" aria-labelledby="overviewTicketsTitle" hidden>
-      <div class="overview-panel-head"><h3 id="overviewTicketsTitle">Related Zendesk tickets</h3><span id="overviewTicketsCount"></span></div>
-      <div class="overview-ticket-groups">
-        <div class="overview-ticket-group" id="overviewRelatedTicketsGroup"><span class="overview-ticket-label">All related tickets</span><div class="overview-ticket-links" id="overviewRelatedTickets"></div></div>
-        <div class="overview-ticket-group" id="overviewFosTicketsGroup"><span class="overview-ticket-label">FOS related tickets</span><div class="overview-ticket-links" id="overviewFosTickets"></div></div>
-      </div>
-    </section>
     <section class="overview-attention-section" id="overviewAttentionSection" aria-labelledby="overviewAttentionTitle" hidden>
       <div class="overview-section-head"><h3 id="overviewAttentionTitle">Needs attention</h3><span id="overviewAttentionCount"></span></div>
       <div class="overview-attention" id="overviewAttention"></div>
@@ -1323,7 +1264,6 @@ textarea.letters-field{min-height:85px;resize:vertical}
   <div class="overview-legacy-controls" aria-hidden="true">
   <div class="home-action-heading"><div><h3>What would you like to do?</h3><p>Select a workspace to continue managing this complaint.</p></div><span class="home-action-count">7 WORKSPACES</span></div>
   <div class="actions-tiles home-tiles home-tiles-five">
-    <button type="button" class="actions-tile" data-go="initialdealer" id="initialDealerHomeTile" hidden><span class="tile-top"><span class="glyph">✉</span><span class="arrow">↗</span></span><span class="tile-copy"><strong>Initial Dealership Email</strong><small>Review and send the first dealership enquiry</small></span></button>
     <button type="button" class="actions-tile" data-go="dekra" id="dekraHomeTile" hidden><span class="tile-top"><span class="glyph">⌕</span><span class="arrow">↗</span></span><span class="tile-copy"><strong>DEKRA Inspection Request</strong><small>Generate an AI request and copy details to the DEKRA portal</small></span></button>
     <button type="button" class="actions-tile" data-go="running"><span class="tile-top"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M8 15h3"/></svg></span><span class="arrow">↗</span></span><span class="tile-copy"><strong>Running Costs</strong><small>Record and manage complaint expenses</small></span></button>
     <button type="button" class="actions-tile" id="homeRejectionTile"><span class="tile-top"><span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 7h8M8 12h3M8 17h8M15 11v5M12.5 13.5h5"/></svg></span><span class="arrow">↗</span></span><span class="tile-copy"><strong>Calculate Vehicle Rejection Loss</strong><small>Calculate and save the customer-side loss to Complaints Hub</small></span></button>
@@ -1337,30 +1277,9 @@ textarea.letters-field{min-height:85px;resize:vertical}
 </div>
 </section>
 
-<section class="actions-page" id="actionsInitialDealer" aria-label="Initial dealership email" hidden>
- <div class="ide-wrap">
-  <header class="ide-header"><div class="eyebrow">COMPLAINT WORKSPACE / VEHICLE ISSUES</div><h2>Initial Dealership Email</h2><p id="idePageDescription">Check the dealership details, generate a draft, then review and send the enquiry. The email is sent through Zendesk and recorded in the complaint timeline.</p></header>
-  <div class="ide-panel" id="ideInputPanel"><h3>1. Review the recipient and complaint</h3><p>Details are taken from Jira. If a required detail is missing, update the complaint before proceeding.</p>
-   <div class="ide-summary"><div class="ide-fact"><span>Dealership</span><strong id="ideDealer">—</strong></div><div class="ide-fact"><span>Vehicle registration</span><strong id="ideVehicle">—</strong></div><div class="ide-fact"><span>Complaint handler</span><strong id="ideAssignee">—</strong></div><div class="ide-fact"><span>Agreement activation date</span><strong id="ideOrigination">—</strong></div></div>
-   <label class="ide-field" for="ideRecipient">Dealership email address<input id="ideRecipient" type="email" autocomplete="off" placeholder="dealer@example.com" maxlength="254"></label>
-   <div class="ide-note" id="ideAlreadySent" hidden></div><p class="ide-error" id="ideLoadError" role="alert"></p>
-   <div class="ide-actions"><span id="idePreviewStatus" class="dekra-status" role="status"></span><button type="button" id="ideGenerate">Generate email draft</button></div>
-  </div>
-  <div class="ide-panel" id="idePreviewPanel" hidden><h3>2. Review and send</h3><p>Make any changes to the email before sending. The preview does not send anything, create a Zendesk ticket or change Jira.</p>
-   <label class="ide-field" for="ideSubject">Email subject<input id="ideSubject" maxlength="220"></label>
-   <label class="ide-field" for="ideEmailBody">Email body<textarea id="ideEmailBody" maxlength="9000" spellcheck="true"></textarea></label>
-   <label class="ide-check"><input type="checkbox" id="ideConfirm"><span>I have checked the recipient, vehicle details and email, and I authorise sending this initial dealership enquiry.</span></label>
-   <div class="ide-note">The initial dealership email can only be sent once through this workflow. If a Zendesk ticket has already been created, check it before attempting another send.</div>
-   <p id="ideSendMessage" role="alert" class="ide-error"></p><div class="ide-actions"><span class="dekra-status" id="ideSendStatus"></span><button type="button" id="ideSend" disabled>Send to dealership</button></div>
-  </div>
-  <div class="ide-panel ide-history-panel" id="ideHistoryPanel"><div class="ide-history-head"><div><h3>Sent dealership email</h3><p>The original enquiry sent to the dealership via Zendesk.</p></div><button type="button" id="ideHistoryRefresh" class="ide-history-refresh">↻ &nbsp;Refresh history</button></div>
-   <div id="ideHistoryList" class="ide-history-list" aria-live="polite"><p>Loading sent emails…</p></div></div>
-  <div class="ide-panel" id="ideSentPanel" hidden><h3>Initial dealership enquiry recorded</h3><p id="ideSuccessText" class="ide-success"></p><a id="ideTicketLink" class="ide-link" target="_blank" rel="noopener noreferrer" hidden>Open dealership Zendesk ticket ↗</a></div>
- </div>
-</section>
 <section id="actionsDekra" class="actions-page" aria-label="DEKRA inspection portal request" hidden>
   <div class="dekra-head"><span class="eyebrow">Vehicle issues · inspection request</span><h2>DEKRA Inspection Request</h2><p>Prepare the inspection request and copy each detail directly into the DEKRA portal. Details are prefilled from the complaint where available and can be corrected before copying.</p></div>
-  <div class="dekra-notice"><strong>Portal submission is manual.</strong> Generating the request records DEKRA Requested in Jira. You must still copy the details into DEKRA’s portal and submit them manually. Generating does not mean an appointment is booked.</div>
+  <div class="dekra-notice"><strong>Portal submission is manual.</strong> Generating the request records the DEKRA request in the Complaints Hub. You must still copy the details into DEKRA’s portal and submit them manually. Generating does not mean an appointment is booked.</div>
   <section class="dekra-section dekra-builder" aria-labelledby="dekraInputsTitle">
     <div class="dekra-step-label">STEP 1 OF 2</div>
     <h3 id="dekraInputsTitle">Required inputs</h3>
@@ -1375,9 +1294,9 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <div class="dekra-builder-actions"><button type="button" class="dekra-save" id="dekraGenerate">✦ &nbsp;Generate DEKRA request</button><span class="dekra-status" id="dekraGenerateStatus" role="status">Nothing generated yet.</span></div>
   </section>
   <div id="dekraGeneratedResult" hidden>
-    <div class="dekra-output-head"><div><div class="dekra-step-label">STEP 2 OF 2</div><h3>Generated request</h3><p>Copy each field into the DEKRA portal, or copy the full formatted request in one go.</p></div><button class="dekra-save" type="button" id="dekraCopyFullTop">▤ &nbsp;Copy full request</button></div>
+    <div class="dekra-output-head"><div><div class="dekra-step-label">INSPECTION DETAILS</div><h3>Generated request</h3><p>Copy each field into the DEKRA portal, or copy the full formatted request in one go.</p></div><button class="dekra-save" type="button" id="dekraCopyFullTop">▤ &nbsp;Copy full request</button></div>
     <div id="dekraPortalFields"></div>
-    <div class="dekra-footer"><span class="dekra-status" id="dekraStatus" role="status" aria-live="polite">Use the copy buttons to transfer the request to DEKRA's portal.</span><div class="dekra-footer-actions"><button class="dekra-secondary" type="button" id="dekraCopyAll">Copy all field values</button><button class="dekra-secondary" type="button" id="dekraSaveComment">Save edited details to Jira</button></div></div>
+    <div class="dekra-footer"><span class="dekra-status" id="dekraStatus" role="status" aria-live="polite">Use the copy buttons to transfer the request to DEKRA's portal.</span><div class="dekra-footer-actions"><button class="dekra-secondary" type="button" id="dekraCopyAll">Copy all field values</button><button class="dekra-secondary" type="button" id="dekraSaveComment">Save edited details</button></div></div>
   </div>
 </section>
 
@@ -1447,7 +1366,7 @@ Consider the appropriate resolution</textarea></label>
         <label class="fourwk-approve"><input type="checkbox" id="fourApproved"><span>I've reviewed this email and confirm it is accurate and ready to send to the customer.</span></label>
         <div class="letters-actions"><button class="letters-btn primary" type="button" id="fourSend" disabled>Send to customer</button></div>
       </div>
-      <div id="fourSentPanel" hidden class="fourwk-complete"><span class="letters-complete-icon">✓</span><div><h3>Four-week holding response sent</h3><p id="fourSentDetails" class="letters-muted">The response has been recorded.</p><button type="button" id="fourReconcile" class="letters-btn" hidden>Reconcile Jira fields</button></div></div>
+      <div id="fourSentPanel" hidden class="fourwk-complete"><span class="letters-complete-icon">✓</span><div><h3>Four-week holding response sent</h3><p id="fourSentDetails" class="letters-muted">The response has been recorded.</p><button type="button" id="fourReconcile" class="letters-btn" hidden>Reconcile Complaints Hub fields</button></div></div>
       <div id="fourSafety" class="letters-message" role="status" aria-live="polite"></div>
     </div>
   </div>
@@ -2114,7 +2033,7 @@ function renderFosDashboard(){
   var sum=0,has=false;entries.forEach(function(item){if(item[1]===null||item[1]===undefined||item[1]==='')return;has=true;var v=Number(item[1]);if(Number.isFinite(v)&&item[0]!=='FOS Case Fee')sum+=v;var line=document.createElement('div');line.className='fosdash-costline';var label=document.createElement('span');label.textContent=item[0];var value=document.createElement('strong');value.textContent=money(item[1]);line.append(label,value);costs.appendChild(line);});
   if(!has){var p=document.createElement('p');p.className='fosdash-muted';p.textContent='No FOS costs recorded yet.';costs.appendChild(p);}
   set('fosDashCostTotal',has?gbp.format(sum):'Not recorded');
-  if(f.totalCost!==null&&f.totalCost!==undefined){set('fosDashCostNote','Jira FOS Total Cost: '+money(f.totalCost)+'. This is the recorded compensation total; the case fee is shown separately.');}
+  if(f.totalCost!==null&&f.totalCost!==undefined){set('fosDashCostNote','Complaints Hub FOS Total Cost: '+money(f.totalCost)+'. This is the recorded compensation total; the case fee is shown separately.');}
   var detailMap=f.explanations||{};var detailRows=[['Direct Compensation',detailMap.direct],['Distress & Inconvenience',detailMap.distress],['Repair Costs',detailMap.repair],['Inspection / Storage / Recovery',detailMap.inspection],['Courtesy Car & Travel',detailMap.courtesy],['Other Costs',detailMap.other]];detailRows.forEach(function(item){if(!String(item[1]||'').trim())return;var details=document.createElement('details');details.style.cssText='margin-top:8px;border:1px solid var(--line);border-radius:9px;padding:9px 11px';var summary=document.createElement('summary');summary.textContent=item[0]+' · View breakdown';summary.style.cssText='cursor:pointer;font-weight:750;font-size:11.5px;color:#9B1A61';var txt=document.createElement('div');txt.style.cssText='white-space:pre-wrap;overflow-wrap:anywhere;font-size:11.5px;line-height:1.6;color:var(--muted);margin-top:8px';txt.textContent=String(item[1]);details.append(summary,txt);costs.appendChild(details);});
   var documents=document.getElementById('fosDashDocuments');documents.replaceChildren();
   var caseFile=document.createElement('div');caseFile.className='fosdash-field';
@@ -3373,9 +3292,8 @@ function initSubmit(){
       var check=await checkClosureRecoveryFresh();
       if(check.blockers&&check.blockers.length){showErrors(check.blockers);return;}
       var canMoveClosed=!!check.canMoveToClosed;
-      var finalResponseBlocker=check.finalResponseBlocker||'';
-      if((check.warnings&&check.warnings.length)||canMoveClosed||finalResponseBlocker){
-        $('#closureCheckDescription').textContent=(finalResponseBlocker?finalResponseBlocker+' ':'')+(check.warnings&&check.warnings.length?check.warnings.join(' ')+' ':'')+'Review the details, then save the complaint closure information.';
+      if((check.warnings&&check.warnings.length)||canMoveClosed){
+        $('#closureCheckDescription').textContent=(check.warnings&&check.warnings.length?check.warnings.join(' ')+' ':'')+'Review the details, then save the complaint closure information.';
         $('#closureMoveClosedRow').hidden=!canMoveClosed;
         $('#closureMoveClosed').checked=false;
         $('#closureCheckModal').hidden=false;
@@ -3490,14 +3408,8 @@ function prCustomerSave(btn){
 }
 var prOpeningStarted=false;var prFinancialMode='view';
 function prIsOutsourced(){return !!(PREFILL.dealershipPosition&&PREFILL.dealershipPosition.outsourced);}
-function finalResponseGateMessage(){
-  var o=(PREFILL&&PREFILL.overview)||{};
-  if(prIsOutsourced()||/^(yes|y|true)$/i.test(String(o.finalResponseSent||'').trim()))return '';
-  return 'A Final Response must be sent before a non-outsourced complaint can move to Post-Resolution or Complaint Closed. Please send it through Letters & Responses first.';
-}
 function prEntryTarget(tasksOnly){return tasksOnly?'Post-Resolution Tasks':prIsOutsourced()?'Partner Funds Outstanding':'Post-Resolution Tasks';}
 function prDecisionBlocker(){
-  if(PREFILL.statusName!=='Complaint Closed'&&finalResponseGateMessage())return finalResponseGateMessage();
   if(PREFILL.statusName==='Ombudsman Investigation'&&!String(PREFILL.fos&&PREFILL.fos.ombudsman||'').trim())return 'Record the Ombudsman Decision in Complaints Hub before moving to Post-Resolution.';
   if(PREFILL.statusName==='FOS Investigation'&&!String(PREFILL.fos&&PREFILL.fos.investigator||'').trim())return 'Record the FOS Investigator Outcome in Complaints Hub before moving to Post-Resolution.';
   return '';
@@ -3510,7 +3422,7 @@ function prUpdateDestinationPreview(){
 }
 
 function prRender(){var p=POST_DATA,s=PREFILL.statusName,nonOut=['Investigation','Holding Letter Due','Final Response Due','Ombudsman Investigation'];var target=s==='Complaint Closed'?'REOPEN':(s==='Outsourced'||s==='FOS Investigation'||nonOut.includes(s))?prEntryTarget(false):'';var active=['Post-Resolution Tasks','Partner Funds Outstanding'].includes(s);$('#postStageChip').textContent=s||'Unknown status';$('#postTransition').hidden=!target;$('#postWorkspace').hidden=!(active||(target&&prOpeningStarted));$('#postNotAvailable').hidden=!!target||active;$('#prDashboard').hidden=!active||!$('#postWorkspace').classList.contains('pr-editor-hidden')&&prOpeningStarted;$('#postWorkspace').classList.toggle('pr-editor-hidden',active&&!prOpeningStarted&&!$('#postWorkspace').classList.contains('pr-details-modal'));if(active){$('#prDashboard').hidden=false;prDisplayTasks();}
-  if(target==='REOPEN'){$('#postBeginOpening').disabled=!!finalResponseGateMessage();$('#postTransitionTitle').textContent='Reopen this complaint';$('#postTransitionDesc').textContent=finalResponseGateMessage()||'This complaint is closed. Reopen it for further recovery or outstanding tasks without changing the existing recovery history.';$('#postBeginOpening').textContent='Reopen complaint';$('#postTransitionStart').hidden=false;$('#postTransitionInstructions').hidden=true;}else if(target){var blocker=prDecisionBlocker();$('#postBeginOpening').disabled=!!blocker;$('#postTransitionTitle').textContent=blocker?'Decision required before Post-Resolution':'Move to Post-Resolution';$('#postTransitionDesc').textContent=blocker||('This complaint is currently in '+s+'. Choose whether there are funds to recover or tasks only. Your choice determines the destination.');$('#postBeginOpening').textContent='Choose Post-Resolution Route';$('#postTargetStatus').textContent=target;$('#postOpeningSaveLabel').textContent='Save & Move to '+target;$('#postTransitionStart').hidden=prOpeningStarted;$('#postTransitionInstructions').hidden=!prOpeningStarted;$('#postSave').textContent='Save & Move to '+target;}else{$('#postSave').textContent=prFinancialMode==='correct'?'Save corrected original breakdown':'Save non-financial details';}
+  if(target==='REOPEN'){$('#postBeginOpening').disabled=false;$('#postTransitionTitle').textContent='Reopen this complaint';$('#postTransitionDesc').textContent='This complaint is closed. Reopen it for further recovery or outstanding tasks without changing the existing recovery history.';$('#postBeginOpening').textContent='Reopen complaint';$('#postTransitionStart').hidden=false;$('#postTransitionInstructions').hidden=true;}else if(target){var blocker=prDecisionBlocker();$('#postBeginOpening').disabled=!!blocker;$('#postTransitionTitle').textContent=blocker?'Decision required before Post-Resolution':'Move to Post-Resolution';$('#postTransitionDesc').textContent=blocker||('This complaint is currently in '+s+'. Choose whether there are funds to recover or tasks only. Your choice determines the destination.');$('#postBeginOpening').textContent='Choose Post-Resolution Route';$('#postTargetStatus').textContent=target;$('#postOpeningSaveLabel').textContent='Save & Move to '+target;$('#postTransitionStart').hidden=prOpeningStarted;$('#postTransitionInstructions').hidden=!prOpeningStarted;$('#postSave').textContent='Save & Move to '+target;}else{$('#postSave').textContent=prFinancialMode==='correct'?'Save corrected original breakdown':'Save non-financial details';}
   if(!active&&!target)return;
   $('#postVehicle').value=(p.auction&&p.auction.sold)?'Carmoola Auction — Completed':(p.vehicleResolution||'Not Yet Decided');prRenderVehicle();prRenderSuspense();
   $('#postParty').value=p.party||(s==='Partner Funds Outstanding'?PREFILL.introducerName:PREFILL.dealershipName)||'';
@@ -3644,7 +3556,6 @@ function prUpdateReopenPreview(){
 }
 function prOpenReopen(){
   if(PREFILL.statusName!=='Complaint Closed')return;
-  if(finalResponseGateMessage()){prError(finalResponseGateMessage());return;}
   var outsourced=prIsOutsourced();
   $('#prReopenChoices').hidden=!outsourced;
   var hasFunds=Number(POST_DATA&&POST_DATA.currentBalance||0)>0.005;
@@ -3884,8 +3795,6 @@ function hubUpdateRail(page){
  var rail=$('#workspaceRail'),shown=true,initialGate=PREFILL.statusName==='Assigned';
  rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
  if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=initialGate?'Initial call required':(PREFILL.statusName||'Complaints Hub');}
- $('#railInitialDealerEmail').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
- $('#initialDealerHomeTile').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
  $('#railDekraRequest').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
  $('#dekraHomeTile').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
  $('#railCustomerUpdates').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
@@ -3919,7 +3828,7 @@ function gotoActionsPage(page){
   if(page==='review'&&!PREFILL.fosApplicable)return;
   if(page==='solicitor'&&!solarisCanAccess())return;
   if(page==='suspense'&&!(Number(PREFILL.suspensePayments?.matchCount||0)>0))return;
-  if(['updates','dekra','initialdealer'].includes(page)&&String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues')return;
+  if(['updates','dekra'].includes(page)&&String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues')return;
   ACTION_PAGE=page;
   hubUpdateRail(page);
   if(page==='home'||page==='suspense')overviewRender();
@@ -3937,8 +3846,6 @@ function gotoActionsPage(page){
   $('#actionsSuspense').classList.toggle('active',page==='suspense');
   $('#actionsPost').classList.toggle('active',page==='post');
   $('#actionsDealer').classList.toggle('active',page==='dealer');
-  $('#actionsInitialDealer').hidden=page!=='initialdealer';
-  $('#actionsInitialDealer').classList.toggle('active',page==='initialdealer');
   $('#actionsDekra').hidden=page!=='dekra';
   $('#actionsDekra').classList.toggle('active',page==='dekra');
   $('#actionsRejection').classList.toggle('active',page==='rejection');
@@ -3949,7 +3856,6 @@ function gotoActionsPage(page){
   $('#actionsUpdates').hidden=page!=='updates';
   $('#actionsUpdates').classList.toggle('active',page==='updates');
   if(page==='updates')acuLoad();
-  if(page==='initialdealer')ideLoad();
   if(page==='rootcause')rcaRender();
   if(page==='letters'){lettersRefresh();fourLoad();}
   if(page==='post' && POST_DATA){prRender();solarisRefresh();prAutoReconcile();$('#deConsole').hidden=!['Post-Resolution Tasks','Partner Funds Outstanding'].includes(PREFILL.statusName);if(!$('#deConsole').hidden)deFetch();}else{$('#deConsole').hidden=true;}
@@ -3957,7 +3863,7 @@ function gotoActionsPage(page){
   $('#reviewShell').classList.toggle('active',page==='review');
   $('#reviewViewSwitch').hidden=true;
   $('#actionsNav').hidden=true;
-  $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','suspense':'/ Suspense Payments','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position','initialdealer':'/ Initial Dealership Email','dekra':'/ DEKRA Inspection Request','rootcause':'/ Root Cause Analysis','updates':'/ Automated Customer Updates'}[page]||'';
+  $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','suspense':'/ Suspense Payments','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position','dekra':'/ DEKRA Inspection Request','rootcause':'/ Root Cause Analysis','updates':'/ Automated Customer Updates'}[page]||'';
   $('#footer').hidden=page!=='closure';
   $('#manageBtn').style.display=page==='closure'?'':'none';
   $('#closedBanner').style.display=(page==='closure'&&PREFILL.alreadyClosed&&$('#unlockBtn').dataset.unlocked!=='1')?'block':'none';
@@ -3991,33 +3897,6 @@ function overviewRender(){
   try{var u=new URL(plain(pair[1]));if(u.protocol!=='https:')return;var a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener noreferrer';a.textContent=pair[0]+' ↗';linkHolder.appendChild(a);}catch(e){}
  });
  $('#overviewShortcuts').hidden=!linkHolder.children.length;
- // IDs are saved in Complaints Hub as semicolon-separated text (not Zendesk URLs).
- var ticketIds=function(value){
-  return [...new Set(String(value||'').split(/[;,\n\r]+/).map(function(part){
-   var trimmed=part.trim();
-   var match=trimmed.match(/^(?:https:\/\/[^\s/]+\.zendesk\.com\/agent\/tickets\/)?(\d+)\/?$/i);
-   return match?match[1]:null;
-  }).filter(Boolean))];
- };
- var allTickets=ticketIds(o.relatedZendeskTickets);
- var fosTickets=ticketIds(o.relatedFosZendeskTickets);
- var renderTickets=function(holderId,groupId,ids){
-  var holder=document.getElementById(holderId),group=document.getElementById(groupId);
-  holder.replaceChildren();group.hidden=!ids.length;
-  ids.forEach(function(id){
-   var link=document.createElement('a');
-   link.href='https://carmoola.zendesk.com/agent/tickets/'+encodeURIComponent(id);
-   link.target='_blank';link.rel='noopener noreferrer';link.textContent='#'+id+' ↗';
-   link.setAttribute('aria-label','Open Zendesk ticket '+id+' in a new tab');
-   holder.appendChild(link);
-  });
- };
- renderTickets('overviewRelatedTickets','overviewRelatedTicketsGroup',allTickets);
- renderTickets('overviewFosTickets','overviewFosTicketsGroup',fosTickets);
- var uniqueTickets=new Set(allTickets.concat(fosTickets));
- document.getElementById('overviewTicketsSection').hidden=uniqueTickets.size===0;
- document.getElementById('overviewTicketsCount').textContent=uniqueTickets.size+' TICKET'+(uniqueTickets.size===1?'':'S');
-
  var attention=[];
  if(p.rootCause&&p.rootCause.required&&!p.rootCause.completed&&p.statusName!=='Complaint Closed')attention.push({name:'Root Cause Analysis',description:'Required before complaint closure',target:'rootcause'});
  var intro=p.initialCall||{};
@@ -4050,7 +3929,6 @@ function overviewRender(){
  if(isYes(o.eightWeekHoldingSent)||plain(o.eightWeekHoldingSentDate)){
   steps.push({label:'8-week holding',date:o.eightWeekHoldingSentDate,done:true,fallback:'Sent'});
  }
- if(plain(o.initialDealershipEmailSentDate))steps.push({label:'Initial dealership email sent',date:o.initialDealershipEmailSentDate,done:true});
  if(plain(o.dekraRequestedDate))steps.push({label:'DEKRA inspection requested',date:o.dekraRequestedDate,done:true});
  if(plain(o.dekraReceivedDate))steps.push({label:'DEKRA report received',date:o.dekraReceivedDate,done:true});
  steps.push({label:'Final response',date:o.finalResponseSentDate,done:isYes(o.finalResponseSent)||!!plain(o.finalResponseSentDate),fallback:'Sent'});
@@ -4186,7 +4064,7 @@ function overviewRender(){
   }
   if(!count){var row=document.createElement('tr'),cell=document.createElement('td');cell.colSpan=3;cell.textContent='Individual payment details are not yet recorded.';row.appendChild(cell);tbody.appendChild(row);}
   var notes=[];
-  if(count!==matchCount)notes.push('The recorded payment count differs from the number of itemised receipts. Please check Jira.');
+  if(count!==matchCount)notes.push('The recorded payment count differs from the number of itemised receipts. Please check the Complaints Hub.');
   if(amounts.length!==refs.length||amounts.length!==ids.length)notes.push('Some receipt fields have different numbers of entries. Items are shown in their recorded order.');
   $('#overviewSuspenseNote').textContent=notes.join(' ');$('#overviewSuspenseNote').hidden=!notes.length;
  }
@@ -4404,7 +4282,7 @@ async function fourSend(){
  finally{FOUR_BUSY=false;fourRender();}
 }
 async function fourReconcile(){
- if(FOUR_BUSY)return;FOUR_BUSY=true;$('#fourSafety').textContent='Reconciling Jira…';
+ if(FOUR_BUSY)return;FOUR_BUSY=true;$('#fourSafety').textContent='Reconciling Complaints Hub records…';
  try{var d=await fourCall('reconcile');$('#fourSafety').textContent=d.message;await fourLoad();}catch(e){$('#fourSafety').textContent=e.message;}
  finally{FOUR_BUSY=false;fourRender();}
 }
@@ -4478,7 +4356,7 @@ function lettersRender(){
  if(holdingBlocked){
   var finalBlocked=!!LETTERS_STATE?.finalSent;
   $('#lettersHoldingBlockedTitle').textContent=finalBlocked?'No holding letter needed':'Eight-week holding letter not yet available';
-  $('#lettersHoldingBlockedReason').textContent=finalBlocked?'The final response has already been sent, so a new eight-week holding letter cannot be generated.':(LETTERS_STATE?.holdingAvailableDate?'You can generate this letter from '+formatDisplayDate(LETTERS_STATE.holdingAvailableDate)+' (53 calendar days after the complaint was received).':'The Complaint Received Date is missing or invalid. Add it in Jira before generating an eight-week holding letter.');
+  $('#lettersHoldingBlockedReason').textContent=finalBlocked?'The final response has already been sent, so a new eight-week holding letter cannot be generated.':(LETTERS_STATE?.holdingAvailableDate?'You can generate this letter from '+formatDisplayDate(LETTERS_STATE.holdingAvailableDate)+' (53 calendar days after the complaint was received).':'The Complaint Received Date is missing or invalid. Add it in the Complaints Hub before generating an eight-week holding letter.');
  }
  var sentDate=holding?LETTERS_STATE?.holdingSentDate:LETTERS_STATE?.finalSentDate;
  var sentLabel=sent?(sentDate?'Sent · '+formatDisplayDate(sentDate):'Sent'):'';
@@ -4514,7 +4392,7 @@ async function lettersRefresh(){
 async function lettersGenerate(){
  if(LETTERS_BUSY||LETTERS_GENERATING||lettersGenerationPending()||lettersSelectedDoc()||lettersSelectedSent()||lettersPending())return;
  if(LETTERS_VIEW==='holding'&&LETTERS_STATE?.finalSent){$('#lettersGenerateMessage').textContent='An eight-week holding letter cannot be generated after the final response has been sent.';return;}
- if(LETTERS_VIEW==='holding'&&LETTERS_STATE?.holdingGenerateEligible===false){$('#lettersGenerateMessage').textContent='An eight-week holding letter is not available yet. '+(LETTERS_STATE?.holdingAvailableDate?'Available from '+formatDisplayDate(LETTERS_STATE.holdingAvailableDate)+'.':'Add the Complaint Received Date in Jira first.');return;}
+ if(LETTERS_VIEW==='holding'&&LETTERS_STATE?.holdingGenerateEligible===false){$('#lettersGenerateMessage').textContent='An eight-week holding letter is not available yet. '+(LETTERS_STATE?.holdingAvailableDate?'Available from '+formatDisplayDate(LETTERS_STATE.holdingAvailableDate)+'.':'Add the Complaint Received Date in the Complaints Hub first.');return;}
  var type=lettersSelectedType(),summary=$('#lettersSummary').value.trim(),details=$('#lettersDetails').value.trim(),facts=$('#lettersFacts').value.trim(),outcome=$('#lettersOutcome').value;
  if((type==='holding'&&!summary)||(type==='affordability'&&!facts)||(['general','vehicle'].includes(type)&&(!summary||!details))){$('#lettersGenerateMessage').textContent='Complete the required fields before generating the letter.';return;}
  LETTERS_BUSY=true;$('#lettersGenerateMessage').textContent='Requesting draft…';lettersRender();
@@ -4691,15 +4569,19 @@ function dekraInit(){
  $('#dekraOverrideLocation').value=String(d.location||'');
  $('#dekraOriginalMileage').value=String(v.originalMileage??'');
  $('#dekraCurrentMileage').value=String(v.complaintMileage??'');
- function revealDekraOutput(){ $('#dekraGeneratedResult').hidden=false; }
+ function revealDekraOutput(){ $('#dekraGeneratedResult').hidden=false; const inputs=document.querySelector('#actionsDekra .dekra-builder'); if(inputs)inputs.hidden=true; }
  function dekraFullComment(){
-   const lines=['DEKRA INSPECTION REQUEST - GENERATED IN COMPLAINTS HUB','Generated for manual copying into the DEKRA portal. No portal submission is verified.',''];
-   const jiraLabels={concern:'Reported vehicle concern',milesTravelled:'Miles travelled',daysOwned:'Days in possession'};
-   for(const group of DEKRA_GROUPS)for(const [id,label] of group.fields)lines.push(jiraLabels[id]||label,dekraValue(id)||'(not recorded)','');
-   return lines.join('\n').trim();
+   const lines=[];
+   for(const group of DEKRA_GROUPS){
+     for(const [id,label] of group.fields){
+       const value=dekraValue(id);
+       if(value)lines.push(label+': '+value);
+     }
+   }
+   return lines.join('\n');
  }
  $('#dekraCopyFullTop').addEventListener('click',async function(){
-   try{if(await dekraCopy(dekraFullComment())){const original=this.textContent;this.textContent='✓ Copied full request';$('#dekraStatus').textContent='Complete Jira-style request copied.';setTimeout(()=>this.textContent=original,1600);}}
+   try{if(await dekraCopy(dekraFullComment())){const original=this.textContent;this.textContent='✓ Copied full request';$('#dekraStatus').textContent='Full DEKRA request copied.';setTimeout(()=>this.textContent=original,1600);}}
    catch(e){$('#dekraStatus').textContent='Unable to copy the full request. Please try the individual copy buttons.';}
  });
  $('#dekraCopyAll').addEventListener('click',async()=>{const parts=[];for(const group of DEKRA_GROUPS){const rows=group.fields.map(([id,label])=>[label,dekraValue(id)]).filter(([,v])=>v);if(rows.length)parts.push(group.title+'\n'+rows.map(([l,v])=>l+': '+v).join('\n'));}try{if(await dekraCopy(parts.join('\n\n')))$('#dekraStatus').textContent='All populated DEKRA details copied.';}catch(e){$('#dekraStatus').textContent='Copy failed. Please copy fields individually.';}});
@@ -4718,8 +4600,8 @@ function dekraInit(){
  $('#dekraSaveComment').addEventListener('click',async function(){
    const fields={};for(const group of DEKRA_GROUPS)for(const [id] of group.fields)fields[id]=dekraValue(id);
    if(!fields.concern){$('#dekraStatus').textContent='Enter a reported concern first.';return;}
-   if(!confirm('Save these edited DEKRA details as an additional internal Jira comment?'))return;
-   this.disabled=true;try{await dekraCall('save_comment',{fields});$('#dekraStatus').textContent='Edited details saved in a Jira comment.';}catch(e){$('#dekraStatus').textContent=e.message;}finally{this.disabled=false;}
+   if(!confirm('Save these edited DEKRA details to the Complaints Hub?'))return;
+   this.disabled=true;try{await dekraCall('save_comment',{fields});$('#dekraStatus').textContent='Edited details saved in the Complaints Hub.';}catch(e){$('#dekraStatus').textContent=e.message;}finally{this.disabled=false;}
  });
  $('#dekraGenerate').addEventListener('click',async function(){
    const location=$('#dekraOverrideLocation').value.trim();
@@ -4738,103 +4620,12 @@ function dekraInit(){
      applyDekraFields(data.fields);generated=true;revealDekraOutput();
      $('#dekraGenerateStatus').textContent=data.message+(data.notification?' '+data.notification:'');
      $('#dekraStatus').textContent='Copy each field into the DEKRA portal and submit the request there.';
-     this.textContent='Already requested';showActionsSaveToast('DEKRA request recorded in Jira.');
+     this.textContent='Already requested';showActionsSaveToast('DEKRA request recorded in the Complaints Hub.');
    }catch(e){$('#dekraGenerateStatus').textContent='Could not generate request: '+e.message;this.disabled=false;}
  });
  loadDekraSaved();
 }
 
-let IDE_STATE=null,IDE_PREVIEW=null,IDE_LOADING=false;
-const IDE_API='https://dpbwnmjqcbaebszwqgea.supabase.co/functions/v1/initial-dealership-email';
-async function ideRequest(action,more={}){
- const r=await fetch(IDE_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action,...more})});
- const d=await r.json();if(!r.ok||!d.ok)throw Error(d.errors?.[0]||'Unable to complete dealership email action.');return d;
-}
-function ideRefreshSent(state){
- const done=!!state?.alreadySent,possible=!!state?.ticketLink;
- // A sent initial dealership email is read-only: show its archived email instead of the generator.
- $('#ideInputPanel').hidden=done;
- $('#idePageDescription').textContent=done?'View the original dealership email sent through Zendesk, including its recorded date and full content.':'Check the dealership details, generate a draft, then review and send the enquiry. The email is sent through Zendesk and recorded in the complaint timeline.';
- if(done)$('#idePreviewPanel').hidden=true;
- $('#ideAlreadySent').hidden=!done&&!possible;
- if(done||possible)$('#ideAlreadySent').textContent=done?'The initial dealership email is already recorded as sent. A second email cannot be sent from here.':'A dealership Zendesk ticket is already linked to this complaint. Check the existing ticket before sending another enquiry.';
- $('#ideGenerate').disabled=done||possible||!state?.eligible;
- if(done||possible){$('#idePreviewPanel').hidden=true;$('#ideSentPanel').hidden=false;$('#ideSuccessText').textContent=done?'Initial dealership email sent'+(state.sentDate?' on '+state.sentDate:'')+'.':'Existing dealership Zendesk ticket found; sending has been disabled to prevent duplication.';
- $('#ideTicketLink').hidden=!state.ticketLink;if(state.ticketLink)$('#ideTicketLink').href=state.ticketLink;
- }else{$('#ideSentPanel').hidden=true;}
-}
-async function ideLoad(){
- if(IDE_LOADING)return;IDE_LOADING=true;$('#ideLoadError').textContent='';$('#idePreviewStatus').textContent='Checking Jira…';
- try{const d=await ideRequest('initial_dealership_status');IDE_STATE=d.state;
- const s=d.state;$('#ideDealer').textContent=s.dealership||'Not recorded';$('#ideVehicle').textContent=s.vehicleReg||'Not recorded';$('#ideAssignee').textContent=s.assignee||'Not assigned';$('#ideOrigination').textContent=s.originationDate||'Not recorded';
- if(!$('#ideRecipient').value)$('#ideRecipient').value=s.dealerEmail||'';
- ideRefreshSent(s);ideLoadHistory();$('#idePreviewStatus').textContent=s.eligible?'Ready to generate a draft.':'Unavailable: '+(s.reason||'Check the complaint details.');
- }catch(e){$('#ideLoadError').textContent=e.message;$('#ideGenerate').disabled=true;$('#idePreviewStatus').textContent='';}
- finally{IDE_LOADING=false;}
-}
-
-function ideFormatSentDate(date){
- if(!date)return 'Date unavailable';
- const d=new Date(date);return Number.isNaN(d.getTime())?'Date unavailable':new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'Europe/London'}).format(d);
-}
-function ideMakeButton(label,cls,handler){
- const b=document.createElement('button');b.type='button';b.className=cls;b.textContent=label;b.addEventListener('click',handler);return b;
-}
-function ideSafeTicketUrl(url){return /^https:\/\/[^\s/]+\.zendesk\.com\/agent\/tickets\/\d+$/.test(url||'')?url:'';}
-async function ideLoadHistory(){
- const root=$('#ideHistoryList');root.replaceChildren();const loading=document.createElement('p');loading.className='ide-history-empty';loading.textContent='Loading sent emails…';root.append(loading);
- try{
-  const d=await ideRequest('initial_dealership_history');root.replaceChildren();const emails=Array.isArray(d.emails)?d.emails:[];
-  if(IDE_STATE?.alreadySent)$('#ideSentPanel').hidden=emails.length>0;
-  if(!emails.length){const p=document.createElement('p');p.className='ide-history-empty';p.textContent=IDE_STATE?.alreadySent?'The initial dealership email is recorded as sent. Its original text is not yet available in the archive.':'No sent dealership email has been archived for this complaint.';root.append(p);return;}
-  for(const mail of emails){
-   const card=document.createElement('article');card.className='ide-mail-card';
-   const head=document.createElement('div');head.className='ide-mail-top';
-   const title=document.createElement('div');title.className='ide-mail-heading';
-   const sentTag=document.createElement('span');sentTag.className='ide-mail-sent';sentTag.textContent='✓  Sent';
-   const heading=document.createElement('div');const h=document.createElement('h4');h.textContent='Sent dealership email';const sub=document.createElement('p');sub.textContent='Original email recorded for this complaint';heading.append(h,sub);title.append(sentTag,heading);
-   const actions=document.createElement('div');actions.className='ide-mail-actions';
-   const ticketUrl=ideSafeTicketUrl(mail.zendesk_ticket_url);
-   if(ticketUrl){const a=document.createElement('a');a.href=ticketUrl;a.className='ide-mail-action';a.target='_blank';a.rel='noopener noreferrer';a.textContent='↗  Open Zendesk ticket';actions.append(a);}
-   const copy=ideMakeButton('▢  Copy email','ide-mail-action',async()=>{
-    try{await navigator.clipboard.writeText(mail.email_body||'');copy.textContent='✓  Copied';setTimeout(()=>copy.textContent='▢  Copy email',1800);}catch{copy.textContent='Copy failed';setTimeout(()=>copy.textContent='▢  Copy email',1800);}
-   });actions.append(copy);head.append(title,actions);
-   const stats=document.createElement('div');stats.className='ide-mail-stats';
-   const metaRows=[['Sent',ideFormatSentDate(mail.sent_at)],['Recorded by',mail.sender_name||'Not recorded']];
-   if(mail.recipient_email)metaRows.push(['To',mail.recipient_email]);
-   if(ticketUrl){const id=ticketUrl.match(/\/(\d+)$/)?.[1];metaRows.push(['Zendesk ticket',id?'#'+id:ticketUrl]);}
-   for(const [name,value] of metaRows){const box=document.createElement('div');box.className='ide-mail-stat';const caption=document.createElement('span');caption.textContent=name;const strong=document.createElement('strong');strong.textContent=value;box.append(caption,strong);stats.append(box);}
-   const bodyTitle=document.createElement('h5');bodyTitle.className='ide-mail-content-label';bodyTitle.textContent='Email content';
-   const body=document.createElement('div');body.className='ide-mail-content';
-   if(mail.subject){const subject=document.createElement('div');subject.className='ide-mail-subject';subject.textContent='Subject: '+mail.subject;body.append(subject);}
-   const message=document.createElement('div');message.className='ide-mail-body';message.textContent=mail.email_body||'Email body not available';body.append(message);
-   card.append(head,stats,bodyTitle,body);root.append(card);
-  }
- }catch(e){root.replaceChildren();const p=document.createElement('p');p.className='ide-error';p.textContent=e.message;root.append(p);}
-}
-function ideInit(){
- $('#ideHistoryRefresh').addEventListener('click',ideLoadHistory);
- $('#ideRecipient').addEventListener('input',()=>{$('#idePreviewPanel').hidden=true;IDE_PREVIEW=null;$('#ideConfirm').checked=false;$('#ideSend').disabled=true;});
- $('#ideGenerate').addEventListener('click',async function(){
-  const recipient=$('#ideRecipient').value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient)){$('#ideLoadError').textContent='Enter a valid dealership email address.';return;}
-  this.disabled=true;$('#ideLoadError').textContent='';$('#idePreviewStatus').textContent='Writing the email draft…';
-  try{const d=await ideRequest('initial_dealership_preview',{recipient});IDE_PREVIEW=d;$('#ideSubject').value=d.subject;$('#ideEmailBody').value=d.emailBody;$('#idePreviewPanel').hidden=false;$('#ideConfirm').checked=false;$('#ideSend').disabled=true;$('#ideSendMessage').textContent='';$('#idePreviewStatus').textContent='Draft ready to review.';$('#idePreviewPanel').scrollIntoView({behavior:'smooth',block:'start'});}
-  catch(e){$('#ideLoadError').textContent=e.message;$('#idePreviewStatus').textContent='';}
-  finally{this.disabled=!!IDE_STATE?.alreadySent||!!IDE_STATE?.ticketLink||!IDE_STATE?.eligible;}
- });
- $('#ideConfirm').addEventListener('change',function(){$('#ideSend').disabled=!this.checked;});
- $('#ideSend').addEventListener('click',async function(){
-  if(!IDE_PREVIEW||!$('#ideConfirm').checked)return;
-  if(!confirm('Send this email to '+$('#ideRecipient').value.trim()+' now? This cannot be undone.'))return;
-  this.disabled=true;$('#ideGenerate').disabled=true;$('#ideSendMessage').textContent='';$('#ideSendStatus').textContent='Sending via Zendesk…';
-  try{const d=await ideRequest('initial_dealership_send',{recipient:$('#ideRecipient').value.trim(),subject:$('#ideSubject').value.trim(),emailBody:$('#ideEmailBody').value.trim(),confirmed:true});
-   IDE_STATE=d.state;ideRefreshSent(d.state);$('#idePreviewPanel').hidden=true;$('#ideSuccessText').textContent=d.message||'Initial dealership email sent.';$('#ideSentPanel').hidden=false;$('#ideSendStatus').textContent='';
-   PREFILL.overview.initialDealershipEmailSentDate=d.state.sentDate||'';PREFILL.overview.dealershipZendesk=d.state.ticketLink||'';
-   ideLoadHistory();showActionsSaveToast('Initial dealership email sent.');
-  }catch(e){$('#ideSendMessage').textContent=e.message+' Check Zendesk and Jira before retrying.';$('#ideSendStatus').textContent='';await ideLoad();}
-  finally{this.disabled=!$('#ideConfirm').checked||$('#idePreviewPanel').hidden;}
- });
-}
 function boot(){
   var token=getToken();
   if(!token){$('#loading').textContent='This link is missing its access token. Please regenerate it from the complaint.';return;}
@@ -4850,7 +4641,7 @@ function boot(){
       initRejCalc();initInspCalc();initCostEditors();
       applyPrefill();restoreRejectionBreakdowns();restoreCostBreakdowns();restoreInspectionBreakdowns();syncRej();syncFos();recompute();initRunningCosts();updateCostRequirements();renderFosRequiredActions();initRunningOnlySave();initSubmit();initManagementActions();initClosedLock();initReview();
       // Outside FOS Decision Review, keep the existing default-to-FOS behaviour.
-      initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();dekraInit();acuInit();ideInit();
+      initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();dekraInit();acuInit();
     })
     .catch(function(){$('#loading').textContent='Network error loading the complaint.';});
 }
