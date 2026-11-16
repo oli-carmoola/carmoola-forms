@@ -786,7 +786,7 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 .overview-secondary-grid .overview-ticket-table th:nth-child(1){width:74px}
 .overview-secondary-grid .overview-ticket-table th:nth-child(3){width:60px}
 .overview-secondary-grid .overview-ticket-table th:nth-child(4){width:84px}
-.overview-secondary-grid .overview-ticket-table th:nth-child(5){width:29px}
+.overview-secondary-grid .overview-ticket-table th:nth-child(5){width:145px}
 .overview-secondary-grid .overview-ticket-table .ov-ticket-status{font-size:9px;padding:2px 5px}
 @media(min-width:901px){.overview-secondary-grid>.overview-tickets-panel:only-child{max-width:700px}}
 @media(max-width:1100px){.overview-secondary-grid{grid-template-columns:1fr}.overview-secondary-grid>.overview-panel{max-width:none}.overview-secondary-grid .overview-ticket-table{min-width:490px}}
@@ -1123,10 +1123,13 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .overview-ticket-table .ov-ticket-status[data-status="open"],.overview-ticket-table .ov-ticket-status[data-status="new"]{background:#fff6e5;border-color:#f4e0b9;color:#916418}
 .overview-ticket-table .ov-ticket-status[data-status="pending"],.overview-ticket-table .ov-ticket-status[data-status="hold"]{background:#f1f5ff;border-color:#dce5fb;color:#52659c}
 .overview-ticket-table .ov-ticket-status[data-status="solved"],.overview-ticket-table .ov-ticket-status[data-status="closed"]{background:#edf8f2;border-color:#d7ebdd;color:#34744f}
-.overview-ticket-table .ov-fos-pill{display:inline-block;border-radius:20px;padding:3px 7px;background:#fff0f7;border:1px solid #f2cee0;color:#a41f64;font-size:10px;font-weight:800}
-.overview-ticket-table th:nth-child(1){width:84px}.overview-ticket-table th:nth-child(2){width:auto}.overview-ticket-table th:nth-child(3){width:67px}.overview-ticket-table th:nth-child(4){width:90px}.overview-ticket-table th:nth-child(5){width:35px}
+.overview-ticket-table .ov-ticket-tags{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.overview-ticket-table .ov-ticket-tag{display:inline-block;border-radius:20px;padding:3px 7px;background:#f7f5f7;border:1px solid #e8e1e8;color:#746777;font-size:9px;font-weight:700;white-space:nowrap}
+.overview-ticket-table .ov-ticket-tag[data-kind="fos"]{background:#fff0f7;border-color:#f2cee0;color:#a41f64}
+.overview-ticket-table .ov-ticket-tag[data-kind="main"]{background:#f9edf4;border-color:#eed7e5;color:#9f376d}
+.overview-ticket-table th:nth-child(1){width:84px}.overview-ticket-table th:nth-child(2){width:auto}.overview-ticket-table th:nth-child(3){width:67px}.overview-ticket-table th:nth-child(4){width:90px}.overview-ticket-table th:nth-child(5){width:145px}
 .overview-tickets-notice{font-size:11px;color:#857788;padding-top:9px}
-@media(max-width:780px){.overview-tickets-panel{max-width:100%}.overview-ticket-table{min-width:570px}}
+@media(max-width:780px){.overview-tickets-panel{max-width:100%}.overview-ticket-table{min-width:650px}}
 
 /* Shared, neutral closed-complaint financial notice */
 .closed-financial-banner{background:#FBFAFC;border:1px solid #E5DDE5;border-radius:13px;padding:15px 17px;margin:0 0 18px;color:#382C3B}
@@ -1364,7 +1367,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
       <div class="overview-panel-head"><h3 id="overviewTicketsTitle">Related Zendesk tickets</h3><span id="overviewTicketsCount"></span></div>
       <div class="overview-ticket-table-wrap">
         <table class="overview-ticket-table" aria-label="Related Zendesk tickets">
-          <thead><tr><th>Ticket</th><th>Subject</th><th>Status</th><th>Last updated</th><th>FOS</th></tr></thead>
+          <thead><tr><th>Ticket</th><th>Subject</th><th>Status</th><th>Last updated</th><th>Tags</th></tr></thead>
           <tbody id="overviewTicketRows"></tbody>
         </table>
       </div>
@@ -4158,7 +4161,11 @@ function overviewRender(){
  var allTickets=ticketIds(o.relatedZendeskTickets);
  var fosTickets=ticketIds(o.relatedFosZendeskTickets);
  var fosSet=new Set(fosTickets);
- var ids=[...new Set(allTickets.concat(fosTickets))];
+ // Include dedicated ticket references even when they are not listed in the related-ticket fields.
+ var mainSet=new Set(ticketIds(o.customerZendesk));
+ var dealerSet=new Set(ticketIds(o.dealershipZendesk));
+ var solicitorSet=new Set(ticketIds((p.solicitorEscalation||{}).zendeskTicket));
+ var ids=[...new Set(allTickets.concat(fosTickets,[...mainSet],[...dealerSet],[...solicitorSet]))];
  var tbody=document.getElementById('overviewTicketRows');tbody.replaceChildren();
  var notice=document.getElementById('overviewTicketsNotice');notice.hidden=true;notice.textContent='';
  var cells=new Map();
@@ -4171,8 +4178,13 @@ function overviewRender(){
   var subjectTd=document.createElement('td');var subject=document.createElement('span');subject.className='ov-ticket-subject ov-ticket-muted';subject.textContent='Loading…';subjectTd.appendChild(subject);
   var statusTd=document.createElement('td');var status=document.createElement('span');status.className='ov-ticket-status';status.textContent='—';statusTd.appendChild(status);
   var dateTd=document.createElement('td');dateTd.className='ov-ticket-muted';dateTd.textContent='—';
-  var fosTd=document.createElement('td');if(fosSet.has(id)){var pill=document.createElement('span');pill.className='ov-fos-pill';pill.textContent='FOS';fosTd.appendChild(pill);}
-  tr.append(ticketTd,subjectTd,statusTd,dateTd,fosTd);tbody.appendChild(tr);
+  var tagsTd=document.createElement('td');var tags=document.createElement('div');tags.className='ov-ticket-tags';
+  [['main','Main Customer Ticket',mainSet],['dealer','Dealership Ticket',dealerSet],['solicitor','Solicitor Escalation Ticket',solicitorSet],['fos','FOS',fosSet]].forEach(function(item){
+   if(!item[2].has(id))return;
+   var pill=document.createElement('span');pill.className='ov-ticket-tag';pill.dataset.kind=item[0];pill.textContent=item[1];tags.appendChild(pill);
+  });
+  tagsTd.appendChild(tags);
+  tr.append(ticketTd,subjectTd,statusTd,dateTd,tagsTd);tbody.appendChild(tr);
   cells.set(id,{subject:subject,status:status,date:dateTd});
  });
  document.getElementById('overviewTicketsSection').hidden=ids.length===0;
