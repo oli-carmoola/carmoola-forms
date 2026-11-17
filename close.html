@@ -5083,6 +5083,28 @@ function ideInit(){
   finally{this.disabled=closedVehicleWorkflowState().closed||!$('#ideConfirm').checked||$('#idePreviewPanel').hidden;}
  });
 }
+// Stable, case-sensitive workspace slugs for AI-generated links. No database required.
+const ACTION_DEEP_LINK_PAGES=new Set([
+  'home','initial','closure','running','suspense','review','post',
+  'dealer','initialdealer','dekra','rejection','solicitor',
+  'letters','rootcause','updates'
+]);
+function openRequestedActionsPage(){
+  const defaultPage=PREFILL.statusName==='Assigned'?'initial':'home';
+  const requested=(new URLSearchParams(window.location.search).get('page')||'').trim().toLowerCase();
+  if(!requested||requested===defaultPage)return;
+  // Initial contact is a mandatory Assigned-stage action, not a shortcut at other stages.
+  if(!ACTION_DEEP_LINK_PAGES.has(requested)||(requested==='initial'&&PREFILL.statusName!=='Assigned'))return;
+  // Reuse the exact button handler because rejection has additional calculator setup.
+  if(requested==='rejection'){
+    const tile=document.getElementById('homeRejectionTile');
+    if(tile&&!tile.disabled)tile.click();
+  }else{
+    gotoActionsPage(requested);
+  }
+  // Existing navigation guards take precedence. A blocked link stays on the safe default.
+  if(ACTION_PAGE!==requested)gotoActionsPage(defaultPage);
+}
 function boot(){
   var token=getToken();
   if(!token){$('#loading').textContent='This link is missing its access token. Please regenerate it from the complaint.';return;}
@@ -5099,6 +5121,7 @@ function boot(){
       applyPrefill();restoreRejectionBreakdowns();restoreCostBreakdowns();restoreInspectionBreakdowns();syncRej();syncFos();recompute();initRunningCosts();updateCostRequirements();renderFosRequiredActions();initRunningOnlySave();initSubmit();initManagementActions();initClosedLock();initReview();
       // Outside FOS Decision Review, keep the existing default-to-FOS behaviour.
       initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();dekraInit();acuInit();ideInit();updateClosedVehicleControls();
+      openRequestedActionsPage();
     })
     .catch(function(){$('#loading').textContent='Network error loading the complaint.';});
 }
