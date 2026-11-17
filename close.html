@@ -823,11 +823,14 @@ textarea.letters-field{min-height:85px;resize:vertical}
 #actionsInitial .initial-page-head p{font-size:13px;line-height:1.65;color:#857888;margin:0;max-width:650px}
 #actionsInitial .initial-gate-chip{flex:none;white-space:nowrap;border:1px solid #f1cee0;background:#fff2f9;color:#a11062;padding:9px 12px;border-radius:999px;font-size:11px;font-weight:800}
 #actionsInitial .initial-gate-chip span{color:#ef0080;font-size:8px;margin-right:6px}
-#actionsInitial .initial-case-strip{display:grid;grid-template-columns:1.2fr 1fr .65fr;gap:0;background:#fff;border:1px solid #eadfe8;border-radius:15px;padding:17px 8px;box-shadow:0 4px 18px #24122408;margin-bottom:22px}
+#actionsInitial .initial-case-strip{display:grid;grid-template-columns:1.2fr 1fr .65fr 1fr;gap:0;background:#fff;border:1px solid #eadfe8;border-radius:15px;padding:17px 8px;box-shadow:0 4px 18px #24122408;margin-bottom:22px}
 #actionsInitial .initial-case-strip>div{padding:2px 19px;border-right:1px solid #f0e7ee;min-width:0}
 #actionsInitial .initial-case-strip>div:last-child{border:0}
 #actionsInitial .initial-case-strip span{display:block;color:#948797;text-transform:uppercase;font-size:10px;font-weight:800;letter-spacing:.065em;margin-bottom:7px}
 #actionsInitial .initial-case-strip strong{display:block;color:#322436;font-size:14px;overflow-wrap:anywhere}
+#actionsInitial .initial-case-strip .initial-sla-overdue{color:#a52445}
+#actionsInitial .initial-sla-note{font-size:11px;color:#a52445;margin-top:5px;display:block}
+#actionsInitial .initial-sla-note[hidden]{display:none!important}
 #actionsInitial .initial-flow-head{display:flex;align-items:center;gap:13px;color:#938697;font-size:12px;font-weight:750;margin:0 0 20px}
 #actionsInitial .initial-flow-active{color:#a50b60;display:flex;align-items:center;gap:8px}
 #actionsInitial .initial-flow-upcoming{display:flex;align-items:center;gap:8px}
@@ -845,7 +848,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
 #actionsInitial .initial-choice:hover{border-color:#ed98c6;background:#fffafd}
 #actionsInitial .initial-footer{border-top:1px solid #f2eaf0;margin-top:17px;padding-top:17px}
 #actionsInitial .initial-footer .btn{border-radius:10px}
-@media(max-width:710px){#actionsInitial .initial-page-head{flex-direction:column;gap:10px}#actionsInitial .initial-page-head h2{font-size:27px}#actionsInitial .initial-case-strip{grid-template-columns:1fr 1fr}#actionsInitial .initial-case-strip>div:nth-child(2){border:0}#actionsInitial .initial-case-strip>div:last-child{grid-column:1/-1;border-top:1px solid #f0e7ee;padding-top:13px;margin-top:12px}#actionsInitial .initial-card{padding:20px}#actionsInitial .initial-card>p{padding-left:0}#actionsInitial .initial-call-actions,#actionsInitial .initial-callout,#actionsInitial .initial-script{margin-left:0}}
+@media(max-width:710px){#actionsInitial .initial-page-head{flex-direction:column;gap:10px}#actionsInitial .initial-page-head h2{font-size:27px}#actionsInitial .initial-case-strip{grid-template-columns:1fr 1fr}#actionsInitial .initial-case-strip>div:nth-child(2){border:0}#actionsInitial .initial-case-strip>div:nth-child(3){border-top:1px solid #f0e7ee;margin-top:12px;padding-top:13px}#actionsInitial .initial-case-strip>div:last-child{grid-column:auto;border-top:1px solid #f0e7ee;padding-top:13px;margin-top:12px}#actionsInitial .initial-card{padding:20px}#actionsInitial .initial-card>p{padding-left:0}#actionsInitial .initial-call-actions,#actionsInitial .initial-callout,#actionsInitial .initial-script{margin-left:0}}
 
 
 /* Sidebar refinement: wider workspace navigation and unobtrusive scrolling. */
@@ -1232,6 +1235,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <div><span>Customer</span><strong id="initialCaseCustomer">—</strong></div>
     <div><span>Assigned to</span><strong id="initialCaseAssignee">—</strong></div>
     <div><span>Status</span><strong>Assigned</strong></div>
+    <div><span>Start Investigation Deadline</span><strong id="initialStartDeadline">—</strong><small id="initialStartDeadlineNote" class="initial-sla-note" hidden></small></div>
   </div>
   <div class="initial-flow-head"><span class="initial-flow-active"><span class="initial-flow-number">1</span> Initial contact</span><span aria-hidden="true" class="initial-flow-arrow">→</span><span class="initial-flow-upcoming"><span class="initial-flow-number">2</span> Investigation</span></div>
   <div class="initial-card"><div class="initial-card-step"><span>01</span><h3>Make the introduction call</h3></div><p>Call <strong id="initialCustomer">the customer</strong> to introduce yourself as their complaint handler. You can adapt the suggestions below to sound natural.</p>
@@ -4036,6 +4040,13 @@ function overviewRender(){
  document.getElementById('overviewTicketsCount').textContent=uniqueTickets.size+' TICKET'+(uniqueTickets.size===1?'':'S');
 
  var attention=[];
+ var investigationDue=plain(o.startInvestigationDeadline);
+ if(p.statusName==='Assigned'&&/^\d{4}-\d{2}-\d{2}$/.test(investigationDue)){
+  var londonParts=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+  var londonPart=function(t){return londonParts.find(function(x){return x.type===t;}).value;};
+  var today=londonPart('year')+'-'+londonPart('month')+'-'+londonPart('day');
+  if(investigationDue<=today)attention.push({name:investigationDue<today?'Investigation start overdue':'Start Investigation due today',description:'Deadline: '+formatDisplayDate(investigationDue),target:'initial'});
+ }
  if(p.rootCause&&p.rootCause.required&&!p.rootCause.completed&&p.statusName!=='Complaint Closed')attention.push({name:'Root Cause Analysis',description:'Required before complaint closure',target:'rootcause'});
  var intro=p.initialCall||{};
  // The initial customer call is a one-time entry gate, not a retrospective action.
@@ -4208,7 +4219,7 @@ function overviewRender(){
   $('#overviewSuspenseNote').textContent=notes.join(' ');$('#overviewSuspenseNote').hidden=!notes.length;
  }
  var details=$('#overviewDetails');details.replaceChildren();
- var pairs=[['First assignee',o.firstAssignee],['First assigned',plain(o.complaintAssignedDate)?formatDisplayDate(o.complaintAssignedDate):''],['Investigation started',plain(o.investigationStartedDate)?formatDisplayDate(o.investigationStartedDate):''],['Dealership',p.dealershipName],['Vehicle',[vd.make,vd.model].filter(Boolean).join(' ')],['Registration',vd.registration],['Complaint type',p.complaintType]];
+ var pairs=[['Start Investigation Deadline',plain(o.startInvestigationDeadline)?formatDisplayDate(o.startInvestigationDeadline):''],['First assignee',o.firstAssignee],['First assigned',plain(o.complaintAssignedDate)?formatDisplayDate(o.complaintAssignedDate):''],['Investigation started',plain(o.investigationStartedDate)?formatDisplayDate(o.investigationStartedDate):''],['Dealership',p.dealershipName],['Vehicle',[vd.make,vd.model].filter(Boolean).join(' ')],['Registration',vd.registration],['Complaint type',p.complaintType]];
  pairs.forEach(function(pair){if(!plain(pair[1]))return;var row=document.createElement('div');row.className='overview-data-row';var a=document.createElement('span');a.textContent=pair[0];var b=document.createElement('strong');b.textContent=pair[1];row.append(a,b);details.appendChild(row);});
  if(!details.children.length)details.textContent='No further details recorded.';
  var hasRecovery=post.currentBalance!==null&&post.currentBalance!==undefined&&Number.isFinite(Number(post.currentBalance));
@@ -4297,6 +4308,22 @@ function initInitialContact(){
  $('#initialCaseType').textContent=p.complaintType||'Complaint';
  $('#initialCaseCustomer').textContent=p.customerName||'—';
  $('#initialCaseAssignee').textContent=p.assigneeName||'Unassigned';
+ var deadline=String((p.overview||{}).startInvestigationDeadline||'').trim();
+ var deadlineEl=$('#initialStartDeadline'),deadlineNote=$('#initialStartDeadlineNote');
+ deadlineEl.textContent=deadline?formatDisplayDate(deadline):'Not set in Jira';
+ deadlineEl.classList.remove('initial-sla-overdue');
+ deadlineNote.hidden=true;deadlineNote.textContent='';
+ if(/^\d{4}-\d{2}-\d{2}$/.test(deadline)){
+   var ukParts=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+   var part=function(type){return ukParts.find(function(v){return v.type===type;}).value;};
+   var londonToday=part('year')+'-'+part('month')+'-'+part('day');
+   // Date-only comparison: deadline is inclusive until the end of the due day.
+   if(deadline<londonToday && String(p.statusName||'')==='Assigned'){
+     deadlineEl.classList.add('initial-sla-overdue');
+     deadlineNote.textContent='Past deadline · check breach status in Jira';
+     deadlineNote.hidden=false;
+   }
+ }
  $('#initialScriptCustomer').textContent=first;
   $('#initialScriptEmailCustomer').textContent=first;
   $('#initialScriptClosingCustomer').textContent=first;
