@@ -1091,6 +1091,58 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .overview-ticket-links a:hover{border-color:#f90081;background:#ffedf6}
 @media(max-width:710px){.overview-ticket-group{display:block}.overview-ticket-label{display:block;margin-bottom:7px}}
 #actionsDekra .dekra-builder[hidden]{display:none!important}
+/* Overview: key information first; supporting records share a quieter two-column row. */
+.overview-secondary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start;margin-top:14px}
+.overview-secondary-grid>.overview-panel{width:100%;max-width:none;min-width:0;box-sizing:border-box;margin:0;padding:15px 17px;box-shadow:none}
+.overview-secondary-grid>.overview-panel[hidden]{display:none!important}
+.overview-secondary-grid>.overview-suspense-panel .overview-panel-head,.overview-secondary-grid>.overview-tickets-panel .overview-panel-head{margin-bottom:9px}
+.overview-secondary-grid>.overview-suspense-panel .overview-panel-head h3,.overview-secondary-grid>.overview-tickets-panel .overview-panel-head h3{font-size:14px;font-weight:700}
+.overview-secondary-grid .overview-panel-head>span{font-size:9px}
+.overview-secondary-grid .overview-suspense-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:4px 0 11px}
+.overview-secondary-grid .overview-suspense-stat{padding:9px 11px;border-radius:9px}
+.overview-secondary-grid .overview-suspense-stat:last-child{grid-column:1/-1;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.overview-secondary-grid .overview-suspense-stat span{font-size:10px;margin-bottom:3px}
+.overview-secondary-grid .overview-suspense-stat strong{font-size:15px}
+.overview-secondary-grid .overview-suspense-stat:last-child strong{font-size:13px;text-align:right}
+.overview-secondary-grid .overview-suspense-table{font-size:11px}
+.overview-secondary-grid .overview-suspense-table th{padding:8px 7px;font-size:9px}
+.overview-secondary-grid .overview-suspense-table td{padding:9px 7px}
+.overview-secondary-grid .overview-ticket-table{font-size:10px}
+.overview-secondary-grid .overview-ticket-table th{font-size:9px;padding:7px 4px}
+.overview-secondary-grid .overview-ticket-table td{padding:9px 4px}
+.overview-secondary-grid .overview-ticket-table th:nth-child(1){width:74px}
+.overview-secondary-grid .overview-ticket-table th:nth-child(3){width:60px}
+.overview-secondary-grid .overview-ticket-table th:nth-child(4){width:84px}
+.overview-secondary-grid .overview-ticket-table th:nth-child(5){width:29px}
+.overview-secondary-grid .overview-ticket-table .ov-ticket-status{font-size:9px;padding:2px 5px}
+@media(min-width:901px){.overview-secondary-grid>.overview-tickets-panel:only-child{max-width:700px}}
+@media(max-width:1100px){.overview-secondary-grid{grid-template-columns:1fr}.overview-secondary-grid>.overview-panel{max-width:none}.overview-secondary-grid .overview-ticket-table{min-width:490px}}
+@media(max-width:620px){.overview-secondary-grid .overview-suspense-stat:last-child{display:block}.overview-secondary-grid .overview-suspense-stat:last-child strong{text-align:left}.overview-secondary-grid .overview-suspense-table{min-width:380px}}
+
+
+/* Compact, responsive related Zendesk table */
+.overview-tickets-panel{width:min(100%,700px);max-width:700px;box-sizing:border-box;padding:13px 15px;margin:2px 0 15px;border-color:#eee8ee;box-shadow:none;background:#fff}
+.overview-tickets-panel .overview-panel-head{margin-bottom:6px}
+.overview-tickets-panel .overview-panel-head h3{font-size:13px;font-weight:650}
+.overview-ticket-table-wrap{width:100%;overflow-x:auto}
+.overview-ticket-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px;text-align:left}
+.overview-ticket-table th{font-size:10px;letter-spacing:.055em;text-transform:uppercase;font-weight:750;color:#958697;padding:7px 6px;border-bottom:1px solid #eee6ec;white-space:nowrap}
+.overview-ticket-table td{vertical-align:middle;padding:8px 6px;border-bottom:1px solid #f2edf1;color:#453b46}
+.overview-ticket-table tbody tr:last-child td{border-bottom:none}
+.overview-ticket-table tbody tr:hover{background:#fcf8fb}
+.overview-ticket-table .ov-ticket-id{font-weight:750;color:#a41f64;text-decoration:none;white-space:nowrap}
+.overview-ticket-table .ov-ticket-id:hover{text-decoration:underline}
+.overview-ticket-table .ov-ticket-subject{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;max-width:100%;color:#38303b}
+.overview-ticket-table .ov-ticket-muted{color:#a096a1}
+.overview-ticket-table .ov-ticket-status{display:inline-block;border:1px solid #e9e4e9;background:#f8f6f8;border-radius:20px;padding:3px 7px;font-weight:650;font-size:10px;white-space:nowrap;text-transform:capitalize}
+.overview-ticket-table .ov-ticket-status[data-status="open"],.overview-ticket-table .ov-ticket-status[data-status="new"]{background:#fff6e5;border-color:#f4e0b9;color:#916418}
+.overview-ticket-table .ov-ticket-status[data-status="pending"],.overview-ticket-table .ov-ticket-status[data-status="hold"]{background:#f1f5ff;border-color:#dce5fb;color:#52659c}
+.overview-ticket-table .ov-ticket-status[data-status="solved"],.overview-ticket-table .ov-ticket-status[data-status="closed"]{background:#edf8f2;border-color:#d7ebdd;color:#34744f}
+.overview-ticket-table .ov-fos-pill{display:inline-block;border-radius:20px;padding:3px 7px;background:#fff0f7;border:1px solid #f2cee0;color:#a41f64;font-size:10px;font-weight:800}
+.overview-ticket-table th:nth-child(1){width:84px}.overview-ticket-table th:nth-child(2){width:auto}.overview-ticket-table th:nth-child(3){width:67px}.overview-ticket-table th:nth-child(4){width:90px}.overview-ticket-table th:nth-child(5){width:35px}
+.overview-tickets-notice{font-size:11px;color:#857788;padding-top:9px}
+@media(max-width:780px){.overview-tickets-panel{max-width:100%}.overview-ticket-table{min-width:570px}}
+
 </style>
 </head>
 <body>
@@ -1285,13 +1337,6 @@ textarea.letters-field{min-height:85px;resize:vertical}
     <div class="overview-shortcuts" id="overviewShortcuts" aria-label="Quick links">
       <span>QUICK LINKS</span><div id="overviewLinks"></div>
     </div>
-    <section class="overview-panel overview-tickets-panel" id="overviewTicketsSection" aria-labelledby="overviewTicketsTitle" hidden>
-      <div class="overview-panel-head"><h3 id="overviewTicketsTitle">Related Zendesk tickets</h3><span id="overviewTicketsCount"></span></div>
-      <div class="overview-ticket-groups">
-        <div class="overview-ticket-group" id="overviewRelatedTicketsGroup"><span class="overview-ticket-label">All related tickets</span><div class="overview-ticket-links" id="overviewRelatedTickets"></div></div>
-        <div class="overview-ticket-group" id="overviewFosTicketsGroup"><span class="overview-ticket-label">FOS related tickets</span><div class="overview-ticket-links" id="overviewFosTickets"></div></div>
-      </div>
-    </section>
     <section class="overview-attention-section" id="overviewAttentionSection" aria-labelledby="overviewAttentionTitle" hidden>
       <div class="overview-section-head"><h3 id="overviewAttentionTitle">Needs attention</h3><span id="overviewAttentionCount"></span></div>
       <div class="overview-attention" id="overviewAttention"></div>
@@ -1301,7 +1346,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
       <div class="overview-timeline" id="overviewTimeline" role="list" aria-label="Complaint milestones"></div>
     </section>
     <section class="overview-panel overview-customer-panel" id="overviewCustomerStatements" aria-labelledby="overviewCustomerStatementsTitle" hidden>
-      <div class="overview-panel-head"><h3 id="overviewCustomerStatementsTitle">In the customer's own words</h3><span>CUSTOMER-PROVIDED TEXT</span></div>
+      <div class="overview-panel-head"><h3 id="overviewCustomerStatementsTitle">Customer's Complaint</h3><span>CUSTOMER-PROVIDED TEXT</span></div>
       <p class="overview-customer-intro">The customer's original description and the outcome they asked for, recorded in the complaint.</p>
       <div class="overview-customer-grid" id="overviewCustomerStatementEntries"></div>
     </section>
@@ -1309,6 +1354,8 @@ textarea.letters-field{min-height:85px;resize:vertical}
       <div class="overview-panel-head"><h3 id="overviewBreachesTitle">Recorded breaches</h3><span id="overviewBreachCount"></span></div>
       <div class="overview-breaches-list" id="overviewBreachesList"></div>
     </section>
+    <section class="overview-panel overview-details-panel" aria-labelledby="overviewDetailsTitle"><div class="overview-panel-head"><h3 id="overviewDetailsTitle">Key details</h3></div><div class="overview-detail-list" id="overviewDetails"></div></section>
+    <div class="overview-secondary-grid" id="overviewSecondaryGrid">
     <section class="overview-panel overview-suspense-panel" id="overviewSuspenseSection" aria-labelledby="overviewSuspenseTitle" hidden>
       <div class="overview-panel-head"><h3 id="overviewSuspenseTitle">Suspense Payments</h3><span>MATCHED RECEIPTS</span></div>
       <div class="overview-suspense-stats">
@@ -1319,7 +1366,17 @@ textarea.letters-field{min-height:85px;resize:vertical}
       <div class="overview-suspense-scroll"><table class="overview-suspense-table"><thead><tr><th>Suspense Item</th><th>Payment Reference</th><th>Amount</th></tr></thead><tbody id="overviewSuspenseRows"></tbody></table></div>
       <p class="overview-suspense-note" id="overviewSuspenseNote" hidden></p>
     </section>
-    <section class="overview-panel overview-details-panel" aria-labelledby="overviewDetailsTitle"><div class="overview-panel-head"><h3 id="overviewDetailsTitle">Key details</h3></div><div class="overview-detail-list" id="overviewDetails"></div></section>
+    <section class="overview-panel overview-tickets-panel" id="overviewTicketsSection" aria-labelledby="overviewTicketsTitle" hidden>
+      <div class="overview-panel-head"><h3 id="overviewTicketsTitle">Related Zendesk tickets</h3><span id="overviewTicketsCount"></span></div>
+      <div class="overview-ticket-table-wrap">
+        <table class="overview-ticket-table" aria-label="Related Zendesk tickets">
+          <thead><tr><th>Ticket</th><th>Subject</th><th>Status</th><th>Last updated</th><th>FOS</th></tr></thead>
+          <tbody id="overviewTicketRows"></tbody>
+        </table>
+      </div>
+      <div class="overview-tickets-notice" id="overviewTicketsNotice" aria-live="polite" hidden></div>
+    </section>
+    </div>
     <div class="overview-bottom" id="overviewBottom" hidden>
       <button type="button" class="overview-bottom-link" id="overviewRecoveryLink" hidden><span>Financial recovery</span><strong id="overviewRecoveryText">—</strong><span aria-hidden="true">↗</span></button>
       <button type="button" class="overview-bottom-link" id="overviewSolicitorLink" hidden><span>Solicitor escalation</span><strong id="overviewSolicitorText">—</strong><span aria-hidden="true">↗</span></button>
@@ -1469,6 +1526,7 @@ Consider the appropriate resolution</textarea></label>
         <div class="letters-actions"><button class="letters-btn primary" type="button" id="fourSend" disabled>Send to customer</button></div>
       </div>
       <div id="fourSentPanel" hidden class="fourwk-complete"><span class="letters-complete-icon">✓</span><div><h3>Four-week holding response sent</h3><p id="fourSentDetails" class="letters-muted">The response has been recorded.</p><button type="button" id="fourReconcile" class="letters-btn" hidden>Reconcile Complaints Hub fields</button></div></div>
+      <p id="fourFinalResponseNotice" class="letters-note" hidden role="status">A final response has already been sent for this complaint. You cannot send a four-week holding response after the final response.</p>
       <div id="fourSafety" class="letters-message" role="status" aria-live="polite"></div>
     </div>
   </div>
@@ -3901,14 +3959,39 @@ function rcaInit(){
  });
 }
 
+// Closed-complaint vehicle workflow visibility: outputs remain viewable, no new writes.
+function closedVehicleWorkflowState(){
+ const closed=String(PREFILL?.statusName||'').trim().toLowerCase()==='complaint closed';
+ const o=PREFILL?.overview||{};
+ const sent=!!String(o.initialDealershipEmailSentDate||'').trim()||!!IDE_STATE?.alreadySent;
+ const dekraRequested=!!String(o.dekraRequestedDate||'').trim()||!!String(o.dekraReceivedDate||'').trim();
+ return {closed,sent,dekraRequested};
+}
+function updateClosedVehicleControls(){
+ const state=closedVehicleWorkflowState();
+ const vehicle=String(PREFILL?.complaintType||'').trim().toLowerCase()==='vehicle issues';
+ const showEmail=vehicle&&(!state.closed||state.sent);
+ const showDekra=vehicle&&(!state.closed||state.dekraRequested);
+ for(const id of ['railInitialDealerEmail','initialDealerHomeTile']){const el=document.getElementById(id);if(el)el.hidden=!showEmail;}
+ for(const id of ['railDekraRequest','dekraHomeTile']){const el=document.getElementById(id);if(el)el.hidden=!showDekra;}
+ if(state.closed){
+   const ideInput=$('#ideInputPanel'),idePreview=$('#idePreviewPanel');
+   if(ideInput)ideInput.hidden=true;
+   if(idePreview)idePreview.hidden=true;
+   for(const id of ['ideGenerate','ideSend']){const b=document.getElementById(id);if(b)b.disabled=true;}
+   const builder=document.querySelector('#actionsDekra .dekra-builder');if(builder)builder.hidden=true;
+   const save=document.getElementById('dekraSaveComment');if(save)save.hidden=true;
+   document.querySelectorAll('#dekraPortalFields input,#dekraPortalFields textarea').forEach(el=>{el.readOnly=true;});
+   document.querySelectorAll('#actionsDekra .dekra-copy').forEach(b=>{b.disabled=false;});
+   const copyHead=$('#actionsDekra .dekra-output-head p');
+   if(copyHead)copyHead.textContent='Previously saved DEKRA request (read-only). You can copy the original details.';
+ }
+}
 function hubUpdateRail(page){
  var rail=$('#workspaceRail'),shown=true,initialGate=PREFILL.statusName==='Assigned';
  rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
  if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=initialGate?'Initial call required':(PREFILL.statusName||'Complaints Hub');}
- $('#railInitialDealerEmail').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
- $('#initialDealerHomeTile').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
- $('#railDekraRequest').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
- $('#dekraHomeTile').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
+ updateClosedVehicleControls();
  $('#railCustomerUpdates').hidden=String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues';
  var suspenseCount=Number(PREFILL.suspensePayments?.matchCount||0);
  var suspenseAvailable=Number.isFinite(suspenseCount)&&suspenseCount>0;
@@ -3941,6 +4024,9 @@ function gotoActionsPage(page){
   if(page==='solicitor'&&!solarisCanAccess())return;
   if(page==='suspense'&&!(Number(PREFILL.suspensePayments?.matchCount||0)>0))return;
   if(['updates','dekra','initialdealer'].includes(page)&&String(PREFILL.complaintType||'').trim().toLowerCase()!=='vehicle issues')return;
+  const closedVehicle=closedVehicleWorkflowState();
+  if(page==='dekra'&&closedVehicle.closed&&!closedVehicle.dekraRequested)return;
+  if(page==='initialdealer'&&closedVehicle.closed&&!closedVehicle.sent)return;
   ACTION_PAGE=page;
   hubUpdateRail(page);
   if(page==='home'||page==='suspense')overviewRender();
@@ -3969,7 +4055,7 @@ function gotoActionsPage(page){
   $('#actionsRootCause').classList.toggle('active',page==='rootcause');
   $('#actionsUpdates').hidden=page!=='updates';
   $('#actionsUpdates').classList.toggle('active',page==='updates');
-  if(page==='updates')acuLoad();
+  if(page==='updates'){acuApplyReadOnly();acuLoad();}
   if(page==='initialdealer')ideLoad();
   if(page==='rootcause')rcaRender();
   if(page==='letters'){lettersRefresh();fourLoad();}
@@ -4022,22 +4108,68 @@ function overviewRender(){
  };
  var allTickets=ticketIds(o.relatedZendeskTickets);
  var fosTickets=ticketIds(o.relatedFosZendeskTickets);
- var renderTickets=function(holderId,groupId,ids){
-  var holder=document.getElementById(holderId),group=document.getElementById(groupId);
-  holder.replaceChildren();group.hidden=!ids.length;
-  ids.forEach(function(id){
-   var link=document.createElement('a');
-   link.href='https://carmoola.zendesk.com/agent/tickets/'+encodeURIComponent(id);
-   link.target='_blank';link.rel='noopener noreferrer';link.textContent='#'+id+' ↗';
-   link.setAttribute('aria-label','Open Zendesk ticket '+id+' in a new tab');
-   holder.appendChild(link);
-  });
- };
- renderTickets('overviewRelatedTickets','overviewRelatedTicketsGroup',allTickets);
- renderTickets('overviewFosTickets','overviewFosTicketsGroup',fosTickets);
- var uniqueTickets=new Set(allTickets.concat(fosTickets));
- document.getElementById('overviewTicketsSection').hidden=uniqueTickets.size===0;
- document.getElementById('overviewTicketsCount').textContent=uniqueTickets.size+' TICKET'+(uniqueTickets.size===1?'':'S');
+ var fosSet=new Set(fosTickets);
+ var ids=[...new Set(allTickets.concat(fosTickets))];
+ var tbody=document.getElementById('overviewTicketRows');tbody.replaceChildren();
+ var notice=document.getElementById('overviewTicketsNotice');notice.hidden=true;notice.textContent='';
+ var cells=new Map();
+ ids.forEach(function(id){
+  var tr=document.createElement('tr');tr.dataset.ticketId=id;
+  var ticketTd=document.createElement('td');var link=document.createElement('a');
+  link.className='ov-ticket-id';link.href='https://carmoola.zendesk.com/agent/tickets/'+encodeURIComponent(id);
+  link.target='_blank';link.rel='noopener noreferrer';link.textContent='#'+id+' ↗';
+  link.setAttribute('aria-label','Open Zendesk ticket '+id+' in a new tab');ticketTd.appendChild(link);
+  var subjectTd=document.createElement('td');var subject=document.createElement('span');subject.className='ov-ticket-subject ov-ticket-muted';subject.textContent='Loading…';subjectTd.appendChild(subject);
+  var statusTd=document.createElement('td');var status=document.createElement('span');status.className='ov-ticket-status';status.textContent='—';statusTd.appendChild(status);
+  var dateTd=document.createElement('td');dateTd.className='ov-ticket-muted';dateTd.textContent='—';
+  var fosTd=document.createElement('td');if(fosSet.has(id)){var pill=document.createElement('span');pill.className='ov-fos-pill';pill.textContent='FOS';fosTd.appendChild(pill);}
+  tr.append(ticketTd,subjectTd,statusTd,dateTd,fosTd);tbody.appendChild(tr);
+  cells.set(id,{subject:subject,status:status,date:dateTd});
+ });
+ document.getElementById('overviewTicketsSection').hidden=ids.length===0;
+ document.getElementById('overviewTicketsCount').textContent=ids.length+' TICKET'+(ids.length===1?'':'S');
+ // Ticket metadata comes from the authenticated Edge Function. Cache the in-flight
+ // request across overview re-renders so responses cannot be discarded indefinitely.
+ if(ids.length){
+  var fetchKey=String(p.issueKey||'')+'|'+ids.join(',');
+  var metaCache=window._overviewTicketMetadataCache||(window._overviewTicketMetadataCache=new Map());
+  var cached=metaCache.get(fetchKey);
+  if(!cached){
+   var controller=new AbortController();
+   var timer=setTimeout(function(){controller.abort();},12000);
+   var promise=fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,
+    body:JSON.stringify({token:getToken(),action:'overview_zendesk_tickets'})})
+    .then(function(resp){return resp.text().then(function(raw){
+     var data;try{data=JSON.parse(raw);}catch(e){throw Error('Invalid response from ticket lookup');}
+     if(!resp.ok||!data.ok)throw Error((data.errors||[])[0]||'Zendesk details unavailable');return data;
+    });})
+    .finally(function(){clearTimeout(timer);});
+   cached={promise:promise};metaCache.set(fetchKey,cached);
+   promise.catch(function(){metaCache.delete(fetchKey);});
+  }
+  cached.promise.then(function(data){
+    // Locate the CURRENT rows rather than retaining old DOM nodes across renders.
+    if(window._overviewTicketMetadataCache?.get(fetchKey)!==cached)return;
+    var body=document.getElementById('overviewTicketRows');
+    var rows=new Map((data.tickets||[]).map(function(t){return [String(t.id),t];}));
+    var dateFormat=new Intl.DateTimeFormat('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'Europe/London'});
+    Array.from(body.rows).forEach(function(row){
+     var id=row.dataset.ticketId;var t=rows.get(id);
+     var subject=row.querySelector('.ov-ticket-subject');var status=row.querySelector('.ov-ticket-status');var date=row.cells[3];
+     subject.classList.remove('ov-ticket-muted');subject.textContent=t&&t.subject?t.subject:'Subject unavailable';subject.title=t&&t.subject?t.subject:'';
+     if(!t)subject.classList.add('ov-ticket-muted');
+     status.textContent=t&&t.status?t.status.replace(/_/g,' '):'—';
+     if(t&&t.status)status.dataset.status=t.status.toLowerCase();
+     if(t&&t.updated_at){var d=new Date(t.updated_at);if(!Number.isNaN(d.getTime())){date.textContent=dateFormat.format(d);date.title=d.toLocaleString('en-GB',{timeZone:'Europe/London'});}}
+    });
+    var n=document.getElementById('overviewTicketsNotice');n.hidden=!data.warning;n.textContent=data.warning||'';
+   }).catch(function(err){
+    var body=document.getElementById('overviewTicketRows');
+    Array.from(body.rows).forEach(function(row){var subject=row.querySelector('.ov-ticket-subject');if(subject){subject.textContent='Details unavailable';subject.classList.add('ov-ticket-muted');}});
+    var n=document.getElementById('overviewTicketsNotice');n.textContent='Ticket details unavailable — open a ticket to view its information.';n.hidden=false;
+    console.warn('Related ticket metadata failed',err);
+   });
+ }
 
  var attention=[];
  var investigationDue=plain(o.startInvestigationDeadline);
@@ -4406,6 +4538,8 @@ async function fourCall(action,extra){
  return data;
 }
 function fourRender(){
+ const finalNotice=document.getElementById('fourFinalResponseNotice');
+ if(finalNotice)finalNotice.hidden=!Boolean(PREFILL?.overview?.finalResponseSentDate||PREFILL?.finalResponseSentDate);
  var state=FOUR_STATE||{},sent=!!state.sent,blocked=state.state==='sending'||state.state==='uncertain',draft=!!FOUR_DRAFT;
  $('#lettersFourTag').textContent=sent?'Sent':blocked?'Check status':'Not sent';
  $('#fourState').textContent=sent?'Sent':blocked?'Requires review':'Not sent';
@@ -4648,6 +4782,28 @@ function initComplaintSwitcher(){
 }
 
 
+// Eligibility mirrors the backend. Historical messages remain viewable.
+function acuRestrictedReason(){
+ const status=String(PREFILL?.statusName||'').trim().toLowerCase();
+ const outsourced=!!PREFILL?.dealershipPosition?.outsourced || ['yes','y','true'].includes(String(PREFILL?.overview?.outsourced||'').trim().toLowerCase()) || ['outsourced','partner funds outstanding'].includes(status);
+ if(outsourced)return 'This complaint is outsourced. Automated customer updates are not available.';
+ if(['complaint closed','post-resolution tasks'].includes(status))return 'Automated customer updates are unavailable while the complaint is '+(status==='complaint closed'?'closed':'in Post-Resolution Tasks')+'.';
+ return '';
+}
+function acuApplyReadOnly(){
+ const reason=acuRestrictedReason()||ACU_DATA?.restrictionReason||'';
+ const disabled=!!reason;
+ const control=document.querySelector('#actionsUpdates .acu-choice');
+ if(control)control.hidden=disabled;
+ const pause=document.getElementById('acuPauseRow');if(pause&&disabled)pause.hidden=true;
+ const save=document.getElementById('acuSave');if(save){save.hidden=disabled;save.disabled=disabled;}
+ for(const el of document.querySelectorAll('#actionsUpdates input[name="acuMode"], #acuPauseDate'))el.disabled=disabled;
+ const message=document.getElementById('acuMessage');if(message&&disabled)message.textContent=reason+' Previously sent updates remain available below.';
+ const status=document.getElementById('acuStatus'),state=document.getElementById('acuState');
+ if(disabled){if(status)status.textContent='Not applicable';if(state)state.textContent='Not applicable';}
+ const header=document.querySelector('#actionsUpdates .acu-panel-heading p');
+ if(header)header.textContent=disabled?'Read-only: automated updates cannot be managed at this stage.':'The scheduled Zap remains responsible for deciding when to send an update.';
+}
 // Automated Customer Updates: all reads/writes stay behind the signed complaint token.
 let ACU_DATA=null,ACU_BUSY=false;
 function acuFormatDate(value){return value?formatDisplayDate(value):'Not recorded';}
@@ -4666,7 +4822,7 @@ function acuRender(){
  $('#acuStatus').textContent=d.label||'Not configured';$('#acuState').textContent=d.label||'Not configured';
  $('#acuCount').textContent=String(d.sentCount??0);$('#acuLast').textContent=acuFormatDate(d.lastSentDate);
  const mode=d.mode||'inactive';const radio=document.querySelector('input[name="acuMode"][value="'+mode+'"]');if(radio)radio.checked=true;
- $('#acuPauseDate').value=d.pausedUntil||'';$('#acuPauseRow').hidden=mode!=='pause';
+ $('#acuPauseDate').value=d.pausedUntil||'';$('#acuPauseRow').hidden=mode!=='pause';acuApplyReadOnly();
  const history=$('#acuHistory');history.replaceChildren();const records=[...(d.history||[])].sort((a,b)=>new Date(b.sent_at||0)-new Date(a.sent_at||0));
  const status=$('#acuHistoryMessage');status.replaceChildren();
  if(!records.length){const empty=document.createElement('div');empty.className='acu-timeline-empty';empty.textContent=d.historyError||'No automated emails are recorded in the archive for this complaint.';history.appendChild(empty);if(!d.historyError&&Number(d.sentCount)>0){acuAppendArchiveGap(history,Number(d.sentCount));}return;}
@@ -4695,8 +4851,8 @@ function acuRender(){
  }
 }
 async function acuCall(action,extra){const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action,...extra})});const data=await res.json();if(!res.ok||!data.ok)throw Error(data.errors?.[0]||'Request failed');return data;}
-async function acuLoad(){if(ACU_BUSY)return;$('#acuHistoryMessage').textContent='Loading automated updates…';try{const data=await acuCall('customer_updates_get');ACU_DATA=data.updates;acuRender();$('#acuMessage').textContent='';}catch(e){$('#acuHistoryMessage').textContent='Unable to load updates: '+e.message;}}
-function acuInit(){document.querySelectorAll('input[name="acuMode"]').forEach(el=>el.addEventListener('change',()=>{$('#acuPauseRow').hidden=document.querySelector('input[name="acuMode"]:checked')?.value!=='pause';}));$('#acuRefresh').addEventListener('click',acuLoad);$('#acuSave').addEventListener('click',async function(){if(ACU_BUSY)return;const mode=document.querySelector('input[name="acuMode"]:checked')?.value||'inactive';const date=$('#acuPauseDate').value;const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());if(mode==='pause'&&(!date||date<=today)){$('#acuMessage').textContent='Choose a future date to resume updates.';return;}if(!confirm('Save '+(mode==='pause'?'a temporary pause':mode==='active'?'Active':'Inactive')+' for automated customer updates?'))return;ACU_BUSY=true;this.disabled=true;$('#acuMessage').textContent='Saving…';try{const result=await acuCall('customer_updates_manage',{mode,pausedUntil:mode==='pause'?date:null});ACU_DATA={...ACU_DATA,...result.updates,history:ACU_DATA?.history||[]};acuRender();$('#acuMessage').textContent='Settings saved successfully.';showActionsSaveToast('Automated customer updates settings saved.');}catch(e){$('#acuMessage').textContent='Could not save settings: '+e.message;}finally{ACU_BUSY=false;this.disabled=false;}});}
+async function acuLoad(){acuApplyReadOnly();if(ACU_BUSY)return;$('#acuHistoryMessage').textContent='Loading automated updates…';try{const data=await acuCall('customer_updates_get');ACU_DATA=data.updates;acuRender();$('#acuMessage').textContent='';}catch(e){$('#acuHistoryMessage').textContent='Unable to load updates: '+e.message;}}
+function acuInit(){document.querySelectorAll('input[name="acuMode"]').forEach(el=>el.addEventListener('change',()=>{$('#acuPauseRow').hidden=document.querySelector('input[name="acuMode"]:checked')?.value!=='pause';}));$('#acuRefresh').addEventListener('click',acuLoad);$('#acuSave').addEventListener('click',async function(){if(acuRestrictedReason()||ACU_DATA?.restrictionReason){acuApplyReadOnly();return;}if(ACU_BUSY)return;const mode=document.querySelector('input[name="acuMode"]:checked')?.value||'inactive';const date=$('#acuPauseDate').value;const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/London',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());if(mode==='pause'&&(!date||date<=today)){$('#acuMessage').textContent='Choose a future date to resume updates.';return;}if(!confirm('Save '+(mode==='pause'?'a temporary pause':mode==='active'?'Active':'Inactive')+' for automated customer updates?'))return;ACU_BUSY=true;this.disabled=true;$('#acuMessage').textContent='Saving…';try{const result=await acuCall('customer_updates_manage',{mode,pausedUntil:mode==='pause'?date:null});ACU_DATA={...ACU_DATA,...result.updates,history:ACU_DATA?.history||[]};acuRender();$('#acuMessage').textContent='Settings saved successfully.';showActionsSaveToast('Automated customer updates settings saved.');}catch(e){$('#acuMessage').textContent='Could not save settings: '+e.message;}finally{ACU_BUSY=false;this.disabled=false;acuApplyReadOnly();}});}
 
 
 // The DEKRA portal is external. Values are editable and copied by the handler.
@@ -4767,6 +4923,7 @@ function dekraInit(){
  let generated=false;
  const DEKRA_API='https://dpbwnmjqcbaebszwqgea.supabase.co/functions/v1/dekra-inspection-request';
  async function dekraCall(action,extra={}){
+   if(closedVehicleWorkflowState().closed&&action!=='load')throw Error('This complaint is closed. The saved DEKRA request is view-only.');
    const r=await fetch(DEKRA_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action,...extra})});
    const d=await r.json();if(!r.ok||!d.ok)throw Error(d.errors?.[0]||'DEKRA request failed');return d;
  }
@@ -4839,18 +4996,19 @@ function dekraInit(){
 let IDE_STATE=null,IDE_PREVIEW=null,IDE_LOADING=false;
 const IDE_API='https://dpbwnmjqcbaebszwqgea.supabase.co/functions/v1/initial-dealership-email';
 async function ideRequest(action,more={}){
+ if(closedVehicleWorkflowState().closed&&!['initial_dealership_status','initial_dealership_history'].includes(action))throw Error('This complaint is closed. The sent dealership email is view-only.');
  const r=await fetch(IDE_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action,...more})});
  const d=await r.json();if(!r.ok||!d.ok)throw Error(d.errors?.[0]||'Unable to complete dealership email action.');return d;
 }
 function ideRefreshSent(state){
- const done=!!state?.alreadySent,possible=!!state?.ticketLink;
+ const done=!!state?.alreadySent,possible=!!state?.ticketLink,closed=closedVehicleWorkflowState().closed;
  // A sent initial dealership email is read-only: show its archived email instead of the generator.
- $('#ideInputPanel').hidden=done;
+ $('#ideInputPanel').hidden=done||closed;
  $('#idePageDescription').textContent=done?'View the original dealership email sent through Zendesk, including its recorded date and full content.':'Check the dealership details, generate a draft, then review and send the enquiry. The email is sent through Zendesk and recorded in the complaint timeline.';
  if(done)$('#idePreviewPanel').hidden=true;
  $('#ideAlreadySent').hidden=!done&&!possible;
  if(done||possible)$('#ideAlreadySent').textContent=done?'The initial dealership email is already recorded as sent. A second email cannot be sent from here.':'A dealership Zendesk ticket is already linked to this complaint. Check the existing ticket before sending another enquiry.';
- $('#ideGenerate').disabled=done||possible||!state?.eligible;
+ $('#ideGenerate').disabled=closed||done||possible||!state?.eligible;
  if(done||possible){$('#idePreviewPanel').hidden=true;$('#ideSentPanel').hidden=false;$('#ideSuccessText').textContent=done?'Initial dealership email sent'+(state.sentDate?' on '+state.sentDate:'')+'.':'Existing dealership Zendesk ticket found; sending has been disabled to prevent duplication.';
  $('#ideTicketLink').hidden=!state.ticketLink;if(state.ticketLink)$('#ideTicketLink').href=state.ticketLink;
  }else{$('#ideSentPanel').hidden=true;}
@@ -4912,9 +5070,9 @@ function ideInit(){
   this.disabled=true;$('#ideLoadError').textContent='';$('#idePreviewStatus').textContent='Writing the email draft…';
   try{const d=await ideRequest('initial_dealership_preview',{recipient});IDE_PREVIEW=d;$('#ideSubject').value=d.subject;$('#ideEmailBody').value=d.emailBody;$('#idePreviewPanel').hidden=false;$('#ideConfirm').checked=false;$('#ideSend').disabled=true;$('#ideSendMessage').textContent='';$('#idePreviewStatus').textContent='Draft ready to review.';$('#idePreviewPanel').scrollIntoView({behavior:'smooth',block:'start'});}
   catch(e){$('#ideLoadError').textContent=e.message;$('#idePreviewStatus').textContent='';}
-  finally{this.disabled=!!IDE_STATE?.alreadySent||!!IDE_STATE?.ticketLink||!IDE_STATE?.eligible;}
+  finally{this.disabled=closedVehicleWorkflowState().closed||!!IDE_STATE?.alreadySent||!!IDE_STATE?.ticketLink||!IDE_STATE?.eligible;}
  });
- $('#ideConfirm').addEventListener('change',function(){$('#ideSend').disabled=!this.checked;});
+ $('#ideConfirm').addEventListener('change',function(){$('#ideSend').disabled=closedVehicleWorkflowState().closed||!this.checked;});
  $('#ideSend').addEventListener('click',async function(){
   if(!IDE_PREVIEW||!$('#ideConfirm').checked)return;
   if(!confirm('Send this email to '+$('#ideRecipient').value.trim()+' now? This cannot be undone.'))return;
@@ -4922,10 +5080,32 @@ function ideInit(){
   try{const d=await ideRequest('initial_dealership_send',{recipient:$('#ideRecipient').value.trim(),subject:$('#ideSubject').value.trim(),emailBody:$('#ideEmailBody').value.trim(),confirmed:true});
    IDE_STATE=d.state;ideRefreshSent(d.state);$('#idePreviewPanel').hidden=true;$('#ideSuccessText').textContent=d.message||'Initial dealership email sent.';$('#ideSentPanel').hidden=false;$('#ideSendStatus').textContent='';
    PREFILL.overview.initialDealershipEmailSentDate=d.state.sentDate||'';PREFILL.overview.dealershipZendesk=d.state.ticketLink||'';
-   ideLoadHistory();showActionsSaveToast('Initial dealership email sent.');
+   updateClosedVehicleControls();ideLoadHistory();showActionsSaveToast('Initial dealership email sent.');
   }catch(e){$('#ideSendMessage').textContent=e.message+' Check Zendesk and Jira before retrying.';$('#ideSendStatus').textContent='';await ideLoad();}
-  finally{this.disabled=!$('#ideConfirm').checked||$('#idePreviewPanel').hidden;}
+  finally{this.disabled=closedVehicleWorkflowState().closed||!$('#ideConfirm').checked||$('#idePreviewPanel').hidden;}
  });
+}
+// Stable, case-sensitive workspace slugs for AI-generated links. No database required.
+const ACTION_DEEP_LINK_PAGES=new Set([
+  'home','initial','closure','running','suspense','review','post',
+  'dealer','initialdealer','dekra','rejection','solicitor',
+  'letters','rootcause','updates'
+]);
+function openRequestedActionsPage(){
+  const defaultPage=PREFILL.statusName==='Assigned'?'initial':'home';
+  const requested=(new URLSearchParams(window.location.search).get('page')||'').trim().toLowerCase();
+  if(!requested||requested===defaultPage)return;
+  // Initial contact is a mandatory Assigned-stage action, not a shortcut at other stages.
+  if(!ACTION_DEEP_LINK_PAGES.has(requested)||(requested==='initial'&&PREFILL.statusName!=='Assigned'))return;
+  // Reuse the exact button handler because rejection has additional calculator setup.
+  if(requested==='rejection'){
+    const tile=document.getElementById('homeRejectionTile');
+    if(tile&&!tile.disabled)tile.click();
+  }else{
+    gotoActionsPage(requested);
+  }
+  // Existing navigation guards take precedence. A blocked link stays on the safe default.
+  if(ACTION_PAGE!==requested)gotoActionsPage(defaultPage);
 }
 function boot(){
   var token=getToken();
@@ -4942,7 +5122,8 @@ function boot(){
       initRejCalc();initInspCalc();initCostEditors();
       applyPrefill();restoreRejectionBreakdowns();restoreCostBreakdowns();restoreInspectionBreakdowns();syncRej();syncFos();recompute();initRunningCosts();updateCostRequirements();renderFosRequiredActions();initRunningOnlySave();initSubmit();initManagementActions();initClosedLock();initReview();
       // Outside FOS Decision Review, keep the existing default-to-FOS behaviour.
-      initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();dekraInit();acuInit();ideInit();
+      initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();dekraInit();acuInit();ideInit();updateClosedVehicleControls();
+      openRequestedActionsPage();
     })
     .catch(function(){$('#loading').textContent='Network error loading the complaint.';});
 }
