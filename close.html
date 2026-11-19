@@ -4457,11 +4457,12 @@ function overviewRender(){
  if(plain(o.resolvedDate))steps.push({label:'Resolved',date:o.resolvedDate,done:true});
  if(plain(o.withdrawnDate))steps.push({label:'Complaint withdrawn',date:o.withdrawnDate,done:true});
  steps.push({label:'Closed',date:o.firstClosedDate,done:!!plain(o.firstClosedDate),fallback:p.statusName==='Complaint Closed'?'Closed':''});
- // Historical assignments are stored as "dd/MM/yy Display Name | ..." in
- // Assignee Change History (customfield_14636). Display them on the SAME
- // shared timeline used by Overview, Closed and Withdrawn, without inference.
- // Ignore malformed segments rather than putting untrustworthy dates on the timeline.
+ // Historical assignment entries are ordered oldest to newest in Jira.
+ // The first entry represents the original "Assigned" milestone, so merge
+ // its name into that milestone instead of adding a duplicate timeline node.
+ // Later entries represent genuine reassignments and are separate milestones.
  var changeHistory=plain(o.assigneeChangeHistory);
+ var assignmentEvents=[];
  if(changeHistory){
   changeHistory.split('|').forEach(function(raw){
    var match=/^\s*(\d{2})\/(\d{2})\/(\d{2})\s+(.+?)\s*$/.exec(raw);
@@ -4470,10 +4471,27 @@ function overviewRender(){
    var valid=new Date(Date.UTC(year,month-1,day));
    if(valid.getUTCFullYear()!==year||valid.getUTCMonth()!==month-1||valid.getUTCDate()!==day)return;
    var name=match[4].trim();if(!name)return;
-   // Keep full names in Jira; use the first given name for timeline labels only.
    var firstName=name.split(/\s+/)[0];
    var iso=String(year)+'-'+String(month).padStart(2,'0')+'-'+String(day).padStart(2,'0');
-   steps.push({label:'Assigned to '+firstName,date:iso,done:true});
+   // Jira may contain duplicate assignee events; ignore consecutive repeats
+   // on the same date, without hiding an actual change of assignee.
+   var last=assignmentEvents[assignmentEvents.length-1];
+   if(last&&last.iso===iso&&last.name===name)return;
+   assignmentEvents.push({name:name,firstName:firstName,iso:iso});
+  });
+ }
+ if(assignmentEvents.length){
+  var firstAssignment=assignmentEvents[0];
+  var assignedMilestone=steps.find(function(step){return step.label==='Assigned';});
+  if(assignedMilestone){
+   assignedMilestone.label='Assigned to '+firstAssignment.firstName;
+   // Retain the actual initial-assignment milestone date if present; use the
+   // first historical event date if the separate milestone date is missing.
+   assignedMilestone.date=plain(assignedMilestone.date)||firstAssignment.iso;
+   assignedMilestone.done=true;
+  }
+  assignmentEvents.slice(1).forEach(function(event){
+   steps.push({label:'Assigned to '+event.firstName,date:event.iso,done:true});
   });
  }
  // A withdrawn complaint has a terminal withdrawal path, not a pending
