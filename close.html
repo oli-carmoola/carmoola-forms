@@ -1230,6 +1230,14 @@ body.pre-dekra-open{overflow:hidden}
 @media(max-width:750px){#actionsPreassignment .initial-case-strip{grid-template-columns:repeat(2,minmax(0,1fr));padding:8px}#actionsPreassignment .initial-case-strip>div:nth-child(2){border-right:0}#actionsPreassignment .initial-case-strip>div{padding:12px;border-bottom:1px solid #f0e7ee}#actionsPreassignment .initial-case-strip>div:nth-child(n+3){border-bottom:0}}
 @media(max-width:560px){#actionsPreassignment .initial-case-strip,#actionsPreassignment .pre-triage-grid,#actionsPreassignment .pre-secondary-details{grid-template-columns:1fr}#actionsPreassignment .initial-case-strip>div{border-right:0!important;border-bottom:1px solid #f0e7ee!important}#actionsPreassignment .initial-case-strip>div:last-child{border-bottom:0!important}#actionsPreassignment .pre-triage-grid,#actionsPreassignment .pre-secondary-details,#actionsPreassignment .pre-summary-label,#actionsPreassignment .pre-description,#actionsPreassignment .pre-dekra-actions{margin-left:0}#actionsPreassignment .initial-card>p{padding-left:0}}
 
+
+/* Pre-assignment pages use the exact first-class Complaints Hub sidebar layout. */
+#railPreassignment[hidden]{display:none!important}
+body.actions-with-rail #actionsPreassignment .initial-wrap{max-width:930px;margin:4px auto 46px}
+body.actions-with-rail #actionsPreassignment .initial-page-head{margin-top:4px}
+body.actions-with-rail #actionsPreassignment .pre-wrap{width:100%}
+#workspaceRail.rail-is-gated .rail-links .rail-link.is-active:not(:disabled){background:#ffffff1c;color:#fff;border-left:3px solid #ff55a9}
+@media(max-width:710px){#actionsPreassignment .pre-secondary-details,#actionsPreassignment .pre-triage-grid{margin-left:0}#actionsPreassignment .pre-summary-label,#actionsPreassignment .pre-description{margin-left:0}}
 </style>
 </head>
 <body>
@@ -1300,6 +1308,7 @@ body.pre-dekra-open{overflow:hidden}
   <div class="rail-brand"><div class="rail-logo">carmoola</div><span class="rail-caption">COMPLAINTS HUB</span></div>
   <div class="rail-case"><span>WORKING ON</span><strong id="railCaseRef">Complaint</strong><small id="railCustomer">Customer</small><button type="button" class="rail-switch" id="railSwitchComplaint"><span aria-hidden="true">⇄</span> Switch complaint</button></div>
   <nav class="rail-links" aria-label="Complaint sections">
+    <button type="button" class="rail-link rail-initial-link" data-rail="preassignment" id="railPreassignment" hidden><span class="rail-icon">◈</span><span id="railPreassignmentLabel">Complaint Triage</span></button>
     <button type="button" class="rail-link rail-initial-link" data-rail="initial" id="railInitialCall"><span class="rail-icon">☎</span><span>Initial Customer Call</span></button>
     <button type="button" class="rail-link" data-rail="home"><span class="rail-icon">⌂</span><span>Overview</span></button>
     <div class="rail-group">WORKSPACES</div>
@@ -4150,7 +4159,7 @@ function initPreassignment(){
 }
 
 function hubUpdateRail(page){
- var rail=$('#workspaceRail'),shown=!isPreassignmentStatus(PREFILL.statusName),initialGate=PREFILL.statusName==='Assigned';
+ var rail=$('#workspaceRail'),preGate=isPreassignmentStatus(PREFILL.statusName),shown=true,initialGate=PREFILL.statusName==='Assigned';
  rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
  if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=initialGate?'Initial call required':(PREFILL.statusName||'Complaints Hub');}
  updateClosedVehicleControls();
@@ -4159,10 +4168,12 @@ function hubUpdateRail(page){
  var suspenseAvailable=Number.isFinite(suspenseCount)&&suspenseCount>0;
  $('#railSuspensePayments').hidden=!suspenseAvailable;
  var initialLink=$('#railInitialCall');initialLink.hidden=!initialGate;
- rail.classList.toggle('rail-is-gated',initialGate);
+ var preLink=$('#railPreassignment');preLink.hidden=!preGate;
+ if(preGate)$('#railPreassignmentLabel').textContent=PREFILL.statusName||'Complaint Triage';
+ rail.classList.toggle('rail-is-gated',initialGate||preGate);
  document.querySelectorAll('[data-rail]').forEach(function(b){
   var target=b.dataset.rail;
-  var allowed=initialGate?target==='initial':(target!=='initial'&&(target==='home'||target==='post'&&canOpenPostResolution(PREFILL.statusName)||target==='review'&&PREFILL.fosApplicable||target==='solicitor'&&solarisCanAccess()||!['post','review','solicitor'].includes(target)));
+  var allowed=preGate?target==='preassignment':initialGate?target==='initial':(target!=='preassignment'&&target!=='initial'&&(target==='home'||target==='post'&&canOpenPostResolution(PREFILL.statusName)||target==='review'&&PREFILL.fosApplicable||target==='solicitor'&&solarisCanAccess()||!['post','review','solicitor'].includes(target)));
   b.disabled=!allowed;b.classList.toggle('is-active',target===page);b.setAttribute('aria-current',target===page?'page':'false');
  });
  rail.classList.remove('rail-open');
