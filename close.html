@@ -1277,6 +1277,18 @@ body.actions-with-rail #actionsPreassignment .pre-wrap{width:100%}
 body.terminal-modal-open{overflow:hidden}
 body.terminal-complaint #workspaceRail [data-rail]{pointer-events:none}
 @media(max-width:900px){.terminal-summary-four{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:680px){.terminal-summary,.terminal-summary-four,.terminal-cost-grid{grid-template-columns:1fr}.terminal-actions{align-items:flex-start;flex-direction:column}.terminal-wrap{padding:8px}.terminal-closure-body{padding:10px}.terminal-closure-dialog .footer-inner{flex-wrap:wrap}}
+
+/* Read-only FOS outcomes, shown only when a complaint has a recorded FOS referral or outcome. */
+.terminal-fos-outcomes{padding:16px 0 17px;border-bottom:1px solid var(--line)}
+.terminal-fos-outcomes[hidden]{display:none!important}
+.terminal-fos-outcomes h4{font-size:13px;font-weight:800;margin:0 0 11px;color:var(--ink)}
+.terminal-fos-outcome-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.terminal-fos-outcome-grid>div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fcfafc;min-width:0}
+.terminal-fos-outcome-grid span{display:block;font-size:11.5px;color:var(--muted);margin-bottom:6px}
+.terminal-fos-outcome-grid strong{display:block;font-size:14px;color:var(--ink);overflow-wrap:anywhere}
+.terminal-fos-outcome-grid .terminal-fos-overall{background:var(--tint-soft);border-color:#f7d2e7}
+.terminal-fos-outcome-grid .terminal-fos-overall strong{color:var(--pink-dark)}
+@media(max-width:680px){.terminal-fos-outcome-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1417,7 +1429,7 @@ body.terminal-complaint #workspaceRail [data-rail]{pointer-events:none}
  <div class="terminal-wrap">
   <header class="terminal-head"><div class="eyebrow">COMPLAINT <span id="terminalReference">—</span> · FINAL STATUS</div><h2 id="terminalHeading">Complaint closed</h2><p id="terminalDescription">This complaint has ended. Other complaint actions are no longer available.</p></header>
   <div class="terminal-summary terminal-summary-four"><div><span>Customer</span><strong id="terminalCustomer">—</strong></div><div><span>Assigned to</span><strong id="terminalAssignee">—</strong></div><div><span>Complaint type</span><strong id="terminalComplaintType">—</strong></div><div><span id="terminalDateLabel">Closed date</span><strong id="terminalDate">—</strong></div></div>
-  <section class="overview-panel terminal-financial-panel" id="terminalOutcomePanel"><div class="overview-panel-head"><h3>Complaint outcome &amp; costs</h3><span>VIEW ONLY · RECORDED IN JIRA</span></div><div class="terminal-financial-content"><div class="terminal-outcome-item"><span>Complaint outcome</span><strong id="terminalComplaintOutcome">—</strong></div><div class="terminal-cost-grid"><div><span>Investigation costs</span><strong id="terminalInvestigationCosts">—</strong></div><div><span>Financial Ombudsman costs</span><strong id="terminalFosCosts">—</strong></div><div class="terminal-cost-total"><span>Total recorded costs</span><strong id="terminalAllCosts">—</strong></div></div><div class="terminal-cost-details" id="terminalCostDetails" hidden></div></div></section>
+  <section class="overview-panel terminal-financial-panel" id="terminalOutcomePanel"><div class="overview-panel-head"><h3>Complaint outcome &amp; costs</h3><span>VIEW ONLY · RECORDED IN JIRA</span></div><div class="terminal-financial-content"><div class="terminal-outcome-item"><span>Complaint outcome</span><strong id="terminalComplaintOutcome">—</strong></div><div class="terminal-fos-outcomes" id="terminalFosOutcomes" hidden><h4>Financial Ombudsman outcomes</h4><div class="terminal-fos-outcome-grid" id="terminalFosOutcomeGrid"></div></div><div class="terminal-cost-grid"><div><span>Investigation costs</span><strong id="terminalInvestigationCosts">—</strong></div><div><span>Financial Ombudsman costs</span><strong id="terminalFosCosts">—</strong></div><div class="terminal-cost-total"><span>Total recorded costs</span><strong id="terminalAllCosts">—</strong></div></div><div class="terminal-cost-details" id="terminalCostDetails" hidden></div></div></section>
   <div class="terminal-timeline" id="terminalTimeline" aria-label="Complaint timeline"></div>
   <div class="terminal-actions" id="terminalClosedActions" hidden><div><strong>Closure details</strong><p>The complaint remains closed. You can review and edit the closure form without reopening other workspaces.</p></div><button id="terminalEditClosure" type="button">Edit closure form</button></div>
  </div>
@@ -4766,6 +4778,21 @@ function terminalRender(){
  $('#terminalDate').textContent=formatDisplayDate(closed?o.firstClosedDate:o.withdrawnDate)||'Not recorded';
  $('#terminalComplaintType').textContent=p.complaintType&&p.complaintType!=='-'?p.complaintType:'Not recorded';
  $('#terminalComplaintOutcome').textContent=p.outcome|| (closed?'Not recorded':'Withdrawn');
+ // Show the three separate Jira FOS outcome fields only if the complaint reached FOS.
+ // A referral date, reference or recorded decision is sufficient even if the FOS flag is unset.
+ var fosDash=p.fosDashboard||{},fosState=p.fos||{};
+ var fosText=function(v){return String(v==null?'':v).trim();};
+ var fosReached=!!(p.fosApplicable||fosText(fosDash.escalationDate)||fosText(fosDash.reference)||fosText(fosDash.investigatorOutcome)||fosText(fosDash.ombudsmanOutcome)||fosText(fosDash.overallOutcome)||fosText(fosState.investigator)||fosText(fosState.ombudsman));
+ var fosSection=$('#terminalFosOutcomes'),fosGrid=$('#terminalFosOutcomeGrid');
+ fosGrid.replaceChildren();fosSection.hidden=!fosReached;
+ if(fosReached){
+  [['FOS Investigator outcome',fosText(fosDash.investigatorOutcome)||fosText(fosState.investigator)],['FOS Ombudsman outcome',fosText(fosDash.ombudsmanOutcome)||fosText(fosState.ombudsman)],['Overall FOS outcome',fosText(fosDash.overallOutcome)]].forEach(function(pair,index){
+   var card=document.createElement('div'),label=document.createElement('span'),value=document.createElement('strong');
+   if(index===2)card.className='terminal-fos-overall';
+   label.textContent=pair[0];value.textContent=pair[1]||'Not recorded';card.append(label,value);fosGrid.appendChild(card);
+  });
+ }
+
  var internal=p.internal||{},fos=(p.fos&&p.fos.costs)||{},keys=[
   ['Direct compensation','customfield_10164','customfield_11555'],
   ['Distress & inconvenience','customfield_10165','customfield_11556'],
