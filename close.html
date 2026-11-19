@@ -4582,7 +4582,7 @@ function overviewRender(){
    var pause=document.createElement('button');pause.type='button';pause.className='timeline-pause';pause.textContent='Pause';pause.setAttribute('aria-label','Pause automatic timeline scrolling');
    controls.append(label,range,endLabel,pause);viewport.insertAdjacentElement('afterend',controls);
    function manualStop(){timeline._timelineUserControlled=true;pause.textContent='Manual';pause.disabled=true;}
-   range.addEventListener('input',function(){manualStop();viewport.scrollLeft=(Number(range.value)/1000)*Math.max(0,viewport.scrollWidth-viewport.clientWidth);});
+   range.addEventListener('input',function(){manualStop();viewport.scrollLeft=(Number(range.value)/1000)*Math.max(0,viewport.scrollWidth-viewport.clientWidth);timeline._timelinePosition=viewport.scrollLeft;});
    pause.addEventListener('click',manualStop);
    viewport.addEventListener('pointerdown',manualStop,{passive:true});
    viewport.addEventListener('wheel',manualStop,{passive:true});
@@ -4635,7 +4635,7 @@ function overviewRender(){
    }
    timeline.prepend(svg);
    controls.hidden=viewport.scrollWidth-viewport.clientWidth<3;
-   if(controls.hidden){viewport.scrollLeft=0;}else{updateRange();}
+   if(controls.hidden){viewport.scrollLeft=0;timeline._timelinePosition=0;}else{timeline._timelinePosition=Math.min(Math.max(0,timeline._timelinePosition||0),Math.max(0,viewport.scrollWidth-viewport.clientWidth));updateRange();}
   }
   redraw();
   if(!timeline._timelineResizeObserver && typeof ResizeObserver!=='undefined'){
@@ -4647,6 +4647,7 @@ function overviewRender(){
    timeline._timelineDirection=1;
    timeline._timelineLastTime=0;
    timeline._timelineAutoWriting=false;
+   timeline._timelinePosition=viewport.scrollLeft;
    var reducedMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
    function frame(now){
     var elapsed=timeline._timelineLastTime?Math.min(100,now-timeline._timelineLastTime):0;
@@ -4654,11 +4655,16 @@ function overviewRender(){
     var distance=viewport.scrollWidth-viewport.clientWidth;
     if(!timeline._timelineUserControlled && !reducedMotion && distance>3 && viewport.getClientRects().length && !document.hidden){
      // Approximately 10 px/sec, reversing at each end.
-     var position=viewport.scrollLeft,step=elapsed*0.010*timeline._timelineDirection;
-     if(position+step>=distance){timeline._timelineDirection=-1;step=distance-position;}
-     if(position+step<=0){timeline._timelineDirection=1;step=-position;}
+     // Keep a floating-point position separate from the element's scrollLeft.
+     // Some browsers quantise scrollLeft to whole pixels, so reading it on
+     // every frame loses the sub-pixel movement at a speed of 10px/second.
+     var position=Number.isFinite(timeline._timelinePosition)?timeline._timelinePosition:viewport.scrollLeft;
+     var next=position+elapsed*0.010*timeline._timelineDirection;
+     if(next>=distance){next=distance;timeline._timelineDirection=-1;}
+     if(next<=0){next=0;timeline._timelineDirection=1;}
+     timeline._timelinePosition=next;
      timeline._timelineAutoWriting=true;
-     viewport.scrollLeft=Math.max(0,Math.min(distance,position+step));
+     viewport.scrollLeft=next;
      updateRange();
      requestAnimationFrame(function(){timeline._timelineAutoWriting=false;});
     }
