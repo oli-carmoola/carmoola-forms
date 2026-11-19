@@ -4457,6 +4457,25 @@ function overviewRender(){
  if(plain(o.resolvedDate))steps.push({label:'Resolved',date:o.resolvedDate,done:true});
  if(plain(o.withdrawnDate))steps.push({label:'Complaint withdrawn',date:o.withdrawnDate,done:true});
  steps.push({label:'Closed',date:o.firstClosedDate,done:!!plain(o.firstClosedDate),fallback:p.statusName==='Complaint Closed'?'Closed':''});
+ // Historical assignments are stored as "dd/MM/yy Display Name | ..." in
+ // Assignee Change History (customfield_14636). Display them on the SAME
+ // shared timeline used by Overview, Closed and Withdrawn, without inference.
+ // Ignore malformed segments rather than putting untrustworthy dates on the timeline.
+ var changeHistory=plain(o.assigneeChangeHistory);
+ if(changeHistory){
+  changeHistory.split('|').forEach(function(raw){
+   var match=/^\s*(\d{2})\/(\d{2})\/(\d{2})\s+(.+?)\s*$/.exec(raw);
+   if(!match)return;
+   var day=Number(match[1]),month=Number(match[2]),year=2000+Number(match[3]);
+   var valid=new Date(Date.UTC(year,month-1,day));
+   if(valid.getUTCFullYear()!==year||valid.getUTCMonth()!==month-1||valid.getUTCDate()!==day)return;
+   var name=match[4].trim();if(!name)return;
+   // Keep full names in Jira; use the first given name for timeline labels only.
+   var firstName=name.split(/\s+/)[0];
+   var iso=String(year)+'-'+String(month).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+   steps.push({label:'Assigned to '+firstName,date:iso,done:true});
+  });
+ }
  // A withdrawn complaint has a terminal withdrawal path, not a pending
  // investigation/final-response/closure path. Only show steps actually recorded
  // before withdrawal, and never imply that it proceeded to Complaint Closed.
