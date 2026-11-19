@@ -4523,12 +4523,14 @@ function overviewRender(){
  // before withdrawal, and never imply that it proceeded to Complaint Closed.
  var isWithdrawnTimeline=String(p.statusName||'').trim().toLowerCase()==='complaint withdrawn';
  if(isWithdrawnTimeline){
-  var withdrawnAt=plain(o.withdrawnDate).slice(0,10);
+   var withdrawnAt=milestoneTime(o.withdrawnDate);
   steps=steps.filter(function(step){
    if(step.label==='Closed'||step.label==='Complaint withdrawn')return false;
    if(!step.done)return false;
-   var recorded=plain(step.date).slice(0,10);
-   return !withdrawnAt||!recorded||recorded<=withdrawnAt;
+   var recorded=milestoneTime(step.date);
+   // Compare actual calendar dates rather than strings: receivedDate is
+   // returned as e.g. "22 October 2026", while Jira milestone dates are ISO.
+   return withdrawnAt===null||recorded===null||recorded<=withdrawnAt;
   });
   steps.push({label:'Complaint withdrawn',date:o.withdrawnDate,done:true,fallback:'Withdrawn'});
  }
@@ -4536,9 +4538,15 @@ function overviewRender(){
  // remain near their natural workflow stage, not pushed to the end.
  // Inserting undated steps never changes the order of the dated ones.
  function milestoneTime(value){
-  var raw=plain(value),m=/^(\d{4})-(\d{2})-(\d{2})(?:T.*)?$/.exec(raw);
-  if(!m)return null;
-  var year=Number(m[1]),month=Number(m[2]),day=Number(m[3]);
+  var raw=plain(value).trim();
+  var iso=/^(\d{4})-(\d{2})-(\d{2})(?:T.*)?$/.exec(raw);
+  var written=/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/.exec(raw);
+  var months=['january','february','march','april','may','june','july','august','september','october','november','december'];
+  var year,month,day;
+  if(iso){year=Number(iso[1]);month=Number(iso[2]);day=Number(iso[3]);}
+  else if(written){year=Number(written[3]);month=months.indexOf(written[2].toLowerCase())+1;day=Number(written[1]);}
+  else return null;
+  if(month<1||month>12)return null;
   var time=Date.UTC(year,month-1,day);
   var valid=new Date(time);
   if(valid.getUTCFullYear()!==year||valid.getUTCMonth()!==month-1||valid.getUTCDate()!==day)return null;
