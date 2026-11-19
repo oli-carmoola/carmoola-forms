@@ -705,24 +705,29 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 
 
 
-/* Compact milestone timeline: a single clean rail whenever space permits. */
-.overview-timeline-panel{margin-top:16px;padding:17px 19px 17px}
-.overview-timeline{position:relative;display:grid;grid-template-columns:repeat(var(--timeline-columns,1),minmax(0,1fr));column-gap:0;row-gap:17px;align-items:start;margin:12px 0 0;overflow:visible;min-width:0}
-.overview-timeline-step{position:relative;z-index:2;min-width:0;min-height:55px;padding:27px 6px 0 0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;overflow-wrap:break-word}
+/* One-row milestone timeline with gentle reversible pan and manual scrubber. */
+.overview-timeline-panel{margin-top:16px;padding:17px 19px 17px;min-width:0}
+.overview-timeline-viewport{overflow-x:auto;overflow-y:hidden;width:100%;max-width:100%;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x;scroll-behavior:auto}
+.overview-timeline-viewport::-webkit-scrollbar{display:none}
+.overview-timeline{position:relative;display:grid;grid-template-columns:repeat(var(--timeline-columns,1),minmax(0,1fr));align-items:start;margin:12px 0 0;min-width:0}
+.overview-timeline-step{position:relative;z-index:2;min-width:0;min-height:78px;padding:28px 12px 0 0;display:flex;flex-direction:column;align-items:flex-start;gap:4px;overflow-wrap:break-word}
 .overview-timeline-step:before{display:none!important}
 .overview-timeline-dot{position:absolute;top:3px;left:0;width:19px;height:19px;box-sizing:border-box;border:2px solid #ded4de;border-radius:50%;background:#fff;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:900;z-index:2}
 .overview-timeline-step.is-complete .overview-timeline-dot{border-color:#e9007b;background:#e9007b}
 .overview-timeline-step.is-pending .overview-timeline-dot{background:#fff}
-.overview-timeline-step strong{font-size:11px;font-weight:800;color:#372439;line-height:1.25;max-width:100%}
-.overview-timeline-step small{font-size:10px;color:#8d7f8e;line-height:1.25;max-width:100%}
+.overview-timeline-step strong{font-size:11px;font-weight:800;color:#372439;line-height:1.3;max-width:100%}
+.overview-timeline-step small{font-size:10px;color:#8d7f8e;line-height:1.3;max-width:100%}
 .overview-timeline-step.is-pending strong{color:#8a7d8c}
 .overview-timeline-lines{position:absolute;inset:0;width:100%;height:100%;z-index:1;overflow:hidden;pointer-events:none}
 .overview-timeline-lines path{fill:none;stroke:#e8dfe8;stroke-width:2.4;stroke-linecap:round}
 .overview-timeline-lines path.is-complete{stroke:#ef9ac4}
-/* Balanced timeline rows: avoid a single orphaned milestone on the last row. */
-.overview-timeline{row-gap:43px}
-.overview-timeline-step.is-row-start:not(:first-of-type)::after{content:'CONTINUED ↓';position:absolute;top:-25px;left:0;font-size:9px;font-weight:800;letter-spacing:.09em;color:#a55b85;white-space:nowrap;pointer-events:none}
-@media(max-width:710px){.overview-timeline{row-gap:42px}}
+.overview-timeline-controls{display:flex;align-items:center;gap:12px;margin:9px 0 1px;padding:9px 12px;border:1px solid #f0e1ed;background:#fdf8fc;border-radius:12px}
+.overview-timeline-controls[hidden]{display:none!important}
+.overview-timeline-controls .timeline-range{flex:1;min-width:0;accent-color:#e9007b;cursor:pointer;height:18px}
+.overview-timeline-controls .timeline-label{font-size:10px;font-weight:750;color:#8e6c84;white-space:nowrap;font-variant-numeric:tabular-nums}
+.overview-timeline-controls .timeline-pause{border:1px solid #e9d6e2;border-radius:8px;padding:6px 10px;background:#fff;color:#a21c64;font-family:inherit;font-size:11px;font-weight:750;cursor:pointer;white-space:nowrap}
+.overview-timeline-controls .timeline-pause:hover{background:#fff0f8}
+@media(max-width:500px){.overview-timeline-controls{gap:7px;padding:8px}.overview-timeline-controls .timeline-label{font-size:9px}.overview-timeline-step{padding-right:8px}}
 
 /* Compact, read-only customer statement and breach panels on Overview. */
 .overview-customer-panel,.overview-breaches-panel{margin-top:15px}
@@ -4556,50 +4561,99 @@ function overviewRender(){
   var outcomeTooltip=plain(step.outcome);if(outcomeTooltip){el.title=outcomeTooltip;el.tabIndex=0;}
   el.setAttribute('aria-label',step.label+': '+detail.textContent+(outcomeTooltip?', outcome: '+outcomeTooltip:''));el.append(dot,label,detail);timeline.appendChild(el);
  });
- // Keep most complaints on a single compact row; never route the connector
- // through labels or dates. On narrow screens, use separate clean rails.
+ // Single horizontal rail. Scroll gently from start to end and then back,
+ // unless the user touches the track or controls (which stops automatic motion).
  function layoutOverviewTimeline(){
-  var previous=timeline.querySelector('.overview-timeline-lines');
-  if(previous)previous.remove();
   var nodes=Array.from(timeline.querySelectorAll('.overview-timeline-step'));
   if(!nodes.length)return;
-  var width=timeline.clientWidth||timeline.parentElement.clientWidth||700;
-  // Keep a single row where labels fit comfortably; when wrapping is needed,
-  // distribute milestones across balanced rows (e.g. 12 => 6 + 6, not 10 + 2).
-  // Eight per row is the readable desktop maximum for long milestone names.
-  var minWidth=width>=950?155:width>=650?145:width>=420?135:145;
-  var maxColumns=Math.min(8,Math.max(1,Math.floor(width/minWidth)));
-  var rowCount=Math.ceil(nodes.length/maxColumns);
-  var columns=Math.ceil(nodes.length/rowCount);
-  timeline.style.setProperty('--timeline-columns',String(columns));
-  nodes.forEach(function(node,index){
-   node.classList.toggle('is-row-start',index>0&&index%columns===0);
-  });
-  var bounds=timeline.getBoundingClientRect();
-  var svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-  svg.setAttribute('class','overview-timeline-lines');
-  svg.setAttribute('aria-hidden','true');
-  svg.setAttribute('viewBox','0 0 '+Math.max(1,bounds.width)+' '+Math.max(1,bounds.height));
-  var dots=nodes.map(function(node){
-   var r=node.querySelector('.overview-timeline-dot').getBoundingClientRect();
-   return {x:r.left-bounds.left+r.width/2,y:r.top-bounds.top+r.height/2};
-  });
-  nodes.forEach(function(node,i){
-   if(i===nodes.length-1)return;
-   var a=dots[i],b=dots[i+1];
-   if(Math.abs(a.y-b.y)>6)return; // never draw a U-turn across text
-   var path=document.createElementNS('http://www.w3.org/2000/svg','path');
-   path.setAttribute('d','M '+a.x+' '+a.y+' L '+b.x+' '+b.y);
-   if(node.classList.contains('is-complete')&&nodes[i+1].classList.contains('is-complete'))path.setAttribute('class','is-complete');
-   svg.appendChild(path);
-  });
-  timeline.prepend(svg);
+  var viewport=timeline.parentElement;
+  if(!viewport || !viewport.classList.contains('overview-timeline-viewport')){
+   viewport=document.createElement('div');viewport.className='overview-timeline-viewport';
+   timeline.parentNode.insertBefore(viewport,timeline);viewport.appendChild(timeline);
+  }
+  var controls=viewport.nextElementSibling;
+  if(!controls || !controls.classList.contains('overview-timeline-controls')){
+   controls=document.createElement('div');controls.className='overview-timeline-controls';
+   var label=document.createElement('span');label.className='timeline-label timeline-start';label.textContent='Start';
+   var range=document.createElement('input');range.type='range';range.className='timeline-range';range.min='0';range.max='1000';range.value='0';range.step='1';range.setAttribute('aria-label','Scroll through complaint milestones');
+   var endLabel=document.createElement('span');endLabel.className='timeline-label timeline-end';endLabel.textContent='End';
+   var pause=document.createElement('button');pause.type='button';pause.className='timeline-pause';pause.textContent='Pause';pause.setAttribute('aria-label','Pause automatic timeline scrolling');
+   controls.append(label,range,endLabel,pause);viewport.insertAdjacentElement('afterend',controls);
+   function manualStop(){timeline._timelineUserControlled=true;pause.textContent='Manual';pause.disabled=true;}
+   range.addEventListener('input',function(){manualStop();viewport.scrollLeft=(Number(range.value)/1000)*Math.max(0,viewport.scrollWidth-viewport.clientWidth);});
+   pause.addEventListener('click',manualStop);
+   viewport.addEventListener('pointerdown',manualStop,{passive:true});
+   viewport.addEventListener('wheel',manualStop,{passive:true});
+   viewport.addEventListener('touchstart',manualStop,{passive:true});
+   viewport.addEventListener('keydown',function(e){if(['ArrowLeft','ArrowRight','Home','End','PageUp','PageDown'].includes(e.key))manualStop();});
+   viewport.addEventListener('scroll',function(){
+    if(timeline._timelineAutoWriting)return;
+    // Wheel, pointer, touch and keyboard listeners handle manual take-over.
+    updateRange();
+   },{passive:true});
+  }
+  var slider=controls.querySelector('.timeline-range');
+  function updateRange(){
+   var maximum=Math.max(0,viewport.scrollWidth-viewport.clientWidth);
+   slider.value=maximum?String(Math.round(viewport.scrollLeft/maximum*1000)):'0';
+  }
+  function redraw(){
+   var width=viewport.clientWidth;
+   if(width<1)return;
+   var minimum=width<570?132:width<920?145:155;
+   var desired=nodes.length*minimum;
+   var totalWidth=Math.max(width,desired);
+   timeline.style.width=totalWidth+'px';
+   timeline.style.setProperty('--timeline-columns',String(nodes.length));
+   nodes.forEach(function(node){node.classList.remove('is-row-start');});
+   var previous=timeline.querySelector('.overview-timeline-lines');if(previous)previous.remove();
+   var bounds=timeline.getBoundingClientRect();
+   var svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+   svg.setAttribute('class','overview-timeline-lines');svg.setAttribute('aria-hidden','true');
+   svg.setAttribute('viewBox','0 0 '+Math.max(1,bounds.width)+' '+Math.max(1,bounds.height));
+   var dots=nodes.map(function(node){var r=node.querySelector('.overview-timeline-dot').getBoundingClientRect();return {x:r.left-bounds.left+r.width/2,y:r.top-bounds.top+r.height/2};});
+   for(var i=0;i<nodes.length-1;i++){
+    var a=dots[i],b=dots[i+1];var path=document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d','M '+a.x+' '+a.y+' L '+b.x+' '+b.y);
+    if(nodes[i].classList.contains('is-complete')&&nodes[i+1].classList.contains('is-complete'))path.setAttribute('class','is-complete');
+    svg.appendChild(path);
+   }
+   timeline.prepend(svg);
+   controls.hidden=viewport.scrollWidth-viewport.clientWidth<3;
+   if(controls.hidden){viewport.scrollLeft=0;}else{updateRange();}
+  }
+  redraw();
+  if(!timeline._timelineResizeObserver && typeof ResizeObserver!=='undefined'){
+   timeline._timelineResizeObserver=new ResizeObserver(redraw);
+   timeline._timelineResizeObserver.observe(viewport);
+  }
+  if(!timeline._timelineAutoStarted){
+   timeline._timelineAutoStarted=true;
+   timeline._timelineDirection=1;
+   timeline._timelineLastTime=0;
+   timeline._timelineAutoWriting=false;
+   var reducedMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+   function frame(now){
+    var elapsed=timeline._timelineLastTime?Math.min(100,now-timeline._timelineLastTime):0;
+    timeline._timelineLastTime=now;
+    var distance=viewport.scrollWidth-viewport.clientWidth;
+    if(!timeline._timelineUserControlled && !reducedMotion && distance>3 && viewport.getClientRects().length && !document.hidden){
+     // Approximately 26 px/sec; soft reversal at each end.
+     var position=viewport.scrollLeft,step=elapsed*0.026*timeline._timelineDirection;
+     if(position+step>=distance){timeline._timelineDirection=-1;step=distance-position;}
+     if(position+step<=0){timeline._timelineDirection=1;step=-position;}
+     timeline._timelineAutoWriting=true;
+     viewport.scrollLeft=Math.max(0,Math.min(distance,position+step));
+     updateRange();
+     requestAnimationFrame(function(){timeline._timelineAutoWriting=false;});
+    }
+    // Stop the loop after manual intervention; it is no longer needed.
+    if(!timeline._timelineUserControlled)requestAnimationFrame(frame);
+   }
+   if(!reducedMotion)requestAnimationFrame(frame);
+  }
  }
  layoutOverviewTimeline();
- if(!timeline._overviewResizeObserver&&typeof ResizeObserver!=='undefined'){
-  timeline._overviewResizeObserver=new ResizeObserver(layoutOverviewTimeline);
-  timeline._overviewResizeObserver.observe(timeline);
- }
  // Compact customer-provided text: display as supplied, never AI-rewrite or treat as handler notes.
  var customerWords=[['Customer issue description',o.customerIssueText],['Customer ideal outcome',o.customerIdealOutcomeText]];
  var wordsHolder=$('#overviewCustomerStatementEntries');wordsHolder.replaceChildren();
