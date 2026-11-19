@@ -1219,7 +1219,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
 #preDekraContent #actionsDekra{display:block!important;width:100%;max-width:100%;margin:0}
 #preDekraContent #actionsDekra .dekra-head{margin-top:0}
 body.pre-dekra-open{overflow:hidden}
-.pre-triage-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pre-triage-grid>div{padding:13px 15px;border:1px solid var(--line);border-radius:10px;background:#fdfafd}.pre-triage-grid span{display:block;color:var(--muted);font-size:11px;font-weight:700;margin-bottom:5px}.pre-triage-grid strong{font-size:15px}.overview-timeline-step[title]{cursor:help}.overview-timeline-step[title]:focus-visible{outline:2px solid var(--pink);outline-offset:3px}@media(max-width:520px){.pre-triage-grid{grid-template-columns:1fr}}
+.pre-triage-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pre-triage-grid>div{padding:13px 15px;border:1px solid var(--line);border-radius:10px;background:#fdfafd}.pre-triage-grid span{display:block;color:var(--muted);font-size:11px;font-weight:700;margin-bottom:5px}.pre-triage-grid strong{font-size:15px}.overview-timeline-step.has-outcome{cursor:default}.overview-timeline-step.has-outcome:focus-visible{outline:2px solid var(--pink);outline-offset:3px}@media(max-width:520px){.pre-triage-grid{grid-template-columns:1fr}}
 @media(max-width:650px){.pre-facts{grid-template-columns:1fr 1fr}.pre-fact{border-bottom:1px solid var(--line)}.pre-fact:nth-child(3n){border-right:1px solid var(--line)}.pre-fact:nth-child(2n){border-right:0}.pre-head{flex-direction:column}.pre-dekra-overlay{padding:6px}.pre-dekra-scroll{padding:13px}}
 
 
@@ -1289,6 +1289,17 @@ body.terminal-complaint #workspaceRail [data-rail]{pointer-events:none}
 .terminal-fos-outcome-grid .terminal-fos-overall{background:var(--tint-soft);border-color:#f7d2e7}
 .terminal-fos-outcome-grid .terminal-fos-overall strong{color:var(--pink-dark)}
 @media(max-width:680px){.terminal-fos-outcome-grid{grid-template-columns:1fr}}
+
+/* Triage outcome: custom, readable popover rather than native browser title. */
+.triage-outcome-popover{position:fixed;z-index:150;width:max-content;max-width:min(290px,calc(100vw - 24px));padding:13px 16px;border:1px solid #eed0e1;border-radius:12px;background:#fff;box-shadow:0 12px 35px rgba(42,19,37,.17);pointer-events:none;text-align:left}
+.triage-outcome-popover[hidden]{display:none!important}
+.triage-outcome-popover:after{content:'';position:absolute;left:calc(50% - 6px);bottom:-7px;width:12px;height:12px;transform:rotate(45deg);background:#fff;border-right:1px solid #eed0e1;border-bottom:1px solid #eed0e1}
+.triage-outcome-popover.below:after{bottom:auto;top:-7px;border-right:0;border-bottom:0;border-left:1px solid #eed0e1;border-top:1px solid #eed0e1}
+.triage-outcome-popover-heading{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#9c4373;font-weight:800;margin-bottom:5px}
+.triage-outcome-popover-value{font-size:14px;color:#2c1c30;font-weight:800;line-height:1.45;overflow-wrap:anywhere}
+.triage-outcome-popover-context{font-size:11px;color:#968a99;margin-top:6px}
+.terminal-summary .terminal-outsourced-pill{display:inline-flex;width:fit-content;margin-top:9px;padding:5px 9px;border-radius:999px;background:#fff0f7;border:1px solid #f2c0db;color:#a71866;font-size:10px;font-weight:800;letter-spacing:.01em}
+.terminal-summary .terminal-outsourced-pill[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -1428,7 +1439,7 @@ body.terminal-complaint #workspaceRail [data-rail]{pointer-events:none}
 <section id="actionsTerminal" class="actions-page" aria-label="Completed complaint" hidden>
  <div class="terminal-wrap">
   <header class="terminal-head"><div class="eyebrow">COMPLAINT <span id="terminalReference">—</span> · FINAL STATUS</div><h2 id="terminalHeading">Complaint closed</h2><p id="terminalDescription">This complaint has ended. Other complaint actions are no longer available.</p></header>
-  <div class="terminal-summary terminal-summary-four"><div><span>Customer</span><strong id="terminalCustomer">—</strong></div><div><span>Assigned to</span><strong id="terminalAssignee">—</strong></div><div><span>Complaint type</span><strong id="terminalComplaintType">—</strong></div><div><span id="terminalDateLabel">Closed date</span><strong id="terminalDate">—</strong></div></div>
+  <div class="terminal-summary terminal-summary-four"><div><span>Customer</span><strong id="terminalCustomer">—</strong></div><div><span>Assigned to</span><strong id="terminalAssignee">—</strong></div><div><span>Complaint type</span><strong id="terminalComplaintType">—</strong><span id="terminalOutsourced" class="terminal-outsourced-pill" hidden>Outsourced complaint</span></div><div><span id="terminalDateLabel">Closed date</span><strong id="terminalDate">—</strong></div></div>
   <div class="terminal-timeline" id="terminalTimeline" aria-label="Complaint timeline"></div>
   <section class="overview-panel terminal-financial-panel" id="terminalOutcomePanel"><div class="overview-panel-head"><h3>Complaint outcome &amp; costs</h3><span>VIEW ONLY · RECORDED IN JIRA</span></div><div class="terminal-financial-content"><div class="terminal-outcome-item"><span>Complaint outcome</span><strong id="terminalComplaintOutcome">—</strong></div><div class="terminal-fos-outcomes" id="terminalFosOutcomes" hidden><h4>Financial Ombudsman outcomes</h4><div class="terminal-fos-outcome-grid" id="terminalFosOutcomeGrid"></div></div><div class="terminal-cost-grid"><div><span>Investigation costs</span><strong id="terminalInvestigationCosts">—</strong></div><div><span>Financial Ombudsman costs</span><strong id="terminalFosCosts">—</strong></div><div class="terminal-cost-total"><span>Total recorded costs</span><strong id="terminalAllCosts">—</strong></div></div><div class="terminal-cost-details" id="terminalCostDetails" hidden></div></div></section>
   <div class="terminal-actions" id="terminalClosedActions" hidden><div><strong>Closure details</strong><p>The complaint remains closed. You can review and edit the closure form without reopening other workspaces.</p></div><button id="terminalEditClosure" type="button">Edit closure form</button></div>
@@ -4330,6 +4341,33 @@ function showActionsSaveToast(message){
   toast.classList.add('show');
   actionsToastTimer=setTimeout(function(){toast.classList.remove('show');},5000);
 }
+function hideTriageOutcomePopover(){
+ var pop=document.getElementById('triageOutcomePopover');if(pop)pop.hidden=true;
+}
+function showTriageOutcomePopover(anchor,label,outcome){
+ var pop=document.getElementById('triageOutcomePopover');
+ if(!pop){
+  pop=document.createElement('div');pop.id='triageOutcomePopover';pop.className='triage-outcome-popover';pop.setAttribute('role','tooltip');pop.hidden=true;
+  var heading=document.createElement('div');heading.className='triage-outcome-popover-heading';
+  var value=document.createElement('div');value.className='triage-outcome-popover-value';
+  var context=document.createElement('div');context.className='triage-outcome-popover-context';
+  pop.append(heading,value,context);document.body.appendChild(pop);
+ }
+ pop.children[0].textContent=label.toLowerCase().startsWith('re-triage')?'Re-triage outcome':'Triage outcome';
+ pop.children[1].textContent=outcome;
+ pop.children[2].textContent='Recorded in Jira';
+ pop.hidden=false;
+ var rect=anchor.getBoundingClientRect(),w=pop.offsetWidth,h=pop.offsetHeight;
+ var left=Math.min(Math.max(12,rect.left+rect.width/2-w/2),window.innerWidth-w-12);
+ var top=rect.top-h-13;
+ var below=top<12;
+ if(below)top=rect.bottom+13;
+ pop.style.left=Math.round(left)+'px';pop.style.top=Math.round(top)+'px';
+ pop.classList.toggle('below',below);
+}
+document.addEventListener('keydown',function(ev){if(ev.key==='Escape')hideTriageOutcomePopover();});
+window.addEventListener('scroll',hideTriageOutcomePopover,true);
+window.addEventListener('resize',hideTriageOutcomePopover);
 function overviewRender(){
  var p=PREFILL||{},o=p.overview||{},post=POST_DATA||p.postResolution||{},vd=p.vehicleDetails||{},fos=p.fosDashboard||{};
  var put=function(id,v,fallback){var el=document.getElementById(id);if(el)el.textContent=(v===undefined||v===null||String(v).trim()==='')?(fallback||'Not recorded'):String(v);};
@@ -4449,7 +4487,7 @@ function overviewRender(){
  withdrawnDateValue.textContent=plain(o.withdrawnDate)?formatDisplayDate(o.withdrawnDate):'';
  var steps=[
   {label:'Received',date:p.receivedDate,done:!!plain(p.receivedDate)},
-  ...(plain(o.triageStartedDate)?[{label:'Triage started',date:o.triageStartedDate,done:true,outcome:o.triageOutcome}]:[]),
+  ...(plain(o.triageStartedDate)?[{label:'Triage started',date:o.triageStartedDate,done:true}]:[]),
   ...(plain(o.triageCompletedDate)?[{label:'Triage completed',date:o.triageCompletedDate,done:true,outcome:o.triageOutcome}]:[]),
   ...(plain(o.reTriageEvidenceReceivedDate)?[{label:'Re-triage evidence received',date:o.reTriageEvidenceReceivedDate,done:true}]:[]),
   ...(plain(o.reTriageCompletedDate)?[{label:'Re-triage completed',date:o.reTriageCompletedDate,done:true,outcome:o.reTriageOutcome}]:[]),
@@ -4580,8 +4618,17 @@ function overviewRender(){
   var dot=document.createElement('span');dot.className='overview-timeline-dot';dot.setAttribute('aria-hidden','true');dot.textContent=step.done?'✓':'';
   var label=document.createElement('strong');label.textContent=step.label;
   var detail=document.createElement('small');detail.textContent=step.done?(plain(step.date)?formatDisplayDate(step.date):(step.fallback||'Recorded')):'Pending';
-  var outcomeTooltip=plain(step.outcome);if(outcomeTooltip){el.title=outcomeTooltip;el.tabIndex=0;}
-  el.setAttribute('aria-label',step.label+': '+detail.textContent+(outcomeTooltip?', outcome: '+outcomeTooltip:''));el.append(dot,label,detail);timeline.appendChild(el);
+  var outcomeTooltip=plain(step.outcome);
+  if(outcomeTooltip){
+   el.classList.add('has-outcome');el.tabIndex=0;
+   el.setAttribute('aria-haspopup','true');
+   el.setAttribute('aria-describedby','triageOutcomePopover');
+   el.addEventListener('mouseenter',function(){showTriageOutcomePopover(el,step.label,outcomeTooltip);});
+   el.addEventListener('mouseleave',hideTriageOutcomePopover);
+   el.addEventListener('focus',function(){showTriageOutcomePopover(el,step.label,outcomeTooltip);});
+   el.addEventListener('blur',hideTriageOutcomePopover);
+  }
+  el.setAttribute('aria-label',step.label+': '+detail.textContent+(outcomeTooltip?', triage outcome: '+outcomeTooltip:''));el.append(dot,label,detail);timeline.appendChild(el);
  });
  // Single horizontal rail. Scroll gently from start to end and then back,
  // unless the user touches the track or controls (which stops automatic motion).
@@ -4785,6 +4832,10 @@ function terminalRender(){
  $('#terminalDateLabel').textContent=closed?'First closed date':'Withdrawn date';
  $('#terminalDate').textContent=formatDisplayDate(closed?o.firstClosedDate:o.withdrawnDate)||'Not recorded';
  $('#terminalComplaintType').textContent=p.complaintType&&p.complaintType!=='-'?p.complaintType:'Not recorded';
+ // Keep outsourcing visible after the issue has moved to a terminal status.
+ var outsourcedValue=String(o.outsourced||'').trim().toLowerCase();
+ var isOutsourced=['yes','y','true','outsourced'].includes(outsourcedValue) || !!p.dealershipPosition?.outsourced;
+ $('#terminalOutsourced').hidden=!(closed && isOutsourced);
  $('#terminalComplaintOutcome').textContent=p.outcome|| (closed?'Not recorded':'Withdrawn');
  // Show the three separate Jira FOS outcome fields only if the complaint reached FOS.
  // A referral date, reference or recorded decision is sufficient even if the FOS flag is unset.
