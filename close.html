@@ -1144,6 +1144,44 @@ textarea.letters-field{min-height:85px;resize:vertical}
 @media(max-width:780px){.overview-tickets-panel{max-width:100%}.overview-ticket-table{min-width:570px}}
 
 
+/* Shared styling from the updated Initial Customer Call design. */
+#actionsPreassignment .initial-wrap{max-width:930px;margin:4px auto 46px}
+#actionsPreassignment .initial-page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin:4px 0 22px}
+#actionsPreassignment .initial-page-kicker{font-size:10.5px;font-weight:800;letter-spacing:.105em;color:#a01361;margin-bottom:8px}
+#actionsPreassignment .initial-head-dot{padding:0 5px;color:#c4a7bc}
+#actionsPreassignment .initial-page-head h2{font-size:31px;line-height:1.15;letter-spacing:-.046em;color:#2e2030;margin:0 0 8px}
+#actionsPreassignment .initial-page-head p{font-size:13px;line-height:1.65;color:#857888;margin:0;max-width:650px}
+#actionsPreassignment .initial-gate-chip{flex:none;white-space:nowrap;border:1px solid #f1cee0;background:#fff2f9;color:#a11062;padding:9px 12px;border-radius:999px;font-size:11px;font-weight:800}
+#actionsPreassignment .initial-gate-chip span{color:#ef0080;font-size:8px;margin-right:6px}
+#actionsPreassignment .initial-case-strip{display:grid;grid-template-columns:1.2fr 1fr .65fr 1fr;gap:0;background:#fff;border:1px solid #eadfe8;border-radius:15px;padding:17px 8px;box-shadow:0 4px 18px #24122408;margin-bottom:22px}
+#actionsPreassignment .initial-case-strip>div{padding:2px 19px;border-right:1px solid #f0e7ee;min-width:0}
+#actionsPreassignment .initial-case-strip>div:last-child{border:0}
+#actionsPreassignment .initial-case-strip span{display:block;color:#948797;text-transform:uppercase;font-size:10px;font-weight:800;letter-spacing:.065em;margin-bottom:7px}
+#actionsPreassignment .initial-case-strip strong{display:block;color:#322436;font-size:14px;overflow-wrap:anywhere}
+#actionsPreassignment .initial-case-strip .initial-sla-overdue{color:#a52445}
+#actionsPreassignment .initial-sla-note{font-size:11px;color:#a52445;margin-top:5px;display:block}
+#actionsPreassignment .initial-sla-note[hidden]{display:none!important}
+#actionsPreassignment .initial-flow-head{display:flex;align-items:center;gap:13px;color:#938697;font-size:12px;font-weight:750;margin:0 0 20px}
+#actionsPreassignment .initial-flow-active{color:#a50b60;display:flex;align-items:center;gap:8px}
+#actionsPreassignment .initial-flow-upcoming{display:flex;align-items:center;gap:8px}
+#actionsPreassignment .initial-flow-number{display:grid;place-items:center;width:25px;height:25px;border-radius:50%;border:1px solid #e8dde8;font-size:11px;background:#fff}
+#actionsPreassignment .initial-flow-active .initial-flow-number{background:#f90081;color:#fff;border-color:#f90081}
+#actionsPreassignment .initial-flow-arrow{color:#b7a9b7}
+#actionsPreassignment .initial-card{border:1px solid #eae0e9;border-radius:17px;padding:24px 27px;margin:0 0 15px;box-shadow:0 4px 20px #24122408}
+#actionsPreassignment .initial-card-step{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+#actionsPreassignment .initial-card-step>span{display:grid;place-items:center;border-radius:10px;background:#fcebf5;color:#b70c67;width:35px;height:35px;flex:none;font-size:12px;font-weight:850}
+#actionsPreassignment .initial-card-step h3{margin:0;font-size:17px;letter-spacing:-.02em}
+#actionsPreassignment .initial-card>p{padding-left:47px;margin-bottom:17px}
+#actionsPreassignment .initial-call-actions,#actionsPreassignment .initial-callout,#actionsPreassignment .initial-script{margin-left:47px}
+#actionsPreassignment .initial-callout{background:#fcf7fa;border-color:#f0e1ea}
+#actionsPreassignment .initial-choice{background:#fff}
+#actionsPreassignment .initial-choice:hover{border-color:#ed98c6;background:#fffafd}
+#actionsPreassignment .initial-footer{border-top:1px solid #f2eaf0;margin-top:17px;padding-top:17px}
+#actionsPreassignment .initial-footer .btn{border-radius:10px}
+@media(max-width:710px){#actionsPreassignment .initial-page-head{flex-direction:column;gap:10px}#actionsPreassignment .initial-page-head h2{font-size:27px}#actionsPreassignment .initial-case-strip{grid-template-columns:1fr 1fr}#actionsPreassignment .initial-case-strip>div:nth-child(2){border:0}#actionsPreassignment .initial-case-strip>div:nth-child(3){border-top:1px solid #f0e7ee;margin-top:12px;padding-top:13px}#actionsPreassignment .initial-case-strip>div:last-child{grid-column:auto;border-top:1px solid #f0e7ee;padding-top:13px;margin-top:12px}#actionsPreassignment .initial-card{padding:20px}#actionsPreassignment .initial-card>p{padding-left:0}#actionsPreassignment .initial-call-actions,#actionsPreassignment .initial-callout,#actionsPreassignment .initial-script{margin-left:0}}
+
+
+
 /* Pre-assignment workspace and DEKRA drawer */
 #actionsPreassignment[hidden],#preDekraOverlay[hidden]{display:none!important}
 .pre-wrap{max-width:930px;margin:8px auto 48px}
@@ -1171,6 +1209,26 @@ textarea.letters-field{min-height:85px;resize:vertical}
 body.pre-dekra-open{overflow:hidden}
 .pre-triage-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pre-triage-grid>div{padding:13px 15px;border:1px solid var(--line);border-radius:10px;background:#fdfafd}.pre-triage-grid span{display:block;color:var(--muted);font-size:11px;font-weight:700;margin-bottom:5px}.pre-triage-grid strong{font-size:15px}.overview-timeline-step[title]{cursor:help}.overview-timeline-step[title]:focus-visible{outline:2px solid var(--pink);outline-offset:3px}@media(max-width:520px){.pre-triage-grid{grid-template-columns:1fr}}
 @media(max-width:650px){.pre-facts{grid-template-columns:1fr 1fr}.pre-fact{border-bottom:1px solid var(--line)}.pre-fact:nth-child(3n){border-right:1px solid var(--line)}.pre-fact:nth-child(2n){border-right:0}.pre-head{flex-direction:column}.pre-dekra-overlay{padding:6px}.pre-dekra-scroll{padding:13px}}
+
+
+/* Pre-assignment stages use precisely the same design language as Initial Customer Call. */
+#actionsPreassignment .pre-wrap{max-width:930px;margin:4px auto 46px}
+#actionsPreassignment .initial-case-strip{grid-template-columns:repeat(4,minmax(0,1fr))}
+#actionsPreassignment .initial-card{background:#fff}
+#actionsPreassignment .pre-triage-grid{margin:15px 0 0 47px;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#actionsPreassignment .pre-triage-grid>div{background:#fcf9fb;border-color:#eee3eb;padding:14px 16px}
+#actionsPreassignment .pre-secondary-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:15px 0 19px 47px}
+#actionsPreassignment .pre-secondary-details>div{padding:13px 15px;border:1px solid #eee3eb;border-radius:10px;background:#fcf9fb;min-width:0}
+#actionsPreassignment .pre-secondary-details span,#actionsPreassignment .pre-triage-grid span{display:block;color:#948797;text-transform:uppercase;font-size:10px;font-weight:800;letter-spacing:.06em;margin-bottom:6px}
+#actionsPreassignment .pre-secondary-details strong,#actionsPreassignment .pre-triage-grid strong{font-size:14px;color:#322436;overflow-wrap:anywhere}
+#actionsPreassignment .pre-summary-label{font-size:13px;font-weight:800;color:#392b3c;margin:0 0 8px 47px}
+#actionsPreassignment .pre-description{margin-left:47px;padding:15px 17px;background:#fcf9fb;border:1px solid #eee3eb;border-radius:11px;color:#514554;white-space:pre-wrap}
+#actionsPreassignment .pre-dekra-actions{margin-left:47px}
+#actionsPreassignment .pre-bottom-note{padding-left:3px;margin-top:17px}
+#actionsPreassignment .initial-card>p{color:#857888;font-size:13px;line-height:1.65}
+#actionsPreassignment .initial-card[hidden],#actionsPreassignment .pre-triage-grid>div[hidden]{display:none!important}
+@media(max-width:750px){#actionsPreassignment .initial-case-strip{grid-template-columns:repeat(2,minmax(0,1fr));padding:8px}#actionsPreassignment .initial-case-strip>div:nth-child(2){border-right:0}#actionsPreassignment .initial-case-strip>div{padding:12px;border-bottom:1px solid #f0e7ee}#actionsPreassignment .initial-case-strip>div:nth-child(n+3){border-bottom:0}}
+@media(max-width:560px){#actionsPreassignment .initial-case-strip,#actionsPreassignment .pre-triage-grid,#actionsPreassignment .pre-secondary-details{grid-template-columns:1fr}#actionsPreassignment .initial-case-strip>div{border-right:0!important;border-bottom:1px solid #f0e7ee!important}#actionsPreassignment .initial-case-strip>div:last-child{border-bottom:0!important}#actionsPreassignment .pre-triage-grid,#actionsPreassignment .pre-secondary-details,#actionsPreassignment .pre-summary-label,#actionsPreassignment .pre-description,#actionsPreassignment .pre-dekra-actions{margin-left:0}#actionsPreassignment .initial-card>p{padding-left:0}}
 
 </style>
 </head>
@@ -1307,14 +1365,35 @@ body.pre-dekra-open{overflow:hidden}
   <div class="closure-check-dialog"><h3 id="closureCheckTitle">Post-Resolution check</h3><p id="closureCheckDescription"></p><label id="closureMoveClosedRow" class="closure-move-closed" hidden><input id="closureMoveClosed" type="checkbox"><span><strong>Move the complaint to Closed</strong><small>After saving, transition the Complaints Hub complaint to Complaint Closed.</small></span></label><div class="closure-check-actions"><button type="button" class="post-btn-secondary" id="closureCheckCancel">Cancel</button><button type="button" class="post-btn-secondary" id="closureCheckReview">Review Recovery</button><button type="button" class="btn" id="closureCheckContinue">Continue &amp; Save Closure</button></div></div>
 </div>
 <section id="actionsPreassignment" class="actions-page" aria-label="Pre-assignment complaint overview" hidden>
-  <div class="pre-wrap">
-    <header class="pre-head"><div><div class="eyebrow">COMPLAINT <span id="preReference">—</span></div><h2 id="preHeading">Complaint triage</h2><p>This complaint has not yet reached Assigned. The investigation workspaces will become available at the appropriate stage.</p></div><span class="pre-status" id="preStatus">—</span></header>
-    <div class="pre-facts"><div class="pre-fact"><span class="k">Customer</span><strong id="preCustomer">—</strong></div><div class="pre-fact"><span class="k">Complaint type</span><strong id="preType">—</strong></div><div class="pre-fact"><span class="k">Received</span><strong id="preReceived">—</strong></div><div class="pre-fact"><span class="k">Assigned to</span><strong id="preAssignee">—</strong></div><div class="pre-fact"><span class="k">Dealership</span><strong id="preDealer">—</strong></div><div class="pre-fact"><span class="k">Vehicle registration</span><strong id="preRegistration">—</strong></div></div>
-    <section class="pre-card" id="preTriageCard" hidden><h3>Triage details</h3><div class="pre-triage-grid"><div><span>Triage started</span><strong id="preTriageStarted">—</strong></div><div><span>Triage deadline</span><strong id="preTriageDeadline">—</strong></div><div id="preTriageOutcomeRow" hidden><span>Triage outcome</span><strong id="preTriageOutcome">—</strong></div></div></section>
-    <section class="pre-card"><h3>Complaint summary</h3><div class="pre-description" id="preIssue">No customer issue has been recorded yet.</div></section>
-    <section class="pre-card" id="preDekraCard" hidden><h3>DEKRA inspection</h3><p>You can prepare, generate and view a DEKRA inspection request before assignment. The full request form opens here without granting access to the other workspaces.</p><div class="pre-dekra-actions"><span id="preDekraState" class="pre-stage-note">Request status will be checked when opened.</span><button class="btn" type="button" id="preOpenDekra">Open DEKRA request</button></div></section>
-    <p class="pre-stage-note">Once the complaint moves to Assigned, the Initial Customer Call screen will be available. Other complaint actions remain restricted until then.</p>
+ <div class="initial-wrap pre-wrap">
+  <header class="initial-page-head">
+   <div><div class="initial-page-kicker">COMPLAINT <span id="preReference">—</span> <span class="initial-head-dot">·</span> <span id="preTypeHeader">Complaint</span></div><h2 id="preHeading">Complaint triage</h2><p id="preIntro">Review the key details while this complaint is awaiting assignment. Other complaint actions become available at the appropriate stage.</p></div>
+   <span class="initial-gate-chip"><span aria-hidden="true">●</span> <span id="preStatus">—</span></span>
+  </header>
+  <div class="initial-case-strip" aria-label="Current complaint details">
+   <div><span>Customer</span><strong id="preCustomer">—</strong></div>
+   <div><span>Assigned to</span><strong id="preAssignee">—</strong></div>
+   <div><span>Complaint type</span><strong id="preType">—</strong></div>
+   <div><span>Received</span><strong id="preReceived">—</strong></div>
   </div>
+  <div class="initial-flow-head" aria-label="Complaint workflow"><span class="initial-flow-active"><span class="initial-flow-number">1</span> <span id="preFlowCurrent">Triage</span></span><span class="initial-flow-arrow" aria-hidden="true">→</span><span class="initial-flow-upcoming"><span class="initial-flow-number">2</span> Assigned / initial call</span></div>
+  <section class="initial-card" id="preTriageCard" hidden>
+   <div class="initial-card-step"><span>01</span><h3>Triage details</h3></div>
+   <p>Key dates and the recorded outcome for this stage.</p>
+   <div class="pre-triage-grid"><div><span>Triage started</span><strong id="preTriageStarted">—</strong></div><div><span>Triage deadline</span><strong id="preTriageDeadline">—</strong></div><div id="preTriageOutcomeRow" hidden><span>Triage outcome</span><strong id="preTriageOutcome">—</strong></div></div>
+  </section>
+  <section class="initial-card pre-details-card">
+   <div class="initial-card-step"><span id="preDetailsStep">01</span><h3>Complaint overview</h3></div>
+   <div class="pre-secondary-details"><div><span>Dealership</span><strong id="preDealer">—</strong></div><div><span>Vehicle registration</span><strong id="preRegistration">—</strong></div></div>
+   <div class="pre-summary-label">Customer issue</div><div class="pre-description" id="preIssue">No customer issue has been recorded yet.</div>
+  </section>
+  <section class="initial-card" id="preDekraCard" hidden>
+   <div class="initial-card-step"><span id="preDekraStep">02</span><h3>DEKRA inspection</h3></div>
+   <p>Prepare, generate or review a DEKRA inspection request without accessing the other investigation workspaces.</p>
+   <div class="pre-dekra-actions"><span id="preDekraState" class="pre-stage-note">Request status will be checked when opened.</span><button class="btn" type="button" id="preOpenDekra">Open DEKRA request</button></div>
+  </section>
+  <p class="pre-stage-note pre-bottom-note" id="preBottomNote">The Initial Customer Call screen becomes available once the complaint reaches Assigned.</p>
+ </div>
 </section>
 <div id="preDekraOverlay" class="pre-dekra-overlay" role="dialog" aria-modal="true" aria-label="DEKRA inspection request" hidden>
   <div class="pre-dekra-dialog"><div class="pre-dekra-toolbar"><h3>DEKRA inspection request</h3><button type="button" class="btn-ghost" id="preCloseDekra">Close ✕</button></div><div id="preDekraContent" class="pre-dekra-scroll"></div></div>
@@ -4039,6 +4118,13 @@ function renderPreassignment(){
  set('preReference',p.issueKey);set('preStatus',p.statusName);set('preCustomer',p.customerName);set('preType',p.complaintType);set('preReceived',formatDisplayDate(p.receivedDate));set('preAssignee',p.assigneeName);set('preDealer',p.dealershipName);set('preRegistration',p.vehicleDetails?.registration);
  set('preIssue',o.customerIssueText||o.customerIssue||o.customerIssueDescription||o.issue||p.customerIssue||p.summary||'No customer issue has been recorded yet.');
  set('preHeading',String(p.statusName||'').toLowerCase()==='insufficient evidence'?'Insufficient Evidence':String(p.statusName||'').toLowerCase().includes('acknowledg')?'Acknowledgement Due':'Complaint Triage');
+ set('preTypeHeader',p.complaintType||'Complaint');
+ const stage=String(p.statusName||'').trim().toLowerCase();
+ set('preFlowCurrent',stage==='triage'?'Triage':stage==='insufficient evidence'?'Evidence gathering':'Acknowledgement');
+ set('preIntro',stage==='triage'?'Review the complaint and triage dates before it can move to the next stage.':stage==='insufficient evidence'?'Review the available information and request a DEKRA inspection where appropriate.':'Review the complaint details while the acknowledgement is due.');
+ set('preDetailsStep',stage==='triage'?'02':'01');
+ set('preDekraStep','02');
+ set('preBottomNote',stage==='triage'?'DEKRA and other investigation workspaces are unavailable while this complaint is in Triage.':'The Initial Customer Call screen becomes available once the complaint reaches Assigned.');
  const isTriage=String(p.statusName||'').trim().toLowerCase()==='triage';
  document.getElementById('preTriageCard').hidden=!isTriage;
  set('preTriageStarted',o.triageStartedDate?formatDisplayDate(o.triageStartedDate):'Not recorded');
