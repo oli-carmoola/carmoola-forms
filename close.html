@@ -1471,6 +1471,9 @@ body.actions-with-rail #actionsPreassignment .pre-wrap{width:100%}
       <div class="overview-section-head"><h3 id="overviewAttentionTitle">Needs attention</h3><span id="overviewAttentionCount"></span></div>
       <div class="overview-attention" id="overviewAttention"></div>
     </section>
+    <section class="overview-panel" id="overviewWithdrawnDatePanel" aria-label="Withdrawn date" hidden>
+      <div class="overview-panel-head"><h3>Withdrawn date</h3><span id="overviewWithdrawnDateValue"></span></div>
+    </section>
     <section class="overview-panel overview-timeline-panel" aria-labelledby="overviewTimelineTitle">
       <div class="overview-panel-head"><h3 id="overviewTimelineTitle">Complaint timeline</h3><span>KEY MILESTONES</span></div>
       <div class="overview-timeline" id="overviewTimeline" role="list" aria-label="Complaint milestones"></div>
@@ -4369,6 +4372,10 @@ function overviewRender(){
  $('#overviewAttentionCount').textContent=attention.length?attention.length+' item'+(attention.length===1?'':'s'):'';
  // Use recorded milestone fields only; do not infer dates from the current status.
  // Optional holding/FOS milestones appear only where a date or explicit sent flag exists.
+ var withdrawnDateValue=$('#overviewWithdrawnDateValue');
+ var withdrawnDatePanel=$('#overviewWithdrawnDatePanel');
+ withdrawnDatePanel.hidden=!plain(o.withdrawnDate);
+ withdrawnDateValue.textContent=plain(o.withdrawnDate)?formatDisplayDate(o.withdrawnDate):'';
  var steps=[
   {label:'Received',date:p.receivedDate,done:!!plain(p.receivedDate)},
   ...(plain(o.triageStartedDate)?[{label:'Triage started',date:o.triageStartedDate,done:true,outcome:o.triageOutcome}]:[]),
@@ -4401,6 +4408,7 @@ function overviewRender(){
  // Show Solaris solicitor instruction when its recorded escalation date exists.
  if(plain(p.solicitorEscalation&&p.solicitorEscalation.escalationDate))steps.push({label:'Solicitor escalation',date:p.solicitorEscalation.escalationDate,done:true});
  if(plain(o.resolvedDate))steps.push({label:'Resolved',date:o.resolvedDate,done:true});
+ if(plain(o.withdrawnDate))steps.push({label:'Complaint withdrawn',date:o.withdrawnDate,done:true});
  steps.push({label:'Closed',date:o.firstClosedDate,done:!!plain(o.firstClosedDate),fallback:p.statusName==='Complaint Closed'?'Closed':''});
  // Show dated milestones in strict chronological order. Undated milestones
  // remain near their natural workflow stage, not pushed to the end.
