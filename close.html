@@ -4653,8 +4653,8 @@ function overviewRender(){
     timeline._timelineLastTime=now;
     var distance=viewport.scrollWidth-viewport.clientWidth;
     if(!timeline._timelineUserControlled && !reducedMotion && distance>3 && viewport.getClientRects().length && !document.hidden){
-     // Approximately 160 px/sec, reversing at each end.
-     var position=viewport.scrollLeft,step=elapsed*0.16*timeline._timelineDirection;
+     // Approximately 32 px/sec, reversing at each end.
+     var position=viewport.scrollLeft,step=elapsed*0.032*timeline._timelineDirection;
      if(position+step>=distance){timeline._timelineDirection=-1;step=distance-position;}
      if(position+step<=0){timeline._timelineDirection=1;step=-position;}
      timeline._timelineAutoWriting=true;
