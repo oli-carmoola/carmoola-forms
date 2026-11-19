@@ -1238,6 +1238,32 @@ body.actions-with-rail #actionsPreassignment .initial-page-head{margin-top:4px}
 body.actions-with-rail #actionsPreassignment .pre-wrap{width:100%}
 #workspaceRail.rail-is-gated .rail-links .rail-link.is-active:not(:disabled){background:#ffffff1c;color:#fff;border-left:3px solid #ff55a9}
 @media(max-width:710px){#actionsPreassignment .pre-secondary-details,#actionsPreassignment .pre-triage-grid{margin-left:0}#actionsPreassignment .pre-summary-label,#actionsPreassignment .pre-description{margin-left:0}}
+
+/* Terminal complaints: a read-only end-state, with a controlled closure editor. */
+#actionsTerminal[hidden],#terminalClosureOverlay[hidden]{display:none!important}
+.terminal-wrap{max-width:1080px;margin:auto;padding:16px 0 50px}
+.terminal-head{background:linear-gradient(120deg,#271b31,#603350);color:white;border-radius:18px;padding:27px;margin-bottom:18px}
+.terminal-head .eyebrow{font-size:11px;letter-spacing:.11em;color:#f4bbd6;font-weight:800}
+.terminal-head h2{font-size:27px;margin:8px 0}.terminal-head p{margin:0;color:#f4dce8;font-size:13px}
+.terminal-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.terminal-summary>div{padding:16px;background:white;border:1px solid var(--line);border-radius:12px}
+.terminal-summary span{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.terminal-summary strong{font-size:14px}
+.terminal-timeline .overview-panel{margin-bottom:16px}
+.terminal-actions{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:18px}
+.terminal-actions p{font-size:13px;color:var(--muted);margin:5px 0 0}
+.terminal-actions button{border:0;border-radius:10px;padding:11px 15px;background:var(--pink);color:white;font:700 13px 'DM Sans',sans-serif;cursor:pointer}
+.terminal-actions button:hover{background:var(--pink-dark)}
+#terminalClosureOverlay{position:fixed;inset:0;background:rgba(25,15,30,.65);z-index:55;display:flex;align-items:center;justify-content:center;padding:18px}
+.terminal-closure-dialog{background:white;width:min(1100px,100%);height:min(94vh,1050px);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 70px #0004}
+.terminal-closure-head{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:15px 20px;flex:none}
+.terminal-closure-head h3{margin:0;font-size:17px}.terminal-closure-head button{border:1px solid var(--line-strong);border-radius:9px;background:white;padding:9px 13px;cursor:pointer}
+.terminal-closure-body{overflow:auto;flex:1;padding:20px 25px}
+.terminal-closure-body #closureShell{display:block!important}
+.terminal-closure-dialog #footer{position:static;display:block!important;box-shadow:none;border-top:1px solid var(--line)}
+.terminal-closure-dialog #manageBtn{display:none!important}
+body.terminal-modal-open{overflow:hidden}
+body.terminal-complaint #workspaceRail [data-rail]{pointer-events:none}
+@media(max-width:680px){.terminal-summary{grid-template-columns:1fr}.terminal-actions{align-items:flex-start;flex-direction:column}.terminal-wrap{padding:8px}.terminal-closure-body{padding:10px}.terminal-closure-dialog .footer-inner{flex-wrap:wrap}}
 </style>
 </head>
 <body>
@@ -1372,6 +1398,19 @@ body.actions-with-rail #actionsPreassignment .pre-wrap{width:100%}
 </div>
 <div class="closure-check-overlay" id="closureCheckModal" hidden role="dialog" aria-modal="true" aria-labelledby="closureCheckTitle">
   <div class="closure-check-dialog"><h3 id="closureCheckTitle">Post-Resolution check</h3><p id="closureCheckDescription"></p><label id="closureMoveClosedRow" class="closure-move-closed" hidden><input id="closureMoveClosed" type="checkbox"><span><strong>Move the complaint to Closed</strong><small>After saving, transition the Complaints Hub complaint to Complaint Closed.</small></span></label><div class="closure-check-actions"><button type="button" class="post-btn-secondary" id="closureCheckCancel">Cancel</button><button type="button" class="post-btn-secondary" id="closureCheckReview">Review Recovery</button><button type="button" class="btn" id="closureCheckContinue">Continue &amp; Save Closure</button></div></div>
+</div>
+
+<section id="actionsTerminal" class="actions-page" aria-label="Completed complaint" hidden>
+ <div class="terminal-wrap">
+  <header class="terminal-head"><div class="eyebrow">COMPLAINT <span id="terminalReference">—</span> · FINAL STATUS</div><h2 id="terminalHeading">Complaint closed</h2><p id="terminalDescription">This complaint has ended. Other complaint actions are no longer available.</p></header>
+  <div class="terminal-summary"><div><span>Customer</span><strong id="terminalCustomer">—</strong></div><div><span>Assigned to</span><strong id="terminalAssignee">—</strong></div><div><span id="terminalDateLabel">Closed date</span><strong id="terminalDate">—</strong></div></div>
+  <section class="overview-panel" id="terminalMilestonesPanel"><div class="overview-panel-head"><h3>Triage &amp; outcome records</h3><span>RECORDED IN JIRA</span></div><div class="terminal-summary" id="terminalMilestones" style="padding:12px;margin:0;grid-template-columns:repeat(3,minmax(0,1fr))"></div></section>
+  <div class="terminal-timeline" id="terminalTimeline" aria-label="Complaint timeline"></div>
+  <div class="terminal-actions" id="terminalClosedActions" hidden><div><strong>Closure details</strong><p>The complaint remains closed. You can review and edit the closure form without reopening other workspaces.</p></div><button id="terminalEditClosure" type="button">Edit closure form</button></div>
+ </div>
+</section>
+<div id="terminalClosureOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="terminalClosureTitle">
+ <div class="terminal-closure-dialog"><div class="terminal-closure-head"><h3 id="terminalClosureTitle">Edit closure form</h3><button type="button" id="terminalCloseClosure">Close ✕</button></div><div class="terminal-closure-body" id="terminalClosureBody"></div><div id="terminalClosureFooter"></div></div>
 </div>
 <section id="actionsPreassignment" class="actions-page" aria-label="Pre-assignment complaint overview" hidden>
  <div class="initial-wrap pre-wrap">
@@ -3532,7 +3571,7 @@ function refreshClosureRecoverySummary(p){
 }
 function openClosureRecoveryModal(){
   var page=$('#actionsPost'),slot=$('#closureRecoveryModalBody');
-  if(closureRecoveryModalOpen)return;
+  if(closureRecoveryModalOpen||isTerminalStatus(PREFILL.statusName))return;
   closurePostOriginalParent=page.parentNode;closurePostOriginalNext=page.nextSibling;
   slot.appendChild(page);page.classList.add('active');closureRecoveryModalOpen=true;
   $('#closureRecoveryModal').hidden=false;document.body.style.overflow='hidden';
@@ -3572,8 +3611,9 @@ function initSubmit(){
       var d=await r.json();
       if(!d.ok){showErrors(d.errors||['Something went wrong saving. Please try again.']);return;}
       runningCostsInitial=runningRowsKey(runningCostsRows);runningCostsDirty=false;
-      if(d.statusName==='Complaint Closed'){PREFILL.statusName='Complaint Closed';$('#homeStatus').textContent='Complaint Closed';}
-      gotoActionsPage('home');showActionsSaveToast(d.statusName==='Complaint Closed'?'Closure details saved and complaint moved to Closed.':'Closure details updated successfully.');
+      if(d.statusName==='Complaint Closed'){PREFILL.statusName='Complaint Closed';PREFILL.alreadyClosed=true;$('#homeStatus').textContent='Complaint Closed';}
+      if(terminalClosureOpen)window.closeTerminalClosure();
+      gotoActionsPage(isTerminalStatus(PREFILL.statusName)?'terminal':'home');showActionsSaveToast(d.statusName==='Complaint Closed'?'Closure details saved and complaint moved to Closed.':'Closure details updated successfully.');
     }catch(e){showErrors(['Network error saving. Please try again.']);}
     finally{saveBtn.disabled=false;saveBtn.textContent='Save Closure Details';}
   }
@@ -4162,7 +4202,7 @@ function initPreassignment(){
 }
 
 function hubUpdateRail(page){
- var rail=$('#workspaceRail'),preGate=isPreassignmentStatus(PREFILL.statusName),shown=true,initialGate=PREFILL.statusName==='Assigned';
+ var rail=$('#workspaceRail'),preGate=isPreassignmentStatus(PREFILL.statusName),shown=true,initialGate=PREFILL.statusName==='Assigned',terminalGate=isTerminalStatus(PREFILL.statusName);
  rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
  if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=initialGate?'Initial call required':(PREFILL.statusName||'Complaints Hub');}
  updateClosedVehicleControls();
@@ -4173,10 +4213,10 @@ function hubUpdateRail(page){
  var initialLink=$('#railInitialCall');initialLink.hidden=!initialGate;
  var preLink=$('#railPreassignment');preLink.hidden=!preGate;
  if(preGate)$('#railPreassignmentLabel').textContent=PREFILL.statusName||'Complaint Triage';
- rail.classList.toggle('rail-is-gated',initialGate||preGate);
+ rail.classList.toggle('rail-is-gated',initialGate||preGate||terminalGate);
  document.querySelectorAll('[data-rail]').forEach(function(b){
   var target=b.dataset.rail;
-  var allowed=preGate?target==='preassignment':initialGate?target==='initial':(target!=='preassignment'&&target!=='initial'&&(target==='home'||target==='post'&&canOpenPostResolution(PREFILL.statusName)||target==='review'&&PREFILL.fosApplicable||target==='solicitor'&&solarisCanAccess()||!['post','review','solicitor'].includes(target)));
+  var allowed=terminalGate?false:preGate?target==='preassignment':initialGate?target==='initial':(target!=='preassignment'&&target!=='initial'&&(target==='home'||target==='post'&&canOpenPostResolution(PREFILL.statusName)||target==='review'&&PREFILL.fosApplicable||target==='solicitor'&&solarisCanAccess()||!['post','review','solicitor'].includes(target)));
   b.disabled=!allowed;b.classList.toggle('is-active',target===page);b.setAttribute('aria-current',target===page?'page':'false');
  });
  rail.classList.remove('rail-open');
@@ -4190,7 +4230,9 @@ function hubOpenDealModal(){
  var first=started?$('#deManageAmount'):$('#deType');if(first&&!first.closest('[hidden]'))first.focus();
 }
 function hubCloseDealModal(){ $('#deModal').hidden=true;$('#deOpenModal').focus(); }
+function isTerminalStatus(status){return ['complaint closed','complaint withdrawn'].includes(String(status||'').trim().toLowerCase());}
 function gotoActionsPage(page){
+  if(isTerminalStatus(PREFILL.statusName)&&page!=='terminal')return;
   if(page!=='rejection'&&ACTION_PAGE==='rejection'&&homeRejectionDirect){closeRejSides();rejWork=null;homeRejectionDirect=false;setRejectionPageMode(false);}
   if(closureRecoveryModalOpen)closeClosureRecoveryModal();
   if(page==='home')prOpeningStarted=false;
@@ -4212,12 +4254,16 @@ function gotoActionsPage(page){
   document.body.classList.toggle('actions-on-home',false);
   document.body.classList.toggle('actions-overview',page==='home');
   document.body.classList.toggle('actions-in-workspace',page!=='home');
-  $('#globalHomeBtn').hidden=page==='home'||page==='preassignment'||page==='initial';
+  $('#globalHomeBtn').hidden=page==='home'||page==='preassignment'||page==='initial'||page==='terminal';
   $('#actionsPreassignment').hidden=page!=='preassignment';
   $('#actionsPreassignment').classList.toggle('active',page==='preassignment');
   $('#actionsInitial').hidden=page!=='initial';
   $('#actionsInitial').classList.toggle('active',page==='initial');
   $('#actionsHome').classList.toggle('active',page==='home');
+  $('#actionsTerminal').hidden=page!=='terminal';
+  $('#actionsTerminal').classList.toggle('active',page==='terminal');
+  document.body.classList.toggle('terminal-complaint',page==='terminal');
+  if(page==='terminal')requestAnimationFrame(terminalRender);
   $('#actionsRunning').classList.toggle('active',page==='running');
   $('#actionsSuspense').hidden=page!=='suspense';
   $('#actionsSuspense').classList.toggle('active',page==='suspense');
@@ -4243,8 +4289,8 @@ function gotoActionsPage(page){
   $('#reviewShell').classList.toggle('active',page==='review');
   $('#reviewViewSwitch').hidden=true;
   $('#actionsNav').hidden=true;
-  $('#actionsCurrent').textContent={'preassignment':'/ Triage','closure':'/ Complaint Closure','running':'/ Running Costs','suspense':'/ Suspense Payments','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position','initialdealer':'/ Initial Dealership Email','dekra':'/ DEKRA Inspection Request','rootcause':'/ Root Cause Analysis','updates':'/ Automated Customer Updates'}[page]||'';
-  $('#footer').hidden=page!=='closure';
+  $('#actionsCurrent').textContent={'terminal':'/ Complaint ended','preassignment':'/ Triage','closure':'/ Complaint Closure','running':'/ Running Costs','suspense':'/ Suspense Payments','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position','initialdealer':'/ Initial Dealership Email','dekra':'/ DEKRA Inspection Request','rootcause':'/ Root Cause Analysis','updates':'/ Automated Customer Updates'}[page]||'';
+  $('#footer').hidden=page!=='closure'&&!terminalClosureOpen;
   $('#manageBtn').style.display=page==='closure'?'':'none';
   $('#closedBanner').style.display=(page==='closure'&&PREFILL.alreadyClosed&&$('#unlockBtn').dataset.unlocked!=='1')?'block':'none';
   $('#formTitle').textContent='Complaint Actions';
@@ -4563,6 +4609,49 @@ function suspenseRenderWorkspace(){
  target.replaceChildren(clone);
 }
 
+
+var terminalClosureOpen=false;
+function terminalRender(){
+ var p=PREFILL||{},o=p.overview||{},closed=String(p.statusName||'').toLowerCase()==='complaint closed';
+ $('#terminalReference').textContent=p.issueKey||'—';
+ $('#terminalHeading').textContent=closed?'Complaint closed':'Complaint withdrawn';
+ $('#terminalDescription').textContent=closed?'This complaint is closed. The investigation workspaces are locked, but closure details can still be updated.':'This complaint has been withdrawn. Its workspaces are read-only and no further actions are available here.';
+ $('#terminalCustomer').textContent=p.customerName||'Not recorded';$('#terminalAssignee').textContent=p.assigneeName||'Not recorded';
+ $('#terminalDateLabel').textContent=closed?'First closed date':'Withdrawn date';
+ $('#terminalDate').textContent=formatDisplayDate(closed?o.firstClosedDate:o.withdrawnDate)||'Not recorded';
+ var records=[['Triage started',o.triageStartedDate,true],['Triage deadline',o.triageDeadline,true],['Triage outcome',o.triageOutcome,false],['Triage breach',((o.breaches||[]).find(function(b){return b.label==='Triage';})||{}).status,false],['Triage breach date',((o.breaches||[]).find(function(b){return b.label==='Triage';})||{}).date,true],['Re-triage evidence received',o.reTriageEvidenceReceivedDate,true],['Re-triage completed',o.reTriageCompletedDate,true],['Re-triage outcome',o.reTriageOutcome,false],['Withdrawn date',o.withdrawnDate,true]];
+ var grid=$('#terminalMilestones');grid.replaceChildren();
+ records.forEach(function(row){if(!String(row[1]??'').trim())return;var card=document.createElement('div'),label=document.createElement('span'),value=document.createElement('strong');label.textContent=row[0];value.textContent=row[2]?formatDisplayDate(row[1]):String(row[1]);card.append(label,value);grid.appendChild(card);});
+ $('#terminalMilestonesPanel').hidden=!grid.children.length;
+ $('#terminalClosedActions').hidden=!closed;
+ // Move the real live timeline to this read-only screen so all existing
+ // milestone labels, outcome tooltips, and connector rendering are preserved.
+ var panel=window._terminalTimelinePanel||document.querySelector('#actionsHome .overview-timeline-panel');
+ var holder=$('#terminalTimeline');
+ if(panel){window._terminalTimelinePanel=panel;if(panel.parentNode!==holder)holder.appendChild(panel);}
+ overviewRender();
+ // The first render can happen before the terminal page becomes visible.
+ requestAnimationFrame(function(){window.dispatchEvent(new Event('resize'));});
+}
+function initTerminalComplaint(){
+ var shell=$('#closureShell'),footer=$('#footer'),banner=$('#closedBanner'),errors=$('#errbox');
+ var bannerParent=banner.parentNode,bannerAfter=banner.nextSibling,errorsParent=errors.parentNode,errorsAfter=errors.nextSibling;
+ var shellParent=shell.parentNode,shellAfter=shell.nextSibling;
+ var footerParent=footer.parentNode,footerAfter=footer.nextSibling;
+ function close(){if(!terminalClosureOpen)return;terminalClosureOpen=false;$('#terminalClosureOverlay').hidden=true;document.body.classList.remove('terminal-modal-open');shellParent.insertBefore(shell,shellAfter);footerParent.insertBefore(footer,footerAfter);bannerParent.insertBefore(banner,bannerAfter);errorsParent.insertBefore(errors,errorsAfter);shell.style.display='none';footer.hidden=true;}
+ $('#terminalEditClosure').addEventListener('click',function(){
+  if(String(PREFILL.statusName||'')!=='Complaint Closed')return;
+  terminalClosureOpen=true;$('#terminalClosureBody').append(banner,errors,shell);$('#terminalClosureFooter').appendChild(footer);
+  shell.style.display='block';footer.hidden=false;$('#closedBanner').style.display='block';
+  document.body.classList.add('terminal-modal-open');$('#terminalClosureOverlay').hidden=false;
+  $('#terminalClosureBody').scrollTop=0;
+ });
+ $('#terminalCloseClosure').addEventListener('click',close);
+ $('#terminalClosureOverlay').addEventListener('click',function(e){if(e.target===this)close();});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&terminalClosureOpen&&$('#closureCheckModal').hidden)close();});
+ window.closeTerminalClosure=close;
+}
+
 function initActionsHome(){
  rcaInit();
   var p=PREFILL;
@@ -4614,7 +4703,8 @@ function initActionsHome(){
   $('#overviewRecoveryLink').addEventListener('click',function(){gotoActionsPage('post');});
   $('#overviewSolicitorLink').addEventListener('click',function(){gotoActionsPage('solicitor');});
   overviewRender();
-  gotoActionsPage(isPreassignmentStatus(p.statusName)?'preassignment':p.statusName==='Assigned'?'initial':'home');
+  initTerminalComplaint();
+  gotoActionsPage(isTerminalStatus(p.statusName)?'terminal':isPreassignmentStatus(p.statusName)?'preassignment':p.statusName==='Assigned'?'initial':'home');
 }
 
 
@@ -5280,9 +5370,9 @@ const ACTION_DEEP_LINK_PAGES=new Set([
   'letters','rootcause','updates'
 ]);
 function openRequestedActionsPage(){
-  const defaultPage=isPreassignmentStatus(PREFILL.statusName)?'preassignment':PREFILL.statusName==='Assigned'?'initial':'home';
+  const defaultPage=isTerminalStatus(PREFILL.statusName)?'terminal':isPreassignmentStatus(PREFILL.statusName)?'preassignment':PREFILL.statusName==='Assigned'?'initial':'home';
   const requested=(new URLSearchParams(window.location.search).get('page')||'').trim().toLowerCase();
-  if(!requested||requested===defaultPage||isPreassignmentStatus(PREFILL.statusName))return;
+  if(!requested||requested===defaultPage||isPreassignmentStatus(PREFILL.statusName)||isTerminalStatus(PREFILL.statusName))return;
   // Initial contact is a mandatory Assigned-stage action, not a shortcut at other stages.
   if(!ACTION_DEEP_LINK_PAGES.has(requested)||(requested==='initial'&&PREFILL.statusName!=='Assigned'))return;
   // Reuse the exact button handler because rejection has additional calculator setup.
