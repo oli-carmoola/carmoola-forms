@@ -4457,6 +4457,20 @@ function overviewRender(){
  if(plain(o.resolvedDate))steps.push({label:'Resolved',date:o.resolvedDate,done:true});
  if(plain(o.withdrawnDate))steps.push({label:'Complaint withdrawn',date:o.withdrawnDate,done:true});
  steps.push({label:'Closed',date:o.firstClosedDate,done:!!plain(o.firstClosedDate),fallback:p.statusName==='Complaint Closed'?'Closed':''});
+ // A withdrawn complaint has a terminal withdrawal path, not a pending
+ // investigation/final-response/closure path. Only show steps actually recorded
+ // before withdrawal, and never imply that it proceeded to Complaint Closed.
+ var isWithdrawnTimeline=String(p.statusName||'').trim().toLowerCase()==='complaint withdrawn';
+ if(isWithdrawnTimeline){
+  var withdrawnAt=plain(o.withdrawnDate).slice(0,10);
+  steps=steps.filter(function(step){
+   if(step.label==='Closed'||step.label==='Complaint withdrawn')return false;
+   if(!step.done)return false;
+   var recorded=plain(step.date).slice(0,10);
+   return !withdrawnAt||!recorded||recorded<=withdrawnAt;
+  });
+  steps.push({label:'Complaint withdrawn',date:o.withdrawnDate,done:true,fallback:'Withdrawn'});
+ }
  // Show dated milestones in strict chronological order. Undated milestones
  // remain near their natural workflow stage, not pushed to the end.
  // Inserting undated steps never changes the order of the dated ones.
@@ -4485,6 +4499,12 @@ function overviewRender(){
   datedSteps.splice(position,0,step);
  });
  steps=datedSteps;
+ // Keep withdrawal as the final milestone even where several events share
+ // the same calendar date.
+ if(isWithdrawnTimeline){
+  steps=steps.filter(function(step){return step.label!=='Complaint withdrawn';});
+  steps.push({label:'Complaint withdrawn',date:o.withdrawnDate,done:true,fallback:'Withdrawn'});
+ }
  var timeline=$('#overviewTimeline');timeline.replaceChildren();
  steps.forEach(function(step){
   var el=document.createElement('div');el.className='overview-timeline-step '+(step.done?'is-complete':'is-pending');el.setAttribute('role','listitem');
