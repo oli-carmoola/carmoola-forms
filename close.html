@@ -1143,6 +1143,35 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .overview-tickets-notice{font-size:11px;color:#857788;padding-top:9px}
 @media(max-width:780px){.overview-tickets-panel{max-width:100%}.overview-ticket-table{min-width:570px}}
 
+
+/* Pre-assignment workspace and DEKRA drawer */
+#actionsPreassignment[hidden],#preDekraOverlay[hidden]{display:none!important}
+.pre-wrap{max-width:930px;margin:8px auto 48px}
+.pre-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin-bottom:22px}
+.pre-head .eyebrow{font-size:11px;font-weight:800;color:var(--pink-dark);letter-spacing:.09em;text-transform:uppercase}
+.pre-head h2{font-size:31px;letter-spacing:-.04em;margin:8px 0}
+.pre-head p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.6}
+.pre-status{border:1px solid #f1cee0;background:#fff2f9;color:#a11062;border-radius:999px;padding:9px 13px;font-size:12px;font-weight:800;white-space:nowrap}
+.pre-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:18px;box-shadow:var(--shadow)}
+.pre-fact{padding:17px 19px;border-right:1px solid var(--line)}.pre-fact:nth-child(3n){border-right:0}
+.pre-fact .k{display:block;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
+.pre-fact strong{font-size:14px;overflow-wrap:anywhere}
+.pre-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:22px 25px;margin-bottom:15px;box-shadow:var(--shadow)}
+.pre-card h3{font-size:17px;margin:0 0 8px}.pre-card p{font-size:13px;color:var(--muted);line-height:1.65;margin:0}
+.pre-description{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;font-size:13.5px}
+.pre-dekra-actions{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:17px}
+.pre-dekra-actions .btn{font-size:13.5px}
+.pre-stage-note{color:var(--muted);font-size:12.5px;margin-top:14px}
+.pre-dekra-overlay{position:fixed;inset:0;background:#1a1523a8;z-index:150;display:flex;align-items:center;justify-content:center;padding:20px}
+.pre-dekra-dialog{background:#fff;border-radius:17px;width:min(1060px,100%);max-height:94vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 22px 65px #0004}
+.pre-dekra-toolbar{padding:16px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.pre-dekra-toolbar h3{margin:0;font-size:17px}.pre-dekra-scroll{overflow:auto;padding:20px 23px;min-height:0}
+#preDekraContent #actionsDekra{display:block!important;width:100%;max-width:100%;margin:0}
+#preDekraContent #actionsDekra .dekra-head{margin-top:0}
+body.pre-dekra-open{overflow:hidden}
+.pre-triage-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pre-triage-grid>div{padding:13px 15px;border:1px solid var(--line);border-radius:10px;background:#fdfafd}.pre-triage-grid span{display:block;color:var(--muted);font-size:11px;font-weight:700;margin-bottom:5px}.pre-triage-grid strong{font-size:15px}.overview-timeline-step[title]{cursor:help}.overview-timeline-step[title]:focus-visible{outline:2px solid var(--pink);outline-offset:3px}@media(max-width:520px){.pre-triage-grid{grid-template-columns:1fr}}
+@media(max-width:650px){.pre-facts{grid-template-columns:1fr 1fr}.pre-fact{border-bottom:1px solid var(--line)}.pre-fact:nth-child(3n){border-right:1px solid var(--line)}.pre-fact:nth-child(2n){border-right:0}.pre-head{flex-direction:column}.pre-dekra-overlay{padding:6px}.pre-dekra-scroll{padding:13px}}
+
 </style>
 </head>
 <body>
@@ -1276,6 +1305,19 @@ textarea.letters-field{min-height:85px;resize:vertical}
 </div>
 <div class="closure-check-overlay" id="closureCheckModal" hidden role="dialog" aria-modal="true" aria-labelledby="closureCheckTitle">
   <div class="closure-check-dialog"><h3 id="closureCheckTitle">Post-Resolution check</h3><p id="closureCheckDescription"></p><label id="closureMoveClosedRow" class="closure-move-closed" hidden><input id="closureMoveClosed" type="checkbox"><span><strong>Move the complaint to Closed</strong><small>After saving, transition the Complaints Hub complaint to Complaint Closed.</small></span></label><div class="closure-check-actions"><button type="button" class="post-btn-secondary" id="closureCheckCancel">Cancel</button><button type="button" class="post-btn-secondary" id="closureCheckReview">Review Recovery</button><button type="button" class="btn" id="closureCheckContinue">Continue &amp; Save Closure</button></div></div>
+</div>
+<section id="actionsPreassignment" class="actions-page" aria-label="Pre-assignment complaint overview" hidden>
+  <div class="pre-wrap">
+    <header class="pre-head"><div><div class="eyebrow">COMPLAINT <span id="preReference">—</span></div><h2 id="preHeading">Complaint triage</h2><p>This complaint has not yet reached Assigned. The investigation workspaces will become available at the appropriate stage.</p></div><span class="pre-status" id="preStatus">—</span></header>
+    <div class="pre-facts"><div class="pre-fact"><span class="k">Customer</span><strong id="preCustomer">—</strong></div><div class="pre-fact"><span class="k">Complaint type</span><strong id="preType">—</strong></div><div class="pre-fact"><span class="k">Received</span><strong id="preReceived">—</strong></div><div class="pre-fact"><span class="k">Assigned to</span><strong id="preAssignee">—</strong></div><div class="pre-fact"><span class="k">Dealership</span><strong id="preDealer">—</strong></div><div class="pre-fact"><span class="k">Vehicle registration</span><strong id="preRegistration">—</strong></div></div>
+    <section class="pre-card" id="preTriageCard" hidden><h3>Triage details</h3><div class="pre-triage-grid"><div><span>Triage started</span><strong id="preTriageStarted">—</strong></div><div><span>Triage deadline</span><strong id="preTriageDeadline">—</strong></div><div id="preTriageOutcomeRow" hidden><span>Triage outcome</span><strong id="preTriageOutcome">—</strong></div></div></section>
+    <section class="pre-card"><h3>Complaint summary</h3><div class="pre-description" id="preIssue">No customer issue has been recorded yet.</div></section>
+    <section class="pre-card" id="preDekraCard" hidden><h3>DEKRA inspection</h3><p>You can prepare, generate and view a DEKRA inspection request before assignment. The full request form opens here without granting access to the other workspaces.</p><div class="pre-dekra-actions"><span id="preDekraState" class="pre-stage-note">Request status will be checked when opened.</span><button class="btn" type="button" id="preOpenDekra">Open DEKRA request</button></div></section>
+    <p class="pre-stage-note">Once the complaint moves to Assigned, the Initial Customer Call screen will be available. Other complaint actions remain restricted until then.</p>
+  </div>
+</section>
+<div id="preDekraOverlay" class="pre-dekra-overlay" role="dialog" aria-modal="true" aria-label="DEKRA inspection request" hidden>
+  <div class="pre-dekra-dialog"><div class="pre-dekra-toolbar"><h3>DEKRA inspection request</h3><button type="button" class="btn-ghost" id="preCloseDekra">Close ✕</button></div><div id="preDekraContent" class="pre-dekra-scroll"></div></div>
 </div>
 <section id="actionsInitial" class="actions-page" aria-label="Initial Customer Call" hidden>
  <div class="initial-wrap">
@@ -3987,8 +4029,42 @@ function updateClosedVehicleControls(){
    if(copyHead)copyHead.textContent='Previously saved DEKRA request (read-only). You can copy the original details.';
  }
 }
+
+// The three pre-assignment workflow statuses deliberately share one limited workspace.
+const PREASSIGNMENT_STATUSES=new Set(['acknowledgement due','acknowledgment due','triage','insufficient evidence']);
+function isPreassignmentStatus(status){return PREASSIGNMENT_STATUSES.has(String(status||'').trim().toLowerCase());}
+function renderPreassignment(){
+ const p=PREFILL||{},o=p.overview||{};
+ const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value===null||value===undefined||String(value).trim()===''?'Not recorded':String(value);};
+ set('preReference',p.issueKey);set('preStatus',p.statusName);set('preCustomer',p.customerName);set('preType',p.complaintType);set('preReceived',formatDisplayDate(p.receivedDate));set('preAssignee',p.assigneeName);set('preDealer',p.dealershipName);set('preRegistration',p.vehicleDetails?.registration);
+ set('preIssue',o.customerIssueText||o.customerIssue||o.customerIssueDescription||o.issue||p.customerIssue||p.summary||'No customer issue has been recorded yet.');
+ set('preHeading',String(p.statusName||'').toLowerCase()==='insufficient evidence'?'Insufficient Evidence':String(p.statusName||'').toLowerCase().includes('acknowledg')?'Acknowledgement Due':'Complaint Triage');
+ const isTriage=String(p.statusName||'').trim().toLowerCase()==='triage';
+ document.getElementById('preTriageCard').hidden=!isTriage;
+ set('preTriageStarted',o.triageStartedDate?formatDisplayDate(o.triageStartedDate):'Not recorded');
+ set('preTriageDeadline',o.triageDeadline?formatDisplayDate(o.triageDeadline):'Not recorded');
+ const outcome=String(o.triageOutcome||'').trim();document.getElementById('preTriageOutcomeRow').hidden=!outcome;if(outcome)set('preTriageOutcome',outcome);
+ const vehicle=String(p.complaintType||'').trim().toLowerCase()==='vehicle issues';
+ document.getElementById('preDekraCard').hidden=!vehicle||isTriage;
+ set('preDekraState',o.dekraReceivedDate?'DEKRA report received':o.dekraRequestedDate?'DEKRA request recorded':'DEKRA request not yet recorded');
+}
+function initPreassignment(){
+ document.getElementById('preOpenDekra').addEventListener('click',()=>{
+  if(!isPreassignmentStatus(PREFILL?.statusName)||String(PREFILL?.statusName||'').trim().toLowerCase()==='triage'||String(PREFILL?.complaintType||'').trim().toLowerCase()!=='vehicle issues')return;
+  const content=document.getElementById('preDekraContent');const dekra=document.getElementById('actionsDekra');
+  if(dekra.parentElement!==content)content.appendChild(dekra);
+  dekra.hidden=false;dekra.classList.add('active');
+  document.getElementById('preDekraOverlay').hidden=false;document.body.classList.add('pre-dekra-open');
+  document.getElementById('preCloseDekra').focus();
+ });
+ const close=()=>{document.getElementById('preDekraOverlay').hidden=true;document.body.classList.remove('pre-dekra-open');document.getElementById('preOpenDekra').focus();};
+ document.getElementById('preCloseDekra').addEventListener('click',close);
+ document.getElementById('preDekraOverlay').addEventListener('click',e=>{if(e.target.id==='preDekraOverlay')close();});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('preDekraOverlay').hidden)close();});
+}
+
 function hubUpdateRail(page){
- var rail=$('#workspaceRail'),shown=true,initialGate=PREFILL.statusName==='Assigned';
+ var rail=$('#workspaceRail'),shown=!isPreassignmentStatus(PREFILL.statusName),initialGate=PREFILL.statusName==='Assigned';
  rail.hidden=!shown;$('#railMobileToggle').hidden=!shown;document.body.classList.toggle('actions-with-rail',shown);
  if(shown){$('#railCaseRef').textContent=PREFILL.issueKey||'Complaint';$('#railCustomer').textContent=PREFILL.customerName||'';$('#railStatus').textContent=initialGate?'Initial call required':(PREFILL.statusName||'Complaints Hub');}
  updateClosedVehicleControls();
@@ -4018,6 +4094,7 @@ function gotoActionsPage(page){
   if(page!=='rejection'&&ACTION_PAGE==='rejection'&&homeRejectionDirect){closeRejSides();rejWork=null;homeRejectionDirect=false;setRejectionPageMode(false);}
   if(closureRecoveryModalOpen)closeClosureRecoveryModal();
   if(page==='home')prOpeningStarted=false;
+  if(isPreassignmentStatus(PREFILL.statusName)&&page!=='preassignment')return;
   if(PREFILL.statusName==='Assigned'&&page!=='initial')return;
   if(page==='post'&&!canOpenPostResolution(PREFILL.statusName))return;
   if(page==='review'&&!PREFILL.fosApplicable)return;
@@ -4035,7 +4112,9 @@ function gotoActionsPage(page){
   document.body.classList.toggle('actions-on-home',false);
   document.body.classList.toggle('actions-overview',page==='home');
   document.body.classList.toggle('actions-in-workspace',page!=='home');
-  $('#globalHomeBtn').hidden=page==='home';
+  $('#globalHomeBtn').hidden=page==='home'||page==='preassignment'||page==='initial';
+  $('#actionsPreassignment').hidden=page!=='preassignment';
+  $('#actionsPreassignment').classList.toggle('active',page==='preassignment');
   $('#actionsInitial').hidden=page!=='initial';
   $('#actionsInitial').classList.toggle('active',page==='initial');
   $('#actionsHome').classList.toggle('active',page==='home');
@@ -4064,7 +4143,7 @@ function gotoActionsPage(page){
   $('#reviewShell').classList.toggle('active',page==='review');
   $('#reviewViewSwitch').hidden=true;
   $('#actionsNav').hidden=true;
-  $('#actionsCurrent').textContent={'closure':'/ Complaint Closure','running':'/ Running Costs','suspense':'/ Suspense Payments','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position','initialdealer':'/ Initial Dealership Email','dekra':'/ DEKRA Inspection Request','rootcause':'/ Root Cause Analysis','updates':'/ Automated Customer Updates'}[page]||'';
+  $('#actionsCurrent').textContent={'preassignment':'/ Triage','closure':'/ Complaint Closure','running':'/ Running Costs','suspense':'/ Suspense Payments','review':'/ Financial Ombudsman','post':'/ Post-Resolution','rejection':'/ Vehicle Rejection Loss','solicitor':'/ Solicitor Escalation','letters':'/ Letters & Responses','dealer':'/ Dealership Position','initialdealer':'/ Initial Dealership Email','dekra':'/ DEKRA Inspection Request','rootcause':'/ Root Cause Analysis','updates':'/ Automated Customer Updates'}[page]||'';
   $('#footer').hidden=page!=='closure';
   $('#manageBtn').style.display=page==='closure'?'':'none';
   $('#closedBanner').style.display=(page==='closure'&&PREFILL.alreadyClosed&&$('#unlockBtn').dataset.unlocked!=='1')?'block':'none';
@@ -4195,7 +4274,10 @@ function overviewRender(){
  // Optional holding/FOS milestones appear only where a date or explicit sent flag exists.
  var steps=[
   {label:'Received',date:p.receivedDate,done:!!plain(p.receivedDate)},
-  ...(plain(o.triageCompletedDate)?[{label:'Triage completed',date:o.triageCompletedDate,done:true}]:[]),
+  ...(plain(o.triageStartedDate)?[{label:'Triage started',date:o.triageStartedDate,done:true,outcome:o.triageOutcome}]:[]),
+  ...(plain(o.triageCompletedDate)?[{label:'Triage completed',date:o.triageCompletedDate,done:true,outcome:o.triageOutcome}]:[]),
+  ...(plain(o.reTriageEvidenceReceivedDate)?[{label:'Re-triage evidence received',date:o.reTriageEvidenceReceivedDate,done:true}]:[]),
+  ...(plain(o.reTriageCompletedDate)?[{label:'Re-triage completed',date:o.reTriageCompletedDate,done:true,outcome:o.reTriageOutcome}]:[]),
   {label:'Acknowledged',date:o.acknowledgementSentDate,done:isYes(o.acknowledgementSent)||!!plain(o.acknowledgementSentDate),fallback:'Sent'},
   {label:'Assigned',date:o.complaintAssignedDate,done:!!plain(o.complaintAssignedDate),fallback:'Assigned'}
  ];
@@ -4257,7 +4339,8 @@ function overviewRender(){
   var dot=document.createElement('span');dot.className='overview-timeline-dot';dot.setAttribute('aria-hidden','true');dot.textContent=step.done?'✓':'';
   var label=document.createElement('strong');label.textContent=step.label;
   var detail=document.createElement('small');detail.textContent=step.done?(plain(step.date)?formatDisplayDate(step.date):(step.fallback||'Recorded')):'Pending';
-  el.setAttribute('aria-label',step.label+': '+detail.textContent);el.append(dot,label,detail);timeline.appendChild(el);
+  var outcomeTooltip=plain(step.outcome);if(outcomeTooltip){el.title=outcomeTooltip;el.tabIndex=0;}
+  el.setAttribute('aria-label',step.label+': '+detail.textContent+(outcomeTooltip?', outcome: '+outcomeTooltip:''));el.append(dot,label,detail);timeline.appendChild(el);
  });
  // Keep most complaints on a single compact row; never route the connector
  // through labels or dates. On narrow screens, use separate clean rails.
@@ -4426,7 +4509,7 @@ function initActionsHome(){
   $('#overviewRecoveryLink').addEventListener('click',function(){gotoActionsPage('post');});
   $('#overviewSolicitorLink').addEventListener('click',function(){gotoActionsPage('solicitor');});
   overviewRender();
-  gotoActionsPage(p.statusName==='Assigned'?'initial':'home');
+  gotoActionsPage(isPreassignmentStatus(p.statusName)?'preassignment':p.statusName==='Assigned'?'initial':'home');
 }
 
 
@@ -5092,9 +5175,9 @@ const ACTION_DEEP_LINK_PAGES=new Set([
   'letters','rootcause','updates'
 ]);
 function openRequestedActionsPage(){
-  const defaultPage=PREFILL.statusName==='Assigned'?'initial':'home';
+  const defaultPage=isPreassignmentStatus(PREFILL.statusName)?'preassignment':PREFILL.statusName==='Assigned'?'initial':'home';
   const requested=(new URLSearchParams(window.location.search).get('page')||'').trim().toLowerCase();
-  if(!requested||requested===defaultPage)return;
+  if(!requested||requested===defaultPage||isPreassignmentStatus(PREFILL.statusName))return;
   // Initial contact is a mandatory Assigned-stage action, not a shortcut at other stages.
   if(!ACTION_DEEP_LINK_PAGES.has(requested)||(requested==='initial'&&PREFILL.statusName!=='Assigned'))return;
   // Reuse the exact button handler because rejection has additional calculator setup.
@@ -5123,7 +5206,7 @@ function boot(){
       applyPrefill();restoreRejectionBreakdowns();restoreCostBreakdowns();restoreInspectionBreakdowns();syncRej();syncFos();recompute();initRunningCosts();updateCostRequirements();renderFosRequiredActions();initRunningOnlySave();initSubmit();initManagementActions();initClosedLock();initReview();
       // Outside FOS Decision Review, keep the existing default-to-FOS behaviour.
       initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();dekraInit();acuInit();ideInit();updateClosedVehicleControls();
-      openRequestedActionsPage();
+      initPreassignment();renderPreassignment();openRequestedActionsPage();
     })
     .catch(function(){$('#loading').textContent='Network error loading the complaint.';});
 }
