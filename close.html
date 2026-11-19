@@ -1245,9 +1245,10 @@ body.actions-with-rail #actionsPreassignment .pre-wrap{width:100%}
 .terminal-head{background:linear-gradient(120deg,#271b31,#603350);color:white;border-radius:18px;padding:27px;margin-bottom:18px}
 .terminal-head .eyebrow{font-size:11px;letter-spacing:.11em;color:#f4bbd6;font-weight:800}
 .terminal-head h2{font-size:27px;margin:8px 0}.terminal-head p{margin:0;color:#f4dce8;font-size:13px}
-.terminal-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.terminal-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:18px}.terminal-summary-four{grid-template-columns:repeat(4,minmax(0,1fr))}
 .terminal-summary>div{padding:16px;background:white;border:1px solid var(--line);border-radius:12px}
 .terminal-summary span{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.terminal-summary strong{font-size:14px}
+.terminal-financial-panel{margin-bottom:18px}.terminal-financial-content{padding:16px 22px 20px}.terminal-outcome-item{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:2px 0 17px;border-bottom:1px solid var(--line)}.terminal-outcome-item span,.terminal-cost-grid span{display:block;font-size:12px;color:var(--muted)}.terminal-outcome-item strong{font-size:17px;color:var(--ink)}.terminal-cost-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}.terminal-cost-grid>div{border:1px solid var(--line);border-radius:11px;padding:14px 16px;background:#fcfafc}.terminal-cost-grid strong{font-size:21px;display:block;margin-top:6px;font-variant-numeric:tabular-nums}.terminal-cost-grid .terminal-cost-total{background:#fff2f9;border-color:#f7d2e7}.terminal-cost-grid .terminal-cost-total strong{color:var(--pink-dark)}.terminal-cost-details{margin-top:15px;border-top:1px solid var(--line);padding-top:9px}.terminal-cost-details>div{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:12px}.terminal-cost-details span{color:var(--muted)}.terminal-cost-details strong{font-variant-numeric:tabular-nums}
 .terminal-timeline .overview-panel{margin-bottom:16px}
 .terminal-actions{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:18px}
 .terminal-actions p{font-size:13px;color:var(--muted);margin:5px 0 0}
@@ -1263,7 +1264,7 @@ body.actions-with-rail #actionsPreassignment .pre-wrap{width:100%}
 .terminal-closure-dialog #manageBtn{display:none!important}
 body.terminal-modal-open{overflow:hidden}
 body.terminal-complaint #workspaceRail [data-rail]{pointer-events:none}
-@media(max-width:680px){.terminal-summary{grid-template-columns:1fr}.terminal-actions{align-items:flex-start;flex-direction:column}.terminal-wrap{padding:8px}.terminal-closure-body{padding:10px}.terminal-closure-dialog .footer-inner{flex-wrap:wrap}}
+@media(max-width:900px){.terminal-summary-four{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:680px){.terminal-summary,.terminal-summary-four,.terminal-cost-grid{grid-template-columns:1fr}.terminal-actions{align-items:flex-start;flex-direction:column}.terminal-wrap{padding:8px}.terminal-closure-body{padding:10px}.terminal-closure-dialog .footer-inner{flex-wrap:wrap}}
 </style>
 </head>
 <body>
@@ -1403,8 +1404,8 @@ body.terminal-complaint #workspaceRail [data-rail]{pointer-events:none}
 <section id="actionsTerminal" class="actions-page" aria-label="Completed complaint" hidden>
  <div class="terminal-wrap">
   <header class="terminal-head"><div class="eyebrow">COMPLAINT <span id="terminalReference">—</span> · FINAL STATUS</div><h2 id="terminalHeading">Complaint closed</h2><p id="terminalDescription">This complaint has ended. Other complaint actions are no longer available.</p></header>
-  <div class="terminal-summary"><div><span>Customer</span><strong id="terminalCustomer">—</strong></div><div><span>Assigned to</span><strong id="terminalAssignee">—</strong></div><div><span id="terminalDateLabel">Closed date</span><strong id="terminalDate">—</strong></div></div>
-  <section class="overview-panel" id="terminalMilestonesPanel"><div class="overview-panel-head"><h3>Triage &amp; outcome records</h3><span>RECORDED IN JIRA</span></div><div class="terminal-summary" id="terminalMilestones" style="padding:12px;margin:0;grid-template-columns:repeat(3,minmax(0,1fr))"></div></section>
+  <div class="terminal-summary terminal-summary-four"><div><span>Customer</span><strong id="terminalCustomer">—</strong></div><div><span>Assigned to</span><strong id="terminalAssignee">—</strong></div><div><span>Complaint type</span><strong id="terminalComplaintType">—</strong></div><div><span id="terminalDateLabel">Closed date</span><strong id="terminalDate">—</strong></div></div>
+  <section class="overview-panel terminal-financial-panel" id="terminalOutcomePanel"><div class="overview-panel-head"><h3>Complaint outcome &amp; costs</h3><span>VIEW ONLY · RECORDED IN JIRA</span></div><div class="terminal-financial-content"><div class="terminal-outcome-item"><span>Complaint outcome</span><strong id="terminalComplaintOutcome">—</strong></div><div class="terminal-cost-grid"><div><span>Investigation costs</span><strong id="terminalInvestigationCosts">—</strong></div><div><span>Financial Ombudsman costs</span><strong id="terminalFosCosts">—</strong></div><div class="terminal-cost-total"><span>Total recorded costs</span><strong id="terminalAllCosts">—</strong></div></div><div class="terminal-cost-details" id="terminalCostDetails" hidden></div></div></section>
   <div class="terminal-timeline" id="terminalTimeline" aria-label="Complaint timeline"></div>
   <div class="terminal-actions" id="terminalClosedActions" hidden><div><strong>Closure details</strong><p>The complaint remains closed. You can review and edit the closure form without reopening other workspaces.</p></div><button id="terminalEditClosure" type="button">Edit closure form</button></div>
  </div>
@@ -4619,10 +4620,29 @@ function terminalRender(){
  $('#terminalCustomer').textContent=p.customerName||'Not recorded';$('#terminalAssignee').textContent=p.assigneeName||'Not recorded';
  $('#terminalDateLabel').textContent=closed?'First closed date':'Withdrawn date';
  $('#terminalDate').textContent=formatDisplayDate(closed?o.firstClosedDate:o.withdrawnDate)||'Not recorded';
- var records=[['Triage started',o.triageStartedDate,true],['Triage deadline',o.triageDeadline,true],['Triage outcome',o.triageOutcome,false],['Triage breach',((o.breaches||[]).find(function(b){return b.label==='Triage';})||{}).status,false],['Triage breach date',((o.breaches||[]).find(function(b){return b.label==='Triage';})||{}).date,true],['Re-triage evidence received',o.reTriageEvidenceReceivedDate,true],['Re-triage completed',o.reTriageCompletedDate,true],['Re-triage outcome',o.reTriageOutcome,false],['Withdrawn date',o.withdrawnDate,true]];
- var grid=$('#terminalMilestones');grid.replaceChildren();
- records.forEach(function(row){if(!String(row[1]??'').trim())return;var card=document.createElement('div'),label=document.createElement('span'),value=document.createElement('strong');label.textContent=row[0];value.textContent=row[2]?formatDisplayDate(row[1]):String(row[1]);card.append(label,value);grid.appendChild(card);});
- $('#terminalMilestonesPanel').hidden=!grid.children.length;
+ $('#terminalComplaintType').textContent=p.complaintType&&p.complaintType!=='-'?p.complaintType:'Not recorded';
+ $('#terminalComplaintOutcome').textContent=p.outcome|| (closed?'Not recorded':'Withdrawn');
+ var internal=p.internal||{},fos=(p.fos&&p.fos.costs)||{},keys=[
+  ['Direct compensation','customfield_10164','customfield_11555'],
+  ['Distress & inconvenience','customfield_10165','customfield_11556'],
+  ['Vehicle repair','customfield_10281','customfield_11557'],
+  ['Vehicle rejection loss','customfield_10282','customfield_11558'],
+  ['Inspection','customfield_10283','customfield_11559'],
+  ['Courtesy car & travel','customfield_11192','customfield_11560'],
+  ['Other costs','customfield_10284','customfield_11561']
+ ];
+ var numeric=function(v){return v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v))?Number(v):0;};
+ var investigationTotal=keys.reduce(function(a,r){return a+numeric(internal[r[1]]);},0);
+ var fosTotal=keys.reduce(function(a,r){return a+numeric(fos[r[2]]);},0)+numeric(fos.customfield_10289);
+ // These figures deliberately sum recorded cost categories, avoiding any double-counting of Jira total fields.
+ $('#terminalInvestigationCosts').textContent=gbp.format(investigationTotal);
+ $('#terminalFosCosts').textContent=p.fosApplicable||fosTotal?gbp.format(fosTotal):'Not applicable';
+ $('#terminalAllCosts').textContent=gbp.format(investigationTotal+fosTotal);
+ var breakdown=$('#terminalCostDetails');breakdown.replaceChildren();
+ var details=keys.map(function(r){return {label:r[0],value:numeric(internal[r[1]])+numeric(fos[r[2]])};}).filter(function(x){return x.value!==0;});
+ if(numeric(fos.customfield_10289)!==0)details.push({label:'FOS case fee',value:numeric(fos.customfield_10289)});
+ details.forEach(function(item){var row=document.createElement('div'),label=document.createElement('span'),value=document.createElement('strong');label.textContent=item.label;value.textContent=gbp.format(item.value);row.append(label,value);breakdown.appendChild(row);});
+ breakdown.hidden=!details.length;
  $('#terminalClosedActions').hidden=!closed;
  // Move the real live timeline to this read-only screen so all existing
  // milestone labels, outcome tooltips, and connector rendering are preserved.
