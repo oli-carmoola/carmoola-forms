@@ -719,6 +719,11 @@ body.actions-overview .overview-legacy-controls{display:none!important}
 .overview-timeline-lines{position:absolute;inset:0;width:100%;height:100%;z-index:1;overflow:hidden;pointer-events:none}
 .overview-timeline-lines path{fill:none;stroke:#e8dfe8;stroke-width:2.4;stroke-linecap:round}
 .overview-timeline-lines path.is-complete{stroke:#ef9ac4}
+/* Balanced timeline rows: avoid a single orphaned milestone on the last row. */
+.overview-timeline{row-gap:43px}
+.overview-timeline-step.is-row-start:not(:first-of-type)::after{content:'CONTINUED ↓';position:absolute;top:-25px;left:0;font-size:9px;font-weight:800;letter-spacing:.09em;color:#a55b85;white-space:nowrap;pointer-events:none}
+@media(max-width:710px){.overview-timeline{row-gap:42px}}
+
 /* Compact, read-only customer statement and breach panels on Overview. */
 .overview-customer-panel,.overview-breaches-panel{margin-top:15px}
 .overview-customer-intro{font-size:11px;color:#8b7a8c;margin:-3px 0 12px}
@@ -4559,10 +4564,17 @@ function overviewRender(){
   var nodes=Array.from(timeline.querySelectorAll('.overview-timeline-step'));
   if(!nodes.length)return;
   var width=timeline.clientWidth||timeline.parentElement.clientWidth||700;
-  // Aim for one row on normal desktop widths; avoid crushed labels.
-  var minWidth=width>=950?96:width>=650?112:width>=420?135:145;
-  var columns=Math.min(nodes.length,Math.max(1,Math.floor(width/minWidth)));
+  // Keep a single row where labels fit comfortably; when wrapping is needed,
+  // distribute milestones across balanced rows (e.g. 12 => 6 + 6, not 10 + 2).
+  // Eight per row is the readable desktop maximum for long milestone names.
+  var minWidth=width>=950?155:width>=650?145:width>=420?135:145;
+  var maxColumns=Math.min(8,Math.max(1,Math.floor(width/minWidth)));
+  var rowCount=Math.ceil(nodes.length/maxColumns);
+  var columns=Math.ceil(nodes.length/rowCount);
   timeline.style.setProperty('--timeline-columns',String(columns));
+  nodes.forEach(function(node,index){
+   node.classList.toggle('is-row-start',index>0&&index%columns===0);
+  });
   var bounds=timeline.getBoundingClientRect();
   var svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
   svg.setAttribute('class','overview-timeline-lines');
