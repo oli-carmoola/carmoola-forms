@@ -1712,6 +1712,11 @@ body.terminal-complaint #workspaceRail [data-rail]{pointer-events:none}
 <section id="actionsLetters" class="actions-page" aria-label="Letters and Responses">
  <div class="letters-wrap">
   <div class="letters-top"><div><h2>Letters &amp; Responses</h2><p>Create a letter once, review it in Google Docs, then send it.</p></div><span class="letters-chip" id="lettersTopStatus">Loading…</span></div>
+  <div class="letters-card" id="lettersFosCaseCard" hidden>
+    <div class="letters-summary"><div><span class="letters-eyebrow">FINANCIAL OMBUDSMAN</span><h3>FOS case file</h3><p class="letters-muted">Create the FOS case file using the existing Zapier workflow. Only one generation request can be submitted.</p></div></div>
+    <div class="letters-actions"><button type="button" class="letters-btn primary" id="lettersFosCaseGenerate">Generate FOS case file</button><button type="button" class="letters-btn quiet" id="lettersFosCaseRefresh">↻ Check case file</button></div>
+    <div class="letters-message" id="lettersFosCaseMessage" role="status" aria-live="polite"></div>
+  </div>
   <div class="letters-switch" role="group" aria-label="Response type"><button type="button" id="lettersTabFinal" class="letters-switch-btn active" aria-pressed="true">Final response <span id="lettersFinalTag" class="letters-switch-tag">—</span></button><button type="button" id="lettersTabFour" class="letters-switch-btn" aria-pressed="false">Four-week holding <span id="lettersFourTag" class="letters-switch-tag">—</span></button><button type="button" id="lettersTabHolding" class="letters-switch-btn" aria-pressed="false">Eight-week holding <span id="lettersHoldingTag" class="letters-switch-tag">—</span></button></div>
   <div id="lettersFourWorkspace" hidden>
     <div class="letters-card fourwk-card">
@@ -2350,6 +2355,43 @@ function reviewSelectDoc(kind){
 }
 
 
+let FOS_CASE_STATE=null,FOS_CASE_BUSY=false,FOS_CASE_MESSAGE='';
+function fosCaseEligible(){return /^yes$/i.test(String(PREFILL?.fosDashboard?.financialOmbudsman||'').trim())&&!String(PREFILL?.fosDashboard?.caseFileId||'').trim();}
+function fosCaseRenderLetters(){
+  var card=document.getElementById('lettersFosCaseCard');if(!card)return;
+  card.hidden=!fosCaseEligible();if(card.hidden)return;
+  var pending=!!FOS_CASE_STATE?.request?.state;
+  var button=document.getElementById('lettersFosCaseGenerate');button.disabled=pending||FOS_CASE_BUSY;
+  var message=document.getElementById('lettersFosCaseMessage');message.textContent=FOS_CASE_MESSAGE||(pending?'Generation already requested. Check for the completed document before trying again.':'');
+}
+async function fosCaseRefresh(){
+  if(FOS_CASE_BUSY)return;
+  try{
+    var d=await lettersCall('fos_case_file_status');
+    FOS_CASE_STATE=d.caseFile;
+    if(!d.caseFile.eligible){PREFILL.fosDashboard.financialOmbudsman=d.caseFile.financialOmbudsman||'';}
+    PREFILL.fosDashboard.caseFileId=d.caseFile.documentId||'';
+    FOS_CASE_MESSAGE=d.caseFile.documentId?'Case file created. You can preview it in Financial Ombudsman.':(d.caseFile.request?.state?'Generation requested. Zapier is preparing the case file.':'');
+  }catch(err){FOS_CASE_MESSAGE=err.message||'Could not check the case file.';}
+  fosCaseRenderLetters();renderFosDashboard();
+}
+async function fosCaseGenerate(){
+  if(FOS_CASE_BUSY||!fosCaseEligible()||FOS_CASE_STATE?.request?.state)return;
+  if(!window.confirm('Generate the FOS case file for this complaint using Zapier?'))return;
+  FOS_CASE_BUSY=true;FOS_CASE_MESSAGE='Requesting case file generation…';fosCaseRenderLetters();renderFosDashboard();
+  try{
+    var d=await lettersCall('fos_case_file_generate',{confirmed:true});
+    FOS_CASE_STATE=d.caseFile||{request:{state:'requested'}};
+    FOS_CASE_MESSAGE=d.message||'Generation requested. Zapier will create the case file.';
+  }catch(err){FOS_CASE_MESSAGE=err.message||'Could not request the case file. Check Zapier before retrying.';}
+  finally{FOS_CASE_BUSY=false;fosCaseRenderLetters();renderFosDashboard();}
+}
+function fosCaseInit(){
+  document.getElementById('lettersFosCaseGenerate').addEventListener('click',fosCaseGenerate);
+  document.getElementById('lettersFosCaseRefresh').addEventListener('click',fosCaseRefresh);
+  fosCaseRenderLetters();
+  if(fosCaseEligible())fosCaseRefresh();
+}
 function renderFosDashboard(){
   var f=PREFILL&&PREFILL.fosDashboard||{},r=PREFILL&&PREFILL.fosReview||{};
   var n=function(v){return v===null||v===undefined||String(v).trim()===''?'Not recorded':String(v);};
@@ -2412,7 +2454,15 @@ function renderFosDashboard(){
     var preview=document.createElement('button');preview.type='button';preview.className='fosdash-linkbutton';preview.textContent='Preview Case File';preview.addEventListener('click',function(){fosOpenCaseFile(docId);});
     var open=document.createElement('a');open.className='fosdash-linkbutton';open.textContent='Open in Google Docs ↗';open.href='https://docs.google.com/document/d/'+encodeURIComponent(docId)+'/edit';open.target='_blank';open.rel='noopener noreferrer';
     docActions.append(preview,open);caseFile.appendChild(docActions);
-  }else{var missing=document.createElement('div');missing.className='fosdash-file-missing';missing.textContent=docId?'Case file link unavailable':'No case file recorded';caseFile.appendChild(missing);}
+  }else{
+    var missing=document.createElement('div');missing.className='fosdash-file-missing';missing.textContent=docId?'Case file link unavailable':'No case file recorded';caseFile.appendChild(missing);
+    if(!docId && !responseCompleted && /^yes$/i.test(String(f.financialOmbudsman||'').trim())){
+      var generate=document.createElement('button');generate.type='button';generate.className='fosdash-linkbutton';generate.textContent='Generate FOS case file';generate.disabled=FOS_CASE_BUSY||!!FOS_CASE_STATE?.request?.state;
+      generate.addEventListener('click',fosCaseGenerate);caseFile.appendChild(generate);
+      var check=document.createElement('button');check.type='button';check.className='fosdash-linkbutton';check.textContent='↻ Check case file';check.style.marginLeft='8px';check.addEventListener('click',fosCaseRefresh);caseFile.appendChild(check);
+      var info=document.createElement('div');info.className='fosdash-file-missing';info.id='fosCaseStatusMessage';info.style.marginTop='8px';info.setAttribute('role','status');info.textContent=FOS_CASE_MESSAGE||(FOS_CASE_STATE?.request?.state?'Generation requested through Zapier. Check again after the document is created.':'');caseFile.appendChild(info);
+    }
+  }
   documents.appendChild(caseFile);
   field(documents,'Response Sent',responseCompleted?'Yes':'Not recorded');
   if(f.responseSentDate)field(documents,'Response Sent Date',d(f.responseSentDate));
@@ -5650,7 +5700,7 @@ function boot(){
       initRejCalc();initInspCalc();initCostEditors();
       applyPrefill();restoreRejectionBreakdowns();restoreCostBreakdowns();restoreInspectionBreakdowns();syncRej();syncFos();recompute();initRunningCosts();updateCostRequirements();renderFosRequiredActions();initRunningOnlySave();initSubmit();initManagementActions();initClosedLock();initReview();
       // Outside FOS Decision Review, keep the existing default-to-FOS behaviour.
-      initPostResolution();deInit();solarisInit();lettersInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();dekraInit();acuInit();ideInit();updateClosedVehicleControls();
+      initPostResolution();deInit();solarisInit();lettersInit();fosCaseInit();initComplaintSwitcher();initClosureRecoveryUI();initActionsHome();initDealer();dekraInit();acuInit();ideInit();updateClosedVehicleControls();
       initPreassignment();renderPreassignment();openRequestedActionsPage();
     })
     .catch(function(){$('#loading').textContent='Network error loading the complaint.';});
