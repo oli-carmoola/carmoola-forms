@@ -258,7 +258,6 @@
   .fosdash-linkbutton{border:1px solid #e7d4e0;background:#fff;color:#99195c;border-radius:9px;padding:10px 13px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none}
   .fosdash-linkbutton:hover{background:#fff4fa;border-color:#eb88ba}
   .fosdash-file-missing{color:var(--muted);font-size:12.5px}
-  #fosCaseFileModal[hidden]{display:none!important}
   @media(max-width:1100px){.fosdash-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.fosdash-columns{grid-template-columns:1fr}}
   @media(max-width:660px){.fosdash-stats,.fosdash-flow,.fosdash-fields{grid-template-columns:1fr 1fr}.fosdash-card{padding:17px}.fosdash-head h2{font-size:25px}}
   @media(max-width:410px){.fosdash-flow,.fosdash-stats{grid-template-columns:1fr}}
@@ -793,6 +792,7 @@ textarea.letters-field{min-height:85px;resize:vertical}
 .letters-actions{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;margin-top:17px}
 .letters-btn{border:1px solid #e8cedd;background:#fff;color:#872052;border-radius:10px;padding:11px 17px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:750;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
 .letters-btn.primary{background:#f90081;border-color:#f90081;color:#fff}
+.letters-btn[hidden],.letters-switch-btn[hidden],.letters-state-pill[hidden]{display:none!important}
 .letters-btn:disabled{opacity:.38;cursor:not-allowed}
 .letters-summary{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
 .letters-status{color:#8d7487;font-size:12px;font-weight:650}
@@ -1715,7 +1715,7 @@ body.terminal-complaint #workspaceRail [data-rail]{pointer-events:none}
   <div class="letters-switch" role="group" aria-label="Response type"><button type="button" id="lettersTabFinal" class="letters-switch-btn active" aria-pressed="true">Final response <span id="lettersFinalTag" class="letters-switch-tag">—</span></button><button type="button" id="lettersTabFour" class="letters-switch-btn" aria-pressed="false">Four-week holding <span id="lettersFourTag" class="letters-switch-tag">—</span></button><button type="button" id="lettersTabHolding" class="letters-switch-btn" aria-pressed="false">Eight-week holding <span id="lettersHoldingTag" class="letters-switch-tag">—</span></button><button type="button" id="lettersTabFos" class="letters-switch-btn" aria-pressed="false" hidden>FOS case file <span id="lettersFosTag" class="letters-switch-tag">Not created</span></button></div>
   <div class="letters-card" id="lettersFosCaseCard" hidden>
     <div class="letters-summary"><div><span class="letters-eyebrow">FINANCIAL OMBUDSMAN</span><h3>FOS case file</h3><p class="letters-muted" id="lettersFosCaseDescription">Create the FOS case file using the existing Zapier workflow. Only one generation request can be submitted.</p></div><span class="letters-state-pill" id="lettersFosCaseSentStatus" hidden>Not sent</span></div>
-    <div class="letters-actions"><button type="button" class="letters-btn primary" id="lettersFosCaseGenerate">Generate FOS case file</button><button type="button" class="letters-btn primary" id="lettersFosCasePreview" hidden>Preview case file</button><a class="letters-btn quiet" id="lettersFosCaseGoogle" target="_blank" rel="noopener noreferrer" hidden>Open in Google Docs ↗</a><button type="button" class="letters-btn quiet" id="lettersFosCaseRefresh">↻ Check case file</button></div>
+    <div class="letters-actions"><button type="button" class="letters-btn primary" id="lettersFosCaseGenerate">Generate FOS case file</button><button type="button" class="letters-btn primary" id="lettersFosCasePreview" hidden>↗ Preview case file</button><a class="letters-btn quiet" id="lettersFosCaseGoogle" target="_blank" rel="noopener noreferrer" hidden>Open in Google Docs ↗</a><button type="button" class="letters-btn quiet" id="lettersFosCaseRefresh">↻ Check case file</button></div>
     <div class="letters-message" id="lettersFosCaseMessage" role="status" aria-live="polite"></div>
   </div>
   <div id="lettersFourWorkspace" hidden>
@@ -1946,7 +1946,7 @@ Consider the appropriate resolution</textarea></label>
   </div>
 
     <section class="review-shell" id="reviewShell">
-    <div class="letters-modal" id="fosCaseFileModal" hidden role="dialog" aria-modal="true" aria-labelledby="fosCaseFileModalTitle"><div class="letters-modal-panel"><div class="letters-modal-head"><div><h3 id="fosCaseFileModalTitle">FOS Case File</h3><p class="letters-muted">Preview the stored case file. Edit or download it in Google Docs.</p></div><div class="letters-row"><a id="fosCaseFileModalEdit" target="_blank" rel="noopener noreferrer" class="letters-btn">Open in Google Docs ↗</a><button type="button" id="fosCaseFileModalClose" class="letters-modal-close" aria-label="Close case file preview">✕</button></div></div><iframe id="fosCaseFileModalFrame" title="FOS case file preview" class="letters-modal-frame" referrerpolicy="no-referrer"></iframe><div class="letters-modal-foot">If Google blocks the preview, use Open in Google Docs above.</div></div></div>
+
     <div class="fosdash" id="fosDashboard">
       <div class="fosdash-head"><div><div class="fosdash-overline">Complaints Hub · FOS Case Management</div><h2>Financial Ombudsman</h2><p>A single view of the referral, deadlines, decisions, financial exposure and correspondence. Review the original decision material and record the next step below.</p></div><span class="fosdash-pill" id="fosDashStatus">FOS Case</span></div>
       <div class="fosdash-stats">
@@ -2365,12 +2365,12 @@ function fosCaseRenderLetters(){
   card.hidden=!fosCaseFlagYes()||LETTERS_VIEW!=='fos';if(card.hidden)return;
   var docId=fosCaseDocumentId(),hasDoc=!!docId,validDoc=/^[A-Za-z0-9_-]{15,}$/.test(docId);
   var pending=!!FOS_CASE_STATE?.request?.state;
-  var generate=document.getElementById('lettersFosCaseGenerate');generate.hidden=hasDoc;generate.disabled=pending||FOS_CASE_BUSY;
+  var generate=document.getElementById('lettersFosCaseGenerate');generate.hidden=hasDoc||fosCaseSent();generate.disabled=hasDoc||fosCaseSent()||pending||FOS_CASE_BUSY;
   var preview=document.getElementById('lettersFosCasePreview');preview.hidden=!validDoc;
   var google=document.getElementById('lettersFosCaseGoogle');google.hidden=!validDoc;
   if(validDoc)google.href='https://docs.google.com/document/d/'+encodeURIComponent(docId)+'/edit';else google.removeAttribute('href');
-  var status=document.getElementById('lettersFosCaseSentStatus');status.hidden=!hasDoc;status.textContent=fosCaseSent()?'Sent':'Not sent';
-  document.getElementById('lettersFosCaseDescription').textContent=hasDoc?'Your FOS case file is saved in Google Docs. Preview or open the document below.':'Create the FOS case file using the existing Zapier workflow. Only one generation request can be submitted.';
+  var status=document.getElementById('lettersFosCaseSentStatus');status.hidden=!hasDoc&&!fosCaseSent();status.textContent=fosCaseSent()?'Sent':'Not sent';
+  document.getElementById('lettersFosCaseDescription').textContent=hasDoc?'Your FOS case file is saved in Google Docs. Preview or open the document below.':fosCaseSent()?'FOS Response Sent is recorded as Yes, but the case file document ID is missing. Check the Jira record.':'Create the FOS case file using the existing Zapier workflow. Only one generation request can be submitted.';
   var message=document.getElementById('lettersFosCaseMessage');message.textContent=hasDoc?(validDoc?'': 'A document ID is recorded, but its Google Docs link is not valid.'):(FOS_CASE_MESSAGE||(pending?'Generation already requested. Check for the completed document before trying again.':''));
 }
 async function fosCaseRefresh(){
@@ -2387,7 +2387,7 @@ async function fosCaseRefresh(){
   fosCaseRenderLetters();if(typeof lettersRender==='function')lettersRender();renderFosDashboard();
 }
 async function fosCaseGenerate(){
-  if(FOS_CASE_BUSY||!fosCaseEligible()||FOS_CASE_STATE?.request?.state)return;
+  if(FOS_CASE_BUSY||!fosCaseEligible()||fosCaseSent()||FOS_CASE_STATE?.request?.state)return;
   if(!window.confirm('Generate the FOS case file for this complaint using Zapier?'))return;
   FOS_CASE_BUSY=true;FOS_CASE_MESSAGE='Requesting case file generation…';fosCaseRenderLetters();lettersRender();renderFosDashboard();
   try{
@@ -2486,21 +2486,21 @@ function renderFosDashboard(){
 
 }
 
+// Use the same modal as Final Response and the other letter previews.
+// From the FOS dashboard, navigate to Letters & Responses first so it is visible.
 function fosOpenCaseFile(docId){
   if(!/^[A-Za-z0-9_-]{15,}$/.test(String(docId||'')))return;
+  if(ACTION_PAGE!=='letters')gotoActionsPage('letters');
+  lettersChoose('fos');
   var base='https://docs.google.com/document/d/'+encodeURIComponent(docId);
-  document.getElementById('fosCaseFileModalEdit').href=base+'/edit';
-  document.getElementById('fosCaseFileModalFrame').src=base+'/preview';
-  document.getElementById('fosCaseFileModal').hidden=false;document.body.style.overflow='hidden';
-  document.getElementById('fosCaseFileModalClose').focus();
+  $('#lettersModalTitle').textContent='FOS case file';
+  $('#lettersModalEdit').textContent='Open in Google Docs ↗';
+  $('#lettersModalEdit').href=base+'/edit';
+  $('#lettersModalFrame').src=base+'/preview';
+  $('#lettersPreviewModal').hidden=false;
+  document.body.style.overflow='hidden';
+  $('#lettersModalClose').focus();
 }
-function fosCloseCaseFile(){
-  document.getElementById('fosCaseFileModal').hidden=true;
-  document.getElementById('fosCaseFileModalFrame').removeAttribute('src');document.body.style.overflow='';
-}
-document.getElementById('fosCaseFileModalClose').addEventListener('click',fosCloseCaseFile);
-document.getElementById('fosCaseFileModal').addEventListener('click',function(e){if(e.target===this)fosCloseCaseFile();});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!document.getElementById('fosCaseFileModal').hidden)fosCloseCaseFile();});
 
 function renderReview(){
   var r=PREFILL.fosReview;if(!fosReviewIsAvailable())return;
@@ -5224,13 +5224,13 @@ function lettersRender(){
  fosTab.hidden=!showFos;
  if(!showFos&&LETTERS_VIEW==='fos')LETTERS_VIEW='final';
  var fosDoc=!!fosCaseDocumentId();
- $('#lettersFosTag').textContent=fosDoc?(fosCaseSent()?'Sent':'Not sent'):(FOS_CASE_STATE?.request?.state?'Generating':'Not created');
+ $('#lettersFosTag').textContent=fosCaseSent()?'Sent':fosDoc?'Not sent':(FOS_CASE_STATE?.request?.state?'Generating':'Not created');
  ['lettersTabFinal','lettersTabFour','lettersTabHolding','lettersTabFos'].forEach(function(id){var b=$('#'+id),selected=id==='lettersTabFos'&&LETTERS_VIEW==='fos';if(selected){b.classList.add('active');b.setAttribute('aria-pressed','true');}else if(LETTERS_VIEW==='fos'){b.classList.remove('active');b.setAttribute('aria-pressed','false');}});
  if(LETTERS_VIEW==='fos'){
    $('#lettersFourWorkspace').hidden=true;
    ['lettersExistingCard','lettersPrepareCard','lettersHoldingBlockedCard','lettersWaitingCard','lettersSendCard','lettersSentCard','lettersSendingCard'].forEach(function(id){$('#'+id).hidden=true;});
    $('#lettersGenerateMessage').hidden=true;
-   $('#lettersTopStatus').textContent=fosDoc?(fosCaseSent()?'Sent':'Generated · Not sent'):(FOS_CASE_STATE?.request?.state?'Generation requested':'Not created');
+   $('#lettersTopStatus').textContent=fosCaseSent()?'Sent':fosDoc?'Generated · Not sent':(FOS_CASE_STATE?.request?.state?'Generation requested':'Not created');
    fosCaseRenderLetters();
    return;
  }
@@ -5323,6 +5323,7 @@ function lettersOpenModal(){
  var doc=lettersSelectedDoc();if(!doc)return;
  var url='https://docs.google.com/document/d/'+encodeURIComponent(doc);
  $('#lettersModalTitle').textContent=LETTERS_VIEW==='holding'?'Eight-week holding letter':'Final response letter';
+ $('#lettersModalEdit').textContent='Edit in Google Docs ↗';
  $('#lettersModalEdit').href=url+'/edit';$('#lettersModalFrame').src=url+'/preview';
  $('#lettersPreviewModal').hidden=false;document.body.style.overflow='hidden';$('#lettersModalClose').focus();
 }
@@ -5338,7 +5339,7 @@ function lettersInit(){
  $('#lettersTabFinal').addEventListener('click',function(){lettersChoose('final');});
  $('#lettersTabHolding').addEventListener('click',function(){lettersChoose('holding');});
  $('#lettersTabFour').addEventListener('click',function(){lettersChoose('four');});
- $('#lettersTabFos').addEventListener('click',function(){lettersChoose('fos');});
+ $('#lettersTabFos').addEventListener('click',function(){lettersCloseModal();lettersChoose('fos');});
  fourInit();
  $('#lettersReviewed').addEventListener('change',lettersRender);
  $('#lettersRefresh').addEventListener('click',function(){LETTERS_SENDING=false;lettersRefresh();});
