@@ -1675,7 +1675,7 @@ body.terminal-complaint #workspaceRail [data-rail]{pointer-events:none}
   <div class="rejection-page-hero"><div><span class="eyebrow">COMPLAINT ACTIONS · CUSTOMER-SIDE CALCULATION</span><h2>Vehicle Rejection Loss</h2><p>Review customer payments, deductions and net proceeds, then save the calculation to Complaints Hub.</p></div><span class="rejection-page-chip">Shared Complaints Hub calculation</span></div>
   <div class="rejection-page-layout">
     <div id="dealerRejectionPrompt" class="dealer-card" hidden><h3>Dealership position</h3><p>For non-outsourced Vehicle Issues complaints where the rejection loss exceeds £500, you can record the dealership position.</p><button type="button" class="post-btn-secondary" id="dealerRejectionOpen">Update dealership position</button></div>
-    <div class="rejection-page-intro"><h3>Rejection loss calculation</h3><p>The same figures appear in Complaint Closure and Post-Resolution. Repayment and deposit calculators open alongside the calculation.</p></div>
+    <div class="rejection-page-intro"><h3>Rejection loss calculation</h3><p>The same figures appear in Complaint Closure and Post-Resolution. Repayment and Deposit/Part-Ex calculators open alongside the calculation.</p></div>
     <div class="rejection-outcome-panel" id="rejectionPageOutcomePanel">
       <div><strong>What happened to the vehicle?</strong><p>Uses the same Vehicle Rejection Outcome as Complaint Closure.</p></div>
       <div class="rejection-outcome-input"><select id="rejectionPageOutcome" aria-label="Vehicle rejection outcome"><option value="">Select vehicle outcome…</option><option>Rejected to Broker</option><option>Rejected to Dealership</option><option>Sold at Auction</option><option>No Vehicle Rejection</option></select><small id="rejectionPageOutcomeNote"></small></div>
@@ -1905,7 +1905,7 @@ Consider the appropriate resolution</textarea></label>
       <div class="post-section-heading"><div><span class="post-eyebrow-light">RECOVERY BREAKDOWN</span><h3>Recovery calculation</h3><p class="post-muted">A clear breakdown of the amount owed to Carmoola.</p></div></div>
       <div class="post-financial-stack">
         <div class="post-financial-row post-financial-credit post-rejection-only"><div class="post-financial-label"><span class="post-step-num">01</span><div><strong>Credit amount</strong><small>Purchase price less deposit and part exchange · calculated from Complaints Hub</small></div></div><div class="post-financial-value"><input id="postCredit" type="text" readonly aria-label="Credit amount"></div></div>
-        <div class="post-financial-row post-deposit-row post-rejection-only"><div class="post-financial-label"><span class="post-step-num">02</span><div><strong>Customer deposit refunded</strong><small>Deposit amount is fixed in Complaints Hub. Add back the amount actually paid to the customer.</small><label class="post-deposit-toggle"><input type="checkbox" id="postDepositRefunded"> We refunded the customer's deposit</label><div id="postDepositCalculator" hidden class="post-deposit-calc"><span>Deposit amount <strong id="postDepositFixed">£0.00</strong></span><label>Less deposit deduction (£) <input id="postDepositDeduction" type="number" min="0" step="0.01" value="0"></label><small id="postDepositCalcNote">Deposit paid out is calculated automatically and shared with Complaint Closure.</small></div></div></div><div class="post-financial-value"><strong id="postDepositPaidOut">+£0.00</strong></div></div>
+        <div class="post-financial-row post-deposit-row post-rejection-only"><div class="post-financial-label"><span class="post-step-num">02</span><div><strong>Customer Deposit/Part-Ex refunded</strong><small>Deposit and Part-Ex amounts are fixed in Complaints Hub. Add back the amount actually paid to the customer.</small><label class="post-deposit-toggle"><input type="checkbox" id="postDepositRefunded"> We refunded the customer's Deposit/Part-Ex contribution</label><div id="postDepositCalculator" hidden class="post-deposit-calc"><span id="postDepositSources"></span><br><span>Total Deposit/Part-Ex <strong id="postDepositFixed">£0.00</strong></span><label>Less Deposit/Part-Ex deduction (£) <input id="postDepositDeduction" type="number" min="0" step="0.01" value="0"></label><small id="postDepositCalcNote">Deposit/Part-Ex paid out is calculated automatically and shared with Complaint Closure.</small></div></div></div><div class="post-financial-value"><strong id="postDepositPaidOut">+£0.00</strong></div></div>
         <div class="post-financial-row post-rejection-only"><div class="post-financial-label"><span class="post-step-num">03</span><div><strong>Dealership / partner deduction</strong><small>Amount to deduct from the credit amount</small></div></div><div class="post-financial-value post-money-input"><span aria-hidden="true">£</span><input id="postDeduction" type="number" step="0.01" min="0" value="0" aria-label="Dealership or partner deduction"></div></div>
         <div class="post-financial-row" id="postRepairRow" hidden><div class="post-financial-label"><span class="post-step-num">01</span><div><strong>Vehicle repair costs</strong><small>Repairs funded by Carmoola that are being recovered from the dealership or partner.</small></div></div><div class="post-financial-value post-money-input"><span aria-hidden="true">£</span><input id="postRepair" type="number" step="0.01" min="0" value="0" aria-label="Vehicle repair costs"></div></div>
         <div class="post-losses">
@@ -2118,7 +2118,7 @@ Consider the appropriate resolution</textarea></label>
         <div id="rl_mismatch" style="display:none;background:#FFF3D6;border:1px solid #F0D48A;color:#7A5A00;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:12.5px;font-weight:600"></div>
         <div class="deduction-box">
           <label for="rl_customer_deduction">Customer Deduction Amount</label>
-          <div class="hint">Maximum deduction from repayments and deposit.</div>
+          <div class="hint">Maximum deduction from repayments and Deposit/Part-Ex.</div>
           <div class="money"><span class="sym">&pound;</span><input type="text" inputmode="decimal" id="rl_customer_deduction" placeholder="0.00"></div>
         </div>
         <div class="calcrow"><span class="op plus">+</span><div class="rl"><div class="nm">Credit Amount</div><div class="hint" id="rl_creditHint">Purchase price &minus; deposit &minus; part exchange</div></div><div class="in money"><span class="sym">&pound;</span><input type="text" inputmode="decimal" id="rl_credit" value="0"></div></div>
@@ -2126,7 +2126,7 @@ Consider the appropriate resolution</textarea></label>
         <div id="rl_earlyComplaintWarning" role="status" aria-live="polite" hidden style="background:#FFF3D6;border:1px solid #E6C775;color:#6F5100;border-radius:10px;padding:12px 14px;margin:10px 0;font-size:12.5px;line-height:1.5"><strong>Early complaint — retained payments require review</strong><div id="rl_earlyComplaintWarningDetail" style="margin-top:4px"></div><div style="margin-top:5px">Generally, deductions from customer payments should not be made where the complaint was raised within the first 30 days. Please review the basis for the deduction before proceeding. This warning does not prevent saving.</div></div>
         <div class="calcrow"><span class="op minus">&minus;</span><div class="rl"><div class="nm" id="rl_proceedsLabel">Vehicle Proceeds Received</div><div class="hint" id="rl_proceedsHint">From auction / dealership</div></div><div class="in money"><span class="sym">&pound;</span><input type="text" inputmode="decimal" id="rl_proceeds" value="0"></div></div>
         <div class="calcrow" id="rl_partnerRecoveryRow" hidden><span class="op minus">&minus;</span><div class="rl"><div class="nm">Additional Dealership / Partner Payment</div></div><div class="in money"><span class="sym">&pound;</span><input type="text" id="rl_partnerRecovery" value="0" readonly aria-label="Confirmed dealership or partner receipts"></div></div>
-        <div class="calcrow with-action" id="rl_depositRow"><span class="op plus">+</span><div class="rl"><div class="nm">Deposit Paid Out</div><div class="hint" id="rl_depositHint">Deposit refunded to customer.</div></div><div class="in calc-readonly"><div class="money"><span class="sym">&pound;</span><input type="text" inputmode="decimal" id="rl_deposit" value="0" readonly></div><button type="button" class="subcalc-btn" id="rl_depositCalcBtn">Calculate</button></div></div>
+        <div class="calcrow with-action" id="rl_depositRow"><span class="op plus">+</span><div class="rl"><div class="nm">Deposit/Part-Ex Paid Out</div><div class="hint" id="rl_depositHint">Deposit/Part-Ex refunded to customer.</div></div><div class="in calc-readonly"><div class="money"><span class="sym">&pound;</span><input type="text" inputmode="decimal" id="rl_deposit" value="0" readonly></div><button type="button" class="subcalc-btn" id="rl_depositCalcBtn">Calculate</button></div></div>
         <div class="calc-total"><span class="l">Vehicle Rejection Loss <small style="display:block;font-size:11px;font-weight:400;opacity:.75">Saved to Complaints Hub</small></span><span class="v" id="rl_total">&pound;0.00</span></div>
         <div class="calc-total" id="rl_remainingLossRow" hidden style="margin-top:8px;background:#fff4f9;border:1px solid #edbfd5"><span class="l">Remaining Unrecovered Loss <small style="display:block;font-size:11px;font-weight:400;opacity:.75">After additional partner payments · indicative</small></span><span class="v" id="rl_remainingLoss">&pound;0.00</span></div>
       </div>
@@ -2147,14 +2147,14 @@ Consider the appropriate resolution</textarea></label>
       <div class="modal-foot"><button class="btn-ghost" id="rpCancel">Cancel</button><button class="btn-sm" id="rpSave">Use Amount</button></div>
     </aside>
 
-    <aside class="rej-side" id="depositSide" aria-label="Deposit Paid Out calculator">
-      <div class="modal-head"><h3>Deposit Paid Out</h3><p>Work out the actual deposit returned to the customer.</p></div>
+    <aside class="rej-side" id="depositSide" aria-label="Deposit/Part-Ex Paid Out calculator">
+      <div class="modal-head"><h3>Deposit/Part-Ex Paid Out</h3><p>Work out the actual Deposit/Part-Ex returned to the customer.</p></div>
       <div class="modal-body">
-        <div class="calcrow"><div class="rl"><div class="nm">Customer Deposit</div><div class="hint">Defaults to the full customer deposit held in Complaints Hub when first opened.</div></div><div class="in money"><span class="sym">&pound;</span><input type="text" inputmode="decimal" id="dp_customer_deposit" value="0"></div></div>
-        <div class="calcrow"><span class="op minus">&minus;</span><div class="rl"><div class="nm">Deposit Deduction</div><div class="hint" id="dp_deductionHint">Cannot exceed the customer deposit or the remaining Customer Deduction Amount.</div></div><div class="in money"><span class="sym">&pound;</span><input type="text" inputmode="decimal" id="dp_deduction" value="0"></div></div>
+        <div class="calcrow"><div class="rl"><div class="nm">Customer Deposit/Part-Ex</div><div class="hint"><span id="dp_sources"></span><br>Fixed total from Complaints Hub.</div></div><div class="in money"><span class="sym">&pound;</span><input type="text" inputmode="decimal" id="dp_customer_deposit" value="0" readonly></div></div>
+        <div class="calcrow"><span class="op minus">&minus;</span><div class="rl"><div class="nm">Deposit/Part-Ex Deduction</div><div class="hint" id="dp_deductionHint">Cannot exceed the total Deposit/Part-Ex or the remaining Customer Deduction Amount.</div></div><div class="in money"><span class="sym">&pound;</span><input type="text" inputmode="decimal" id="dp_deduction" value="0"></div></div>
         <div class="allocation-strip"><div class="allocation-cell"><div class="k">Customer deduction</div><div class="v" id="dp_alloc_total">&pound;0.00</div></div><div class="allocation-cell"><div class="k">Allocated</div><div class="v" id="dp_alloc_used">&pound;0.00</div></div><div class="allocation-cell"><div class="k">Remaining</div><div class="v" id="dp_alloc_remaining">&pound;0.00</div></div></div>
         <div class="subcalc-error" id="dp_error"></div>
-        <div class="calc-output"><span class="l">Actual Deposit Paid Out</span><span class="v" id="dp_paid_out">&pound;0.00</span></div>
+        <div class="calc-output"><span class="l">Actual Deposit/Part-Ex Paid Out</span><span class="v" id="dp_paid_out">&pound;0.00</span></div>
       </div>
       <div class="modal-foot"><button class="btn-ghost" id="dpCancel">Cancel</button><button class="btn-sm" id="dpSave">Use Amount</button></div>
     </aside>
@@ -2799,6 +2799,7 @@ function jiraTag(id){var p=document.querySelector('.jhint[data-for="'+id+'"]');i
 
 /* ---- shared rejection-loss calculator (target: investigation or fos) ---- */
 function cloneObj(o){return JSON.parse(JSON.stringify(o||{}));}
+function contributionTotal(){var p=PREFILL||{};return Math.round((Math.max(0,Number(p.deposit)||0)+Math.max(0,Number(p.partEx)||0))*100)/100;}
 function rejHas(v){return v!==null&&v!==undefined&&v!=='';}
 function closeRejSides(){
   $('#retainedSide').classList.remove('show');
@@ -2928,12 +2929,12 @@ function openRejCalc(which){
   var mm=$('#rl_mismatch');
   mm.style.display='none';
   var dep=$('#rl_deposit'),depRow=$('#rl_depositRow'),depBtn=$('#rl_depositCalcBtn');
-  if(PREFILL.deposit===0 && !rejHas(rejWork.customerDeposit)){
+  if(contributionTotal()===0 && !rejHas(rejWork.customerDeposit) && !num(rejWork.depositPaidOut||0)){
     depRow.classList.add('disabled');depBtn.disabled=true;dep.value='0';
-    $('#rl_depositHint').textContent='Deposit was £0 on the loan';
+    $('#rl_depositHint').textContent='Deposit/Part-Ex was £0 on the agreement';
   } else {
     depRow.classList.remove('disabled');depBtn.disabled=false;dep.value=String(rejHas(rejWork.depositPaidOut)?rejWork.depositPaidOut:0);
-    $('#rl_depositHint').textContent='Calculated from the customer deposit and deposit deduction';
+    $('#rl_depositHint').textContent='Calculated from the customer Deposit/Part-Ex and deduction';
   }
   $('#rejCalcTitle').textContent=which==='fos'?'FOS Rejection Loss':'Vehicle Rejection Loss';
   updateRejRefundInfo();
@@ -3032,7 +3033,7 @@ function rpCompute(){
   $('#rp_alloc_remaining').textContent=overall===null?'—':gbp.format(Math.max(0,overall-(deduction+other)));
   var err='';
   if(deduction>made+0.00001)err='Repayments Deduction cannot be greater than Repayments Made By Customer.';
-  else if(overall!==null&&deduction+other>overall+0.00001)err='Repayments Deduction plus Deposit Deduction cannot be greater than the Customer Deduction Amount.';
+  else if(overall!==null&&deduction+other>overall+0.00001)err='Repayments Deduction plus Deposit/Part-Ex Deduction cannot be greater than the Customer Deduction Amount.';
   else if(overall===null&&deduction>0)err='Enter a Customer Deduction Amount on the main calculator before applying a repayments deduction.';
   showSubError('#rp_error',err);
   rpDraft.made=made;rpDraft.deduction=deduction;rpDraft.retained=retained;rpDraft.refund=refund;rpDraft.maxAllowed=maxAllowed;rpDraft.error=err;
@@ -3041,7 +3042,8 @@ function rpCompute(){
 function openDepositCalc(){
   if(!rejWork)return;
   closeRejSides();
-  var customerDeposit=rejHas(rejWork.customerDeposit)?rejWork.customerDeposit:(PREFILL.deposit==null?0:PREFILL.deposit);
+  var customerDeposit=contributionTotal();
+  $('#dp_sources').textContent='Deposit: '+gbp.format(Number(PREFILL.deposit)||0)+' · Part-Ex: '+gbp.format(Number(PREFILL.partEx)||0);
   var deduction=rejHas(rejWork.depositDeduction)?rejWork.depositDeduction:0;
   dpDraft={customerDeposit:Math.max(0,num(customerDeposit)),deduction:Math.max(0,num(deduction))};
   $('#dp_customer_deposit').value=String(dpDraft.customerDeposit);
@@ -3050,7 +3052,7 @@ function openDepositCalc(){
 }
 function dpCompute(){
   if(!dpDraft)return;
-  var customerDeposit=Math.max(0,num($('#dp_customer_deposit').value));
+  var customerDeposit=contributionTotal();
   var deduction=Math.max(0,num($('#dp_deduction').value));
   var rp=Math.max(0,num(rejWork&&rejWork.repaymentsDeduction||0));
   var overall=currentCustomerDeduction();
@@ -3060,9 +3062,9 @@ function dpCompute(){
   $('#dp_alloc_used').textContent=gbp.format(rp+deduction);
   $('#dp_alloc_remaining').textContent=overall===null?'—':gbp.format(Math.max(0,overall-(rp+deduction)));
   var err='';
-  if(deduction>customerDeposit+0.00001)err='Deposit Deduction cannot be greater than the Customer Deposit.';
-  else if(overall!==null&&rp+deduction>overall+0.00001)err='Repayments Deduction plus Deposit Deduction cannot be greater than the Customer Deduction Amount.';
-  else if(overall===null&&deduction>0)err='Enter a Customer Deduction Amount on the main calculator before applying a deposit deduction.';
+  if(deduction>customerDeposit+0.00001)err='Deposit/Part-Ex Deduction cannot be greater than the Customer Deposit/Part-Ex.';
+  else if(overall!==null&&rp+deduction>overall+0.00001)err='Repayments Deduction plus Deposit/Part-Ex Deduction cannot be greater than the Customer Deduction Amount.';
+  else if(overall===null&&deduction>0)err='Enter a Customer Deduction Amount on the main calculator before applying a Deposit/Part-Ex deduction.';
   showSubError('#dp_error',err);
   dpDraft.customerDeposit=customerDeposit;dpDraft.deduction=deduction;dpDraft.paidOut=paidOut;dpDraft.error=err;
   return dpDraft;
@@ -3072,8 +3074,8 @@ function validateMainDeduction(){
   var total=currentCustomerDeduction();
   var rp=Math.max(0,num(rejWork.repaymentsDeduction||0));
   var dp=Math.max(0,num(rejWork.depositDeduction||0));
-  if(total===null&&(rp>0||dp>0))return 'Enter a Customer Deduction Amount because a repayments or deposit deduction has been applied.';
-  if(total!==null&&rp+dp>total+0.00001)return 'Repayments Deduction plus Deposit Deduction cannot be greater than the Customer Deduction Amount.';
+  if(total===null&&(rp>0||dp>0))return 'Enter a Customer Deduction Amount because a repayments or Deposit/Part-Ex deduction has been applied.';
+  if(total!==null&&rp+dp>total+0.00001)return 'Repayments Deduction plus Deposit/Part-Ex Deduction cannot be greater than the Customer Deduction Amount.';
   return '';
 }
 function initRejCalc(){
@@ -3085,7 +3087,6 @@ function initRejCalc(){
   $('#rl_depositCalcBtn').addEventListener('click',openDepositCalc);
   $('#rp_made').addEventListener('input',rpCompute);
   $('#rp_deduction').addEventListener('input',function(){if(rpDraft)rpDraft.deductionTouched=true;rpCompute();});
-  $('#dp_customer_deposit').addEventListener('input',dpCompute);
   $('#dp_deduction').addEventListener('input',dpCompute);
   $('#rpCancel').addEventListener('click',function(){closeRejSides();});
   $('#dpCancel').addEventListener('click',function(){closeRejSides();});
@@ -3785,12 +3786,12 @@ function prRenderRunningCosts(){
     pending.forEach(function(x){prAddLine(x.desc,prCash(x.row.amount));});prUpdateMath();prRenderRunningCosts();
   });
 }
-function prDeposit(){var p=POST_DATA||{},raw=p.depositAmount==null?(PREFILL&&PREFILL.deposit!=null?PREFILL.deposit:null):p.depositAmount,valid=raw!==null&&raw!==''&&Number.isFinite(Number(raw))&&Number(raw)>0,amount=valid?prCash(raw):0,enabled=$('#postDepositRefunded').checked,ded=prCash($('#postDepositDeduction').value);return {amount:amount,valid:valid,enabled:enabled,deduction:ded,paid:enabled&&valid?Math.max(0,prCash(amount-ded)):0};}
+function prDeposit(){var p=POST_DATA||{},amount=contributionTotal(),enabled=$('#postDepositRefunded').checked,ded=prCash($('#postDepositDeduction').value),preserve=p.originalBalance!=null&&prFinancialMode!=='correct'&&enabled===!!p.depositRefunded&&ded===prCash(p.depositDeduction);return {amount:amount,valid:amount>0||preserve,enabled:enabled,deduction:ded,preserve:preserve,paid:enabled?(preserve?prCash(p.depositPaidOut):Math.max(0,prCash(amount-ded))):0};}
 function prUpdateMath(){
   if(!POST_DATA)return;
   var p=POST_DATA;
   var dep=prDeposit();var noVehicle=$('#postVehicle').value==='No Vehicle Rejection';var calc=prCash((noVehicle?0:p.creditAmount+dep.paid-prCash($('#postDeduction').value))+prRows().reduce(function(v,r){return v+r[1];},0));
-  $('#postDepositCalculator').hidden=!dep.enabled;$('#postDepositFixed').textContent=dep.valid?gbp.format(dep.amount):'Not available from Complaints Hub';$('#postDepositPaidOut').textContent='+'+gbp.format(dep.paid);$('#postDepositCalcNote').textContent=!dep.valid?'Deposit Amount (customfield_11128) was not returned by Complaints Hub. This must be resolved before saving a deposit refund.':dep.deduction>dep.amount?'Deposit deduction cannot exceed the original deposit.':'Deposit paid out: '+gbp.format(dep.paid)+' · included in recovery entitlement.';
+  $('#postDepositSources').textContent='Deposit: '+gbp.format(Number(PREFILL.deposit)||0)+' · Part-Ex: '+gbp.format(Number(PREFILL.partEx)||0);$('#postDepositCalculator').hidden=!dep.enabled;$('#postDepositFixed').textContent=gbp.format(dep.amount);$('#postDepositPaidOut').textContent='+'+gbp.format(dep.paid);$('#postDepositCalcNote').textContent=dep.preserve?'Saved refund retained: '+gbp.format(dep.paid)+'. Use Edit original breakdown to recalculate.':!dep.valid?'No positive Deposit/Part-Ex contribution recorded in Complaints Hub.':dep.deduction>dep.amount?'Deposit/Part-Ex deduction cannot exceed the original Deposit/Part-Ex.':'Deposit/Part-Ex paid out: '+gbp.format(dep.paid)+' · included in recovery entitlement.';
   var paid=prCash((p.history||{}).p),written=prCash((p.history||{}).w);
   var auctionPaid=prCash((p.reconciled||[]).filter(function(x){return x[2]==='A';}).reduce(function(n,x){return n+Number(x[1]||0)/100;},0));
   var preview=(p.auctionPreview||[]).reduce(function(n,r){return n+Number(r.amount||0);},0);
@@ -3819,7 +3820,7 @@ function prCustomerBreakdown(){return prCustomerStage()==='fos'?fosRejBreakdown:
 function prCustomerStage(){var saved=(PREFILL.saved||{}).rejStage;return saved==='FOS'?'fos':saved==='Investigation'?'inv':(PREFILL.fosApplicable&&$('#fosRejection').value?'fos':'inv');}
 function prCustomerDraw(){
   var s=PREFILL.saved||{},bd=prCustomerBreakdown()||{},v=function(x){return x===null||x===undefined?'Not recorded':gbp.format(Number(x))};
-  var data=[['Customer deduction',bd.customerDeductionAmount??s.rejCustomerDeduction],['Repayments made',bd.repaymentsMadeByCustomer??s.rejRepaymentsMade],['Repayments deduction',bd.repaymentsDeduction??s.rejRepaymentsDeduction],['Customer refund',bd.customerRefundAmount??s.rejCustomerRefund],['Customer deposit',bd.customerDeposit??s.rejCustomerDeposit??PREFILL.deposit],['Deposit deduction',bd.depositDeduction??s.rejDepositDeduction],['Deposit paid out',bd.depositPaidOut??s.rejDeposit],['Retained repayments',bd.retainedPayments??s.rejRetained],['Vehicle proceeds',bd.vehicleProceeds??s.rejProceeds],['Rejection loss',bd.used?bd.total:null]];
+  var data=[['Customer deduction',bd.customerDeductionAmount??s.rejCustomerDeduction],['Repayments made',bd.repaymentsMadeByCustomer??s.rejRepaymentsMade],['Repayments deduction',bd.repaymentsDeduction??s.rejRepaymentsDeduction],['Customer refund',bd.customerRefundAmount??s.rejCustomerRefund],['Customer Deposit/Part-Ex',bd.customerDeposit??s.rejCustomerDeposit??contributionTotal()],['Deposit/Part-Ex deduction',bd.depositDeduction??s.rejDepositDeduction],['Deposit/Part-Ex paid out',bd.depositPaidOut??s.rejDeposit],['Retained repayments',bd.retainedPayments??s.rejRetained],['Vehicle proceeds',bd.vehicleProceeds??s.rejProceeds],['Rejection loss',bd.used?bd.total:null]];
   $('#postCustomerSummary').innerHTML=data.map(function(x){return '<div class="post-customer-datum"><span>'+prHtml(x[0])+'</span><strong>'+v(x[1])+'</strong></div>';}).join('');
   var customer=bd.customerDeductionAmount??s.rejCustomerDeduction;
   var different=customer!==null&&customer!==undefined&&Math.abs(prCash(customer)-prCash($('#postDeduction').value))>0.009;
@@ -4020,7 +4021,7 @@ function prSubmitReopen(btn){
 function prTaskMode(){return document.querySelector('input[name="prSetupMode"]:checked').value;}
 function prSaveTaskList(tasks,btn,opening){var descriptions=tasks.filter(function(x){return String(x.description||'').trim();});if(descriptions.length!==tasks.length||!descriptions.length){(opening?$('#prSetupError'):$('#prTaskError')).textContent='Enter at least one task with a description.';return;}if(tasks.some(function(x){return x.status==='not_required'&&!String(x.reason||'').trim();})){(opening?$('#prSetupError'):$('#prTaskError')).textContent='Provide a reason for every task marked No Longer Required.';return;}var payload={action:opening?'post_tasks_only_open':'post_tasks_save',tasks:tasks,confirmedNoFunds:opening&&$('#prNoFundsConfirmed').checked,expectedTasksRaw:(POST_DATA&&POST_DATA.tasksRaw)||''};prRequest(payload,btn,function(data){POST_DATA=data.postResolution;if(data.statusName){PREFILL.statusName=data.statusName;$('#homeStatus').textContent=data.statusName;}$('#prTasksModal').hidden=true;$('#prSetupModal').hidden=true;prOpeningStarted=false;prRender();refreshClosureRecoverySummary(POST_DATA);showActionsSaveToast('Post-Resolution tasks saved.');});}
 function prOpenRecoveryDetails(mode){
- prFinancialMode=mode;$('#prCorrectionPanel').hidden=mode!=='correct';
+ prFinancialMode=mode;prUpdateMath();$('#prCorrectionPanel').hidden=mode!=='correct';
  if(mode==='correct')$('#prCorrectionReason').value='';
  $('#postWorkspace').hidden=false;$('#postWorkspace').classList.remove('pr-editor-hidden');
  $('#postWorkspace').classList.add('pr-details-modal');$('#prDashboard').hidden=false;
@@ -4028,6 +4029,7 @@ function prOpenRecoveryDetails(mode){
  document.body.style.overflow='hidden';
 }
 function prCloseRecoveryDetails(){
+ prFinancialMode='view';
  $('#postWorkspace').classList.remove('pr-details-modal');document.body.style.overflow='';
  prOpeningStarted=false;prRender();
 }
@@ -4060,7 +4062,7 @@ function initPostResolution(){POST_DATA=PREFILL.postResolution||null;if(!POST_DA
   $('#postDeduction').addEventListener('input',function(){prUpdateMath();prCustomerDraw();});$('#postDepositRefunded').addEventListener('change',prUpdateMath);$('#postDepositDeduction').addEventListener('input',prUpdateMath);$('#postAddLine').addEventListener('click',function(){prAddLine();prRenderRunningCosts();});
   $('#postOpenWriteoff').addEventListener('click',prOpenWriteoff);$('#postCloseWriteoff').addEventListener('click',prCloseWriteoff);$('#postCancelWriteoff').addEventListener('click',prCloseWriteoff);$('#postWriteoffModal').addEventListener('click',function(e){if(e.target===this)prCloseWriteoff();});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#postWriteoffModal').hidden)prCloseWriteoff();});
 
-  function submit(mode,btn,providedReason){var rows=prRows();var payload={action:'post_recovery_save',mode:mode,reason:providedReason|| (mode==='correct'?$('#prCorrectionReason').value.trim():''),expectedOriginalBalance:POST_DATA.originalBalance,expectedCurrentBalance:POST_DATA.currentBalance,party:$('#postParty').value,deduction:prCash($('#postDeduction').value),depositRefunded:$('#postDepositRefunded').checked,depositDeduction:prCash($('#postDepositDeduction').value),adjustments:rows,recoveryStatus:$('#postStatus').value,dueDate:$('#postDue').value,vehicleResolution:$('#postVehicle').value,expectedReconciledRaw:POST_DATA.reconciledRaw||'',expectedHistoryRaw:POST_DATA.historyRaw||'',expectedAdjustmentsRaw:POST_DATA.adjustmentsRaw||''};var entryStatus=['Investigation','Holding Letter Due','Final Response Due','Ombudsman Investigation','FOS Investigation','Outsourced'].includes(PREFILL.statusName);if(entryStatus){if(prDecisionBlocker()){prError(prDecisionBlocker());return;}if(!prOpeningStarted){prError('Select Move to Post-Resolution first, then complete the opening recovery information.');return;}if(mode!=='save'){prError('Save the opening recovery details before recording payments or write-offs.');return;}var target=prEntryTarget(false);if(!window.confirm('Save the opening recovery balance and move this complaint to '+target+'?'))return;payload.openPostResolution=true;payload.confirmed=true;payload.tasks=prSetupTasksDraft;}if(payload.vehicleResolution==='No Vehicle Rejection'){payload.depositRefunded=false;payload.depositDeduction=0;payload.deduction=0;}if(POST_DATA.originalBalance!==null&&payload.vehicleResolution!==POST_DATA.vehicleResolution&&!window.confirm('Changing the vehicle position will recalculate the recovery. Existing payments and write-offs remain applied. Continue?'))return;if(payload.depositRefunded&&!prDeposit().valid){prError('Deposit Amount (customfield_11128) is missing or zero in Complaints Hub. Cannot save a deposit refund.');return;}if(payload.depositRefunded&&payload.depositDeduction>prDeposit().amount){prError('Deposit deduction cannot exceed the fixed customer deposit.');return;}if(rows.some(function(r){return !r[0];})){prError('Every other loss needs a description.');return;}if(mode==='correct'&&payload.reason.length<8){prError('Enter a reason of at least eight characters for correcting the original breakdown.');return;}if(mode==='payment'){payload.paymentAmount=prCash($('#postPayment').value);payload.paymentReference=$('#postPaymentRef').value;if(!payload.paymentReference.trim()){prError('Enter the payment reference.');return;}}if(mode==='writeoff'){payload.writeoffAmount=prCash($('#postWriteoff').value);payload.reason=$('#postWriteoffReason').value;if(!window.confirm('Record a write-off of '+gbp.format(payload.writeoffAmount)+'? This will be logged in Complaints Hub.'))return;}prRequest(payload,btn,function(data){POST_DATA=data.postResolution;if(data.statusName){PREFILL.statusName=data.statusName;$('#homeStatus').textContent=data.statusName;$('#postHomeTile').disabled=!canOpenPostResolution(data.statusName);}if(PREFILL.saved){PREFILL.saved.rejCustomerDeposit=POST_DATA.depositRefunded?POST_DATA.depositAmount:null;PREFILL.saved.rejDepositDeduction=POST_DATA.depositRefunded?POST_DATA.depositDeduction:null;PREFILL.saved.rejDeposit=POST_DATA.depositRefunded?POST_DATA.depositPaidOut:null;}$('#postPayment').value='';$('#postPaymentRef').value='';$('#postWriteoff').value='';$('#postWriteoffReason').value='';$('#postWorkspace').classList.remove('pr-details-modal');document.body.style.overflow='';prRender();prFinancialMode='view';$('#prCorrectionPanel').hidden=true;if(closureRecoveryModalOpen){refreshClosureRecoverySummary(POST_DATA);closeClosureRecoveryModal();}else {prOpeningStarted=false;prRender();}showActionsSaveToast((mode==='payment'?'Recovery payment recorded successfully.':mode==='writeoff'?'Recovery write-off recorded successfully.':mode==='correct'?'Original recovery breakdown corrected successfully.':mode==='add'?'Additional cost recorded successfully.':'Recovery details updated successfully.')+(data.reportingSync&&!data.reportingSync.ok?' '+data.reportingSync.warning:''));prAutoReconcile();});}
+  function submit(mode,btn,providedReason){var rows=prRows();var payload={action:'post_recovery_save',mode:mode,reason:providedReason|| (mode==='correct'?$('#prCorrectionReason').value.trim():''),expectedOriginalBalance:POST_DATA.originalBalance,expectedCurrentBalance:POST_DATA.currentBalance,party:$('#postParty').value,deduction:prCash($('#postDeduction').value),depositRefunded:$('#postDepositRefunded').checked,depositDeduction:prCash($('#postDepositDeduction').value),adjustments:rows,recoveryStatus:$('#postStatus').value,dueDate:$('#postDue').value,vehicleResolution:$('#postVehicle').value,expectedReconciledRaw:POST_DATA.reconciledRaw||'',expectedHistoryRaw:POST_DATA.historyRaw||'',expectedAdjustmentsRaw:POST_DATA.adjustmentsRaw||''};var entryStatus=['Investigation','Holding Letter Due','Final Response Due','Ombudsman Investigation','FOS Investigation','Outsourced'].includes(PREFILL.statusName);if(entryStatus){if(prDecisionBlocker()){prError(prDecisionBlocker());return;}if(!prOpeningStarted){prError('Select Move to Post-Resolution first, then complete the opening recovery information.');return;}if(mode!=='save'){prError('Save the opening recovery details before recording payments or write-offs.');return;}var target=prEntryTarget(false);if(!window.confirm('Save the opening recovery balance and move this complaint to '+target+'?'))return;payload.openPostResolution=true;payload.confirmed=true;payload.tasks=prSetupTasksDraft;}if(payload.vehicleResolution==='No Vehicle Rejection'){payload.depositRefunded=false;payload.depositDeduction=0;payload.deduction=0;}if(POST_DATA.originalBalance!==null&&payload.vehicleResolution!==POST_DATA.vehicleResolution&&!window.confirm('Changing the vehicle position will recalculate the recovery. Existing payments and write-offs remain applied. Continue?'))return;if(payload.depositRefunded&&!prDeposit().valid){prError('No positive Deposit/Part-Ex contribution recorded in Complaints Hub. Cannot save a refund.');return;}if(payload.depositRefunded&&!prDeposit().preserve&&payload.depositDeduction>prDeposit().amount){prError('Deposit/Part-Ex deduction cannot exceed the fixed Deposit/Part-Ex contribution.');return;}if(rows.some(function(r){return !r[0];})){prError('Every other loss needs a description.');return;}if(mode==='correct'&&payload.reason.length<8){prError('Enter a reason of at least eight characters for correcting the original breakdown.');return;}if(mode==='payment'){payload.paymentAmount=prCash($('#postPayment').value);payload.paymentReference=$('#postPaymentRef').value;if(!payload.paymentReference.trim()){prError('Enter the payment reference.');return;}}if(mode==='writeoff'){payload.writeoffAmount=prCash($('#postWriteoff').value);payload.reason=$('#postWriteoffReason').value;if(!window.confirm('Record a write-off of '+gbp.format(payload.writeoffAmount)+'? This will be logged in Complaints Hub.'))return;}prRequest(payload,btn,function(data){POST_DATA=data.postResolution;if(data.statusName){PREFILL.statusName=data.statusName;$('#homeStatus').textContent=data.statusName;$('#postHomeTile').disabled=!canOpenPostResolution(data.statusName);}if(PREFILL.saved){PREFILL.saved.rejCustomerDeposit=POST_DATA.recordedCustomerDeposit;PREFILL.saved.rejDepositDeduction=POST_DATA.depositRefunded?POST_DATA.depositDeduction:null;PREFILL.saved.rejDeposit=POST_DATA.depositRefunded?POST_DATA.depositPaidOut:null;}$('#postPayment').value='';$('#postPaymentRef').value='';$('#postWriteoff').value='';$('#postWriteoffReason').value='';$('#postWorkspace').classList.remove('pr-details-modal');document.body.style.overflow='';prRender();prFinancialMode='view';$('#prCorrectionPanel').hidden=true;if(closureRecoveryModalOpen){refreshClosureRecoverySummary(POST_DATA);closeClosureRecoveryModal();}else {prOpeningStarted=false;prRender();}showActionsSaveToast((mode==='payment'?'Recovery payment recorded successfully.':mode==='writeoff'?'Recovery write-off recorded successfully.':mode==='correct'?'Original recovery breakdown corrected successfully.':mode==='add'?'Additional cost recorded successfully.':'Recovery details updated successfully.')+(data.reportingSync&&!data.reportingSync.ok?' '+data.reportingSync.warning:''));prAutoReconcile();});}
   window.prSubmitRecovery=submit;
   $('#postSave').addEventListener('click',function(){submit(prFinancialMode==='correct'?'correct':'save',this);});$('#postRecordPayment').addEventListener('click',function(){submit('payment',this);});$('#postRecordWriteoff').addEventListener('click',function(){submit('writeoff',this);});prRender();
 }
@@ -4155,7 +4157,7 @@ function solarisCalculatedBreakdown(amount){
  var cash=function(v){var n=Number(v);return Number.isFinite(n)?Math.round(n*100)/100:0;};
  var f=function(v){return gbp.format(Math.abs(cash(v)));};
  var lines=[],rejection=p.vehicleResolution!=='No Vehicle Rejection';
- if(rejection){lines.push('Credit amount: +'+f(p.creditAmount));if(cash(p.depositPaidOut))lines.push('Customer deposit refunded: +'+f(p.depositPaidOut));if(cash(p.deduction))lines.push('Dealership / partner deduction: -'+f(p.deduction));}
+ if(rejection){lines.push('Credit amount: +'+f(p.creditAmount));if(cash(p.depositPaidOut))lines.push('Customer Deposit/Part-Ex refunded: +'+f(p.depositPaidOut));if(cash(p.deduction))lines.push('Dealership / partner deduction: -'+f(p.deduction));}
  var adj=p.adjustments||[];
  adj.forEach(function(r){var n=cash(r[1]);if(n)lines.push(String(r[0]||'Other recovery cost')+': '+(n<0?'-':'+')+f(n));});
  var original=p.originalBalance==null?null:cash(p.originalBalance),paid=cash((p.history||{}).p),written=cash((p.history||{}).w),current=p.currentBalance==null?null:cash(p.currentBalance);
