@@ -1657,7 +1657,8 @@ body.terminal-complaint #workspaceRail [data-rail]{pointer-events:none}
   <div class="ide-panel" id="idePreviewPanel" hidden><h3>2. Review and send</h3><p>Make any changes to the email before sending. The preview does not send anything, create a Zendesk ticket or change Jira.</p>
    <label class="ide-field" for="ideSubject">Email subject<input id="ideSubject" maxlength="220"></label>
    <label class="ide-field" for="ideEmailBody">Email body<textarea id="ideEmailBody" maxlength="9000" spellcheck="true"></textarea></label>
-   <label class="ide-check"><input type="checkbox" id="ideConfirm"><span>I have checked the recipient, vehicle details and email, and I authorise sending this initial dealership enquiry.</span></label>
+   <div class="ide-field" id="ideAttachments"><strong>Attachments <small style="font-weight:400;color:var(--muted)">(optional)</small></strong><label id="ideDrop" for="ideFiles" style="display:block;border:1.5px dashed #E6A8C8;border-radius:10px;padding:18px;text-align:center;background:#FFF8FC;cursor:pointer;color:#B8005F;margin-top:8px">Choose files or drag and drop here<input id="ideFiles" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.txt,.xlsx,.xls" style="display:block;max-width:100%;margin:10px auto 0"></label><p style="font-size:12px;color:var(--muted)">Up to 10 files, 10 MB total. Only include evidence appropriate to share with the dealership.</p><div id="ideFileList"></div><p id="ideFileError" class="ide-error" role="alert"></p></div>
+   <label class="ide-check"><input type="checkbox" id="ideConfirm"><span>I have checked the recipient, vehicle details, email and all attachments, and confirm they are appropriate to share with the dealership.</span></label>
    <div class="ide-note">The initial dealership email can only be sent once through this workflow. If a Zendesk ticket has already been created, check it before attempting another send.</div>
    <p id="ideSendMessage" role="alert" class="ide-error"></p><div class="ide-actions"><span class="dekra-status" id="ideSendStatus"></span><button type="button" id="ideSend" disabled>Send to dealership</button></div>
   </div>
@@ -5646,10 +5647,22 @@ function dekraInit(){
 }
 
 let IDE_STATE=null,IDE_PREVIEW=null,IDE_LOADING=false;
+let IDE_FILES=[],IDE_SENDING=false;
+const IDE_MAX_BYTES=10*1024*1024, IDE_EXT=/\.(pdf|jpe?g|png|webp|docx?|txt|xlsx?)$/i;
+function ideRenderFiles(){
+ const root=$('#ideFileList');root.replaceChildren();
+ IDE_FILES.forEach((file,i)=>{const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)';const name=document.createElement('span');name.style.cssText='flex:1;overflow-wrap:anywhere';name.textContent=file.name+' ('+(file.size/1024/1024).toFixed(2)+' MB)';const remove=document.createElement('button');remove.type='button';remove.className='btn-ghost';remove.textContent='Remove';remove.disabled=IDE_SENDING;remove.onclick=()=>{if(IDE_SENDING)return;IDE_FILES.splice(i,1);ideFilesChanged();};row.append(name,remove);root.append(row);});
+}
+function ideFilesChanged(){ $('#ideConfirm').checked=false;$('#ideSend').disabled=true;$('#ideFileError').textContent='';ideRenderFiles(); }
+function ideAddFiles(files){if(IDE_SENDING||closedVehicleWorkflowState().closed)return;const next=[...IDE_FILES];for(const f of files){if(!IDE_EXT.test(f.name)||!f.size){$('#ideFileError').textContent='Unsupported or empty file: '+f.name;return;}if(!next.some(x=>x.name===f.name&&x.size===f.size&&x.lastModified===f.lastModified))next.push(f);}if(next.length>10||next.reduce((n,f)=>n+f.size,0)>IDE_MAX_BYTES){$('#ideFileError').textContent='Choose no more than 10 files and 10 MB in total.';return;}IDE_FILES=next;ideFilesChanged();}
+function ideLockSending(lock){IDE_SENDING=lock;for(const id of ['ideRecipient','ideSubject','ideEmailBody','ideConfirm','ideFiles'])$('#'+id).disabled=lock;ideRenderFiles();}
+
 const IDE_API='https://dpbwnmjqcbaebszwqgea.supabase.co/functions/v1/initial-dealership-email';
 async function ideRequest(action,more={}){
  if(closedVehicleWorkflowState().closed&&!['initial_dealership_status','initial_dealership_history'].includes(action))throw Error('This complaint is closed. The sent dealership email is view-only.');
- const r=await fetch(IDE_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action,...more})});
+ let options={method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:getToken(),action,...more})};
+ if(action==='initial_dealership_send'&&IDE_FILES.length){const form=new FormData();form.append('payload',JSON.stringify({token:getToken(),action,...more}));for(const f of IDE_FILES)form.append('attachments',f,f.name);options={method:'POST',body:form};}
+ const r=await fetch(IDE_API,options);
  const d=await r.json();if(!r.ok||!d.ok)throw Error(d.errors?.[0]||'Unable to complete dealership email action.');return d;
 }
 function ideRefreshSent(state){
@@ -5710,11 +5723,17 @@ async function ideLoadHistory(){
    const body=document.createElement('div');body.className='ide-mail-content';
    if(mail.subject){const subject=document.createElement('div');subject.className='ide-mail-subject';subject.textContent='Subject: '+mail.subject;body.append(subject);}
    const message=document.createElement('div');message.className='ide-mail-body';message.textContent=mail.email_body||'Email body not available';body.append(message);
-   card.append(head,stats,bodyTitle,body);root.append(card);
+   card.append(head,stats,bodyTitle,body);
+   if(Array.isArray(mail.attachments)&&mail.attachments.length){const title=document.createElement('h5');title.className='ide-mail-content-label';title.textContent='Attachments';const list=document.createElement('ul');for(const a of mail.attachments){const li=document.createElement('li');li.textContent=String(a.name||'Attachment');list.append(li);}card.append(title,list);}
+   root.append(card);
   }
  }catch(e){root.replaceChildren();const p=document.createElement('p');p.className='ide-error';p.textContent=e.message;root.append(p);}
 }
 function ideInit(){
+ $('#ideFiles').addEventListener('change',function(){ideAddFiles(this.files);this.value='';});
+ $('#ideDrop').addEventListener('dragover',e=>e.preventDefault());
+ $('#ideDrop').addEventListener('drop',e=>{e.preventDefault();ideAddFiles(e.dataTransfer.files);});
+ for(const id of ['ideSubject','ideEmailBody'])$('#'+id).addEventListener('input',()=>{$('#ideConfirm').checked=false;$('#ideSend').disabled=true;});
  $('#ideHistoryRefresh').addEventListener('click',ideLoadHistory);
  $('#ideRecipient').addEventListener('input',()=>{$('#idePreviewPanel').hidden=true;IDE_PREVIEW=null;$('#ideConfirm').checked=false;$('#ideSend').disabled=true;});
  $('#ideGenerate').addEventListener('click',async function(){
@@ -5726,15 +5745,15 @@ function ideInit(){
  });
  $('#ideConfirm').addEventListener('change',function(){$('#ideSend').disabled=closedVehicleWorkflowState().closed||!this.checked;});
  $('#ideSend').addEventListener('click',async function(){
-  if(!IDE_PREVIEW||!$('#ideConfirm').checked)return;
-  if(!confirm('Send this email to '+$('#ideRecipient').value.trim()+' now? This cannot be undone.'))return;
-  this.disabled=true;$('#ideGenerate').disabled=true;$('#ideSendMessage').textContent='';$('#ideSendStatus').textContent='Sending via Zendesk…';
+  if(IDE_SENDING||!IDE_PREVIEW||!$('#ideConfirm').checked)return;
+  if(!confirm('Send this email to '+$('#ideRecipient').value.trim()+' now with '+IDE_FILES.length+' attachment(s)? This cannot be undone.'))return;
+  this.disabled=true;ideLockSending(true);$('#ideGenerate').disabled=true;$('#ideSendMessage').textContent='';$('#ideSendStatus').textContent='Uploading attachments and sending via Zendesk…';
   try{const d=await ideRequest('initial_dealership_send',{recipient:$('#ideRecipient').value.trim(),subject:$('#ideSubject').value.trim(),emailBody:$('#ideEmailBody').value.trim(),confirmed:true});
-   IDE_STATE=d.state;ideRefreshSent(d.state);$('#idePreviewPanel').hidden=true;$('#ideSuccessText').textContent=d.message||'Initial dealership email sent.';$('#ideSentPanel').hidden=false;$('#ideSendStatus').textContent='';
+   IDE_FILES=[];IDE_STATE=d.state;ideRefreshSent(d.state);$('#idePreviewPanel').hidden=true;$('#ideSuccessText').textContent=d.message||'Initial dealership email sent.';$('#ideSentPanel').hidden=false;$('#ideSendStatus').textContent='';
    PREFILL.overview.initialDealershipEmailSentDate=d.state.sentDate||'';PREFILL.overview.dealershipZendesk=d.state.ticketLink||'';
    updateClosedVehicleControls();ideLoadHistory();showActionsSaveToast('Initial dealership email sent.');
   }catch(e){$('#ideSendMessage').textContent=e.message+' Check Zendesk and Jira before retrying.';$('#ideSendStatus').textContent='';await ideLoad();}
-  finally{this.disabled=closedVehicleWorkflowState().closed||!$('#ideConfirm').checked||$('#idePreviewPanel').hidden;}
+  finally{ideLockSending(false);this.disabled=closedVehicleWorkflowState().closed||!$('#ideConfirm').checked||$('#idePreviewPanel').hidden||!IDE_STATE?.eligible;}
  });
 }
 // Stable, case-sensitive workspace slugs for AI-generated links. No database required.
