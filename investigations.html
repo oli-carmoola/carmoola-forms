@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Carmoola Investigations Hub</title>
+  <style>
+    :root{
+      --bg:#f7f7fb;
+      --panel:#ffffff;
+      --panel-2:#fcfcff;
+      --ink:#1f2330;
+      --muted:#6e7385;
+      --line:#ececf3;
+      --line-2:#e4e5ef;
+      --brand:#ff008a;
+      --brand-2:#ff4db0;
+      --brand-3:#fff0f8;
+      --green:#15803d;
+      --green-bg:#ecfdf3;
+      --amber:#b45309;
+      --amber-bg:#fff8eb;
+      --blue:#1d4ed8;
+      --blue-bg:#eef4ff;
+      --slate:#475569;
+      --slate-bg:#f3f6f9;
+      --red:#b91c1c;
+      --red-bg:#fff1f2;
+      --shadow:0 12px 38px rgba(24,32,72,.08);
+      --radius-xl:24px;
+      --radius-lg:18px;
+      --radius-md:14px;
+      --radius-sm:10px;
+      --sidebar:310px;
+      --directory:380px;
+      --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255,0,138,.06), transparent 28%),
+        radial-gradient(circle at right 20%, rgba(255,0,138,.04), transparent 18%),
+        var(--bg);
+    }
+
+    a{color:inherit;text-decoration:none}
+    button,input,select,textarea{font:inherit}
+
+    .app{
+      display:grid;
+      grid-template-columns:var(--sidebar) 1fr;
+      min-height:100vh;
+    }
+
+    .sidebar{
+      border-right:1px solid var(--line);
+      background:linear-gradient(180deg,#fff 0%, #fcfcff 100%);
+      padding:22px 18px 18px;
+      position:sticky;
+      top:0;
+      height:100vh;
+      overflow:auto;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:20px;
+      padding:12px 12px 16px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .brand img{
+      height:36px;
+      width:auto;
+      display:block;
+    }
+
+    .brand-fallback{
+      font-size:34px;
+      font-weight:800;
+      letter-spacing:-1.5px;
+      color:var(--brand);
+      line-height:1;
+      display:none;
+    }
+
+    .brand-meta h1{
+      margin:0;
+      font-size:18px;
+      line-height:1.1;
+      letter-spacing:-.02em;
+    }
+
+    .brand-meta p{
+      margin:5px 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .sidebar-card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius-lg);
+      box-shadow:var(--shadow);
+      padding:16px;
+      margin-bottom:14px;
+    }
+
+    .sidebar-section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin:0 0 12px;
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .nav{
+      display:grid;
+      gap:8px;
+    }
+
+    .nav button{
+      appearance:none;
+      border:1px solid transparent;
+      background:#fff;
+      padding:12px 14px;
+      border-radius:14px;
+      text-align:left;
+      cursor:pointer;
+      color:var(--slate);
+      transition:.18s ease;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-weight:600;
+    }
+
+    .nav button:hover{
+      border-color:var(--line-2);
+      background:#fafafe;
+      color:var(--ink);
+      transform:translateY(-1px);
+    }
+
+    .nav button.active{
+      background:linear-gradient(135deg,var(--brand),var(--brand-2));
+      color:#fff;
+      box-shadow:0 10px 30px rgba(255,0,138,.22);
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line-2);
+      background:#fff;
+      font-size:12px;
+      font-weight:700;
+      color:var(--slate);
+    }
+
+    .filter-grid{
+      display:grid;
+      gap:10px;
+    }
+
+    .control label,
+    .search-label{
+      display:block;
+      margin:0 0 7px;
+      font-size:12px;
+      font-weight:700;
+      color:var(--muted);
+    }
+
+    .control input,
+    .control select,
+    .control textarea,
+    .search-box input{
+      width:100%;
+      border:1px solid var(--line-2);
+      background:#fff;
+      color:var(--ink);
+      border-radius:12px;
+      padding:11px 12px;
+      transition:.18s ease;
+      outline:none;
+    }
+
+    .control textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    .control input:focus,
+    .control select:focus,
+    .control textarea:focus,
+    .search-box input:focus{
+      border-color:rgba(255,0,138,.45);
+      box-shadow:0 0 0 4px rgba(255,0,138,.08);
+    }
+
+    .tag-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:4px;
+    }
+
+    .tag{
+      padding:8px 10px;
+      border-radius:999px;
+      background:var(--brand-3);
+      color:var(--brand);
+      font-size:12px;
+      font-weight:700;
+      border:1px solid rgba(255,0,138,.12);
+    }
+
+    .main{
+      padding:20px;
+      overflow:hidden;
+    }
+
+    .hero{
+      background:
+        linear-gradient(135deg, rgba(255,0,138,.08), rgba(255,255,255,0) 55%),
+        linear-gradient(180deg,#fff 0%, #fdfdff 100%);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:28px;
+      padding:22px;
+      margin-bottom:18px;
+    }
+
+    .hero-top{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+
+    .hero-title h2{
+      margin:0;
+      font-size:30px;
+      line-height:1;
+      letter-spacing:-.03em;
+    }
+
+    .hero-title p{
+      margin:10px 0 0;
+      color:var(--muted);
+      max-width:900px;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:800;
+      transition:.18s ease;
+    }
+
+    .btn:hover{transform:translateY(-1px)}
+    .btn:disabled{opacity:.55; cursor:not-allowed; transform:none}
+
+    .btn-primary{
+      background:linear-gradient(135deg,var(--brand),var(--brand-2));
+      color:#fff;
+      box-shadow:0 10px 28px rgba(255,0,138,.22);
+    }
+
+    .btn-secondary{
+      background:#fff;
+      border:1px solid var(--line-2);
+      color:var(--ink);
+    }
+
+    .btn-ghost{
+      background:#f7f8fc;
+      border:1px solid var(--line);
+      color:var(--slate);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .stat{
+      background:rgba(255,255,255,.86);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      min-height:108px;
+    }
+
+    .stat-label{
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:800;
+    }
+
+    .stat-value{
+      margin-top:8px;
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-.04em;
+    }
+
+    .stat-sub{
+      margin-top:6px;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .workspace{
+      display:grid;
+      grid-template-columns:var(--directory) 1fr;
+      gap:18px;
+      min-height:calc(100vh - 230px);
+    }
+
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:24px;
+      overflow:hidden;
+      min-height:200px;
+    }
+
+    .panel-header{
+      padding:18px 18px 14px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,#fff 0%, #fcfcff 100%);
+    }
+
+    .panel-header h3{
+      margin:0;
+      font-size:17px;
+      letter-spacing:-.02em;
+    }
+
+    .panel-header p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .panel-body{padding:16px 18px 18px}
+
+    .directory-tools{
+      display:grid;
+      gap:12px;
+    }
+
+    .search-box{
+      position:relative;
+    }
+
+    .search-box input{
+      padding-left:14px;
+    }
+
+    .case-list{
+      display:grid;
+      gap:10px;
+      max-height:calc(100vh - 400px);
+      overflow:auto;
+      padding-right:2px;
+    }
+
+    .case-item{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      background:linear-gradient(180deg,#fff,#fcfcff);
+      cursor:pointer;
+      transition:.18s ease;
+    }
+
+    .case-item:hover{
+      transform:translateY(-2px);
+      border-color:#dfdff0;
+      box-shadow:0 10px 22px rgba(31,35,48,.08);
+    }
+
+    .case-item.active{
+      border-color:rgba(255,0,138,.28);
+      box-shadow:0 12px 30px rgba(255,0,138,.12);
+      background:linear-gradient(180deg,#fff,#fff8fc);
+    }
+
+    .case-item-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      margin-bottom:9px;
+    }
+
+    .case-key{
+      font-weight:900;
+      letter-spacing:-.02em;
+    }
+
+    .case-title{
+      font-weight:700;
+      line-height:1.35;
+      margin-top:5px;
+    }
+
+    .case-meta,
+    .mini-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .mini{
+      font-size:12px;
+      color:var(--muted);
+      padding:7px 9px;
+      border-radius:999px;
+      background:#f7f8fc;
+      border:1px solid var(--line);
+      font-weight:700;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 11px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      border:1px solid transparent;
+      white-space:nowrap;
+    }
+
+    .badge.open{background:var(--blue-bg); color:var(--blue); border-color:#dce8ff}
+    .badge.assigned{background:#f3e8ff; color:#7c3aed; border-color:#e7d7ff}
+    .badge.investigation{background:var(--amber-bg); color:var(--amber); border-color:#ffe6bf}
+    .badge.actions{background:#fef3c7; color:#92400e; border-color:#fde68a}
+    .badge.closed{background:var(--green-bg); color:var(--green); border-color:#d1fadf}
+    .badge.default{background:#f5f7fb; color:var(--slate); border-color:#e8edf3}
+
+    .detail-shell{
+      display:flex;
+      flex-direction:column;
+      min-height:calc(100vh - 290px);
+    }
+
+    .detail-header{
+      padding:18px 18px 16px;
+      border-bottom:1px solid var(--line);
+      background:
+        linear-gradient(135deg,rgba(255,0,138,.08),rgba(255,255,255,0) 40%),
+        linear-gradient(180deg,#fff 0%, #fcfcff 100%);
+    }
+
+    .detail-title-row{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+
+    .detail-title h3{
+      margin:0;
+      font-size:26px;
+      line-height:1.06;
+      letter-spacing:-.03em;
+    }
+
+    .detail-title p{
+      margin:8px 0 0;
+      color:var(--muted);
+    }
+
+    .detail-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    .inline-field{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background:#fff;
+      border:1px solid var(--line-2);
+      border-radius:14px;
+      padding:8px 10px;
+    }
+
+    .inline-field label{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+
+    .inline-field select{
+      border:none;
+      background:transparent;
+      outline:none;
+      font-weight:700;
+      color:var(--ink);
+      min-width:170px;
+    }
+
+    .detail-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .tabbar{
+      display:flex;
+      gap:8px;
+      padding:14px 18px 0;
+      flex-wrap:wrap;
+    }
+
+    .tabbar button{
+      appearance:none;
+      border:1px solid var(--line-2);
+      background:#fff;
+      color:var(--slate);
+      border-radius:12px;
+      padding:10px 14px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+
+    .tabbar button.active{
+      background:var(--brand-3);
+      border-color:rgba(255,0,138,.18);
+      color:var(--brand);
+    }
+
+    .tab-content{
+      padding:18px;
+      display:grid;
+      gap:16px;
+      overflow:auto;
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+    }
+
+    .grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+    .card{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,#fff,#fcfcff);
+      border-radius:20px;
+      padding:16px;
+    }
+
+    .card h4{
+      margin:0 0 12px;
+      font-size:15px;
+      letter-spacing:-.02em;
+    }
+
+    .kv{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .kv.one{grid-template-columns:1fr}
+
+    .kv-item{
+      background:#fafbff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      min-height:74px;
+    }
+
+    .kv-label{
+      font-size:12px;
+      font-weight:800;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      margin-bottom:7px;
+    }
+
+    .kv-value{
+      font-size:14px;
+      line-height:1.45;
+      word-break:break-word;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin:0 0 4px;
+    }
+
+    .section-title h4{
+      margin:0;
+      font-size:16px;
+      letter-spacing:-.02em;
+    }
+
+    .section-title p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .form-section{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,#fff,#fcfcff);
+      border-radius:20px;
+      padding:16px;
+    }
+
+    .form-actions{
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+      margin-top:4px;
+    }
+
+    .timeline{
+      display:grid;
+      gap:10px;
+    }
+
+    .timeline-item{
+      display:grid;
+      grid-template-columns:16px 1fr;
+      gap:12px;
+      align-items:flex-start;
+    }
+
+    .timeline-dot{
+      width:12px;
+      height:12px;
+      border-radius:999px;
+      margin-top:7px;
+      background:linear-gradient(135deg,var(--brand),var(--brand-2));
+      box-shadow:0 0 0 4px rgba(255,0,138,.10);
+    }
+
+    .timeline-card{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px 14px;
+      background:#fff;
+    }
+
+    .timeline-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:6px;
+    }
+
+    .timeline-title{
+      font-weight:800;
+    }
+
+    .timeline-time{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .timeline-detail{
+      color:var(--slate);
+      font-size:14px;
+      line-height:1.45;
+      white-space:pre-wrap;
+    }
+
+    .task-list,
+    .comment-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .task{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:13px 14px;
+      background:#fff;
+    }
+
+    .task-top,
+    .comment-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+
+    .task-title,
+    .comment-author{
+      font-weight:800;
+    }
+
+    .task-meta,
+    .comment-time{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .comment{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:13px 14px;
+      background:#fff;
+    }
+
+    .empty{
+      display:grid;
+      place-items:center;
+      min-height:420px;
+      padding:24px;
+      text-align:center;
+    }
+
+    .empty-card{
+      max-width:520px;
+      padding:34px;
+      border:1px dashed #d9dcec;
+      border-radius:24px;
+      background:linear-gradient(180deg,#fff,#fcfcff);
+    }
+
+    .empty-card h3{
+      margin:0 0 8px;
+      font-size:26px;
+      letter-spacing:-.03em;
+    }
+
+    .empty-card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .footer-note{
+      margin-top:10px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .link{
+      color:var(--brand);
+      font-weight:800;
+    }
+
+    .muted{color:var(--muted)}
+    .text-right{text-align:right}
+
+    .loading{
+      opacity:.7;
+      pointer-events:none;
+    }
+
+    .toast{
+      position:fixed;
+      right:20px;
+      bottom:20px;
+      min-width:280px;
+      max-width:460px;
+      padding:14px 16px;
+      border-radius:16px;
+      color:#fff;
+      background:linear-gradient(135deg,#111827,#334155);
+      box-shadow:0 14px 38px rgba(17,24,39,.25);
+      z-index:9999;
+      transform:translateY(20px);
+      opacity:0;
+      transition:.22s ease;
+    }
+
+    .toast.show{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    @media (max-width: 1400px){
+      .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .workspace{grid-template-columns:340px 1fr}
+    }
+
+    @media (max-width: 1180px){
+      .app{grid-template-columns:1fr}
+      .sidebar{
+        position:relative;
+        height:auto;
+        border-right:none;
+        border-bottom:1px solid var(--line);
+      }
+      .workspace{grid-template-columns:1fr}
+      .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media (max-width: 760px){
+      .main{padding:12px}
+      .hero{padding:16px}
+      .panel-header,.panel-body,.detail-header,.tab-content{padding-left:14px;padding-right:14px}
+      .tabbar{padding-left:14px;padding-right:14px}
+      .stats,.grid.two,.grid.three,.grid.four,.kv{grid-template-columns:1fr}
+      .detail-title h3{font-size:22px}
+      .hero-title h2{font-size:24px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <img id="brandLogo" src="assets/carmoola-logo.png" alt="Carmoola" onerror="this.style.display='none';document.getElementById('brandFallback').style.display='block';" />
+        <div id="brandFallback" class="brand-fallback">carmoola</div>
+        <div class="brand-meta">
+          <h1>Investigations Hub</h1>
+          <p>Innocent purchaser investigations, tasks, evidence and activity in one place.</p>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-section-title">Navigation</div>
+        <div class="nav">
+          <button class="active" data-left-nav="overview">
+            <span>Overview</span>
+            <span>→</span>
+          </button>
+          <button data-left-nav="directory">
+            <span>Case directory</span>
+            <span>→</span>
+          </button>
+          <button data-left-nav="current">
+            <span>Current case</span>
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-section-title">Fraud type</div>
+        <div class="filter-grid">
+          <div class="control">
+            <label for="fraudTypeFilter">Fraud type</label>
+            <select id="fraudTypeFilter"></select>
+          </div>
+          <div class="tag-row" id="fraudTypeTags"></div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-section-title">Filters</div>
+        <div class="filter-grid">
+          <div class="control">
+            <label for="scopeFilter">Case scope</label>
+            <select id="scopeFilter">
+              <option value="all">All cases</option>
+              <option value="open">Open only</option>
+              <option value="recent_closed">Recently closed</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="statusFilter">Status</label>
+            <select id="statusFilter">
+              <option value="">All statuses</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="assigneeFilter">Assignee</label>
+            <select id="assigneeFilter">
+              <option value="">All assignees</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="queryFilter">Search</label>
+            <input id="queryFilter" placeholder="Search by INV reference, customer, vehicle, summary..." />
+          </div>
+          <button id="clearFiltersBtn" class="btn btn-secondary">Clear filters</button>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-section-title">Notes</div>
+        <div class="muted" style="font-size:13px; line-height:1.6;">
+          This Hub is set up for <strong>Asset Sale</strong> now, but the structure supports additional fraud types later.
+          Assignee is always visible, and the homepage shows all cases without requiring staff log-in.
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <div class="hero-top">
+          <div class="hero-title">
+            <h2>Investigations Hub</h2>
+            <p>
+              A dedicated workspace for innocent purchaser investigations, built on top of Jira.
+              View every case, move through the investigation, manage tasks, track evidence and keep a clean activity trail.
+            </p>
+          </div>
+          <div class="hero-actions">
+            <button id="refreshAllBtn" class="btn btn-secondary">Refresh</button>
+            <button id="openFirstCaseBtn" class="btn btn-primary">Open first case</button>
+          </div>
+        </div>
+        <div id="statsRow" class="stats"></div>
+      </section>
+
+      <section class="workspace">
+        <section class="panel" id="directoryPanel">
+          <div class="panel-header">
+            <h3>Case directory</h3>
+            <p>All matching investigations, including open and closed cases.</p>
+          </div>
+          <div class="panel-body">
+            <div class="directory-tools">
+              <div class="search-box">
+                <label class="search-label" for="quickSearch">Quick search</label>
+                <input id="quickSearch" placeholder="Search current results..." />
+              </div>
+              <div class="mini-meta" id="directorySummary"></div>
+              <div id="caseList" class="case-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="detailPanel">
+          <div id="detailRoot" class="detail-shell"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const CONFIG = {
+      apiUrl: "YOUR_SUPABASE_FUNCTION_URL"
+    };
+
+    const state = {
+      bootstrap: null,
+      cases: [],
+      filteredCases: [],
+      selectedKey: "",
+      detail: null,
+      activeTab: "overview",
+      loading: false
+    };
+
+    const STATUS_ORDER = [
+      "Reported",
+      "Awaiting Assignee",
+      "Assigned",
+      "Investigation",
+      "Actions Outstanding",
+      "Case Closed"
+    ];
+
+    function qs(id){ return document.getElementById(id); }
+
+    function showToast(message){
+      const toast = qs("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    async function api(action, payload = {}){
+      const res = await fetch(CONFIG.apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, ...payload })
+      });
+
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || json.ok === false) {
+        throw new Error(json.error || "Something went wrong");
+      }
+      return json;
+    }
+
+    function formatDate(value, withTime = false){
+      if (!value) return "—";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return value;
+      return new Intl.DateTimeFormat("en-GB", withTime ? {
+        day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit"
+      } : {
+        day:"2-digit", month:"short", year:"numeric"
+      }).format(d);
+    }
+
+    function formatMoney(value){
+      const num = Number(value);
+      if (!Number.isFinite(num)) return "—";
+      return new Intl.NumberFormat("en-GB", {
+        style:"currency",
+        currency:"GBP",
+        maximumFractionDigits:2
+      }).format(num);
+    }
+
+    function escapeHtml(text){
+      return String(text ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;");
+    }
+
+    function nl2br(text){
+      return escapeHtml(text || "").replace(/\n/g, "<br>");
+    }
+
+    function statusBadgeClass(status){
+      switch(status){
+        case "Reported":
+        case "Awaiting Assignee":
+          return "open";
+        case "Assigned":
+          return "assigned";
+        case "Investigation":
+          return "investigation";
+        case "Actions Outstanding":
+          return "actions";
+        case "Case Closed":
+          return "closed";
+        default:
+          return "default";
+      }
+    }
+
+    function isClosed(caseItem){
+      return caseItem.statusName === "Case Closed" || caseItem.statusCategory === "Done";
+    }
+
+    function daysSince(date){
+      if (!date) return null;
+      const d = new Date(date);
+      if (Number.isNaN(d.getTime())) return null;
+      const diff = Date.now() - d.getTime();
+      return Math.max(0, Math.floor(diff / 86400000));
+    }
+
+    function getFilteredCases(){
+      const fraudType = qs("fraudTypeFilter").value || "Asset Sale";
+      const scope = qs("scopeFilter").value;
+      const status = qs("statusFilter").value;
+      const assignee = qs("assigneeFilter").value;
+      const q = (qs("queryFilter").value || qs("quickSearch").value || "").trim().toLowerCase();
+
+      return state.cases.filter(item => {
+        if (item.fraudType !== fraudType) return false;
+
+        if (scope === "open" && isClosed(item)) return false;
+        if (scope === "recent_closed") {
+          if (!isClosed(item)) return false;
+          const age = daysSince(item.closedDate || item.updated);
+          if (age === null || age > 45) return false;
+        }
+
+        if (status && item.statusName !== status) return false;
+        if (assignee && (item.assigneeAccountId || "") !== assignee) return false;
+
+        if (q){
+          const hay = [
+            item.key,
+            item.summary,
+            item.customerName,
+            item.loanReferenceNumber,
+            item.currentVehicleRegistration,
+            item.originalVehicleRegistration,
+            item.vehicleMake,
+            item.vehicleModel,
+            item.assigneeName
+          ].join(" ").toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+
+        return true;
+      });
+    }
+
+    function buildStats(cases){
+      const total = cases.length;
+      const open = cases.filter(c => !isClosed(c)).length;
+      const investigation = cases.filter(c => c.statusName === "Investigation").length;
+      const actions = cases.filter(c => c.statusName === "Actions Outstanding").length;
+      const recentClosed = cases.filter(c => isClosed(c) && (daysSince(c.closedDate || c.updated) ?? 999) <= 30).length;
+      const exposure = cases.reduce((sum, c) => sum + (Number(c.potentialExposure) || 0), 0);
+
+      return [
+        { label:"Total cases", value: total, sub:"All cases in current fraud type" },
+        { label:"Open cases", value: open, sub:"Not yet closed" },
+        { label:"In investigation", value: investigation, sub:"Actively under review" },
+        { label:"Actions outstanding", value: actions, sub:"Investigation done, actions remain" },
+        { label:"Potential exposure", value: formatMoney(exposure), sub:"Based on recorded case exposure" }
+      ];
+    }
+
+    function renderStats(){
+      const stats = buildStats(state.filteredCases);
+      qs("statsRow").innerHTML = stats.map(item => `
+        <div class="stat">
+          <div class="stat-label">${escapeHtml(item.label)}</div>
+          <div class="stat-value">${escapeHtml(item.value)}</div>
+          <div class="stat-sub">${escapeHtml(item.sub)}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderDirectorySummary(){
+      const filtered = state.filteredCases.length;
+      const total = state.cases.filter(c => c.fraudType === (qs("fraudTypeFilter").value || "Asset Sale")).length;
+      qs("directorySummary").innerHTML = `
+        <span class="mini">${filtered} shown</span>
+        <span class="mini">${total} total in fraud type</span>
+        <span class="mini">${state.filteredCases.filter(c => !isClosed(c)).length} open</span>
+      `;
+    }
+
+    function renderCaseList(){
+      const list = qs("caseList");
+      if (!state.filteredCases.length){
+        list.innerHTML = `
+          <div class="empty">
+            <div class="empty-card">
+              <h3>No matching cases</h3>
+              <p>Try broadening the filters or switching fraud type.</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = state.filteredCases.map(item => `
+        <div class="case-item ${state.selectedKey === item.key ? "active" : ""}" data-case-key="${escapeHtml(item.key)}">
+          <div class="case-item-top">
+            <div>
+              <div class="case-key">${escapeHtml(item.key)}</div>
+              <div class="case-title">${escapeHtml(item.summary || "Untitled investigation")}</div>
+            </div>
+            <span class="badge ${statusBadgeClass(item.statusName)}">${escapeHtml(item.statusName)}</span>
+          </div>
+          <div class="case-meta">
+            <span class="mini">${escapeHtml(item.customerName || "No customer name")}</span>
+            <span class="mini">${escapeHtml(item.assigneeName || "Unassigned")}</span>
+          </div>
+          <div class="case-meta">
+            <span class="mini">${escapeHtml(item.currentVehicleRegistration || item.originalVehicleRegistration || "No reg")}</span>
+            <span class="mini">${formatMoney(item.potentialExposure)}</span>
+          </div>
+        </div>
+      `).join("");
+
+      list.querySelectorAll("[data-case-key]").forEach(el => {
+        el.addEventListener("click", () => openCase(el.getAttribute("data-case-key")));
+      });
+    }
+
+    function renderFilterOptions(){
+      const statuses = Array.from(new Set(state.cases.map(c => c.statusName).filter(Boolean)))
+        .sort((a,b) => {
+          const ai = STATUS_ORDER.indexOf(a);
+          const bi = STATUS_ORDER.indexOf(b);
+          return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+        });
+
+      qs("statusFilter").innerHTML = `<option value="">All statuses</option>` + statuses.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join("");
+
+      const assignees = state.bootstrap.assignees || [];
+      qs("assigneeFilter").innerHTML = `<option value="">All assignees</option>` + assignees.map(a => `
+        <option value="${escapeHtml(a.accountId)}">${escapeHtml(a.displayName)}</option>
+      `).join("");
+    }
+
+    function renderFraudTypes(){
+      const fraudTypes = state.bootstrap.fraudTypes || [];
+      qs("fraudTypeFilter").innerHTML = fraudTypes.map(f => `
+        <option value="${escapeHtml(f.value)}">${escapeHtml(f.label)}</option>
+      `).join("");
+
+      qs("fraudTypeTags").innerHTML = fraudTypes.map(f => `
+        <span class="tag">${escapeHtml(f.label)}</span>
+      `).join("");
+    }
+
+    function renderOverview(detail){
+      const timelinePreview = (detail.timeline || []).slice(0, 8);
+      return `
+        <div class="grid two">
+          <div class="card">
+            <div class="section-title">
+              <h4>Investigation snapshot</h4>
+              <p>At-a-glance summary</p>
+            </div>
+            <div class="kv">
+              <div class="kv-item">
+                <div class="kv-label">Fraud type</div>
+                <div class="kv-value">${escapeHtml(detail.fraudType || "—")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Assignee</div>
+                <div class="kv-value">${escapeHtml(detail.assigneeName || "Unassigned")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Status</div>
+                <div class="kv-value">${escapeHtml(detail.statusName || "—")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Innocent purchaser</div>
+                <div class="kv-value">${escapeHtml(detail.innocentPurchaser || "Not yet recorded")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Potential exposure</div>
+                <div class="kv-value">${formatMoney(detail.potentialExposure)}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Actual loss</div>
+                <div class="kv-value">${formatMoney(detail.investigationActualLoss)}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <h4>Important dates</h4>
+              <p>Milestones and chronology</p>
+            </div>
+            <div class="kv">
+              <div class="kv-item">
+                <div class="kv-label">Date reported</div>
+                <div class="kv-value">${formatDate(detail.dateReported)}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Incident date</div>
+                <div class="kv-value">${formatDate(detail.incidentDate)}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Assigned date</div>
+                <div class="kv-value">${formatDate(detail.investigationAssignedDate)}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Started date</div>
+                <div class="kv-value">${formatDate(detail.investigationStartedDate)}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Completed date</div>
+                <div class="kv-value">${formatDate(detail.investigationCompletedDate)}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Closed date</div>
+                <div class="kv-value">${formatDate(detail.investigationClosedDate)}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <div class="section-title">
+              <h4>Customer, agreement and vehicle</h4>
+              <p>Source information and key identifiers</p>
+            </div>
+            <div class="kv">
+              <div class="kv-item">
+                <div class="kv-label">Customer</div>
+                <div class="kv-value">${escapeHtml(detail.customerFirstName || "")} ${escapeHtml(detail.customerLastName || "")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Agreement reference</div>
+                <div class="kv-value">${escapeHtml(detail.loanReferenceNumber || "—")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Customer email</div>
+                <div class="kv-value">${escapeHtml(detail.customerEmail || "—")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Customer phone</div>
+                <div class="kv-value">${escapeHtml(detail.customerPhone || "—")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Current registration</div>
+                <div class="kv-value">${escapeHtml(detail.currentVehicleRegistration || "—")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Original registration</div>
+                <div class="kv-value">${escapeHtml(detail.originalVehicleRegistration || "—")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Vehicle</div>
+                <div class="kv-value">${escapeHtml([detail.vehicleMake, detail.vehicleModel].filter(Boolean).join(" ") || "—")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">VIN</div>
+                <div class="kv-value">${escapeHtml(detail.vehicleVin || "—")}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <h4>Purchaser and seller</h4>
+              <p>Current chain details</p>
+            </div>
+            <div class="kv">
+              <div class="kv-item">
+                <div class="kv-label">Purchaser</div>
+                <div class="kv-value">${escapeHtml([detail.purchaserFirstName, detail.purchaserLastName].filter(Boolean).join(" ") || "—")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Purchaser contact</div>
+                <div class="kv-value">${escapeHtml(detail.purchaserContactNumber || detail.purchaserEmailAddress || "—")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Acquisition channel</div>
+                <div class="kv-value">${escapeHtml(detail.purchaserAcquisitionChannel || "—")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Purchase price</div>
+                <div class="kv-value">${formatMoney(detail.purchaserPurchasePrice)}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Seller name</div>
+                <div class="kv-value">${escapeHtml(detail.sellerName || "—")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Seller relationship</div>
+                <div class="kv-value">${escapeHtml(detail.sellerRelationshipToCustomer || "—")}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <div class="section-title">
+              <h4>Investigation findings</h4>
+              <p>Recorded notes and legal review flag</p>
+            </div>
+            <div class="kv one">
+              <div class="kv-item">
+                <div class="kv-label">Findings</div>
+                <div class="kv-value">${nl2br(detail.investigationFindings || "No findings recorded yet.")}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Legal review required</div>
+                <div class="kv-value">${escapeHtml(detail.investigationLegalReviewRequired || "—")}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <h4>Recent activity</h4>
+              <p>Latest status changes, comments and actions</p>
+            </div>
+            <div class="timeline">
+              ${
+                timelinePreview.length
+                  ? timelinePreview.map(item => `
+                    <div class="timeline-item">
+                      <div class="timeline-dot"></div>
+                      <div class="timeline-card">
+                        <div class="timeline-top">
+                          <div class="timeline-title">${escapeHtml(item.title)}</div>
+                          <div class="timeline-time">${formatDate(item.at, true)}</div>
+                        </div>
+                        <div class="timeline-detail">${nl2br(item.detail || "")}</div>
+                      </div>
+                    </div>
+                  `).join("")
+                  : `<div class="muted">No activity yet.</div>`
+              }
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function optionSelect(name, label, value, options = [], placeholder = "Select..."){
+      return `
+        <div class="control">
+          <label for="${name}">${escapeHtml(label)}</label>
+          <select id="${name}" data-field="${name}">
+            <option value="">${escapeHtml(placeholder)}</option>
+            ${options.map(o => `<option value="${escapeHtml(o.value)}" ${String(value || "") === String(o.value) ? "selected" : ""}>${escapeHtml(o.value)}</option>`).join("")}
+          </select>
+        </div>
+      `;
+    }
+
+    function textInput(name, label, value = "", type = "text"){
+      return `
+        <div class="control">
+          <label for="${name}">${escapeHtml(label)}</label>
+          <input type="${type}" id="${name}" data-field="${name}" value="${escapeHtml(value || "")}">
+        </div>
+      `;
+    }
+
+    function textareaInput(name, label, value = "", rows = 6){
+      return `
+        <div class="control">
+          <label for="${name}">${escapeHtml(label)}</label>
+          <textarea id="${name}" data-field="${name}" rows="${rows}">${escapeHtml(value || "")}</textarea>
+        </div>
+      `;
+    }
+
+    function renderInvestigationForm(detail){
+      const o = detail.optionSets || {};
+      return `
+        <div class="form-section">
+          <div class="section-title">
+            <h4>Core case details</h4>
+            <p>Main investigation record and customer context</p>
+          </div>
+          <div class="grid two">
+            ${textInput("summary", "Summary", detail.summary)}
+            ${textInput("loanReferenceNumber", "Loan reference number", detail.loanReferenceNumber)}
+            ${textInput("customerFirstName", "Customer first name", detail.customerFirstName)}
+            ${textInput("customerLastName", "Customer last name", detail.customerLastName)}
+            ${textInput("customerEmail", "Customer email", detail.customerEmail, "email")}
+            ${textInput("customerPhone", "Customer phone", detail.customerPhone)}
+            ${textInput("adminPortalLink", "Application / Loan admin portal link", detail.adminPortalLink, "url")}
+            ${textInput("dateReported", "Date reported", detail.dateReported, "date")}
+            ${textInput("incidentDate", "Incident date", detail.incidentDate, "date")}
+            ${textInput("loanOriginationDate", "Agreement start date", detail.loanOriginationDate, "date")}
+            ${optionSelect("confirmedSuspected", "Confirmed / suspected", detail.confirmedSuspected, o.confirmedSuspected)}
+            ${optionSelect("fraudType", "Fraud type", detail.fraudType, o.fraudType)}
+          </div>
+          ${textareaInput("description", "Description", detail.description, 7)}
+        </div>
+
+        <div class="form-section">
+          <div class="section-title">
+            <h4>Vehicle and original sale</h4>
+            <p>Original agreement and vehicle details</p>
+          </div>
+          <div class="grid three">
+            ${textInput("currentVehicleRegistration", "Current vehicle registration", detail.currentVehicleRegistration)}
+            ${textInput("originalVehicleRegistration", "Original vehicle registration", detail.originalVehicleRegistration)}
+            ${textInput("vehicleVin", "Vehicle VIN", detail.vehicleVin)}
+            ${textInput("vehicleMake", "Vehicle make", detail.vehicleMake)}
+            ${textInput("vehicleModel", "Vehicle model", detail.vehicleModel)}
+            ${textInput("vehicleOriginalMileage", "Vehicle original mileage", detail.vehicleOriginalMileage)}
+            ${textInput("purchasePrice", "Purchase price", detail.purchasePrice, "number")}
+            ${textInput("depositAmount", "Deposit amount", detail.depositAmount, "number")}
+            ${textInput("partExchangeAmount", "Part-exchange amount", detail.partExchangeAmount, "number")}
+            ${textInput("dealershipName", "Dealership name", detail.dealershipName)}
+            ${optionSelect("introducer", "Introducer", detail.introducer, o.introducer)}
+            ${optionSelect("introducerType", "Introducer type", detail.introducerType, o.introducerType)}
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-title">
+            <h4>Purchaser and seller</h4>
+            <p>Current purchaser details and immediate seller details</p>
+          </div>
+          <div class="grid three">
+            ${optionSelect("purchaserKnown", "Purchaser known", detail.purchaserKnown, o.purchaserKnown)}
+            ${textInput("purchaserFirstName", "Purchaser first name", detail.purchaserFirstName)}
+            ${textInput("purchaserLastName", "Purchaser last name", detail.purchaserLastName)}
+            ${textInput("purchaserEmailAddress", "Purchaser email address", detail.purchaserEmailAddress, "email")}
+            ${textInput("purchaserContactNumber", "Purchaser contact number", detail.purchaserContactNumber)}
+            ${optionSelect("purchaserRelationship", "Purchaser relationship", detail.purchaserRelationship, o.purchaserRelationship)}
+            ${textInput("purchaserAcquisitionDate", "Purchaser acquisition date", detail.purchaserAcquisitionDate, "date")}
+            ${textInput("purchaserPurchasePrice", "Purchaser purchase price", detail.purchaserPurchasePrice, "number")}
+            ${optionSelect("purchaserPaymentMethod", "Purchaser payment method", detail.purchaserPaymentMethod, o.purchaserPaymentMethod)}
+            ${optionSelect("purchaserAcquisitionChannel", "Purchaser acquisition channel", detail.purchaserAcquisitionChannel, o.purchaserAcquisitionChannel)}
+            ${optionSelect("purchaserType", "Purchaser type", detail.purchaserType, o.purchaserType)}
+            ${textInput("sellerName", "Seller name", detail.sellerName)}
+            ${textInput("sellerPhone", "Seller phone", detail.sellerPhone)}
+            ${textInput("sellerEmailAddress", "Seller email address", detail.sellerEmailAddress, "email")}
+            ${optionSelect("sellerRelationshipToCustomer", "Seller relationship to customer", detail.sellerRelationshipToCustomer, o.sellerRelationshipToCustomer)}
+            ${optionSelect("vehicleLocationKnown", "Vehicle location known", detail.vehicleLocationKnown, o.vehicleLocationKnown)}
+            ${textInput("vehicleLocation", "Vehicle location", detail.vehicleLocation)}
+            ${optionSelect("innocentPurchaser", "Innocent purchaser", detail.innocentPurchaser, o.innocentPurchaser)}
+            ${textInput("potentialExposure", "Potential exposure", detail.potentialExposure, "number")}
+          </div>
+          ${textareaInput("investigationTransactionHistory", "Investigation transaction history", detail.investigationTransactionHistory, 6)}
+          ${textareaInput("investigationActions", "Investigation actions", detail.investigationActions, 5)}
+        </div>
+
+        <div class="form-section">
+          <div class="section-title">
+            <h4>Financial summary</h4>
+            <p>Exposure, costs and loss</p>
+          </div>
+          <div class="grid three">
+            ${textInput("outstandingAgreementBalance", "Outstanding agreement balance", detail.outstandingAgreementBalance, "number")}
+            ${textInput("investigationRecoveryCosts", "Investigation recovery costs", detail.investigationRecoveryCosts, "number")}
+            ${textInput("investigationLegalCosts", "Investigation legal costs", detail.investigationLegalCosts, "number")}
+            ${textInput("investigationOtherCosts", "Investigation other costs", detail.investigationOtherCosts, "number")}
+            ${textInput("investigationActualLoss", "Investigation actual loss", detail.investigationActualLoss, "number")}
+            ${optionSelect("vehicleAuctionSale", "Vehicle auction sale", detail.vehicleAuctionSale, o.vehicleAuctionSale)}
+            ${textInput("auctionDateSold", "Auction date sold", detail.auctionDateSold, "date")}
+            ${textInput("auctionSaleValue", "Auction sale value", detail.auctionSaleValue, "number")}
+            ${textInput("auctionNamaGrade", "Auction NAMA grade", detail.auctionNamaGrade, "number")}
+            ${textInput("auctionDamageEstimate", "Auction damage estimate", detail.auctionDamageEstimate, "number")}
+            ${textInput("auctionG3InvoiceReference", "Auction G3 invoice reference", detail.auctionG3InvoiceReference)}
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" id="saveInvestigationBtn">Save case</button>
+        </div>
+      `;
+    }
+
+    function renderEvidenceForm(detail){
+      const o = detail.optionSets || {};
+      return `
+        <div class="form-section">
+          <div class="section-title">
+            <h4>Evidence and findings</h4>
+            <p>Questionnaire, evidence register and investigation findings</p>
+          </div>
+          <div class="grid three">
+            ${textInput("innocentPurchaserFormRequestedDate", "Innocent purchaser form requested date", detail.innocentPurchaserFormRequestedDate, "date")}
+            ${textInput("innocentPurchaserFormReceivedDate", "Innocent purchaser form received date", detail.innocentPurchaserFormReceivedDate, "date")}
+            ${optionSelect("investigationEvidenceStatus", "Investigation evidence status", detail.investigationEvidenceStatus, o.investigationEvidenceStatus)}
+            ${optionSelect("investigationLegalReviewRequired", "Investigation legal review required", detail.investigationLegalReviewRequired, o.investigationLegalReviewRequired)}
+          </div>
+          ${textareaInput("investigationEvidenceRegister", "Investigation evidence register", detail.investigationEvidenceRegister, 7)}
+          ${textareaInput("investigationFindings", "Investigation findings", detail.investigationFindings, 10)}
+          <div class="form-actions">
+            <button class="btn btn-primary" id="saveEvidenceBtn">Save evidence and findings</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderActivity(detail){
+      return `
+        <div class="grid two">
+          <div class="card">
+            <div class="section-title">
+              <h4>Comments</h4>
+              <p>Jira comments on this investigation</p>
+            </div>
+            <div class="comment-list">
+              ${
+                (detail.comments || []).length
+                  ? detail.comments.map(comment => `
+                    <div class="comment">
+                      <div class="comment-top">
+                        <div class="comment-author">${escapeHtml(comment.author || "Unknown")}</div>
+                        <div class="comment-time">${formatDate(comment.created, true)}</div>
+                      </div>
+                      <div>${nl2br(comment.body || "")}</div>
+                    </div>
+                  `).join("")
+                  : `<div class="muted">No comments yet.</div>`
+              }
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <h4>Log new activity</h4>
+              <p>Add a comment directly to Jira</p>
+            </div>
+            ${textareaInput("newCommentText", "New comment", "", 8)}
+            <div class="form-actions">
+              <button class="btn btn-primary" id="addCommentBtn">Add comment</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <div class="section-title">
+              <h4>Tasks</h4>
+              <p>Subtasks linked to this investigation</p>
+            </div>
+            <div class="task-list">
+              ${
+                (detail.tasks || []).length
+                  ? detail.tasks.map(task => `
+                    <div class="task">
+                      <div class="task-top">
+                        <div class="task-title">${escapeHtml(task.key)} — ${escapeHtml(task.summary || "Untitled task")}</div>
+                        <span class="badge ${statusBadgeClass(task.statusName === "Done" ? "Case Closed" : task.statusName)}">${escapeHtml(task.statusName || "To Do")}</span>
+                      </div>
+                      <div class="task-meta">
+                        ${escapeHtml(task.assigneeName || "Unassigned")}
+                        ${task.dueDate ? " • Due " + formatDate(task.dueDate) : ""}
+                      </div>
+                    </div>
+                  `).join("")
+                  : `<div class="muted">No tasks yet.</div>`
+              }
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <h4>Create task</h4>
+              <p>Add a Jira subtask under this investigation</p>
+            </div>
+            <div class="grid two">
+              ${textInput("taskSummary", "Task summary", "")}
+              <div class="control">
+                <label for="taskAssignee">Assignee</label>
+                <select id="taskAssignee">
+                  <option value="">Unassigned</option>
+                  ${(state.bootstrap.assignees || []).map(a => `<option value="${escapeHtml(a.accountId)}">${escapeHtml(a.displayName)}</option>`).join("")}
+                </select>
+              </div>
+              ${textInput("taskDueDate", "Due date", "", "date")}
+            </div>
+            ${textareaInput("taskDescription", "Task description", "", 6)}
+            <div class="form-actions">
+              <button class="btn btn-primary" id="createTaskBtn">Create task</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <h4>Full activity timeline</h4>
+            <p>Status changes, assignee changes and comments</p>
+          </div>
+          <div class="timeline">
+            ${
+              (detail.timeline || []).length
+                ? detail.timeline.map(item => `
+                  <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                      <div class="timeline-top">
+                        <div class="timeline-title">${escapeHtml(item.title)}</div>
+                        <div class="timeline-time">${formatDate(item.at, true)}</div>
+                      </div>
+                      <div class="timeline-detail">${nl2br(item.detail || "")}</div>
+                    </div>
+                  </div>
+                `).join("")
+                : `<div class="muted">No timeline items found.</div>`
+            }
+          </div>
+        </div>
+      `;
+    }
+
+    function renderDetail(){
+      const root = qs("detailRoot");
+
+      if (!state.detail){
+        root.innerHTML = `
+          <div class="empty">
+            <div class="empty-card">
+              <h3>Select a case</h3>
+              <p>
+                Choose a case from the directory to open the full investigation dashboard.
+                The design is built so additional fraud types can slot in later without changing the overall structure.
+              </p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const d = state.detail;
+      root.innerHTML = `
+        <div class="detail-header">
+          <div class="detail-title-row">
+            <div class="detail-title">
+              <h3>${escapeHtml(d.summary || "Untitled investigation")}</h3>
+              <p>${escapeHtml(d.key)} • ${escapeHtml(d.customerFirstName || "")} ${escapeHtml(d.customerLastName || "")}</p>
+            </div>
+
+            <div class="detail-actions">
+              <div class="inline-field">
+                <label for="caseAssigneeSelect">Assignee</label>
+                <select id="caseAssigneeSelect">
+                  <option value="">Unassigned</option>
+                  ${(state.bootstrap.assignees || []).map(a => `
+                    <option value="${escapeHtml(a.accountId)}" ${a.accountId === d.assigneeAccountId ? "selected" : ""}>${escapeHtml(a.displayName)}</option>
+                  `).join("")}
+                </select>
+              </div>
+              <button class="btn btn-secondary" id="saveAssigneeBtn">Save assignee</button>
+              <button class="btn btn-secondary" id="refreshCaseBtn">Refresh case</button>
+            </div>
+          </div>
+
+          <div class="detail-meta">
+            <span class="badge ${statusBadgeClass(d.statusName)}">${escapeHtml(d.statusName)}</span>
+            <span class="pill">${escapeHtml(d.fraudType || "—")}</span>
+            <span class="pill">Exposure: ${formatMoney(d.potentialExposure)}</span>
+            <span class="pill">First assignee: ${escapeHtml(d.firstAssignee || "—")}</span>
+            <span class="pill">Updated: ${formatDate(d.updated, true)}</span>
+          </div>
+
+          ${
+            (d.transitions || []).length
+              ? `<div class="detail-meta" style="margin-top:12px;">
+                  ${(d.transitions || []).map(t => `<button class="btn btn-ghost transitionBtn" data-transition-id="${escapeHtml(t.id)}">${escapeHtml(t.name)}</button>`).join("")}
+                </div>`
+              : ``
+          }
+        </div>
+
+        <div class="tabbar">
+          <button class="${state.activeTab === "overview" ? "active" : ""}" data-tab="overview">Overview</button>
+          <button class="${state.activeTab === "investigation" ? "active" : ""}" data-tab="investigation">Investigation</button>
+          <button class="${state.activeTab === "evidence" ? "active" : ""}" data-tab="evidence">Evidence</button>
+          <button class="${state.activeTab === "activity" ? "active" : ""}" data-tab="activity">Activity & tasks</button>
+        </div>
+
+        <div class="tab-content">
+          ${
+            state.activeTab === "overview" ? renderOverview(d)
+            : state.activeTab === "investigation" ? renderInvestigationForm(d)
+            : state.activeTab === "evidence" ? renderEvidenceForm(d)
+            : renderActivity(d)
+          }
+        </div>
+      `;
+
+      root.querySelectorAll("[data-tab]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.activeTab = btn.getAttribute("data-tab");
+          renderDetail();
+        });
+      });
+
+      root.querySelectorAll(".transitionBtn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          await transitionCase(btn.getAttribute("data-transition-id"));
+        });
+      });
+
+      const saveAssigneeBtn = qs("saveAssigneeBtn");
+      if (saveAssigneeBtn){
+        saveAssigneeBtn.addEventListener("click", saveAssigneeOnly);
+      }
+
+      const refreshCaseBtn = qs("refreshCaseBtn");
+      if (refreshCaseBtn){
+        refreshCaseBtn.addEventListener("click", () => openCase(d.key, true));
+      }
+
+      const saveInvestigationBtn = qs("saveInvestigationBtn");
+      if (saveInvestigationBtn){
+        saveInvestigationBtn.addEventListener("click", saveInvestigationTab);
+      }
+
+      const saveEvidenceBtn = qs("saveEvidenceBtn");
+      if (saveEvidenceBtn){
+        saveEvidenceBtn.addEventListener("click", saveEvidenceTab);
+      }
+
+      const addCommentBtn = qs("addCommentBtn");
+      if (addCommentBtn){
+        addCommentBtn.addEventListener("click", addComment);
+      }
+
+      const createTaskBtn = qs("createTaskBtn");
+      if (createTaskBtn){
+        createTaskBtn.addEventListener("click", createTask);
+      }
+    }
+
+    function collectFields(fieldNames){
+      const payload = {};
+      fieldNames.forEach(name => {
+        const el = document.querySelector(`[data-field="${name}"]`);
+        if (!el) return;
+        payload[name] = el.value;
+      });
+      return payload;
+    }
+
+    async function saveAssigneeOnly(){
+      const accountId = qs("caseAssigneeSelect").value;
+      await setBusy(true);
+      try{
+        await api("update_case", {
+          issueKey: state.selectedKey,
+          payload: { assigneeAccountId: accountId }
+        });
+        showToast("Assignee updated");
+        await Promise.all([loadCases(false), openCase(state.selectedKey, true)]);
+      }catch(error){
+        showToast(error.message || "Unable to update assignee");
+      }finally{
+        setBusy(false);
+      }
+    }
+
+    async function saveInvestigationTab(){
+      const fieldNames = [
+        "summary","description","loanReferenceNumber","customerFirstName","customerLastName","customerEmail","customerPhone",
+        "adminPortalLink","dateReported","incidentDate","loanOriginationDate","confirmedSuspected","fraudType",
+        "currentVehicleRegistration","originalVehicleRegistration","vehicleVin","vehicleMake","vehicleModel","vehicleOriginalMileage",
+        "purchasePrice","depositAmount","partExchangeAmount","dealershipName","introducer","introducerType",
+        "purchaserKnown","purchaserFirstName","purchaserLastName","purchaserEmailAddress","purchaserContactNumber",
+        "purchaserRelationship","purchaserAcquisitionDate","purchaserPurchasePrice","purchaserPaymentMethod",
+        "purchaserAcquisitionChannel","purchaserType","sellerName","sellerPhone","sellerEmailAddress",
+        "sellerRelationshipToCustomer","vehicleLocationKnown","vehicleLocation","innocentPurchaser","potentialExposure",
+        "investigationTransactionHistory","investigationActions","outstandingAgreementBalance","investigationRecoveryCosts",
+        "investigationLegalCosts","investigationOtherCosts","investigationActualLoss","vehicleAuctionSale","auctionDateSold",
+        "auctionSaleValue","auctionNamaGrade","auctionDamageEstimate","auctionG3InvoiceReference"
+      ];
+      const payload = collectFields(fieldNames);
+      payload.assigneeAccountId = qs("caseAssigneeSelect")?.value || "";
+
+      await setBusy(true);
+      try{
+        await api("update_case", { issueKey: state.selectedKey, payload });
+        showToast("Case saved");
+        await Promise.all([loadCases(false), openCase(state.selectedKey, true)]);
+      }catch(error){
+        showToast(error.message || "Unable to save case");
+      }finally{
+        setBusy(false);
+      }
+    }
+
+    async function saveEvidenceTab(){
+      const payload = collectFields([
+        "innocentPurchaserFormRequestedDate",
+        "innocentPurchaserFormReceivedDate",
+        "investigationEvidenceStatus",
+        "investigationLegalReviewRequired",
+        "investigationEvidenceRegister",
+        "investigationFindings"
+      ]);
+
+      await setBusy(true);
+      try{
+        await api("update_case", { issueKey: state.selectedKey, payload });
+        showToast("Evidence and findings saved");
+        await Promise.all([loadCases(false), openCase(state.selectedKey, true)]);
+      }catch(error){
+        showToast(error.message || "Unable to save evidence");
+      }finally{
+        setBusy(false);
+      }
+    }
+
+    async function addComment(){
+      const text = qs("newCommentText")?.value?.trim();
+      if (!text){
+        showToast("Please add a comment first");
+        return;
+      }
+
+      await setBusy(true);
+      try{
+        await api("add_comment", { issueKey: state.selectedKey, comment: text });
+        showToast("Comment added");
+        await openCase(state.selectedKey, true);
+      }catch(error){
+        showToast(error.message || "Unable to add comment");
+      }finally{
+        setBusy(false);
+      }
+    }
+
+    async function createTask(){
+      const summary = qs("taskSummary")?.value?.trim();
+      if (!summary){
+        showToast("Please add a task summary");
+        return;
+      }
+
+      const payload = {
+        summary,
+        description: qs("taskDescription")?.value || "",
+        assigneeAccountId: qs("taskAssignee")?.value || "",
+        dueDate: qs("taskDueDate")?.value || ""
+      };
+
+      await setBusy(true);
+      try{
+        await api("create_task", { issueKey: state.selectedKey, payload });
+        showToast("Task created");
+        await openCase(state.selectedKey, true);
+      }catch(error){
+        showToast(error.message || "Unable to create task");
+      }finally{
+        setBusy(false);
+      }
+    }
+
+    async function transitionCase(transitionId){
+      await setBusy(true);
+      try{
+        await api("transition_case", { issueKey: state.selectedKey, transitionId });
+        showToast("Case updated");
+        await Promise.all([loadCases(false), openCase(state.selectedKey, true)]);
+      }catch(error){
+        showToast(error.message || "Unable to transition case");
+      }finally{
+        setBusy(false);
+      }
+    }
+
+    async function openCase(key, keepTab = false){
+      if (!key) return;
+      await setBusy(true);
+      try{
+        const data = await api("get_case", { issueKey: key });
+        state.selectedKey = key;
+        state.detail = data.case;
+        if (!keepTab) state.activeTab = "overview";
+        renderCaseList();
+        renderDetail();
+      }catch(error){
+        showToast(error.message || "Unable to load case");
+      }finally{
+        setBusy(false);
+      }
+    }
+
+    async function loadBootstrap(){
+      const data = await api("bootstrap");
+      state.bootstrap = data;
+      renderFraudTypes();
+    }
+
+    async function loadCases(autoSelect = true){
+      const fraudType = qs("fraudTypeFilter")?.value || "Asset Sale";
+      const data = await api("list_cases", { fraudType });
+      state.cases = data.cases || [];
+      state.filteredCases = getFilteredCases();
+      renderFilterOptions();
+      renderStats();
+      renderDirectorySummary();
+      renderCaseList();
+
+      if (autoSelect){
+        const currentStillExists = state.filteredCases.some(c => c.key === state.selectedKey);
+        const firstKey = currentStillExists ? state.selectedKey : (state.filteredCases[0]?.key || "");
+        if (firstKey){
+          await openCase(firstKey, true);
+        } else {
+          state.selectedKey = "";
+          state.detail = null;
+          renderDetail();
+        }
+      } else {
+        state.filteredCases = getFilteredCases();
+        renderStats();
+        renderDirectorySummary();
+        renderCaseList();
+      }
+    }
+
+    function reFilter(){
+      state.filteredCases = getFilteredCases();
+      renderStats();
+      renderDirectorySummary();
+      renderCaseList();
+
+      if (state.selectedKey && !state.filteredCases.some(c => c.key === state.selectedKey)){
+        const next = state.filteredCases[0]?.key || "";
+        if (next) openCase(next, true);
+        else {
+          state.selectedKey = "";
+          state.detail = null;
+          renderDetail();
+        }
+      }
+    }
+
+    async function setBusy(loading){
+      state.loading = loading;
+      document.body.classList.toggle("loading", loading);
+    }
+
+    function wireGlobalEvents(){
+      qs("fraudTypeFilter").addEventListener("change", async () => {
+        await loadCases(true);
+      });
+
+      ["scopeFilter","statusFilter","assigneeFilter"].forEach(id => {
+        qs(id).addEventListener("change", reFilter);
+      });
+
+      ["queryFilter","quickSearch"].forEach(id => {
+        qs(id).addEventListener("input", reFilter);
+      });
+
+      qs("clearFiltersBtn").addEventListener("click", () => {
+        qs("scopeFilter").value = "all";
+        qs("statusFilter").value = "";
+        qs("assigneeFilter").value = "";
+        qs("queryFilter").value = "";
+        qs("quickSearch").value = "";
+        reFilter();
+      });
+
+      qs("refreshAllBtn").addEventListener("click", async () => {
+        await loadCases(true);
+        showToast("Hub refreshed");
+      });
+
+      qs("openFirstCaseBtn").addEventListener("click", async () => {
+        const first = state.filteredCases[0]?.key || "";
+        if (first) await openCase(first);
+      });
+
+      document.querySelectorAll("[data-left-nav]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("[data-left-nav]").forEach(x => x.classList.remove("active"));
+          btn.classList.add("active");
+          const mode = btn.getAttribute("data-left-nav");
+          if (mode === "directory") qs("directoryPanel").scrollIntoView({ behavior:"smooth", block:"start" });
+          if (mode === "current") qs("detailPanel").scrollIntoView({ behavior:"smooth", block:"start" });
+          if (mode === "overview") window.scrollTo({ top:0, behavior:"smooth" });
+        });
+      });
+    }
+
+    async function init(){
+      if (!CONFIG.apiUrl || CONFIG.apiUrl === "YOUR_SUPABASE_FUNCTION_URL"){
+        qs("detailRoot").innerHTML = `
+          <div class="empty">
+            <div class="empty-card">
+              <h3>Set your API URL</h3>
+              <p>Replace <code>YOUR_SUPABASE_FUNCTION_URL</code> in <code>investigations.html</code> with your deployed Supabase function URL.</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      try{
+        await setBusy(true);
+        await loadBootstrap();
+        wireGlobalEvents();
+        await loadCases(true);
+      }catch(error){
+        qs("detailRoot").innerHTML = `
+          <div class="empty">
+            <div class="empty-card">
+              <h3>Unable to load the Hub</h3>
+              <p>${escapeHtml(error.message || "An unknown error occurred.")}</p>
+            </div>
+          </div>
+        `;
+      }finally{
+        setBusy(false);
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
